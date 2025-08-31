@@ -9,7 +9,7 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Dialog;
-import com.promilo.automation.pageobjects.Mymeetings.MymeetingPage;
+import com.promilo.automation.pageobjects.mymeetings.MymeetingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.Baseclass;

@@ -1,4 +1,4 @@
-package com.promilo.automation.pageobjects.Mymeetings;
+package com.promilo.automation.pageobjects.mymeetings;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;

@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-08-04T16:56:02 IST" name="Default suite" finished-at="2025-08-04T16:56:04 IST" duration-ms="2144">
+  <suite started-at="2025-07-16T16:41:29 IST" name="Default suite" finished-at="2025-07-16T16:41:49 IST" duration-ms="19567">
     <groups>
     </groups>
-    <test started-at="2025-08-04T16:56:02 IST" name="Default test" finished-at="2025-08-04T16:56:04 IST" duration-ms="2144">
-      <class name="com.promilo.automation.signupandlogin.ValidLogin">
-        <test-method signature="validLogin()[pri:0, instance:com.promilo.automation.signupandlogin.ValidLogin@6c40365c]" started-at="2025-08-04T16:56:02 IST" name="validLogin" finished-at="2025-08-04T16:56:04 IST" duration-ms="2080" status="PASS">
+    <test started-at="2025-07-16T16:41:29 IST" name="Default test" finished-at="2025-07-16T16:41:49 IST" duration-ms="19567">
+      <class name="com.promilo.automation.signupAndLogin.ValidLogin">
+        <test-method signature="validLogin()[pri:0, instance:com.promilo.automation.signupAndLogin.ValidLogin@6ab778a]" started-at="2025-07-16T16:41:29 IST" name="validLogin" finished-at="2025-07-16T16:41:49 IST" duration-ms="19499" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- validLogin -->
-      </class> <!-- com.promilo.automation.signupandlogin.ValidLogin -->
+      </class> <!-- com.promilo.automation.signupAndLogin.ValidLogin -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

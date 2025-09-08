@@ -1,20 +1,14 @@
 package com.promilo.automation.resources;
 
 import com.microsoft.playwright.*;
-
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-@Slf4j
-public class Baseclass {
-
-    private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(Baseclass.class);
+public class BaseClass {
 
     private static ThreadLocal<Playwright> playwright = new ThreadLocal<>();
-    protected static ThreadLocal<Browser> browser = new ThreadLocal<>();
+    private static ThreadLocal<Browser> browser = new ThreadLocal<>();
     private static ThreadLocal<BrowserContext> context = new ThreadLocal<>();
     private static ThreadLocal<Page> page = new ThreadLocal<>();
 
@@ -28,6 +22,7 @@ public class Baseclass {
 
         String browserName = prop.getProperty("browser", "chromium").toLowerCase();
         boolean headless = Boolean.parseBoolean(prop.getProperty("headless", "false"));
+        String url = prop.getProperty("url");
 
         playwright.set(Playwright.create());
 
@@ -48,26 +43,69 @@ public class Baseclass {
                 throw new RuntimeException("❌ Browser not supported: " + browserName);
         }
 
+        // Use null viewport to simulate maximizing the window
         context.set(browser.get().newContext(new Browser.NewContextOptions().setViewportSize(null)));
         page.set(context.get().newPage());
+        page.get().navigate(url);
 
-        // 🔄 No navigation here
         return page.get();
     }
+
+    /**
+     * Maximizes the browser window to the screen's available width and height.
+     * Works by retrieving screen dimensions using JS and resizing the viewport dynamically.
+     */
+    
 
     public void maximizeWindow() {
         Page currentPage = page.get();
         if (currentPage != null) {
+            boolean maximized = false;
+
+            // ---------- Method 1: Fixed 1920x1080 ----------
             try {
                 currentPage.setViewportSize(1920, 1080);
-                log.info("✅ Window maximized using setViewportSize(1920, 1080).");
+                System.out.println("✅ Window maximized using Method 1: setViewportSize(1920, 1080).");
+                maximized = true;
             } catch (Exception e) {
-                log.error("❌ Failed to maximize window: {}", e.getMessage());
+                System.out.println("⚠️ Method 1 failed: " + e.getMessage());
+            }
+
+            // ---------- Method 2: Using screen.availWidth/availHeight ----------
+            if (!maximized) {
+                try {
+                    int width = ((Double) currentPage.evaluate("() => screen.availWidth")).intValue();
+                    int height = ((Double) currentPage.evaluate("() => screen.availHeight")).intValue();
+                    currentPage.setViewportSize(width, height);
+                    System.out.println("✅ Window maximized using Method 2: screen.availWidth/availHeight.");
+                    maximized = true;
+                } catch (Exception e) {
+                    System.out.println("⚠️ Method 2 failed: " + e.getMessage());
+                }
+            }
+
+            // ---------- Method 3: Using window.moveTo and resizeTo ----------
+            if (!maximized) {
+                try {
+                    currentPage.evaluate("() => { window.moveTo(0, 0); window.resizeTo(screen.availWidth, screen.availHeight); }");
+                    System.out.println("✅ Window maximized using Method 3: window.moveTo + resizeTo.");
+                    maximized = true;
+                } catch (Exception e) {
+                    System.out.println("⚠️ Method 3 failed: " + e.getMessage());
+                }
+            }
+
+            if (!maximized) {
+                System.out.println("❌ All maximize methods failed. Running with default window size.");
             }
         } else {
             throw new RuntimeException("❌ Page is not initialized. Cannot maximize window.");
         }
     }
+
+        
+        
+    
 
     public void closePlaywright() {
         if (context.get() != null) {

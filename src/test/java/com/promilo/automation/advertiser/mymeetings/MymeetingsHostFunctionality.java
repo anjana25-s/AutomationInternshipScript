@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
-import com.promilo.automation.pageobjects.Mymeetings.MymeetingPage;
+import com.promilo.automation.pageobjects.mymeetings.MymeetingPage;
 import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExtentManager;

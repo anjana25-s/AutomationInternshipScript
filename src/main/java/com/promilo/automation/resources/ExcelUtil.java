@@ -1,102 +1,74 @@
 package com.promilo.automation.resources;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.FileInputStream;
+import java.io.IOException;
 
-import java.io.*;
-import java.math.BigDecimal;
+import org.apache.poi.ss.usermodel.*;
 
 public class ExcelUtil {
 
     private Workbook workbook;
     private Sheet sheet;
-    private String path;
+    private FileInputStream fis;
 
+    /**
+     * Initializes ExcelUtil with the provided file path and sheet name.
+     *
+     * @param excelPath Absolute path of the Excel file
+     * @param sheetName Name of the sheet to load
+     * @throws IOException if file or sheet cannot be loaded
+     */
     public ExcelUtil(String excelPath, String sheetName) throws IOException {
-        this.path = excelPath;
-        FileInputStream fis = new FileInputStream(path);
-        workbook = new XSSFWorkbook(fis);
-        sheet = workbook.getSheet(sheetName);
-        fis.close(); // ✅ close input stream
-    }
+        try {
+            fis = new FileInputStream(excelPath);
+            workbook = WorkbookFactory.create(fis);
+            sheet = workbook.getSheet(sheetName);
 
-    public String getCellData(int rowNum, int colNum) {
-        Row row = sheet.getRow(rowNum);
-        if (row == null) return "";
-        Cell cell = row.getCell(colNum);
-        if (cell == null) return "";
-
-        switch (cell.getCellType()) {
-            case STRING:
-                return cell.getStringCellValue().trim();
-            case NUMERIC:
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    return cell.getDateCellValue().toString();
-                } else {
-                    return BigDecimal.valueOf(cell.getNumericCellValue()).toPlainString();
-                }
-            case BOOLEAN:
-                return String.valueOf(cell.getBooleanCellValue());
-            case FORMULA:
-                return cell.getCellFormula();
-            default:
-                return "";
-        }
-    }
-
-    public void setCellData(int rowNum, int colNum, String value) throws IOException {
-        Row row = sheet.getRow(rowNum);
-        if (row == null)
-            row = sheet.createRow(rowNum);
-
-        Cell cell = row.getCell(colNum, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-        cell.setCellValue(value);
-
-        try (FileOutputStream fos = new FileOutputStream(path)) {
-            workbook.write(fos); // ✅ ensures data is flushed
-        }
-    }
-    
-    
-    
-    public int getColumnIndex(String columnName) {
-        Row headerRow = sheet.getRow(0); // assuming first row has headers
-        if (headerRow == null) throw new RuntimeException("Header row not found");
-
-        for (int i = 0; i < headerRow.getLastCellNum(); i++) {
-            Cell cell = headerRow.getCell(i);
-            if (cell != null && columnName.equalsIgnoreCase(cell.getStringCellValue().trim())) {
-                return i;
+            if (sheet == null) {
+                throw new RuntimeException("❌ Sheet '" + sheetName + "' not found in '" + excelPath + "'");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException("❌ Unable to load Excel file or sheet: " + e.getMessage());
         }
-
-        throw new RuntimeException("Column not found: " + columnName);
     }
 
-
-    public int getRowIndex(String testCaseId) {
-        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-            String id = getCellData(i, 0);
-            if (id.equalsIgnoreCase(testCaseId))
-                return i;
-        }
-        throw new RuntimeException("TestCase ID not found: " + testCaseId);
+    public Sheet getSheet() {
+        return sheet;
     }
 
-    public Object[][] getTestData(String filterTestCaseId) {
-        int rowCount = sheet.getLastRowNum();
-        int colCount = sheet.getRow(0).getLastCellNum();
-        Object[][] data = new Object[1][colCount];
+    public int getRowCount() {
+        return sheet.getPhysicalNumberOfRows();
+    }
 
-        for (int i = 1; i <= rowCount; i++) {
-            String testCaseId = getCellData(i, 0);
-            if (testCaseId.equalsIgnoreCase(filterTestCaseId)) {
-                for (int j = 0; j < colCount; j++) {
-                    data[0][j] = getCellData(i, j);
-                }
-                break;
+    public String getCellData(int row, int col) {
+        DataFormatter formatter = new DataFormatter();
+        Row sheetRow = sheet.getRow(row);
+        if (sheetRow == null) {
+            return "";
+        }
+        Cell cell = sheetRow.getCell(col);
+        if (cell == null) {
+            return "";
+        }
+        return formatter.formatCellValue(cell);
+    }
+
+    public void closeWorkbook() {
+        try {
+            if (workbook != null) {
+                workbook.close();
             }
+            if (fis != null) {
+                fis.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return data;
     }
+
+	public void setCellData(int rowIndex, int mailPhoneColIndex, String randomMobile) {
+		// TODO Auto-generated method stub
+		
+	}
 }

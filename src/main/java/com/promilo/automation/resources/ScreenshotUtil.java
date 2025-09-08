@@ -1,6 +1,5 @@
 package com.promilo.automation.resources;
 
-
 import com.microsoft.playwright.Page;
 
 import java.io.File;
@@ -44,4 +43,3 @@ public class ScreenshotUtil {
         return Base64.getEncoder().encodeToString(screenshotBytes);
     }
 }
-

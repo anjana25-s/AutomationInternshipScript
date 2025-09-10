@@ -1,6 +1,5 @@
 package com.promilo.automation.emailnotifcations.advertiser;
 
-import static org.testng.Assert.assertTrue;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -32,12 +31,13 @@ import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignupWithMailosaurUI;
 
-public class AcceptTheGetHrCallRequest  extends Baseclass{
+public class AcceptTheGetHrCallRequest  extends BaseClass{
 	
 	 ExtentReports extent = ExtentManager.getInstance();
      ExtentTest test = extent.createTest("🚀 Promilo Staging Signup - Passes if 'My Stuff' is visible after signup (Playwright)");

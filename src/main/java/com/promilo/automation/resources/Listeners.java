@@ -37,7 +37,7 @@ public class Listeners extends Baseclass implements ITestListener {
         currentTest.fail(result.getThrowable());
 
         try {
-            Page page = BaseClass.getPage();
+            Page page = Baseclass.getPage();
             if (page != null) {
                 byte[] screenshotBytes = page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
                 String base64Screenshot = java.util.Base64.getEncoder().encodeToString(screenshotBytes);

@@ -1,27 +1,21 @@
 package com.promilo.automation.courses.myintrests;
 
-import java.awt.Desktop;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Download;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
+import com.promilo.automation.courses.intrestspages.DownloadsIntrestPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
-import com.promilo.automation.resources.ExcelReadUtil;  
 import com.promilo.automation.resources.ExtentManager;
 
 public class DownloadsIntrestValidation extends Baseclass {
@@ -49,9 +43,9 @@ public class DownloadsIntrestValidation extends Baseclass {
         for (int i = 1; i < rowCount; i++) {
             String testCaseId = excel.getCellData(i, 0);
             String keyword = excel.getCellData(i, 1);
-            String email = excel.getCellData(i, 7); // MailPhone
-            String password = excel.getCellData(i, 6); // Password
-            String comment = excel.getCellData(i, 10); // Comment text
+            String email = excel.getCellData(i, 7); 
+            String password = excel.getCellData(i, 6); 
+            String comment = excel.getCellData(i, 10); 
 
             if (!"CommentFunctionality".equalsIgnoreCase(keyword)) {
                 continue;
@@ -68,89 +62,55 @@ public class DownloadsIntrestValidation extends Baseclass {
             LandingPage landingPage = new LandingPage(page);
             try {
                 landingPage.getPopup().click();
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
+
+            DownloadsIntrestPage downloadsPage = new DownloadsIntrestPage(page);
 
             Thread.sleep(3000);
-            page.locator("//a[text()='Courses']").click();
-           page.locator("//span[text()='Download Brochure']").first().click();
-           page.locator("//input[@name='userName']").nth(1).fill("karthik");
+            downloadsPage.coursesMenu().click();
+            downloadsPage.downloadBrochureBtn().click();
+            downloadsPage.userNameField().fill("karthik");
 
-           // Generate random 10-digit phone number starting with 90000
-           String randomPhone = "90000" + String.format("%05d", new Random().nextInt(100000));
+            String randomPhone = "90000" + String.format("%05d", new Random().nextInt(100000));
+            String randomEmail = "testuserautomation" + System.currentTimeMillis() + "@mail.com";
 
-           // Generate random email with timestamp
-           String randomEmail = "testuserautomation" + System.currentTimeMillis() + "@mail.com";
+            downloadsPage.userMobileField().fill(randomPhone);
+            downloadsPage.userEmailField().fill(randomEmail);
+            downloadsPage.finalDownloadBtn().click();
 
-           // Fill the fields
-           page.locator("//input[@name='userMobile']").nth(1).fill(randomPhone);
-           page.locator("//input[@id='userEmail']").nth(1).fill(randomEmail);
-           
-           page.locator("//button[text()='Download Brochure']").click();
-           
-           
-           String otp = "9999";
-           // OTP input logic
-           if (otp == null || otp.length() < 4)
-               throw new IllegalArgumentException("❌ OTP must be at least 4 digits. Found: " + otp);
+            String otp = "9999";
+            for (int i1 = 0; i1 < 4; i1++) {
+                String digit = Character.toString(otp.charAt(i1));
+                Locator otpField = page.locator(
+                    "//input[@aria-label='Please enter OTP character " + (i1 + 1) + "']"
+                );
+                otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
 
-           for (int i1 = 0; i1 < 4; i1++) {
-               String digit = Character.toString(otp.charAt(i1));
-               Locator otpField = page
-                       .locator("//input[@aria-label='Please enter OTP character " + (i1 + 1) + "']");
-               otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
+                for (int retry = 0; retry < 3; retry++) {
+                    otpField.click();
+                    otpField.fill("");
+                    otpField.fill(digit);
 
-               for (int retry = 0; retry < 3; retry++) {
-                   otpField.click();
-                   otpField.fill("");
-                   otpField.fill(digit);
+                    if (otpField.evaluate("el => el.value").toString().trim().equals(digit))
+                        break;
+                    page.waitForTimeout(500);
+                }
+            }
 
-                   if (otpField.evaluate("el => el.value").toString().trim().equals(digit))
-                       break;
-                   page.waitForTimeout(500);
-               }
-           }
-           
-           
-           page.locator("//button[text()='Verify & Proceed']").click();
-           
-                     
-           
-           
+            downloadsPage.verifyProceedBtn().click();
 
-           // ✅ Validate Thank You popup
-           Locator thankYouPopup = page.locator(
-               "//div[translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = 'thank you!']"
-           );
-           thankYouPopup.waitFor(new Locator.WaitForOptions().setTimeout(10000)); // wait max 10s
+            downloadsPage.thankYouPopup().waitFor(new Locator.WaitForOptions().setTimeout(10000));
+            String popupText = downloadsPage.thankYouPopup().innerText().trim();
+            Assert.assertTrue(popupText.equalsIgnoreCase("Thank You!"),
+                    "Expected 'Thank You!' popup, found: " + popupText);
+            test.pass("🎉 Thank You popup validated: " + popupText);
 
-           String popupText = thankYouPopup.innerText().trim();
-           Assert.assertTrue(popupText.equalsIgnoreCase("Thank You!"),
-                   "Expected 'Thank You!' popup, found: " + popupText);
-           test.pass("🎉 Thank You popup validated: " + popupText);
-           
-           
-page.locator("img[alt='closeIcon Ask us']").click();
-           
-           
-           page.locator("//span[text()='My Interest']").click();
-           
-           
-           page.locator("//div[text()='My Preference']").click();
-           page.locator("//div[text()='Downloads']").click();
-          System.out.println(page.locator("//span[text()='Total Results of ']").textContent()); 
+            downloadsPage.thankYouCloseIcon().click();
+            downloadsPage.myInterestTab().click();
+            downloadsPage.myPreferenceTab().click();
+            downloadsPage.downloadsTab().click();
 
-           
-           
-           
-           
-
-           
-
-
-          
-           }
-            
+            System.out.println(downloadsPage.totalResults().textContent());
         }
     }
-
+}

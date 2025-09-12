@@ -1,7 +1,5 @@
 package com.promilo.automation.courses.myintrests;
 
-import java.awt.Desktop;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -16,10 +14,11 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
+import com.promilo.automation.courses.FreeVideoCounselling;
+import com.promilo.automation.courses.intrestspages.FreeVideoCounsellingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
-import com.promilo.automation.resources.ExcelReadUtil;  // ✅ added import
 import com.promilo.automation.resources.ExtentManager;
 
 public class FreeVideoCounsellingSendReminder extends Baseclass {
@@ -47,9 +46,9 @@ public class FreeVideoCounsellingSendReminder extends Baseclass {
         for (int i = 1; i < rowCount; i++) {
             String testCaseId = excel.getCellData(i, 0);
             String keyword = excel.getCellData(i, 1);
-            String email = excel.getCellData(i, 7); // MailPhone
-            String password = excel.getCellData(i, 6); // Password
-            String comment = excel.getCellData(i, 10); // Comment text
+            String email = excel.getCellData(i, 7);
+            String password = excel.getCellData(i, 6);
+            String comment = excel.getCellData(i, 10);
 
             if (!"CommentFunctionality".equalsIgnoreCase(keyword)) {
                 continue;
@@ -66,39 +65,32 @@ public class FreeVideoCounsellingSendReminder extends Baseclass {
             LandingPage landingPage = new LandingPage(page);
             try {
                 landingPage.getPopup().click();
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
+
+            FreeVideoCounsellingPage counsellingPage = new FreeVideoCounsellingPage(page);
 
             Thread.sleep(3000);
-            page.locator("//a[text()='Courses']").click();
+            counsellingPage.coursesMenu().click();
+            Thread.sleep(3000);
+            counsellingPage.seeMoreLink().click();
             Thread.sleep(3000);
 
-            
+            counsellingPage.lpuOption().click();
+            counsellingPage.freeVideoCounsellingBtn().click();
 
-            page.locator("//a[text()='See More']").nth(1).click();
-            Thread.sleep(3000);
+            counsellingPage.userNameField().fill("karthik");
 
-
-            page.locator("//div[text()='LPU']").first().click();
-            page.locator("//span[text()='Free Video Counselling']").click();
-            
-            page.locator("//input[@name='userName']").nth(1).fill("karthik");
-
-            // Generate random 10-digit phone number starting with 90000
             String randomPhone = "90000" + String.format("%05d", new Random().nextInt(100000));
-
-            // Generate random email with timestamp
             String randomEmail = "testuserautomation" + System.currentTimeMillis() + "@mail.com";
 
-            // Fill the fields
-            page.locator("//input[@name='userMobile']").nth(1).fill(randomPhone);
-            page.locator("//input[@id='userEmail']").nth(1).fill(randomEmail);
+            counsellingPage.userMobileField().fill(randomPhone);
+            counsellingPage.userEmailField().fill(randomEmail);
 
-            page.locator("[id='preferredLocation']").nth(1).click();
-
+            counsellingPage.preferredLocationDropdown().click();
             Thread.sleep(1000);
+
             List<String> industries = Arrays.asList("Ahmedabad", "Bengaluru/Bangalore", "Chennai", "Mumbai (All Areas)");
-            Locator options = page.locator("//div[@class='option w-100']");
+            Locator options = counsellingPage.locationOptions();
             for (String industry : industries) {
                 boolean found = false;
                 for (int i1 = 0; i1 < options.count(); i1++) {
@@ -115,23 +107,17 @@ public class FreeVideoCounsellingSendReminder extends Baseclass {
                 }
             }
 
-            page.locator("//div[@class='text-content']").textContent();
-
-            page.locator("[id='preferredLocation']").nth(1).click();
-
-            page.locator("//label[@for='enableNotifications']").click();
-
-            page.locator("//button[text()='Free Video Counselling']").nth(1).click();
+            counsellingPage.textContent().textContent();
+            counsellingPage.preferredLocationDropdown().click();
+            counsellingPage.enableNotificationsCheckbox().click();
+            counsellingPage.finalCounsellingBtn().click();
 
             String otp = "9999";
-            // OTP input logic
-            if (otp == null || otp.length() < 4)
-                throw new IllegalArgumentException("❌ OTP must be at least 4 digits. Found: " + otp);
-
             for (int i1 = 0; i1 < 4; i1++) {
                 String digit = Character.toString(otp.charAt(i1));
-                Locator otpField = page
-                        .locator("//input[@aria-label='Please enter OTP character " + (i1 + 1) + "']");
+                Locator otpField = page.locator(
+                    "//input[@aria-label='Please enter OTP character " + (i1 + 1) + "']"
+                );
                 otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
 
                 for (int retry = 0; retry < 3; retry++) {
@@ -145,42 +131,24 @@ public class FreeVideoCounsellingSendReminder extends Baseclass {
                 }
             }
 
-            page.locator("//button[text()='Verify & Proceed']").click();
-            
-            
-            
-            page.locator("//span[@class='flatpickr-day']").first().click();
-            page.locator("//li[@class='time-slot-box list-group-item']").first().click();
+            counsellingPage.verifyProceedBtn().click();
+            counsellingPage.datePickerDay().click();
+            counsellingPage.timeSlot().click();
             Thread.sleep(3000);
-            
-            page.locator("//button[text()='Submit']").nth(1).click();
-            // Validate thank you popup
-            Locator thankYouPopup = page.locator(
-                    "//div[translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = 'thank you!']");
-            thankYouPopup.waitFor(new Locator.WaitForOptions().setTimeout(5000));
+            counsellingPage.submitBtn().click();
 
-            String popupText = thankYouPopup.innerText().trim();
+            counsellingPage.thankYouPopup().waitFor(new Locator.WaitForOptions().setTimeout(5000));
+            String popupText = counsellingPage.thankYouPopup().innerText().trim();
             Assert.assertTrue(popupText.equalsIgnoreCase("Thank You!"),
                     "Expected 'Thank You!' popup, found: " + popupText);
             test.pass("🎉 Job applied successfully — Popup: " + popupText);
-            
-            
-            page.locator("//img[@alt='closeIcon Ask us']").click();
-            page.locator("//span[text()='My Interest']").click();
-            
-            System.out.println(page.locator("//div[@class='my-preferance-card-body card-body']").textContent());  
-            page.locator("//button[text()='Send Reminder']").click();
-            page.locator("//div[@class='pt-0 px-1 modal-body']").click();
-            System.out.println(page.locator("//p[@class='text-capitalize text-gray-500 font-16 fw-bold text-center pt-50']").textContent()); 
-            
-            
 
-
-
-            
-
-
-            
+            counsellingPage.thankYouCloseIcon().click();
+            counsellingPage.myInterestTab().click();
+            System.out.println(counsellingPage.myPreferenceCardBody().textContent());
+            counsellingPage.sendReminderBtn().click();
+            counsellingPage.reminderModal().click();
+            System.out.println(counsellingPage.reminderConfirmationText().textContent());
         }
     }
 }

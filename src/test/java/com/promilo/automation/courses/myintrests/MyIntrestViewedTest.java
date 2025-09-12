@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Page;
+import com.promilo.automation.courses.intrestspages.ViewedIntrestPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.Baseclass;
@@ -71,28 +72,20 @@ public class MyIntrestViewedTest extends Baseclass {
             loginPage.passwordField().fill(password);
             loginPage.loginButton().click();
             test.info("🔑 Logged in with Mailosaur account");
+            ViewedIntrestPage viewedPage = new ViewedIntrestPage(page);
 
-            // ✅ Step 3: Navigate to Courses > See More > LPU
-            page.locator("//a[text()='Courses']").click();
-            Thread.sleep(2000);
-
-            page.locator("//a[text()='See More']").nth(1).click();
-            Thread.sleep(2000);
-
-            page.locator("//div[text()='LPU']").first().click();
-            Thread.sleep(2000);
-
-            // ✅ Step 4: My Interest
-            page.locator("//span[text()='My Interest']").click();
+            viewedPage.coursesMenu().click();
+            viewedPage.seeMoreBtn().click();
             
-            
-            Thread.sleep(2000);
-            
-            
-            page.locator("//div[text()='My Preference']").click();
+            Thread.sleep(3000);
 
-            String cardText = page.locator("//div[@class='my-preferance-card']").textContent();
-            test.info("🎯 My Interest Card: " + cardText);
+            viewedPage.lpuCard().click();
+            
+            Thread.sleep(3000);
+            viewedPage.myInterestTab().click();
+            viewedPage.myPreferenceTab().click();
+
+            String cardText = viewedPage.preferenceCard().textContent();
 
             if (cardText == null || cardText.isEmpty()) {
                 test.fail("❌ My Interest card content is empty!");

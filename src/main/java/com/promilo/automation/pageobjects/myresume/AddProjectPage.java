@@ -53,7 +53,7 @@ public class AddProjectPage {
         this.PartTimeRadio = page.locator("//input[@id='partime']");
         this.ContractualRadio = page.locator("//input[@id='contractual']");
         this.RoleInput = page.locator("//input[@id='react-select-9-input']");
-        this.RoleDescription = page.locator("//body//div//div[@class='px-0 modal-body']//div//div//div[6]//div[1]//textarea[1]");
+        this.RoleDescription = page.locator("//textarea[@placeholder='Role Description ...']");
         this.SkillsUsedTextarea = page.locator("//textarea[@placeholder='Skill Used ...']");
         this.SaveButton = page.locator("//button[@class='save-resume-btn']");
     }

@@ -55,6 +55,7 @@ public class AccomplishmentsPage {
     private final Locator certificationsValidityToMonth;
     private final Locator certificationsDoesNotExpireCheckbox;
     
+    
     //presentation
     private final Locator presentationTitleTextField;
     private final Locator presentationUrlTextField;
@@ -112,10 +113,10 @@ public class AccomplishmentsPage {
         this.certificationsNameTextField = page.locator("//input[@placeholder='Enter certificate name']");
         this.certificationsCompletionIdField = page.locator("//input[@placeholder='Enter certificate completion ID']");
         this.certificationsUrlField = page.locator("//input[@placeholder='Paste link']");
-        this.certificationsValidityFromYear = page.locator("//input[@id='react-select-12-input']");
-        this.certificationsValidityFromMonth = page.locator("//input[@id='react-select-13-input']");
-        this.certificationsValidityToYear = page.locator("//input[@id='react-select-14-input']");
-        this.certificationsValidityToMonth = page.locator("//input[@id='react-select-15-input']");
+        this.certificationsValidityFromYear = page.locator("//div[contains(text(), 'Select Year')]/ancestor::div[contains(@class, 'custom-select')]//div[contains(@class, 'react-select__control')]");
+        this.certificationsValidityFromMonth = page.locator("//div[contains(text(), 'Select Month')]/ancestor::div[contains(@class, 'custom-select')]//div[contains(@class, 'react-select__control')]");
+        this.certificationsValidityToYear = page.locator("//div[contains(@class,'react-select__control')])[3]");
+        this.certificationsValidityToMonth = page.locator("(//div[contains(text(), 'Select Month')]/ancestor::div[contains(@class, 'custom-select')]//div[contains(@class, 'react-select__control')])[2]");
         this.certificationsDoesNotExpireCheckbox = page.locator("//label[text()='This certification does not expire']");
         
         //presentation

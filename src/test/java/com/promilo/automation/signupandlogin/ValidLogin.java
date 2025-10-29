@@ -37,7 +37,7 @@ public class ValidLogin extends Baseclass {
         for (int i = 1; i < rowCount; i++) {
             String testCaseId = excel.getCellData(i, 0);
             String keyword = excel.getCellData(i, 1);
-            String username = excel.getCellData(i, 3);
+            String InputValue = excel.getCellData(i, 3);
             String password = excel.getCellData(i, 6);
 
             if (!loginKeywords.contains(keyword)) {
@@ -70,12 +70,14 @@ public class ValidLogin extends Baseclass {
                 LoginPage loginPage = new LoginPage(page);
 
                 // Fill username (email/phone)
-                if (username == null || username.trim().isEmpty()) {
+                if (InputValue
+ == null || InputValue
+.trim().isEmpty()) {
                     test.fail("❌ Username required for " + testCaseId + " but missing in Excel.");
                     throw new RuntimeException("Username missing for login: " + testCaseId);
                 }
-                loginPage.loginMailPhone().fill(username);
-                test.info("✍️ Entered Username: " + username);
+                loginPage.loginMailPhone().fill(InputValue);
+                test.info("✍️ Entered Username: " + InputValue);
 
                 // Fill password
                 if (password == null || password.trim().isEmpty()) {
@@ -84,6 +86,7 @@ public class ValidLogin extends Baseclass {
                 }
                 loginPage.passwordField().fill(password);
                 test.info("🔑 Entered Password.");
+                
 
                 // Click login
                 loginPage.loginButton().click();

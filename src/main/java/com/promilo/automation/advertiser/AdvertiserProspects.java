@@ -123,7 +123,7 @@ public class AdvertiserProspects {
         this.FolderAcces = page.locator("//div[text()='Access']");
         this.ShareFolderButton = page.locator("//div[text()='Delete']");
         this.shortlistedbutton = page.locator("//button[text()='Shortlisted']");
-        this.EditComment = page.locator("div[class='comment-list']");
+        this.EditComment = page.locator("div[class='comment-item']");
         this.All = page.locator("//div[text()='All']");
         this.NewLeads = page.locator("//div[text()='New Leads']");
         this.Pendings = page.locator("//div[text()='Pendings']");

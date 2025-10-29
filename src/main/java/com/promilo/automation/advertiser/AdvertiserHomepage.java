@@ -14,6 +14,7 @@ public class AdvertiserHomepage {
     private final Locator helpAndSupport;
     private final Locator hamburger;
     private final Locator comingSoon;
+    private final Locator myBilling;
 
     public AdvertiserHomepage(Page page) {
         this.page = page;
@@ -25,6 +26,7 @@ public class AdvertiserHomepage {
         this.helpAndSupport = page.locator("//span[text()='Help & Support' and@class='menu-item text-truncate']");
         this.hamburger = page.locator("//a[@class='nav-menu-main menu-toggle hidden-xs is-active nav-link']");
         this.comingSoon = page.locator("//p[text()='Coming Soon']");
+        this.myBilling = page.locator("//span[text()='My Billing']");
     }
 
     public Locator myAccount() { return myAccount; }
@@ -34,4 +36,5 @@ public class AdvertiserHomepage {
     public Locator helpAndSupport() { return helpAndSupport; }
     public Locator hamburger() { return hamburger; }
     public Locator comingSoon() { return comingSoon; }
+    public Locator myBilling() {return myBilling;}
 }

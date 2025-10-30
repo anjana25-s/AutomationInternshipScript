@@ -102,6 +102,7 @@ public class BookMeetingErrorMessagesValidation extends Baseclass {
             
             
 
+            //click on Mentorship in Dashboard or Homepage
             DashboardPage dashboard = new DashboardPage(page);
             page.waitForTimeout(3000);
             dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));

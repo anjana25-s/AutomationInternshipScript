@@ -39,5 +39,14 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Admin/.p2/pool/plugins/org.testng_7.11.0.r202503091654.jar" sourcepath="C:/Users/Admin/.p2/pool/plugins/org.testng.source_7.11.0.r202503091654.jar"/>
 	<classpathentry kind="src" path="/promiloAutomationWebProject"/>
+	<classpathentry kind="lib" path="C:/Users/Admin/.m2/repository/com/sun/mail/javax.mail/1.6.0/javax.mail-1.6.0.jar" sourcepath="C:/Users/Admin/.m2/repository/com/sun/mail/javax.mail/1.6.0/javax.mail-1.6.0-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.sun.mail"/>
+			<attribute name="maven.artifactId" value="javax.mail"/>
+			<attribute name="maven.version" value="1.6.0"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

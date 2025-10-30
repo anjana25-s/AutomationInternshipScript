@@ -19,6 +19,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Page.LocatorOptions;
 import com.promilo.automation.mentor.myacceptance.MyAcceptance;
 import com.promilo.automation.pageobjects.myresume.MyResumePage;
+import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.Baseclass;
@@ -103,18 +104,28 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             loginPage.passwordField().fill("Karthik@88");
             loginPage.loginButton().click();
             test.info("✅ Logged in with registered credentials: " );
+            
+            
 
-            MyResumePage hamburger = new MyResumePage(page);
-            hamburger.Mystuff().click();
-            hamburger.MyAccount().click();
+            //click on my stuff button
+            DashboardPage myStuff= new DashboardPage(page);
+            myStuff.mystuff().click();
             
             
+            //click on my acceptance button
             MyAcceptance acceptRequest= new MyAcceptance(page);
             acceptRequest.myAcceptance().click();
             acceptRequest.brandEndorsementAccept().click();
             System.out.println(acceptRequest.modalContent().textContent()); 
+            
+            
+            //click on exit icon of the request accepted  modal
             page.locator("img[alt='Add New']").click();
-         // Click the copy icon
+            
+            
+            
+            
+         // Click the copy icon of the mail
             Locator mailcopyIcon = page.locator("(//p[text()='Brand Endorsement']//following::img[@alt='copyIcon'])[1]");
             mailcopyIcon.click();
             
@@ -125,13 +136,19 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             System.out.println("Copied mail: "+ copiedMail );
 
             
+            //click the copy icon of the phone Number
             Locator phonecopyIcon = page.locator("(//p[text()='Brand Endorsement']//following::img[@alt='copyIcon'])[2]");
             phonecopyIcon.click();
+            
+            
             // Get clipboard content
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             String copiedNumber = (String) clipboard.getData(DataFlavor.stringFlavor);
 
             System.out.println("Copied number: " + copiedNumber);
+            
+            
+            
 
             // Assertion: check if the copied value is digits only (valid number)
             Assert.assertTrue(copiedNumber.matches("\\d+"), "Copied value is not a valid number: " + copiedNumber);
@@ -142,27 +159,27 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             // Create a new context
             Browser actualBrowser = browser.get();
             BrowserContext advertiserContext = actualBrowser.newContext();
-            Page advertiserPage = advertiserContext.newPage();
+            Page mentorPage = advertiserContext.newPage();
 
-            // Now use advertiserPage as usual
-            advertiserPage.navigate(prop.getProperty("url"));
+            // Now use mentor page as usual
+            mentorPage.navigate(prop.getProperty("url"));
 
             
-            LandingPage login= new LandingPage(advertiserPage);
+            LandingPage login= new LandingPage(mentorPage);
             login.dismissPopup();
             login.clickLoginButton();
             
          
-               LoginPage loginPage1 = new LoginPage(advertiserPage);
+               LoginPage loginPage1 = new LoginPage(mentorPage);
                loginPage1.loginMailPhone().fill(Baseclass.generatedPhone); // use the generated email
                loginPage1.loginWithOtp().click();
                loginPage1.otpField().fill("9999");
                loginPage1.loginButton().click();
          
                
-               
-               advertiserPage.locator("//span[text()='My Interest']").click();
-               advertiserPage.locator("//div[@class='tab text-center w-50 ms-1 pointer ']").click();
+               //click on my interest tab and get the card details
+               mentorPage.locator("//span[text()='My Interest']").click();
+               mentorPage.locator("//div[@class='tab text-center w-50 ms-1 pointer ']").click();
                
                
                

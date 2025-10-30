@@ -6,11 +6,14 @@ import com.microsoft.playwright.Page;
 public class MentorshipFormComponents {
     
     private final Page page;
+    
+    //short list
     private final Locator name;
     private final Locator MobileTextField;
     private final Locator emailTextfield;
     private final Locator shortListButton;
     
+    //ask us
     private final Locator askUsSubmit;
     private final Locator askUsTextarea;
     private final Locator getMentorCall;
@@ -33,6 +36,9 @@ public class MentorshipFormComponents {
     private final Locator yesRadrioBox;
     private final Locator gstNumber;
     private final Locator panNumber;
+    
+    
+    
     
 
     

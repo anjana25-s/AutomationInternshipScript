@@ -116,6 +116,10 @@ public class ExcelUtil {
         throw new RuntimeException("TestCase ID not found: " + testCaseId);
     }
 
+    public int getColumnCount() {
+        return sheet.getRow(0).getLastCellNum();
+    }
+
     /**
      * Fetch test data for a specific TestCase ID (row-based)
      * @param filterTestCaseId ID of the test case

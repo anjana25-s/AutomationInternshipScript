@@ -18,8 +18,8 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.mentorship.mentee.MentorshipErrorMessagesAndToasters;
 import com.promilo.automation.mentorship.mentee.DescriptionPage;
 import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
-import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.HomePage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
 import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -100,7 +100,7 @@ public class BrandEndorsementWithInvalidOtp extends Baseclass {
                 test.info("🔍 Test started for keyword: " + keyword);
 
                 // Step 1: Close popup if present
-                LandingPage homePage = new LandingPage(page);
+                MayBeLaterPopUp homePage = new MayBeLaterPopUp(page);
                 try {
                 	homePage.getPopup().click();
                     test.info("✅ Popup closed successfully.");
@@ -109,7 +109,7 @@ public class BrandEndorsementWithInvalidOtp extends Baseclass {
                 }
 
                 // Step 2: Navigate to Mentorships
-                DashboardPage dashboard = new DashboardPage(page);
+                HomePage dashboard = new HomePage(page);
                 page.waitForTimeout(3000);
                 dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
                 test.info("🧭 Clicked on Mentorships tab.");

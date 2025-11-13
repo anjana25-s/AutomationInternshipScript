@@ -13,8 +13,8 @@ import com.microsoft.playwright.Page;
 import com.promilo.automation.mentorship.mentee.MentorshipErrorMessagesAndToasters;
 import com.promilo.automation.mentorship.mentee.DescriptionPage;
 import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
-import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.HomePage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
 import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -59,7 +59,7 @@ public class BookMeetingErrorMessagesValidation extends Baseclass {
     }
 
     @Test(dataProvider = "BookAMeetingErrorValidation")
-    public void applyForJobTestFromExcel(
+    public void BookMeetingErrorMessagesValidationTest(
             String testCaseId,
             String keyword,
             String registeredEmail,
@@ -96,15 +96,15 @@ public class BookMeetingErrorMessagesValidation extends Baseclass {
 
         logger.info("Executing BookMeetingErrorValidation for TestCaseID: {}", testCaseId);
 
-        LandingPage landingPage = new LandingPage(page);
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
         try {
-            landingPage.getPopup().click();
+            mayBeLaterPopUp.getPopup().click();
             test.info("✅ Popup closed.");
         } catch (Exception ignored) {
             test.info("ℹ️ No popup found.");
         }
 
-        DashboardPage dashboard = new DashboardPage(page);
+        HomePage dashboard = new HomePage(page);
         page.waitForTimeout(3000);
         dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
         logger.info("Clicked on Mentorship module");

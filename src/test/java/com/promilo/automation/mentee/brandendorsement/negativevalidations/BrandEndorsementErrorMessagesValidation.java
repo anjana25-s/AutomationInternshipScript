@@ -15,8 +15,8 @@ import com.microsoft.playwright.Page;
 import com.promilo.automation.mentorship.mentee.MentorshipErrorMessagesAndToasters;
 import com.promilo.automation.mentorship.mentee.DescriptionPage;
 import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
-import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.HomePage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
 import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -80,10 +80,10 @@ public class BrandEndorsementErrorMessagesValidation extends Baseclass {
         // =========================================================
         //                🔸 LANDING PAGE
         // =========================================================
-        LandingPage landingPage = new LandingPage(page);
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
 
         try {
-            landingPage.getPopup().click();
+            mayBeLaterPopUp.getPopup().click();
             test.info("✅ Popup closed.");
         } catch (Exception ignored) {
             test.info("ℹ️ No popup found.");
@@ -92,7 +92,7 @@ public class BrandEndorsementErrorMessagesValidation extends Baseclass {
         // =========================================================
         //                🔸 DASHBOARD NAVIGATION
         // =========================================================
-        DashboardPage dashboard = new DashboardPage(page);
+        HomePage dashboard = new HomePage(page);
         page.waitForTimeout(3000);
         dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
         logger.info("Clicked on Mentorship module");
@@ -128,9 +128,10 @@ public class BrandEndorsementErrorMessagesValidation extends Baseclass {
         Assert.assertEquals(actualNameError, nameIsRequired, "❌ Name error message mismatch!");
         Assert.assertEquals(actualMobileError, mobileNumberIsRequired, "❌ Mobile number error message mismatch!");
         Assert.assertEquals(actualEmailError, emailIsRequired, "❌ Email error message mismatch!");
+        
 
         // ✅ Invalid inputs validation
-        ErrorMessageValidation.nameTextField().nth(1).fill(NameMinimum);
+        ErrorMessageValidation.nameTextField().fill(NameMinimum);
         ErrorMessageValidation.mobileTextField().nth(1).fill(invalidMobileNumber);
         ErrorMessageValidation.emailTextField().nth(1).fill(invalidEmailAdress);
 

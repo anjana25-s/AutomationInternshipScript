@@ -44,6 +44,10 @@ public class DescriptionPage {
 	private final Locator resourceName;
 	private final Locator aboutMeTittle;
 	private final Locator aboutMeContent;
+	private final Locator typeOfMentorSection;
+	private final Locator socialMediaLink;
+	private final Locator leftButton;
+	private final Locator rightButton;
 	
 	public DescriptionPage(Page page) {
 		
@@ -64,7 +68,7 @@ public class DescriptionPage {
 		 this.askQuery= page.locator("//a[text()='Ask Query']");
 		 this.brandEndorsement= page.locator("//a[text()='Brand Endorsement']");
 		 this.personalizedVideoMessage= page.locator("//a[text()='Personalized Video Message']");
-		 this.getMentorCall= page.locator("//button[text()='Get a Mentor Call']").first();
+		 this.getMentorCall= page.locator("//button[text()='Get a Mentor Call']");
 		 this.askYourQuery= page.locator("//button[text()='Ask Your Query']");
 		 this.bookOnlineMeeting= page.locator("//button[text()='Book Online Meeting']").first();
 		 this.bookEnquiry= page.locator("//button[text()='Book Inquiry']");
@@ -86,6 +90,10 @@ public class DescriptionPage {
 		 this.bookAnEnquiry = page.locator("//button[text()='Book an Inquiry']");
 		 this.aboutMeTittle = page.locator("//a[@class='font-sm-12 nav-link mentorship-pill tab-link-searchlisting']");
 		 this.aboutMeContent= page.locator("//div[@class='tab-content']");
+		 this.socialMediaLink= page.locator("//div[@class='mentorship-heading d-flex']//img[@alt='Location']");
+		 this.typeOfMentorSection= page.locator("//h5[@class='font-14 fw-normal pb-2 mb-0 pointer']");
+		 this.leftButton= page.locator("[class='left border-0 pointer']");
+		 this.rightButton= page.locator("[class='right border-0 pointer']");
 		 
 		 
 		 
@@ -130,6 +138,10 @@ public class DescriptionPage {
 	public Locator bookAnEnquiry() {return bookAnEnquiry;}
 	public Locator aboutMeTittle() {return aboutMeTittle;}
 	public Locator aboutMeContent() {return aboutMeContent;}
+	public Locator typeOfMentorSection() {return typeOfMentorSection;}
+	public Locator socialMediaLink() {return socialMediaLink;}
+	public Locator leftButton() {return leftButton;}
+	public Locator rightButton() {return rightButton;}
 	
 	
 	

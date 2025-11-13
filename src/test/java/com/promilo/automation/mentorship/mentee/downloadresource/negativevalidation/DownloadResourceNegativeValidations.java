@@ -1,4 +1,4 @@
-package com.promilo.automation.mentee.brandendorsement.negativevalidations;
+package com.promilo.automation.mentorship.mentee.downloadresource.negativevalidation;
 
 import java.nio.file.Paths;
 
@@ -12,9 +12,10 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.promilo.automation.mentorship.mentee.MentorshipErrorMessagesAndToasters;
-import com.promilo.automation.mentorship.mentee.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
+import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
+import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
+import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipErrorMessagesAndToasters;
+import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipFormComponents;
 import com.promilo.automation.pageobjects.signuplogin.HomePage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
@@ -22,7 +23,7 @@ import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class BrandEndorsementErrorMessagesValidation extends Baseclass {
+public class DownloadResourceNegativeValidations extends Baseclass {
 
     ExtentReports extent = ExtentManager.getInstance();
     ExtentTest test = extent.createTest("Brand Endorsement Error Messages Validation Functionality");
@@ -111,14 +112,24 @@ public class BrandEndorsementErrorMessagesValidation extends Baseclass {
         // =========================================================
         DescriptionPage serviceClick = new DescriptionPage(page);
         serviceClick.allLink().click();
-        serviceClick.brandEndorsement().click();
-        serviceClick.bookEnquiry().nth(1).click();
-        serviceClick.bookAnEnquiry().click();
+        Locator buyRessuource=  serviceClick.buyResources().first();
+        buyRessuource.scrollIntoViewIfNeeded();
+        buyRessuource.click();
+        
+        
+        
+        
+        
         
         // =========================================================
         //                🔸 ERROR MESSAGE VALIDATION
         // =========================================================
         MentorshipErrorMessagesAndToasters ErrorMessageValidation = new MentorshipErrorMessagesAndToasters(page);
+        
+        
+        //click on Download Resource button
+        MentorshipFormComponents clickDownloadResouce= new MentorshipFormComponents(page);
+        clickDownloadResouce.downloadResource().click();
 
         // ✅ Required field validations
         String actualNameError = ErrorMessageValidation.nameIsRequired().textContent();
@@ -128,16 +139,19 @@ public class BrandEndorsementErrorMessagesValidation extends Baseclass {
         Assert.assertEquals(actualNameError, nameIsRequired, "❌ Name error message mismatch!");
         Assert.assertEquals(actualMobileError, mobileNumberIsRequired, "❌ Mobile number error message mismatch!");
         Assert.assertEquals(actualEmailError, emailIsRequired, "❌ Email error message mismatch!");
-        
 
         // ✅ Invalid inputs validation
-        ErrorMessageValidation.nameTextField().fill(NameMinimum);
+        ErrorMessageValidation.nameTextField().first().fill(NameMinimum);
         ErrorMessageValidation.mobileTextField().nth(1).fill(invalidMobileNumber);
         ErrorMessageValidation.emailTextField().nth(1).fill(invalidEmailAdress);
 
+        page.waitForTimeout(3000);
         String actualNameErrorValidation = ErrorMessageValidation.nameMinimumCharacter().textContent();
         String actualEmailErrorValidation = ErrorMessageValidation.invalidEmailAdress().textContent();
         String actualMobileErrorValidation = ErrorMessageValidation.invalidMobileNumber().textContent();
+        
+        
+        
 
         // ✅ Assertions for invalid input messages
         Assert.assertEquals(actualNameErrorValidation, nameMinimumCharacter,
@@ -146,6 +160,47 @@ public class BrandEndorsementErrorMessagesValidation extends Baseclass {
                 "❌ Invalid email address validation failed!");
         Assert.assertEquals(actualMobileErrorValidation, invalidMobileNumber,
                 "❌ Invalid mobile number validation failed!");
+        
+        
+        
+        
+ //Invalid Negative data
+
+String invalidNameSpecialChars = "@#$%^^";
+String invalidMobileAlpha = "98767abcde";
+String invalidEmailNoDomain = "testmail@";
+
+//Clear fields
+ErrorMessageValidation.nameTextField().first().fill("");
+ErrorMessageValidation.mobileTextField().nth(1).fill("");
+ErrorMessageValidation.emailTextField().nth(1).fill("");
+
+page.waitForTimeout(1000);
+
+//Fill  negative values
+ErrorMessageValidation.nameTextField().first().fill(invalidNameSpecialChars);
+ErrorMessageValidation.mobileTextField().nth(1).fill(invalidMobileAlpha);
+ErrorMessageValidation.emailTextField().nth(1).fill(invalidEmailNoDomain);
+
+//click submit button again to trigger validation message
+clickDownloadResouce.downloadResource().click();
+
+page.waitForTimeout(2000);
+
+
+//✅ Assertions for invalid Error messages
+Assert.assertEquals(actualNameErrorValidation, nameMinimumCharacter,
+        "❌ Name minimum character validation failed!");
+Assert.assertEquals(actualEmailErrorValidation, invalidEmailAdress,
+        "❌ Invalid email address validation failed!");
+Assert.assertEquals(actualMobileErrorValidation, invalidMobileNumber,
+        "❌ Invalid mobile number validation failed!");
+
+
+
+ 
+        
+        
 
         test.pass("✅ Brand Endorsement Error Messages Validation passed for TestCase: " + testCaseId);
 

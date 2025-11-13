@@ -1,4 +1,4 @@
-package com.promilo.automation.mentorship.mentee.bookmeeting.negativevalidation;
+package com.promilo.automation.mentorship.mentee.personalizedvideo.negativevalidations;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class BookMeetingWithInvalidOtp extends Baseclass {
+public class PersonalizedVideoWithInvaldOtp extends Baseclass {
 
     ExtentReports extent = ExtentManager.getInstance();
     private static final Logger logger = LogManager.getLogger(RegisteredUserShortList.class);
@@ -61,7 +61,7 @@ public class BookMeetingWithInvalidOtp extends Baseclass {
     }
 
     @Test(dataProvider = "BookAMeetingErrorValidation")
-    public void applyForJobTestFromExcel(
+    public void PersonalizedVideoWithInvaldOtpTest(
             String testCaseId,
             String keyword,
             String registeredEmail,

@@ -1,4 +1,4 @@
-package com.promilo.automation.mentorship.mentee.bookmeeting.negativevalidation;
+package com.promilo.automation.mentorship.mentee.getmentorcall.negativevalidation;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -25,12 +25,12 @@ import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class BookMeetingWithInvalidOtp extends Baseclass {
+public class GetMentorCallWithInvalidOtp extends Baseclass {
 
     ExtentReports extent = ExtentManager.getInstance();
     private static final Logger logger = LogManager.getLogger(RegisteredUserShortList.class);
 
-    // ✅ Filter only BookMeetingOtpValidation rows dynamically
+    // ✅ Filter only GetMentorCallOtpValidation rows dynamically
     @DataProvider(name = "BookAMeetingErrorValidation")
     public Object[][] jobApplicationData() throws Exception {
         String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "Mentorship Test Data.xlsx").toString();
@@ -61,7 +61,7 @@ public class BookMeetingWithInvalidOtp extends Baseclass {
     }
 
     @Test(dataProvider = "BookAMeetingErrorValidation")
-    public void applyForJobTestFromExcel(
+    public void PersonalizedVideoWithInvaldOtpTest(
             String testCaseId,
             String keyword,
             String registeredEmail,

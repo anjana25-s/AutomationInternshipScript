@@ -1,4 +1,4 @@
-package com.promilo.automation.mentorship.mentee.bookmeeting.negativevalidation;
+package com.promilo.automation.mentee.brandendorsement.negativevalidation;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class BookMeetingWithInvalidOtp extends Baseclass {
+public class BrandEndorsementWithInvalidOtp extends Baseclass {
 
     ExtentReports extent = ExtentManager.getInstance();
     private static final Logger logger = LogManager.getLogger(RegisteredUserShortList.class);
@@ -100,9 +100,9 @@ public class BookMeetingWithInvalidOtp extends Baseclass {
                 test.info("🔍 Test started for keyword: " + keyword);
 
                 // Step 1: Close popup if present
-                MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
+                MayBeLaterPopUp homePage = new MayBeLaterPopUp(page);
                 try {
-                    mayBeLaterPopUp.getPopup().click();
+                	homePage.getPopup().click();
                     test.info("✅ Popup closed successfully.");
                 } catch (Exception ignored) {
                     test.info("ℹ️ No popup found.");

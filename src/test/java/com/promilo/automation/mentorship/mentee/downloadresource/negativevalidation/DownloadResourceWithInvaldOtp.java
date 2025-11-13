@@ -1,4 +1,4 @@
-package com.promilo.automation.mentee.brandendorsement.negativevalidations;
+package com.promilo.automation.mentorship.mentee.downloadresource.negativevalidation;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -15,9 +15,9 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
-import com.promilo.automation.mentorship.mentee.MentorshipErrorMessagesAndToasters;
-import com.promilo.automation.mentorship.mentee.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
+import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
+import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
+import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipErrorMessagesAndToasters;
 import com.promilo.automation.pageobjects.signuplogin.HomePage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
@@ -25,7 +25,7 @@ import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class BrandEndorsementWithInvalidOtp extends Baseclass {
+public class DownloadResourceWithInvaldOtp extends Baseclass {
 
     ExtentReports extent = ExtentManager.getInstance();
     private static final Logger logger = LogManager.getLogger(RegisteredUserShortList.class);
@@ -61,7 +61,7 @@ public class BrandEndorsementWithInvalidOtp extends Baseclass {
     }
 
     @Test(dataProvider = "BookAMeetingErrorValidation")
-    public void applyForJobTestFromExcel(
+    public void PersonalizedVideoWithInvaldOtpTest(
             String testCaseId,
             String keyword,
             String registeredEmail,
@@ -100,9 +100,9 @@ public class BrandEndorsementWithInvalidOtp extends Baseclass {
                 test.info("🔍 Test started for keyword: " + keyword);
 
                 // Step 1: Close popup if present
-                MayBeLaterPopUp homePage = new MayBeLaterPopUp(page);
+                MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
                 try {
-                	homePage.getPopup().click();
+                    mayBeLaterPopUp.getPopup().click();
                     test.info("✅ Popup closed successfully.");
                 } catch (Exception ignored) {
                     test.info("ℹ️ No popup found.");

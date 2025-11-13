@@ -1,4 +1,4 @@
-package com.promilo.automation.mentorship.mentee.bookmeeting.negativevalidation;
+package com.promilo.automation.mentorship.mentee.personalizedvideo.negativevalidations;
 
 import java.nio.file.Paths;
 import org.apache.logging.log4j.LogManager;
@@ -20,17 +20,17 @@ import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class BookMeetingErrorMessagesValidation extends Baseclass {
+public class PersonalizedVideoNegativeValidations extends Baseclass {
 
     ExtentReports extent = ExtentManager.getInstance();
-    ExtentTest test = extent.createTest("Book A Video Call Error Messages Validation Functionality");
+    ExtentTest test = extent.createTest("personalized  Video Message Error  Validation Functionality");
 
     private static final Logger logger = LogManager.getLogger(RegisteredUserShortList.class);
 
     // ✅ Prevent duplicate execution
     private static boolean hasRun = false;
 
-    @DataProvider(name = "BookAMeetingErrorValidation")
+    @DataProvider(name = "PersonalizedVideoMessageErrorValidation")
     public Object[][] jobApplicationData() throws Exception {
         String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "Mentorship Test Data.xlsx").toString();
         ExcelUtil excel = new ExcelUtil(excelPath, "Mentorship");
@@ -58,8 +58,8 @@ public class BookMeetingErrorMessagesValidation extends Baseclass {
         return data;
     }
 
-    @Test(dataProvider = "BookAMeetingErrorValidation")
-    public void BookMeetingErrorMessagesValidationTest(
+    @Test(dataProvider = "PersonalizedVideoMessageErrorValidation")
+    public void applyForJobTestFromExcel(
             String testCaseId,
             String keyword,
             String registeredEmail,
@@ -78,7 +78,7 @@ public class BookMeetingErrorMessagesValidation extends Baseclass {
     ) throws Exception {
 
         // ✅ Run only once and only for matching keyword
-        if (!"BookMeetingErrorValidation".equalsIgnoreCase(keyword)) {
+        if (!"PersonalizedVideoMessageErrorValidation".equalsIgnoreCase(keyword)) {
             return;
         }
         if (hasRun) {
@@ -119,11 +119,11 @@ public class BookMeetingErrorMessagesValidation extends Baseclass {
         // Description page components
         DescriptionPage serviceClick = new DescriptionPage(page);
         serviceClick.allLink().click();
-        serviceClick.bookOnlineMeeting().click();
+        serviceClick.personalizedVideoMessage().click();
+        serviceClick.requestVideo().nth(1).click();
 
         // Click on Book a Video Call button
         MentorshipErrorMessagesAndToasters ErrorMessageValidation = new MentorshipErrorMessagesAndToasters(page);
-        ErrorMessageValidation.bookVideoCallButton().click();
 
         // ✅ Error validations without entering the data
         String actualNameError = ErrorMessageValidation.nameIsRequired().textContent();

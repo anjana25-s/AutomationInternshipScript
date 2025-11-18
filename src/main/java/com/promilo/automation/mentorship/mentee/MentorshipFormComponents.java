@@ -1,4 +1,4 @@
-package com.promilo.automation.mentorship.mentee.pagepbjects;
+package com.promilo.automation.mentorship.mentee;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;

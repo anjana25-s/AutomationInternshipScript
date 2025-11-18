@@ -16,7 +16,6 @@ import org.testng.annotations.Test;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import com.promilo.automation.mentorship.mentee.AskUsWithInvalidData;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipErrorMessagesAndToasters;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipFormComponents;
 import com.promilo.automation.mentorship.mentor.AboutMePage;
@@ -34,7 +33,7 @@ import com.promilo.automation.resources.SignupWithMailosaurUI;
 
 public class CampaignCreationNegativeValidation extends Baseclass {
 
-    private static final Logger log = LogManager.getLogger(AskUsWithInvalidData.class);
+    private static final Logger log = LogManager.getLogger(CampaignCreationNegativeValidation.class);
 
     private static String registeredEmail = null;
     private static String registeredPassword = null;

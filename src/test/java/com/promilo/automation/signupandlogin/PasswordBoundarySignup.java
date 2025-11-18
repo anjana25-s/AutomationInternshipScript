@@ -6,7 +6,7 @@ import com.aventstack.extentreports.*;
 import com.promilo.automation.pageobjects.signuplogin.CreateAccountpage;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import org.testng.annotations.Test;
@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class PasswordBoundarySignup extends Baseclass {
+public class PasswordBoundarySignup extends BaseClass {
 
     @Test
     public void signup() throws Exception {

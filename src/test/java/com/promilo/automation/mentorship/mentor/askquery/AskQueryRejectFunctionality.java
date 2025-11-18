@@ -48,7 +48,7 @@ public class AskQueryRejectFunctionality extends Baseclass {
 
 	    @Test(
 	        dependsOnMethods = {
-	            "com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipAskQueryPaid.mentorshipShortListFunctionalityTest"
+	            "com.promilo.automation.mentorship.mentee.intrests.pagepbjects.MentorshipAskQueryPaid.mentorshipShortListFunctionalityTest"
 	        } 
 	    )
 public void AcceptVideoServiceRequestTest() throws Exception {

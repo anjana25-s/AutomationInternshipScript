@@ -7,8 +7,8 @@ import org.testng.annotations.Test;
 import com.aventstack.extentreports.*;
 import com.promilo.automation.pageobjects.signuplogin.CreateAccountpage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
 import com.promilo.automation.resources.ExtentManager;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 
 import java.nio.file.Paths;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ExistingUserSignupPhone extends Baseclass {
+public class ExistingUserSignupPhone extends BaseClass {
 
     @Test
     public void signupWithExistingUserMail() throws Exception {

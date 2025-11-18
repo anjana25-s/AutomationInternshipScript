@@ -4,6 +4,8 @@ import com.microsoft.playwright.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
+import java.util.Arrays;
+
 public class BaseClass {
 
     protected Playwright playwright;
@@ -14,11 +16,24 @@ public class BaseClass {
     @BeforeClass
     public void launchBrowser() {
         playwright = Playwright.create();
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
-                .setHeadless(false)
-                .setSlowMo(500) // slows down actions for visibility
+
+        // Launch browser in FULL screen size (static window)
+        browser = playwright.chromium().launch(
+                new BrowserType.LaunchOptions()
+                        .setHeadless(false)
+                        .setSlowMo(200) // optional: slow for stability/visibility
+                        .setArgs(Arrays.asList(
+                                "--start-maximized",
+                                "--window-size=1920,1080"
+                        ))
         );
-        context = browser.newContext();
+
+        // Context with NO viewport = NO resizing = NO fluctuation
+        context = browser.newContext(
+                new Browser.NewContextOptions()
+                        .setViewportSize(null)        // ⭐ Key fix
+        );
+
         page = context.newPage();
     }
 
@@ -30,3 +45,4 @@ public class BaseClass {
         if (playwright != null) playwright.close();
     }
 }
+

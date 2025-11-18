@@ -1,70 +1,104 @@
 package com.automation.tests;
 
-import com.microsoft.playwright.*;
-import com.automation.scripts.HomePageScript;
-import com.automation.scripts.RegisterWithUsScript;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import com.automation.base.BaseClass;
+import com.automation.pages.HomepagePage;
+import com.automation.pages.RegisterWithUsPage;
+import com.automation.utils.HelperUtility;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.options.WaitForSelectorState;
+import org.testng.Assert;
+import org.testng.annotations.*;
 
-public class RegisterWithUsTest {
+public class RegisterWithUsTest extends BaseClass {
 
-    private Playwright playwright;
-    private Browser browser;
-    private Page page;
-    private HomePageScript homePageScript;
+    private HomepagePage home;
+    private RegisterWithUsPage register;
+    private HelperUtility helper;
+
+    private static final String BASE_URL = "https://stage.promilo.com/";
+    private static final String OTP = "9999";
 
     @BeforeClass
-    public void setUp() {
-        playwright = Playwright.create();
-        browser = playwright.chromium()
-                .launch(new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(500));
-        page = browser.newPage();
+    public void initPages() {
+        home = new HomepagePage(page);
+        register = new RegisterWithUsPage(page);
+        helper = new HelperUtility(page);
+    }
 
-        homePageScript = new HomePageScript(page);
-        System.out.println("[Step 1] Playwright initialized and browser launched");
+    @BeforeMethod
+    public void openUrl() {
+        helper.log("[Step 1] Navigating to " + BASE_URL);
+        page.navigate(BASE_URL);
+        page.waitForLoadState();
+        page.waitForSelector("body");
+
+        if (home.getMaybeLaterBtn().isVisible()) {
+            helper.safeClick(home.getMaybeLaterBtn(), "Close Maybe Later Popup");
+        }
     }
 
     @Test
-    public void testRegisterWithUs() {
-        // Step 2: Navigate to the website
-        page.navigate("https://stage.promilo.com");
-        System.out.println("[Step 2] Navigated to Promilo");
+    public void verifyRegisterWithUsFlow() {
+        try {
+            // Generate random user
+            String name = helper.generateRandomName();
+            String phone = helper.generateRandomPhone();
+            String email = helper.generateEmailFromName(name);
+            String password = "Test@" + phone.substring(phone.length() - 3);
 
-        // Step 3: Dismiss preference modal if present
-        homePageScript.clickMaybeLater();
-        System.out.println("[Step 3] Dismissed 'Maybe Later' modal if appeared");
+            helper.log("[DATA] Name=" + name + " | Phone=" + phone + " | Email=" + email);
 
-        // Step 4: Click on Internships tab
-        homePageScript.clickInternships();
-        System.out.println("[Step 4] Clicked on 'Internships' tab");
+            helper.safeClick(home.getInternshipsTab(), "Open Internships Tab");
 
-        // Step 5: Initialize RegisterWithUsScript and complete registration
-        RegisterWithUsScript registerScript = new RegisterWithUsScript(page);
-        System.out.println("[Step 5] Initialized registration script");
+            helper.safeFill(register.getNameField(), name, "Name");
+            helper.safeFill(register.getMobileField(), phone, "Mobile");
+            helper.safeFill(register.getEmailField(), email, "Email");
+            helper.safeFill(register.getPasswordField(), password, "Password");
 
-        // Step 6: Fill registration details and submit
-        registerScript.completeRegisterFlow(
-                "John Doe",              // Name
-                "9000019278",            // Mobile
-                "johw4jwjsn@example.com",  // Email
-                "Ahmedabad",             // Preferred Location
-                "Animation & VFX",       // Industry
-                "SecurePass123",         // Password
-                "9999"                   // OTP
-        );
-        System.out.println("[Step 6] Completed registration with user details");
+            // ---------- LOCATION ----------
+            helper.safeClick(register.getPreferredLocationDropdown(), "Open Location Dropdown");
+            helper.safeClick(register.getFirstLocationOption(), "Select FIRST Location Option");
 
-        // Step 7: Wait for final confirmation (optional but helpful)
-        page.waitForTimeout(2000);
-        System.out.println("[Step 7] Waited for confirmation");
-    }
+            // ---------- INDUSTRY ----------
+            helper.safeClick(register.getIndustryDropdown(), "Open Industry Dropdown");
 
-    @AfterClass
-    public void tearDown() {
-        if (browser != null) browser.close();
-        if (playwright != null) playwright.close();
-        System.out.println("[Teardown] Browser and Playwright closed");
+            Locator checkboxes = register.getIndustryCheckboxes();
+            int total = checkboxes.count();
+
+            Assert.assertTrue(total > 5, "❌ Industry checkboxes not loaded!");
+
+            helper.safeClick(checkboxes.nth(0), "Select Checkbox 1");
+            helper.safeClick(checkboxes.nth(1), "Select Checkbox 2");
+
+            helper.safeClick(register.getIndustryDropdown(), "Close Industry Dropdown");
+
+            // ---------- REGISTER ----------
+            helper.safeClick(register.getRegisterNowButton(), "Register Now");
+
+            // ---------- OTP ----------
+            Locator otp = register.getOtpInputs();
+            otp.nth(0).fill("9");
+            otp.nth(1).fill("9");
+            otp.nth(2).fill("9");
+            otp.nth(3).fill("9");
+
+            helper.safeClick(register.getVerifyOtpButton(), "Verify & Proceed");
+
+            // ---------- THANK YOU ----------
+            register.getThankYouPopup().waitFor(new Locator.WaitForOptions()
+                    .setState(WaitForSelectorState.VISIBLE)
+                    .setTimeout(15000));
+
+            Assert.assertTrue(register.getThankYouPopup().isVisible(),
+                    "❌ THANK YOU POPUP NOT VISIBLE!");
+
+            helper.safeClick(register.getThankYouCloseButton(), "Close Thank You Popup");
+
+            helper.log("===== ✅ REGISTER WITH US FLOW PASSED =====");
+
+        } catch (Exception e) {
+            helper.takeScreenshot("RegisterWithUs_Failed");
+            Assert.fail("❌ TEST FAILED: " + e.getMessage());
+        }
     }
 }
-

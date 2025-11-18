@@ -1,95 +1,111 @@
 package com.automation.tests;
 
-import com.microsoft.playwright.*;
-import com.automation.scripts.FeedbackPopupScript;
-import com.automation.scripts.HomePageScript;
-import com.automation.scripts.SignupPageScript;
+import com.automation.base.BaseClass;
+import com.automation.pages.*;
+import com.automation.utils.HelperUtility;
+import com.microsoft.playwright.Locator;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-public class FeedbackMobileTest {
+public class FeedbackMobileTest extends BaseClass {
 
-    private Playwright playwright;
-    private Browser browser;
-    private Page page;
-    private HomePageScript homePageScript;
-    private SignupPageScript signupPageScript;
-    private FeedbackPopupScript feedbackPopupScript;
+    private HomepagePage home;
+    private SignUpPage signup;
+    private FeedbackPopupPage feedback;
+    private HelperUtility helper;
+
+    private static final String BASE_URL = "https://stage.promilo.com/";
+    private static final String OTP = "9999";
+    private static final String PASSWORD = "Test@123";
+    private static final String INTERNSHIP = "Finance- Job role";
+    private static final String FEEDBACK_TEXT = "This is feedback after mobile signup.";
 
     @BeforeClass
-    public void setup() {
-        // Initialize Playwright and browser
-        playwright = Playwright.create();
-        browser = playwright.chromium()
-                .launch(new BrowserType.LaunchOptions()
-                        .setHeadless(false)
-                        .setSlowMo(500));
-        page = browser.newPage();
+    public void initPages() {
+        home = new HomepagePage(page);
+        signup = new SignUpPage(page);
+        feedback = new FeedbackPopupPage(page);
+        helper = new HelperUtility(page);
+    }
 
-        // Initialize script objects
-        homePageScript = new HomePageScript(page);
-        signupPageScript = new SignupPageScript(page);
-        feedbackPopupScript = new FeedbackPopupScript(page);
+    @BeforeMethod
+    public void openBase() {
+        helper.log("[Step 1] Navigating to Homepage…");
+        page.navigate(BASE_URL);
+        page.waitForLoadState();
 
-        // Navigate to the application
-        page.navigate("https://stage.promilo.com");
-        System.out.println("[Step 1] Navigated to Promilo");
+        if (home.getMaybeLaterBtn().isVisible()) {
+            helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
+        }
     }
 
     @Test
-    public void feedbackFlow_MobileSignup() {
-        // Dismiss 'Maybe Later' modal if present
-        homePageScript.clickMaybeLater();
-        System.out.println("[Step 2] Dismissed 'Maybe Later' modal if appeared");
+    public void verifyFeedbackPopupViaMobileSignup() {
 
-        // Click on Internships tab
-        homePageScript.clickInternships();
-        System.out.println("[Step 3] Clicked on 'Internships' tab");
+        // ----------- Test Data (Helper Based) -----------
+        String name = helper.generateRandomName();
+        String mobile = helper.generateRandomPhone();
+        String email = helper.generateEmailFromName(name);
 
-        // Click initial Sign Up button
-        signupPageScript.clickInitialSignupButton();
-        System.out.println("[Step 4] Clicked on 'Sign Up' button");
+        helper.log("Generated Name = " + name);
+        helper.log("Generated Mobile = " + mobile);
+        helper.log("Generated Email = " + email);
 
-        // Enter mobile number and request OTP
-        signupPageScript.enterEmailOrPhone("9000018583");
-        signupPageScript.clickVerificationCode();
-        System.out.println("[Step 5] Entered mobile number and requested OTP");
+        // ----------- SIGNUP USING MOBILE -----------
+        helper.safeClick(signup.getInitialSignupButton(), "Click SignUp");
+        helper.safeFill(signup.getEmailOrPhoneInput(), mobile, "Enter Mobile");
+        helper.safeClick(signup.getSendVerificationCodeButton(), "Send Verification Code");
 
-        // Enter OTP and complete signup
-        signupPageScript.enterOtp("9999", false);
-        signupPageScript.enterPassword("Test@1234");
-        signupPageScript.clickFinalSignupButton();
-        System.out.println("[Step 6] ✅ Mobile signup completed");
+        helper.safeFill(signup.getOtpInput(), OTP, "Enter OTP");
+        helper.safeFill(signup.getPasswordInput(), PASSWORD, "Enter Password");
+        helper.safeClick(signup.getFinalSignupButton(), "Complete Signup");
 
-        // Select internship card
-        homePageScript.selectInternship("Finance- Job role");
-        System.out.println("[Step 7] Selected internship card: Finance- Job role");
+        // Assert login success by checking Internships tab
+        Assert.assertTrue(home.getInternshipsTab().isVisible(),
+                "❌ Signup might have failed — Internships Tab not visible!");
+        helper.log("✔ Signup successful via Mobile");
 
-        // Enter feedback
-        feedbackPopupScript.getActions().enterFeedback("This is feedback after mobile signup");
-        feedbackPopupScript.getActions().submitFeedback();
-        System.out.println("[Step 8] Feedback submitted");
+        // ----------- INTERNSHIPS TAB -----------
+        helper.safeClick(home.getInternshipsTab(), "Open Internships");
 
-        // Fill user details and submit
-        feedbackPopupScript.getActions().fillUserDetails(
-                "Meghana",
-                "",
-                "testmeghana234@yopmail.com"
-        );
-        feedbackPopupScript.getActions().clickUserDetailsSubmit();
-        System.out.println("[Step 9] User details submitted");
+        Locator card = home.getInternshipCard(INTERNSHIP);
+        helper.waitForVisible(card, "Internship Card");
+        helper.scrollAndClick(card, "Open Internship");
 
-        // Verify Thank You popup is displayed
-        Assert.assertTrue(feedbackPopupScript.getActions().isThankYouDisplayed(), "Thank You popup not displayed!");
-        System.out.println("[Step 10] ✅ Feedback flow executed successfully for mobile signup");
-    }
+        // ----------- FEEDBACK MODAL -----------
+        Locator feedbackModal = page.locator("div.Job-Feedback-modal");
+        helper.waitForVisible(feedbackModal, "Feedback Modal");
+        Assert.assertTrue(feedbackModal.isVisible(), "❌ Feedback modal not visible!");
+        helper.log("✔ Feedback Modal Visible");
 
-    @AfterClass
-    public void teardown() {
-        // Close browser and Playwright
-        if (browser != null) browser.close();
-        if (playwright != null) playwright.close();
-        System.out.println("[Teardown] Browser and Playwright closed");
+        // ----------- ENTER FEEDBACK -----------
+        helper.safeFill(feedback.getFeedbackTextarea(), FEEDBACK_TEXT, "Enter Feedback");
+        helper.safeClick(feedback.getFeedbackSubmitBtn(), "Submit Feedback");
+
+        // ----------- USER DETAILS FORM -----------
+        helper.safeFill(feedback.getNameField(), name, "Enter Name");
+
+        if (feedback.getMobileField().isEnabled()) {
+            helper.safeFill(feedback.getMobileField(), mobile, "Enter Mobile");
+        } else {
+            helper.log("✔ Mobile auto-filled");
+        }
+
+        helper.safeFill(feedback.getEmailField(), email, "Enter Email");
+        helper.safeClick(feedback.getPopupSubmitBtn(), "Submit User Details");
+
+        // ----------- THANK YOU POPUP -----------
+        helper.waitForVisible(feedback.getThankYouPopup(), "Thank You Popup");
+
+        Assert.assertTrue(feedback.getThankYouPopup().isVisible(),
+                "❌ Thank You popup not visible!");
+        helper.log("✔ Thank You Popup Visible");
+
+        // Close Popup
+        helper.safeClick(feedback.getThankYouCloseBtn(), "Close Thank You Popup");
+
+        helper.log("🎉 FEEDBACK FLOW VIA MOBILE PASSED!");
     }
 }
+
 

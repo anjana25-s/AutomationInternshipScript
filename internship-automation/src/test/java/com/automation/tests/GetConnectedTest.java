@@ -1,90 +1,125 @@
 package com.automation.tests;
 
-import com.microsoft.playwright.*;
+import com.automation.base.BaseClass;
+import com.automation.pages.HomepagePage;
+import com.automation.pages.GetConnectedPage;
+import com.automation.utils.HelperUtility;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.options.WaitForSelectorState;
-import com.automation.scripts.GetConnectedScript;
-import com.automation.scripts.HomePageScript;
 import org.testng.Assert;
+import org.testng.Reporter;
 import org.testng.annotations.*;
 
-public class GetConnectedTest {
+public class GetConnectedTest extends BaseClass {
 
-    private Playwright playwright;
-    private Browser browser;
-    private BrowserContext context;
-    private Page page;
+    private HomepagePage home;
+    private GetConnectedPage connect;
+    private HelperUtility helper;
 
-    private HomePageScript homePageScript;
-    private GetConnectedScript getConnectedScript;
+    private static final String BASE_URL = "https://stage.promilo.com/";
+    private static final String INTERNSHIP = "Designer1";
+    private static final String OTP = "9999";
 
     @BeforeClass
-    public void setup() {
-        playwright = Playwright.create();
-        browser = playwright.chromium()
-                .launch(new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(300));
+    public void initPages() {
+        home = new HomepagePage(page);
+        connect = new GetConnectedPage(page);
+        helper = new HelperUtility(page);
     }
 
     @BeforeMethod
-    public void createContextAndPage() {
-        context = browser.newContext();
-        page = context.newPage();
+    public void openUrl() {
 
-        homePageScript = new HomePageScript(page);
-        getConnectedScript = new GetConnectedScript(page);
+        helper.log("[Step 1] Navigating to: " + BASE_URL);
+        page.navigate(BASE_URL);
+        page.waitForLoadState();
 
-        page.navigate("https://stage.promilo.com");
-        System.out.println("[Step 1] Navigated to Promilo");
+        Assert.assertTrue(page.url().contains("promilo"), "❌ URL did not load correctly!");
+
+        if (home.getMaybeLaterBtn().isVisible()) {
+            helper.safeClick(home.getMaybeLaterBtn(), "Close 'Maybe later' popup");
+        }
     }
 
-    @Test(description = "Get Connected flow with OTP verification")
-    public void testGetConnectedFlow() {
-        // Dismiss Modal if present
-        homePageScript.clickMaybeLater();
-        System.out.println("[Step 2] Dismissed 'Maybe Later' modal if appeared");
+    @Test
+    public void verifyGetConnectedFlow() {
 
-        // Click on 'Internships' tab
-        homePageScript.clickInternships();
-        System.out.println("[Step 3] Clicked on 'Internships' tab");
+        try {
+            // ------------------- GENERATE DATA -------------------
+            String name = helper.generateRandomName();
+            String phone = helper.generateRandomPhone();
+            String email = helper.generateEmailFromName(name);
+            String password = "Test@" + phone.substring(6);
 
-        // Select an internship card
-        homePageScript.selectInternship("Finance- Job role");
-        System.out.println("[Step 4] Selected internship: Finance- Job role");
+            helper.log("[DATA] Name: " + name);
+            helper.log("[DATA] Phone: " + phone);
+            helper.log("[DATA] Email: " + email);
 
-        // Wait until 'Get Connected' button is visible
-        page.waitForSelector("//button[contains(text(),'Get Connected')]",
-                new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
-        System.out.println("[Step 5] 'Get Connected' button is visible");
+            // ------------------- OPEN INTERNSHIPS -------------------
+            helper.safeClick(home.getInternshipsTab(), "Open Internships");
 
-        // Click 'Get Connected' button
-        getConnectedScript.getActions().clickGetConnected();
-        System.out.println("[Step 6] Clicked 'Get Connected'");
+            Locator card = home.getInternshipCard(INTERNSHIP);
+            helper.waitForVisible(card, "Internship Card");
 
-        // Fill form and verify OTP
-        getConnectedScript.registerAndVerify(
-                "Meghana",
-                "9000011480",
-                "testgetconnected@yopmail.com",
-                "Animation & VFX",
-                "Test@1234",
-                "9999"
-        );
-        System.out.println("[Step 7] Completed Get Connected registration and verification");
+            helper.scrollAndClick(card, "Open Internship");
 
-        // Verify Thank You popup
-        Assert.assertTrue(getConnectedScript.getActions().isThankYouDisplayed(),
-                "❌ Thank You popup not displayed after Get Connected registration!");
-        System.out.println("[Step 8] Thank You popup displayed successfully");
-    }
+            // ------------------- CLICK GET CONNECTED -------------------
+            helper.safeClick(connect.getGetConnectedBtn(), "Click Get Connected");
 
-    @AfterMethod
-    public void closeContext() {
-        if (context != null) context.close();
-    }
+            // ------------------- FILL FORM -------------------
+            helper.safeFill(connect.getNameField(), name, "Name");
+            helper.safeFill(connect.getMobileField(), phone, "Mobile");
+            helper.safeFill(connect.getEmailField(), email, "Email");
 
-    @AfterClass
-    public void tearDown() {
-        if (browser != null) browser.close();
-        if (playwright != null) playwright.close();
-        System.out.println("[Teardown] Browser and Playwright closed");
+            // ------------------- INDUSTRY DROPDOWN -------------------
+            helper.safeClick(connect.getIndustryDropdown(), "Open Industry");
+
+            Locator boxes = connect.getIndustryCheckboxes();
+            int total = boxes.count();
+
+            Assert.assertTrue(total >= 3, "❌ Less than 3 industry checkboxes available!");
+
+            helper.safeClick(boxes.nth(1), "Select Industry Checkbox 1");
+            helper.safeClick(boxes.nth(2), "Select Industry Checkbox 2");
+            helper.safeClick(boxes.nth(3), "Select Industry Checkbox 3");
+
+            // Close dropdown (same locator used)
+            helper.safeClick(connect.getIndustryDropdown(), "Close Industry Dropdown");
+
+            helper.safeFill(connect.getPasswordField(), password, "Password");
+
+            // ------------------- REGISTER -------------------
+            helper.safeClick(connect.getRegisterBtn(), "Click Register");
+
+            // ------------------- OTP SCREEN -------------------
+            Locator otpBox = connect.getOtpInput(1);
+            otpBox.waitFor(new Locator.WaitForOptions()
+                    .setState(WaitForSelectorState.VISIBLE)
+                    .setTimeout(15000));
+
+            helper.log("OTP screen loaded!");
+
+            // ------------------- ENTER OTP -------------------
+            for (int i = 1; i <= 4; i++) {
+                helper.safeFill(connect.getOtpInput(i),
+                        OTP.substring(i - 1, i),
+                        "OTP Digit " + i);
+            }
+
+            Assert.assertFalse(connect.getVerifyOtpBtn().isDisabled(),
+                    "❌ Verify & Proceed button should be enabled!");
+
+            // ------------------- VERIFY OTP -------------------
+            helper.safeClick(connect.getVerifyOtpBtn(), "Verify OTP");
+
+            helper.log("===== ✅ GET CONNECTED FLOW COMPLETED SUCCESSFULLY =====");
+
+        } catch (Exception e) {
+            Reporter.log("❌ TEST FAILED: " + e.getMessage(), true);
+            helper.takeScreenshot("GetConnected_Failed");
+            Assert.fail("❌ Test crashed: " + e.getMessage());
+        }
     }
 }
+
+

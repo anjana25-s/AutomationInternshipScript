@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.automation.tests.RescheduleFunctionalityTest">
+      <class name="com.automation.tests.FeedbackNegativeTest">
         <methods>
-          <include name="setup"/>
-          <include name="testCandidateToAdvertiserRescheduleFlow"/>
-          <include name="teardown"/>
+          <include name="launchBrowser"/>
+          <include name="closeBrowser"/>
+          <include name="fullFeedbackNegativeFlow"/>
         </methods>
-      </class> <!-- com.automation.tests.RescheduleFunctionalityTest -->
+      </class> <!-- com.automation.tests.FeedbackNegativeTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

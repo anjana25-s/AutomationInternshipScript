@@ -57,9 +57,9 @@ function toggleAllBoxes() {
 <tr>
 <td>Tests passed/Failed/Skipped:</td><td>0/1/0</td>
 </tr><tr>
-<td>Started on:</td><td>Thu Oct 23 17:44:04 IST 2025</td>
+<td>Started on:</td><td>Tue Nov 18 17:54:34 IST 2025</td>
 </tr>
-<tr><td>Total time:</td><td>65 seconds (65488 ms)</td>
+<tr><td>Total time:</td><td>55 seconds (55560 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -76,29 +76,56 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='com.automation.tests.RescheduleFunctionalityTest.testCandidateToAdvertiserRescheduleFlow()'><b>testCandidateToAdvertiserRescheduleFlow</b><br>Test class: com.automation.tests.RescheduleFunctionalityTest</td>
-<td><div><pre>com.microsoft.playwright.impl.TargetClosedError: Error {
-  message=&apos;Target page, context or browser has been closed
-  name=&apos;TargetClosedError
-  stack=&apos;TargetClosedError:Target page, context or browser has been closed
-Error
-    at captureRawStack (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\stackTrace.js:32:17)
-    at LongStandingScope._race (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\manualPromise.js:87:58)
-    at LongStandingScope.race (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\manualPromise.js:80:17)
-    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\server\dispatchers\dispatcher.js:90:36)
-    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\server\dispatchers\dispatcher.js:309:39)
+<td title='com.automation.tests.FeedbackNegativeTest.fullFeedbackNegativeFlow()'><b>fullFeedbackNegativeFlow</b><br>Test class: com.automation.tests.FeedbackNegativeTest<br/>
+<a href="#Output-252738640" onClick='toggleBox("Output-252738640", this, "Show output", "Hide output");'>Show output</a>
+
+<a href="#Output-252738640" onClick="toggleAllBoxes();">Show all outputs</a>
+<div class='log' id="Output-252738640">
+======== FEEDBACK NEGATIVE FLOW STARTED ========<br/>
+[STEP] Navigate to website<br/>
+[Click] Close Maybe Later ✓<br/>
+📷 Screenshot: screenshots/Close Maybe Later_20251118_175449.png<br/>
+[Click] Open Internships ✓<br/>
+📷 Screenshot: screenshots/Open Internships_20251118_175451.png<br/>
+[Wait] Internship Card<br/>
+[Click] Open Internship ✓<br/>
+📷 Screenshot: screenshots/Open Internship_20251118_175455.png<br/>
+[Wait] Feedback Textarea<br/>
+[Fill] Feedback Text = Automated feedback for validation.<br/>
+📷 Screenshot: screenshots/Fill_Feedback Text_20251118_175456.png<br/>
+[Click] Submit Feedback Text ✓<br/>
+📷 Screenshot: screenshots/Submit Feedback Text_20251118_175457.png<br/>
+[Wait] Ask Us Popup<br/>
+[Click] Submit Blank Ask-Us Form ✓<br/>
+📷 Screenshot: screenshots/Submit Blank Ask-Us Form_20251118_175458.png<br/>
+[ERROR FOUND] Name is required<br/>
+[ERROR FOUND] Mobile number is required<br/>
+[ERROR FOUND] Email is required<br/>
+</div>
+</td>
+<td><div><pre>com.microsoft.playwright.TimeoutError: Error {
+  message=&apos;Timeout 30000ms exceeded.
+  name=&apos;TimeoutError
+  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\progress.js:76:26)
+    at Frame.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\frames.js:615:23)
+    at FrameDispatcher.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\frameDispatcher.js:82:116)
+    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:88:40)
+    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:309:39)
 }
 Call log:
--   - waiting for locator(&quot;//span[text()=&apos;My Interest&apos;]&quot;) to be visible
+-   - waiting for locator(&quot;//div[contains(@class,&apos;AskUs-Modal&apos;) and contains(@class,&apos;show&apos;)]//div[contains(@class,&apos;text-danger&apos;) and normalize-space()=&apos;Must be 3 characters or greater&apos;]&quot;) to be visible
 
-	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:54)
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
 	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:138)
 	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:131)
 	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:124)
 	at com.microsoft.playwright.impl.FrameImpl.waitForSelectorImpl(FrameImpl.java:985)
 	at com.microsoft.playwright.impl.LocatorImpl.waitFor(LocatorImpl.java:625)
-	at com.automation.pages.RescheduleFunctionalityActions.clickMyInterests(RescheduleFunctionalityActions.java:27)
-	at com.automation.tests.RescheduleFunctionalityTest.testCandidateToAdvertiserRescheduleFlow(RescheduleFunctionalityTest.java:41)
+	at com.microsoft.playwright.Locator.waitFor(Locator.java:5418)
+	at com.automation.pages.FeedbackErrorMessagesPage.assertErrorVisible(FeedbackErrorMessagesPage.java:24)
+	at com.automation.pages.FeedbackErrorMessagesPage.assertRequiredErrorMessages(FeedbackErrorMessagesPage.java:37)
+	at com.automation.tests.FeedbackNegativeTest.fullFeedbackNegativeFlow(FeedbackNegativeTest.java:54)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
@@ -125,47 +152,47 @@ Call log:
 	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
 	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
-Caused by: com.microsoft.playwright.impl.TargetClosedError: Error {
-  message=&apos;Target page, context or browser has been closed
-  name=&apos;TargetClosedError
-  stack=&apos;TargetClosedError:Target page, context or browser has been closed
-Error
-    at captureRawStack (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\stackTrace.js:32:17)
-    at LongStandingScope._race (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\manualPromise.js:87:58)
-    at LongStandingScope.race (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\manualPromise.js:80:17)
-    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\server\dispatchers\dispatcher.js:90:36)
-    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\server\dispatchers\dispatcher.js:309:39)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message=&apos;Timeout 30000ms exceeded.
+  name=&apos;TimeoutError
+  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\progress.js:76:26)
+    at Frame.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\frames.js:615:23)
+    at FrameDispatcher.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\frameDispatcher.js:82:116)
+    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:88:40)
+    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:309:39)
 }
 Call log:
--   - waiting for locator(&quot;//span[text()=&apos;My Interest&apos;]&quot;) to be visible
+-   - waiting for locator(&quot;//div[contains(@class,&apos;AskUs-Modal&apos;) and contains(@class,&apos;show&apos;)]//div[contains(@class,&apos;text-danger&apos;) and normalize-space()=&apos;Must be 3 characters or greater&apos;]&quot;) to be visible
 
-	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:259)
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:257)
 	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:214)
 	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:136)
-	... 32 more
-</pre></div><a href='#' onClick='toggleBox("stack-trace2095788421", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace2095788421'><pre>com.microsoft.playwright.impl.TargetClosedError: Error {
-  message=&apos;Target page, context or browser has been closed
-  name=&apos;TargetClosedError
-  stack=&apos;TargetClosedError:Target page, context or browser has been closed
-Error
-    at captureRawStack (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\stackTrace.js:32:17)
-    at LongStandingScope._race (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\manualPromise.js:87:58)
-    at LongStandingScope.race (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\manualPromise.js:80:17)
-    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\server\dispatchers\dispatcher.js:90:36)
-    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\server\dispatchers\dispatcher.js:309:39)
+	... 34 more
+</pre></div><a href='#' onClick='toggleBox("stack-trace252738640", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace252738640'><pre>com.microsoft.playwright.TimeoutError: Error {
+  message=&apos;Timeout 30000ms exceeded.
+  name=&apos;TimeoutError
+  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\progress.js:76:26)
+    at Frame.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\frames.js:615:23)
+    at FrameDispatcher.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\frameDispatcher.js:82:116)
+    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:88:40)
+    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:309:39)
 }
 Call log:
--   - waiting for locator(&quot;//span[text()=&apos;My Interest&apos;]&quot;) to be visible
+-   - waiting for locator(&quot;//div[contains(@class,&apos;AskUs-Modal&apos;) and contains(@class,&apos;show&apos;)]//div[contains(@class,&apos;text-danger&apos;) and normalize-space()=&apos;Must be 3 characters or greater&apos;]&quot;) to be visible
 
-	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:54)
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
 	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:138)
 	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:131)
 	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:124)
 	at com.microsoft.playwright.impl.FrameImpl.waitForSelectorImpl(FrameImpl.java:985)
 	at com.microsoft.playwright.impl.LocatorImpl.waitFor(LocatorImpl.java:625)
-	at com.automation.pages.RescheduleFunctionalityActions.clickMyInterests(RescheduleFunctionalityActions.java:27)
-	at com.automation.tests.RescheduleFunctionalityTest.testCandidateToAdvertiserRescheduleFlow(RescheduleFunctionalityTest.java:41)
+	at com.microsoft.playwright.Locator.waitFor(Locator.java:5418)
+	at com.automation.pages.FeedbackErrorMessagesPage.assertErrorVisible(FeedbackErrorMessagesPage.java:24)
+	at com.automation.pages.FeedbackErrorMessagesPage.assertRequiredErrorMessages(FeedbackErrorMessagesPage.java:37)
+	at com.automation.tests.FeedbackNegativeTest.fullFeedbackNegativeFlow(FeedbackNegativeTest.java:54)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
@@ -192,27 +219,26 @@ Call log:
 	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
 	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
-Caused by: com.microsoft.playwright.impl.TargetClosedError: Error {
-  message=&apos;Target page, context or browser has been closed
-  name=&apos;TargetClosedError
-  stack=&apos;TargetClosedError:Target page, context or browser has been closed
-Error
-    at captureRawStack (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\stackTrace.js:32:17)
-    at LongStandingScope._race (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\manualPromise.js:87:58)
-    at LongStandingScope.race (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\utils\isomorphic\manualPromise.js:80:17)
-    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\server\dispatchers\dispatcher.js:90:36)
-    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-16131072603072406056\package\lib\server\dispatchers\dispatcher.js:309:39)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message=&apos;Timeout 30000ms exceeded.
+  name=&apos;TimeoutError
+  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\progress.js:76:26)
+    at Frame.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\frames.js:615:23)
+    at FrameDispatcher.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\frameDispatcher.js:82:116)
+    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:88:40)
+    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:309:39)
 }
 Call log:
--   - waiting for locator(&quot;//span[text()=&apos;My Interest&apos;]&quot;) to be visible
+-   - waiting for locator(&quot;//div[contains(@class,&apos;AskUs-Modal&apos;) and contains(@class,&apos;show&apos;)]//div[contains(@class,&apos;text-danger&apos;) and normalize-space()=&apos;Must be 3 characters or greater&apos;]&quot;) to be visible
 
-	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:259)
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:257)
 	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:214)
 	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:136)
-	... 32 more
+	... 34 more
 </pre></div></td>
 <td>43</td>
-<td>com.automation.tests.RescheduleFunctionalityTest@128d2484</td></tr>
+<td>com.automation.tests.FeedbackNegativeTest@7cc0cdad</td></tr>
 </table><p>
 </body>
 </html>

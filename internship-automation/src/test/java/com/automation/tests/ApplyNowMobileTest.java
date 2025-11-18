@@ -9,7 +9,7 @@ import com.microsoft.playwright.Locator;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-public class ApplyNowEmailTest extends BaseClass {
+public class ApplyNowMobileTest extends BaseClass {
 
     private HomepagePage home;
     private SignUpPage signup;
@@ -37,61 +37,52 @@ public class ApplyNowEmailTest extends BaseClass {
         if (home.getMaybeLaterBtn().isVisible()) {
             helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
         }
-        Assert.assertTrue(page.url().contains("stage.promilo.com"), "❌ Base URL not loaded!");
     }
 
     @Test
-    public void verifyApplyNowViaEmail() {
+    public void verifyApplyNowViaMobile() {
 
         // ---------- Test Data ----------
         String name = helper.generateRandomName();
+        String mobile = helper.generateRandomPhone();
         String email = helper.generateEmailFromName(name);
-        String phone = helper.generateRandomPhone();
 
-        helper.log("Generated Name = " + name);
-        helper.log("Generated Email = " + email);
-        helper.log("Generated Phone = " + phone);
+        helper.log("[Generated Name] " + name);
+        helper.log("[Generated Mobile] " + mobile);
+        helper.log("[Generated Email] " + email);
 
-        // ---------- SIGNUP ----------
-        Assert.assertTrue(signup.getInitialSignupButton().isVisible(), "❌ Signup button not visible!");
+        // ---------- SIGNUP USING MOBILE ----------
         helper.safeClick(signup.getInitialSignupButton(), "Click SignUp");
-
-        helper.safeFill(signup.getEmailOrPhoneInput(), email, "Enter Email");
-        Assert.assertEquals(signup.getEmailOrPhoneInput().inputValue(), email, "❌ Email not entered correctly!");
-
+        helper.safeFill(signup.getEmailOrPhoneInput(), mobile, "Enter Mobile Number");
         helper.safeClick(signup.getSendVerificationCodeButton(), "Send Verification Code");
-        Assert.assertTrue(signup.getOtpInput().isVisible(), "❌ OTP input not visible!");
 
         helper.safeFill(signup.getOtpInput(), OTP, "Enter OTP");
         helper.safeFill(signup.getPasswordInput(), PASSWORD, "Enter Password");
-
         helper.safeClick(signup.getFinalSignupButton(), "Complete Signup");
-        Assert.assertTrue(home.getInternshipsTab().isVisible(), "❌ Signup failed, internships tab not visible!");
 
         // ---------- INTERNSHIP ----------
         helper.safeClick(home.getInternshipsTab(), "Open Internships");
 
         Locator card = home.getInternshipCard(INTERNSHIP);
         helper.waitForVisible(card, "Internship Card");
-        Assert.assertTrue(card.isVisible(), "❌ Internship card not visible!");
-
         helper.scrollAndClick(card, "Open Internship");
-        Assert.assertTrue(apply.getApplyNowButton().isVisible(), "❌ Apply Now button missing!");
 
         // ---------- APPLY NOW POPUP ----------
         helper.safeClick(apply.getApplyNowButton(), "Click Apply Now");
 
-        Assert.assertTrue(apply.getNameField().isVisible(), "❌ Name field missing!");
+        // name: empty → fill
         helper.safeFill(apply.getNameField(), name, "Fill Name");
-        Assert.assertEquals(apply.getNameField().inputValue(), name, "❌ Name not entered!");
 
-        helper.safeFill(apply.getPhoneField(), phone, "Fill Phone");
-        Assert.assertEquals(apply.getPhoneField().inputValue(), phone, "❌ Phone not entered!");
+        // mobile: already prefilled → skip, OR assert that it is prefilled
+        Assert.assertFalse(apply.getPhoneField().inputValue().isEmpty(), "❌ Mobile number should be prefilled!");
+        helper.log("✔ Mobile number is prefilled.");
 
-        // email is disabled after signup → skip fill
-        Assert.assertFalse(apply.getEmailField().isEnabled(), "❌ Email field should be disabled!");
+        // email is empty (only in mobile) → fill
+        if (apply.getEmailField().isEnabled()) {
+            helper.safeFill(apply.getEmailField(), email, "Fill Email");
+        }
 
-        // ---------- SELECT CHECKBOXES ----------
+        // ---------- SELECT INDUSTRIES ----------
         helper.safeClick(apply.getIndustryDropdown(), "Open Industry");
 
         Locator boxes = apply.getAllIndustryCheckboxes();
@@ -104,30 +95,23 @@ public class ApplyNowEmailTest extends BaseClass {
 
         helper.safeClick(apply.getIndustryDropdown(), "Close Industry");
 
-        helper.safeClick(apply.getAskUsApplyNowButton(), "Submit ApplyNow Form");
-
-        // ---------- OTP ----------
-        for (int i = 1; i <= 4; i++) {
-            helper.safeFill(apply.getOtpInputField(i), OTP.substring(i - 1, i), "OTP Digit " + i);
-            Assert.assertEquals(apply.getOtpInputField(i).inputValue(), OTP.substring(i - 1, i), "❌ OTP digit mismatch!");
-        }
-
-        helper.safeClick(apply.getVerifyAndProceedButton(), "Verify OTP");
-        Assert.assertTrue(apply.getLanguageCard("English").isVisible(), "❌ Language selection not loaded!");
+        // ---------- MOBILE → NO OTP ----------
+        helper.safeClick(apply.getAskUsApplyNowButton(), "Submit Apply Now");
 
         // ---------- CALENDAR ----------
         helper.safeClick(apply.getLanguageCard("English"), "Select English");
         helper.safeClick(apply.getFirstActiveDate(), "Select Date");
         helper.safeClick(apply.getFirstActiveTimeSlot(), "Select Time");
 
-        // ---------- SCREENING (if present) ----------
+        // ---------- SCREENING FLOW ----------
         if (apply.getNextButton().isVisible()) {
 
             helper.safeClick(apply.getNextButton(), "Go to Screening");
 
             Locator questions = apply.getScreeningQuestions();
             int count = questions.count();
-            Assert.assertTrue(count > 0, "❌ No screening questions found!");
+
+            helper.log("Total Screening Questions = " + count);
 
             for (int i = 0; i < count; i++) {
 
@@ -141,7 +125,6 @@ public class ApplyNowEmailTest extends BaseClass {
                 Locator textArea = q.locator("textarea");
                 if (textArea.count() > 0) {
                     helper.safeFill(textArea.first(), "Automated Answer", "Fill Subjective Answer");
-                    Assert.assertEquals(textArea.first().inputValue(), "Automated Answer", "❌ Subjective answer mismatch!");
                 }
             }
 
@@ -153,12 +136,11 @@ public class ApplyNowEmailTest extends BaseClass {
 
         // ---------- ASSERT THANK YOU POPUP ----------
         helper.waitForVisible(apply.getThankYouHeader(), "Thank You Popup");
-
-        Assert.assertTrue(apply.getThankYouHeader().isVisible(), "❌ Thank You header NOT visible!");
+        Assert.assertTrue(apply.getThankYouHeader().isVisible(), "❌ Thank You popup NOT visible!");
 
         helper.log("✔ Thank You popup verified!");
 
-        // ---------- CLICK MY INTEREST LINK ----------
+        // ---------- CLICK MY INTEREST ----------
         helper.safeClick(apply.getThankYouMyInterestLink(), "Click My Interest");
 
         page.waitForURL("**/myinterest**");
@@ -166,31 +148,30 @@ public class ApplyNowEmailTest extends BaseClass {
 
         helper.log("✔ Navigated to My Interest");
 
-        // ---------- ASSERT INTEREST CARD ----------
+        // ---------- ASSERT MY INTEREST CARD ----------
         Locator interestCard = page.locator("//div[contains(@class,'my-interest-card-contianer')]").first();
         helper.waitForVisible(interestCard, "My Interest Card");
+        Assert.assertTrue(interestCard.isVisible(), "❌ My Interest Card NOT visible!");
 
-        Assert.assertTrue(interestCard.isVisible(), "❌ Interest Card not visible!");
-        helper.log("✔ Interest Card Visible");
+        helper.log("✔ My Interest Card Visible");
 
         // Status
         Locator status = interestCard.locator(".my-interest-status-tag");
         Assert.assertEquals(status.innerText().trim(), "Pending", "❌ Status incorrect!");
+
         helper.log("✔ Status = Pending");
 
         // Meeting Date
         String date = interestCard.locator("(//div[@class='card_detail-value'])[1]").innerText().trim();
-        Assert.assertFalse(date.isEmpty(), "❌ Meeting Date empty!");
+        Assert.assertFalse(date.isEmpty(), "❌ Meeting Date is empty!");
 
         // Meeting Time
         String time = interestCard.locator("(//div[@class='card_detail-value'])[2]").innerText().trim();
-        Assert.assertFalse(time.isEmpty(), "❌ Meeting Time empty!");
+        Assert.assertFalse(time.isEmpty(), "❌ Meeting Time is empty!");
 
         helper.log("✔ Meeting Date & Time Validated");
-        helper.log("🎉 APPLY NOW EMAIL FLOW PASSED!");
+        helper.log("🎉 APPLY NOW MOBILE FLOW PASSED!");
     }
 }
-
-
 
 

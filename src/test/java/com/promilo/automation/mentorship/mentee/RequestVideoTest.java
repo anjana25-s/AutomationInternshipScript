@@ -20,10 +20,9 @@ import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipMyintrest;
 import com.promilo.automation.mentorship.mentee.pagepbjects.ThankYouPopup;
 import com.promilo.automation.pageobjects.signuplogin.HomePage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.Baseclass;
 
-public class RequestVideoTest extends BaseClass{
+public class RequestVideoTest extends Baseclass{
 	
 	
 	 private static final Logger log = LogManager.getLogger(ShortListWithExistingPhoneAndEmail.class);

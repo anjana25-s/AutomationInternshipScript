@@ -139,7 +139,7 @@ public class BrandEndorsementErrorMessagesValidation extends Baseclass {
         String actualEmailErrorValidation = ErrorMessageValidation.invalidEmailAdress().textContent();
         String actualMobileErrorValidation = ErrorMessageValidation.invalidMobileNumber().textContent();
 
-        // ✅ Assertions for invalid input messages.
+        // ✅ Assertions for invalid input messages
         Assert.assertEquals(actualNameErrorValidation, nameMinimumCharacter,
                 "❌ Name minimum character validation failed!");
         Assert.assertEquals(actualEmailErrorValidation, invalidEmailAdress,

@@ -45,7 +45,7 @@ public class OneOnOneCallRejectFunctionality extends Baseclass {
 
     @Test(
         dependsOnMethods = {
-            "com.promilo.automation.mentorship.mentee.intrests.pagepbjects.GetMentorCall.mentorshipShortListFunctionalityTest"
+            "com.promilo.automation.mentorship.mentee.pagepbjects.GetMentorCall.mentorshipShortListFunctionalityTest"
         }
     )
     public void AcceptVideoServiceRequestTest() throws Exception {

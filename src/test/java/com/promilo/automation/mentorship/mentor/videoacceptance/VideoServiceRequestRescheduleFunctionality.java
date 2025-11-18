@@ -44,7 +44,7 @@ public class VideoServiceRequestRescheduleFunctionality extends Baseclass{
 
 	    @Test(
 	        dependsOnMethods = {
-	            "com.promilo.automation.mentorship.mentee.intrests.pagepbjects.MentorshipBookMeeting.mentorshipbook"
+	            "com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipBookMeeting.mentorshipbook"
 	        } 
 	    )
     public void AcceptVideoServiceRequestTest() throws Exception {

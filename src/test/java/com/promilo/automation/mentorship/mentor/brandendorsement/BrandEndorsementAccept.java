@@ -51,7 +51,7 @@ public class BrandEndorsementAccept extends com.promilo.automation.resources.Bas
 
 	    @Test(
 	        dependsOnMethods = {
-	            "com.promilo.automation.mentorship.mentee.intrests.pagepbjects.BrandEndorsement.mentorshipBrandEndorsement"
+	            "com.promilo.automation.mentorship.mentee.pagepbjects.BrandEndorsement.mentorshipBrandEndorsement"
 	        } 
 	    )
 public void AcceptVideoServiceRequestTest() throws Exception {

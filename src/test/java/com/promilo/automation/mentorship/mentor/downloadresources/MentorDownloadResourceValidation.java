@@ -49,7 +49,7 @@ public class MentorDownloadResourceValidation extends Baseclass{
 
 	    @Test(
 	        dependsOnMethods = {
-	            "com.promilo.automation.mentorship.mentee.intrests.pagepbjects.BuyResourcesFunctionality.mentorshipShortListFunctionalityTest"
+	            "com.promilo.automation.mentorship.mentee.pagepbjects.BuyResourcesFunctionality.mentorshipShortListFunctionalityTest"
 	        } 
 	    )
 public void AcceptVideoServiceRequestTest() throws Exception {

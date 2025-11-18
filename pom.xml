@@ -28,13 +28,6 @@
             <artifactId>playwright</artifactId>
             <version>1.44.0</version>
         </dependency>
-        
-        <dependency>
-    <groupId>PromiloWebAutomationProject</groupId>
-    <artifactId>PromiloWebAutomationProject</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-</dependency>
-
 
         <!-- TestNG -->
         <dependency>

@@ -8,16 +8,16 @@ import org.testng.annotations.Test;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.promilo.automation.advertiser.MentorFilterTest;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
 import com.promilo.automation.pageobjects.signuplogin.HomePage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.Baseclass;
 
-public class MentorshipRegisterWithUS extends BaseClass{
+public class MentorshipRegisterWithUS extends Baseclass{
 
 	
-	private static final Logger log = LogManager.getLogger(MentorshipRegisterWithUS.class);
+	private static final Logger log = LogManager.getLogger(MentorFilterTest.class);
 
     @Test
     public void mentorshipRegisterWithUSTest() throws IOException {

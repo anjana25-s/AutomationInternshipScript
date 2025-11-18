@@ -10,7 +10,7 @@ import com.promilo.automation.resources.*;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class ResetPasswordwith_Existingmail extends BaseClass {
+public class ResetPasswordwith_Existingmail extends Baseclass {
 
     @Test
     public void resetPasswordWithExistingMail() throws Exception {

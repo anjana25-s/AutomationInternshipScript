@@ -47,7 +47,7 @@ public class PersonalizedVideoAcceptFunctionality extends Baseclass{
 
 	    @Test(
 	        dependsOnMethods = {
-	            "com.promilo.automation.mentorship.mentee.intrests.pagepbjects.RequestVideoTest.mentorshipShortListFunctionalityTest"
+	            "com.promilo.automation.mentorship.mentee.pagepbjects.RequestVideoTest.mentorshipShortListFunctionalityTest"
 	        } 
 	    )
 public void AcceptVideoServiceRequestTest() throws Exception {

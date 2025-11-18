@@ -1,4 +1,4 @@
-package com.promilo.automation.mentee.brandendorsement.negativevalidations;
+package com.promilo.automation.mentee.brandendorsement.negativevalidation;
 
 import java.nio.file.Paths;
 
@@ -12,9 +12,9 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.promilo.automation.mentorship.mentee.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
-import com.promilo.automation.mentorship.mentee.MentorshipErrorMessagesAndToasters;
+import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
+import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
+import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipErrorMessagesAndToasters;
 import com.promilo.automation.pageobjects.signuplogin.HomePage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;

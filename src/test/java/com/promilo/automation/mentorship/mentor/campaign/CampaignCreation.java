@@ -16,7 +16,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import com.promilo.automation.mentorship.mentee.MentorshipFormComponents;
+import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipFormComponents;
 import com.promilo.automation.mentorship.mentor.*;
 import com.promilo.automation.pageobjects.myresume.Hamburger;
 import com.promilo.automation.pageobjects.signuplogin.*;

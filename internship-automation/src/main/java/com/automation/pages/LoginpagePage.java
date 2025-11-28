@@ -26,6 +26,10 @@ public class LoginpagePage {
     // Profile icon after login
     private final Locator headerProfileImg;
 
+    // ⭐ NEW: After-login dropdown + logout
+    private final Locator userDropdownIcon;
+    private final Locator logoutButton;
+
     public LoginpagePage(Page page) {
         this.page = page;
 
@@ -39,6 +43,10 @@ public class LoginpagePage {
 
         this.userDoesNotExistError = page.getByRole(AriaRole.STATUS);
         this.headerProfileImg = page.locator("div.header-profile-img");
+
+     
+        this.userDropdownIcon = page.locator("//img[contains(@class,'user-drop')]");
+        this.logoutButton = page.locator("//span[normalize-space()='Sign Out']");
     }
 
     public Locator getLoginBtnOnHome() { return loginBtnOnHome; }
@@ -50,5 +58,9 @@ public class LoginpagePage {
 
     public Locator getUserDoesNotExistError() { return userDoesNotExistError; }
     public Locator getHeaderProfileImg() { return headerProfileImg; }
+
+    public Locator getUserDropdownIcon() { return userDropdownIcon; }
+    public Locator getLogoutButton() { return logoutButton; }
 }
+
 

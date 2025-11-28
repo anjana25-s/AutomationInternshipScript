@@ -5,52 +5,32 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 
+import java.util.Map;
+
 public class LoginUtility {
 
     private final Page page;
     private final LoginpagePage loginPage;
-    private final int timeout = 15000;
+    private final HelperUtility helper;
 
     public LoginUtility(Page page) {
         this.page = page;
         this.loginPage = new LoginpagePage(page);
-    }
-
-    // ------------------------------------------------------------
-    // 🔹 STEP 1: Open Login Popup
-    // ------------------------------------------------------------
-    private void openLoginWindow() {
-        loginPage.getLoginBtnOnHome().waitFor(
-                new Locator.WaitForOptions()
-                        .setState(WaitForSelectorState.VISIBLE)
-                        .setTimeout(timeout)
-        );
-        loginPage.getLoginBtnOnHome().click();
+        this.helper = new HelperUtility(page);
     }
 
     // ------------------------------------------------------------
     // 🔹 PASSWORD LOGIN
     // ------------------------------------------------------------
-    public void loginWithPassword(String emailOrMobile, String password) {
+    public void loginWithPassword(String email, String password) {
 
-        openLoginWindow();
+        helper.safeClick(loginPage.getLoginBtnOnHome(), "Open Login Popup");
 
-        loginPage.getEmailInput().waitFor(
-                new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(timeout)
-        );
+        helper.safeFill(loginPage.getEmailInput(), email, "Enter Email");
+        helper.safeFill(loginPage.getPasswordInput(), password, "Enter Password");
 
-        loginPage.getPasswordInput().waitFor(
-                new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(timeout)
-        );
-
-        loginPage.getEmailInput().fill(emailOrMobile);
-        loginPage.getPasswordInput().fill(password);
-
-        loginPage.getLoginSubmitBtn().waitFor(
-                new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(timeout)
-        );
-
-        loginPage.getLoginSubmitBtn().click();
+        helper.safeClick(loginPage.getLoginSubmitBtn(), "Login");
+        assertLoginSuccess();
     }
 
     // ------------------------------------------------------------
@@ -58,85 +38,65 @@ public class LoginUtility {
     // ------------------------------------------------------------
     public void loginWithOtp(String mobile, String otp) {
 
-        openLoginWindow();
+        helper.safeClick(loginPage.getLoginBtnOnHome(), "Open Login Popup");
 
-        loginPage.getEmailInput().waitFor(
-                new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(timeout)
-        );
-        loginPage.getEmailInput().fill(mobile);
+        helper.safeFill(loginPage.getEmailInput(), mobile, "Enter Mobile Number");
 
-        loginPage.getLoginWithOtpBtn().click();
+        helper.safeClick(loginPage.getLoginWithOtpBtn(), "Click Login with OTP");
 
         loginPage.getOtpInput().waitFor(
-                new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(timeout)
+                new Locator.WaitForOptions()
+                        .setState(WaitForSelectorState.VISIBLE)
+                        .setTimeout(15000)
         );
-        loginPage.getOtpInput().fill(otp);
 
-        loginPage.getLoginSubmitBtn().click();
+        helper.safeFill(loginPage.getOtpInput(), otp, "Enter OTP");
+
+        helper.safeClick(loginPage.getLoginSubmitBtn(), "Submit OTP");
+
+        assertLoginSuccess();
     }
 
     // ------------------------------------------------------------
-    // 🔹 SUCCESS CHECK (NEW: By CSS/XPath Selector)
+    // 🔹 LOGIN USING LAST SAVED JSON ACCOUNT
     // ------------------------------------------------------------
-    public boolean isLoginSuccessful(String successSelector) {
-        try {
-            page.locator(successSelector).waitFor(
-                    new Locator.WaitForOptions()
-                            .setState(WaitForSelectorState.VISIBLE)
-                            .setTimeout(20000)
-            );
-            return true;
-        } catch (Exception e) {
-            return false;
+    public void loginWithSavedAccount() {
+
+        Map<String, String> acc = TestAccountSave.loadLastAccount();
+
+        if (acc == null) {
+            throw new RuntimeException("❌ No saved account found! Run Signup test first.");
         }
+
+        String email = acc.get("email");
+        String password = acc.get("password");
+
+        helper.log("🔐 Logging in with saved account: " + email);
+
+        loginWithPassword(email, password);
     }
 
     // ------------------------------------------------------------
-    // 🔹 SUCCESS CHECK (ROBUST) — profile icon or popup disappeared
+    // 🔹 SUCCESS CHECK
     // ------------------------------------------------------------
-    public boolean isFullyLoggedIn() {
-
-        // Popup closed check
-        boolean popupClosed;
-        try {
-            popupClosed = loginPage.getEmailInput().isHidden();
-        } catch (Exception e) {
-            popupClosed = true;
-        }
-
-        // Profile icon check
-        boolean profileVisible;
-        try {
-            loginPage.getHeaderProfileImg().waitFor(
-                    new Locator.WaitForOptions()
-                            .setState(WaitForSelectorState.VISIBLE)
-                            .setTimeout(25000)
-            );
-            profileVisible = true;
-        } catch (Exception e) {
-            profileVisible = false;
-        }
-
-        return popupClosed || profileVisible;
+    public void assertLoginSuccess() {
+        helper.assertVisible(loginPage.getHeaderProfileImg(), "Profile Icon Visible → Login Success");
     }
 
     // ------------------------------------------------------------
-    // 🔹 USER DOESN'T EXIST ERROR
+    // 🔹 LOGOUT
     // ------------------------------------------------------------
-    public String getUserDoesNotExistError() {
+    public void logout() {
         try {
-            loginPage.getUserDoesNotExistError().waitFor(
-                    new Locator.WaitForOptions()
-                            .setState(WaitForSelectorState.VISIBLE)
-                            .setTimeout(5000)
-            );
-            return loginPage.getUserDoesNotExistError().innerText();
+            helper.log("🔽 Opening user dropdown...");
+            helper.safeClick(loginPage.getUserDropdownIcon(), "Open User Dropdown");
+
+            helper.safeClick(loginPage.getLogoutButton(), "Click Sign Out");
+
+            helper.log("✔ Logged out successfully");
+
         } catch (Exception e) {
-            return "";
+            helper.log("⚠ Logout skipped — already logged out or dropdown missing");
         }
     }
 }
-
-
-
-

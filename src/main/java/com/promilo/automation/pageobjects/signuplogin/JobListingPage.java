@@ -93,7 +93,7 @@ public class JobListingPage {
         this.applyNowOtpField = page.locator("//input[@aria-label='Please enter OTP character 1']");
         this.applyNameField = page.locator("//input[@name='userName']");
         this.jobApplyPopup = page.locator("//div[text()='Thank You!']");
-        this.getHrCall = page.locator("//button[text()='Get HR Call' and @class='functional_btn-Get-call']");
+        this.getHrCall = page.locator("//button[text()='Get HR Call']");
         this.getHrCallSubmitButton = page.locator("//button[@class='fw-bold w-100 font-16 fw-bold calendar-modal-custom-btn mt-2 btn btn-primary']");
         this.getHrCallThankYouPopup = page.locator("//p[text()='Thank you for requesting an HR Call from Agile Technology. Check your email, notifications, and WhatsApp for details on exclusive access.']");
         this.getAnHrCallButton = page.locator("//button[text()='Get an HR Call']");

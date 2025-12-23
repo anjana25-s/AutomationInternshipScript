@@ -9,6 +9,7 @@ public class DashboardPage {
 
     // ✅ Profile image after login
     private final Locator profileImage;
+    private final Locator mentorships;
 
     // ✅ Login validation image/icon
     private final Locator loginValidation;
@@ -23,6 +24,7 @@ public class DashboardPage {
         this.profileImage = page.locator("//div[@role='status']");
         this.loginValidation = page.locator("//div[@id='navbarScroll']//img[@class='me-50 menu-header-user-img rounded-circle']");
         this.mystuff = page.locator("//img[@alt='my stuff']");
+        this.mentorships=page.locator("//a[text()='Mentorships']");
     }
 
     
@@ -38,4 +40,6 @@ public class DashboardPage {
     public Locator mystuff() {
         return mystuff;
     }
+    
+    public Locator mentorships() {return mentorships;}
 }

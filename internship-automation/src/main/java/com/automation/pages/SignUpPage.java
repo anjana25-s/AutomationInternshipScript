@@ -8,15 +8,25 @@ public class SignUpPage {
     private final Page page;
 
     // ------------------- Locators -------------------
-    private final String initialSignupBtn = "(//div[contains(@class,'sign-up-button') and normalize-space(text())='Sign Up'])[last()]";
-    private final String emailOrPhoneInput = "//input[@placeholder='Enter Email or Mobile Number']";
-    private final String sendVerificationCodeBtn = "//button[text()='Send Verification Code']";
 
-    // Support both email & mobile OTP placeholders
-    private final String otpInput = "//input[@placeholder='Enter OTP sent to email' or @placeholder='Enter OTP sent to mobile number']";
+    // ✔ Updated and stable locator
+    private final String initialSignupBtn =
+            "//nav//div[@class='sign-up-button' and normalize-space(text())='Sign Up']";
 
-    private final String passwordInput = "//input[@placeholder='Enter Password']";
-    private final String finalSignupBtn = "//button[text()='Sign Up']";
+    private final String emailOrPhoneInput =
+            "//input[@placeholder='Enter Email or Mobile Number']";
+
+    private final String sendVerificationCodeBtn =
+            "//button[normalize-space(text())='Send Verification Code']";
+
+    private final String otpInput =
+            "//input[@placeholder='Enter OTP sent to email' or @placeholder='Enter OTP sent to mobile number']";
+
+    private final String passwordInput =
+            "//input[@placeholder='Enter Password']";
+
+    private final String finalSignupBtn =
+            "//button[normalize-space(text())='Sign Up']";
 
     // ------------------- Constructor -------------------
     public SignUpPage(Page page) {
@@ -48,4 +58,6 @@ public class SignUpPage {
         return page.locator(finalSignupBtn);
     }
 }
+
+
 

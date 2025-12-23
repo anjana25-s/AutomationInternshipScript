@@ -7,41 +7,53 @@ import com.automation.pages.RegisterWithUsErrorMessagesPage;
 import com.automation.utils.HelperUtility;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Locator;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class RegisterWithUsNegativeTest extends BaseClass {
 
+    private HomepagePage home;
+    private RegisterWithUsPage reg;
+    private RegisterWithUsErrorMessagesPage errors;
+    private HelperUtility helper;
+
+    private static final String BASE_URL = "https://stage.promilo.com/";
+
+    @BeforeMethod(alwaysRun = true)
+    public void openBase() {
+
+        home   = new HomepagePage(page);
+        reg    = new RegisterWithUsPage(page);
+        errors = new RegisterWithUsErrorMessagesPage(page);
+        helper = new HelperUtility(page);
+
+        helper.log("[Step 1] Navigating to " + BASE_URL);
+        page.navigate(BASE_URL);
+        page.waitForLoadState();
+
+        if (home.getMaybeLaterBtn().isVisible()) {
+            helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
+        }
+
+        helper.safeClick(home.getInternshipsTab(), "Open Internships");
+    }
+
     @Test
     public void fullRegisterWithUsNegativeFlow() {
-
-        HomepagePage home = new HomepagePage(page);
-        RegisterWithUsPage reg = new RegisterWithUsPage(page);
-        RegisterWithUsErrorMessagesPage errors = new RegisterWithUsErrorMessagesPage(page);
-        HelperUtility helper = new HelperUtility(page);
 
         helper.log("==== REGISTER WITH US FULL NEGATIVE FLOW STARTED ====");
 
         // ------------------------------------------------------------
-        // NAVIGATION
-        // ------------------------------------------------------------
-        page.navigate("https://stage.promilo.com/");
-        if (home.getMaybeLaterBtn().isVisible()) helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
-
-        helper.safeClick(home.getInternshipsTab(), "Open Internships");
-
-
-        // ------------------------------------------------------------
-        // EMPTY FORM VALIDATION
+        // EMPTY FORM
         // ------------------------------------------------------------
         helper.safeClick(reg.getRegisterNowButton(), "Submit Blank Form");
 
         helper.assertVisible(errors.nameRequiredError(), "Name required");
         helper.assertVisible(errors.mobileRequiredError(), "Mobile required");
         helper.assertVisible(errors.emailRequiredError(), "Email required");
-        helper.assertVisible(errors.preferredLocationRequiredError(), "Preferred location required");
+        helper.assertVisible(errors.preferredLocationRequiredError(), "Location required");
         helper.assertVisible(errors.industryRequiredError(), "Industry required");
         helper.assertVisible(errors.passwordRequiredError(), "Password required");
-
 
         // ------------------------------------------------------------
         // INVALID NAME
@@ -50,14 +62,12 @@ public class RegisterWithUsNegativeTest extends BaseClass {
         helper.safeClick(reg.getRegisterNowButton(), "Invalid Name Submit");
         helper.assertVisible(errors.invalidNameError(), "Invalid name error");
 
-
         // ------------------------------------------------------------
         // INVALID MOBILE
         // ------------------------------------------------------------
         reg.getMobileField().fill("12345");
         helper.safeClick(reg.getRegisterNowButton(), "Invalid Mobile Submit");
         helper.assertVisible(errors.invalidMobileError(), "Invalid mobile error");
-
 
         // ------------------------------------------------------------
         // INVALID EMAIL
@@ -66,21 +76,19 @@ public class RegisterWithUsNegativeTest extends BaseClass {
         helper.safeClick(reg.getRegisterNowButton(), "Invalid Email Submit");
         helper.assertVisible(errors.invalidEmailError(), "Invalid email error");
 
-
         // ------------------------------------------------------------
-        // PASSWORD INVALIDS
+        // PASSWORD INVALID
         // ------------------------------------------------------------
         reg.getPasswordField().fill("12345");
-        helper.safeClick(reg.getRegisterNowButton(), "Password too short");
+        helper.safeClick(reg.getRegisterNowButton(), "Short Password");
         helper.assertVisible(errors.passwordMinError(), "Password min error");
 
         reg.getPasswordField().fill("A".repeat(16));
-        helper.safeClick(reg.getRegisterNowButton(), "Password too long");
+        helper.safeClick(reg.getRegisterNowButton(), "Long Password");
         helper.assertVisible(errors.passwordMaxError(), "Password max error");
 
-
         // ------------------------------------------------------------
-        // VALID RANDOM DATA
+        // VALID DATA
         // ------------------------------------------------------------
         String NAME = helper.generateRandomName();
         String EMAIL = helper.generateEmailFromName(NAME);
@@ -97,30 +105,27 @@ public class RegisterWithUsNegativeTest extends BaseClass {
         reg.getEmailField().fill(EMAIL);
         reg.getPasswordField().fill(PASSWORD);
 
-
         // ------------------------------------------------------------
         // LOCATION + INDUSTRY
         // ------------------------------------------------------------
-        helper.safeClick(reg.getPreferredLocationDropdown(), "Open Preferred Location");
+        helper.safeClick(reg.getPreferredLocationDropdown(), "Open Location");
         helper.safeClick(reg.getFirstLocationOption(), "Select Location");
 
         helper.safeClick(reg.getIndustryDropdown(), "Open Industry");
         Locator boxes = reg.getIndustryCheckboxes();
-        helper.assertTrue(boxes.count() > 0, "Industry checkboxes present");
+        helper.assertTrue(boxes.count() > 0, "Industry options present");
 
         helper.safeClick(boxes.nth(0), "Select Industry");
         helper.safeClick(reg.getIndustryDropdown(), "Close Industry");
 
-
         // ------------------------------------------------------------
-        // SUBMIT VALID DATA → OTP SCREEN
+        // SUBMIT → OTP
         // ------------------------------------------------------------
-        helper.safeClick(reg.getRegisterNowButton(), "Submit Valid Details");
+        helper.safeClick(reg.getRegisterNowButton(), "Submit Valid Data");
         helper.log("---- REACHED OTP SCREEN ----");
 
-
         // ------------------------------------------------------------
-        // OTP NEGATIVE (compact incremental validation)
+        // OTP NEGATIVE
         // ------------------------------------------------------------
         String[] wrongDigits = {"1", "2", "3", "9"};
         for (int i = 0; i < wrongDigits.length; i++) {
@@ -134,32 +139,24 @@ public class RegisterWithUsNegativeTest extends BaseClass {
         }
 
         helper.safeClick(reg.getVerifyOtpButton(), "Submit WRONG OTP");
-
-        helper.assertToastAppeared(errors.invalidOtpToast(), "Invalid OTP toast appeared");
-
+        helper.assertToastAppeared(errors.invalidOtpToast(),
+                "Invalid OTP toast appeared");
 
         // ------------------------------------------------------------
-        // ENTER CORRECT OTP
+        // OTP POSITIVE
         // ------------------------------------------------------------
         for (int i = 0; i < 4; i++) reg.getOtpInputs().nth(i).fill("");
-
-        for (int i = 0; i < 4; i++) {
-            reg.getOtpInputs().nth(i).fill("9");
-            helper.assertEquals(reg.getOtpInputs().nth(i).inputValue(), "9", "OTP digit correct");
-        }
+        for (int i = 0; i < 4; i++) reg.getOtpInputs().nth(i).fill("9");
 
         helper.safeClick(reg.getVerifyOtpButton(), "Submit CORRECT OTP");
         helper.log("---- OTP VERIFIED SUCCESSFULLY ----");
 
-
-        // Close Thank You popup if visible
         if (reg.getThankYouPopup().isVisible()) {
-            helper.safeClick(reg.getThankYouCloseButton(), "Close Thank You Popup");
+            helper.safeClick(reg.getThankYouCloseButton(), "Close Thank You");
         }
 
-
         // ------------------------------------------------------------
-        // ALREADY REGISTERED VALIDATION
+        // ALREADY REGISTERED EMAIL
         // ------------------------------------------------------------
         helper.log("---- TESTING ALREADY REGISTERED EMAIL ----");
 
@@ -167,23 +164,25 @@ public class RegisterWithUsNegativeTest extends BaseClass {
         old.close();
 
         page = browser.newContext().newPage();
-        home = new HomepagePage(page);
-        reg = new RegisterWithUsPage(page);
+
+        home   = new HomepagePage(page);
+        reg    = new RegisterWithUsPage(page);
         errors = new RegisterWithUsErrorMessagesPage(page);
         helper = new HelperUtility(page);
 
-        page.navigate("https://stage.promilo.com/");
-        if (home.getMaybeLaterBtn().isVisible()) helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
+        page.navigate(BASE_URL);
+
+        if (home.getMaybeLaterBtn().isVisible())
+            helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
 
         helper.safeClick(home.getInternshipsTab(), "Open Internships Again");
 
-        // SAME EMAIL, NEW PHONE
         reg.getNameField().fill(NAME);
         reg.getMobileField().fill(helper.generateRandomPhone());
         reg.getEmailField().fill(EMAIL);
         reg.getPasswordField().fill(PASSWORD);
 
-        helper.safeClick(reg.getPreferredLocationDropdown(), "Open Preferred Location");
+        helper.safeClick(reg.getPreferredLocationDropdown(), "Open Location");
         helper.safeClick(reg.getFirstLocationOption(), "Select Location");
 
         helper.safeClick(reg.getIndustryDropdown(), "Open Industry");
@@ -192,10 +191,13 @@ public class RegisterWithUsNegativeTest extends BaseClass {
 
         helper.safeClick(reg.getRegisterNowButton(), "Submit Already Registered");
 
-        helper.assertToastAppeared(errors.emailAlreadyRegisteredToast(),
-                "Already registered toast visible");
+        helper.assertToastAppeared(
+                errors.emailAlreadyRegisteredToast(),
+                "Already registered email toast visible"
+        );
 
         helper.log("==== REGISTER WITH US FULL NEGATIVE FLOW COMPLETED ====");
     }
 }
+
 

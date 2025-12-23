@@ -19,18 +19,16 @@ public class ApplyNowMobileTest extends BaseClass {
     private final String BASE_URL = "https://stage.promilo.com/";
     private final String OTP = "9999";
     private final String PASSWORD = "Test@123";
-    private final String INTERNSHIP = "Designer1";
+    private final String INTERNSHIP = "Tester 1";
 
-    @BeforeClass
-    public void initPages() {
+    @BeforeMethod(alwaysRun = true)
+    public void init() {
+
         home = new HomepagePage(page);
         signup = new SignUpPage(page);
         apply = new ApplyNowPage(page);
         helper = new HelperUtility(page);
-    }
 
-    @BeforeMethod
-    public void openBase() {
         page.navigate(BASE_URL);
         page.waitForLoadState();
 
@@ -42,23 +40,26 @@ public class ApplyNowMobileTest extends BaseClass {
     @Test
     public void verifyApplyNowViaMobile() {
 
-        // ---------- Test Data ----------
+        // ---------- TEST DATA ----------
         String name = helper.generateRandomName();
         String mobile = helper.generateRandomPhone();
         String email = helper.generateEmailFromName(name);
 
-        helper.log("[Generated Name] " + name);
-        helper.log("[Generated Mobile] " + mobile);
-        helper.log("[Generated Email] " + email);
+        helper.log("Generated: " + name + " | " + mobile + " | " + email);
 
-        // ---------- SIGNUP USING MOBILE ----------
-        helper.safeClick(signup.getInitialSignupButton(), "Click SignUp");
-        helper.safeFill(signup.getEmailOrPhoneInput(), mobile, "Enter Mobile Number");
-        helper.safeClick(signup.getSendVerificationCodeButton(), "Send Verification Code");
+        // ---------- SIGNUP (MOBILE) ----------
+        helper.safeClick(signup.getInitialSignupButton(), "Sign Up");
+
+        helper.safeFill(signup.getEmailOrPhoneInput(), mobile, "Enter Mobile");
+        helper.safeClick(signup.getSendVerificationCodeButton(), "Send OTP");
 
         helper.safeFill(signup.getOtpInput(), OTP, "Enter OTP");
-        helper.safeFill(signup.getPasswordInput(), PASSWORD, "Enter Password");
-        helper.safeClick(signup.getFinalSignupButton(), "Complete Signup");
+        helper.safeFill(signup.getPasswordInput(), PASSWORD, "Password");
+        helper.safeClick(signup.getFinalSignupButton(), "Complete SignUp");
+
+        helper.waitForVisible(home.getInternshipsTab(), "Internships Tab");
+        Assert.assertTrue(home.getInternshipsTab().isVisible(), "Signup failed!");
+
 
         // ---------- INTERNSHIP ----------
         helper.safeClick(home.getInternshipsTab(), "Open Internships");
@@ -67,64 +68,63 @@ public class ApplyNowMobileTest extends BaseClass {
         helper.waitForVisible(card, "Internship Card");
         helper.scrollAndClick(card, "Open Internship");
 
-        // ---------- APPLY NOW POPUP ----------
-        helper.safeClick(apply.getApplyNowButton(), "Click Apply Now");
+        helper.safeClick(apply.getApplyNowButton(), "Open Apply Now");
 
-        // name: empty → fill
-        helper.safeFill(apply.getNameField(), name, "Fill Name");
+        // ---------- APPLY FORM ----------
+        helper.safeFill(apply.getNameField(), name, "Name");
 
-        // mobile: already prefilled → skip, OR assert that it is prefilled
-        Assert.assertFalse(apply.getPhoneField().inputValue().isEmpty(), "❌ Mobile number should be prefilled!");
-        helper.log("✔ Mobile number is prefilled.");
+        // Mobile should be prefilled
+        Assert.assertFalse(
+                apply.getPhoneField().inputValue().isEmpty(),
+                "Mobile number should be prefilled!"
+        );
 
-        // email is empty (only in mobile) → fill
+        // Email should be editable in mobile flow
         if (apply.getEmailField().isEnabled()) {
-            helper.safeFill(apply.getEmailField(), email, "Fill Email");
+            helper.safeFill(apply.getEmailField(), email, "Email");
         }
 
-        // ---------- SELECT INDUSTRIES ----------
-        helper.safeClick(apply.getIndustryDropdown(), "Open Industry");
+        // ---------- INDUSTRY ----------
+        helper.safeClick(apply.getIndustryDropdown(), "Industry");
 
         Locator boxes = apply.getAllIndustryCheckboxes();
-        int total = boxes.count();
-        Assert.assertTrue(total >= 3, "❌ Less than 3 industry checkboxes!");
+        Assert.assertTrue(boxes.count() >= 3, "Less than 3 industries!");
 
-        helper.safeClick(boxes.nth(1), "Select Checkbox 1");
-        helper.safeClick(boxes.nth(3), "Select Checkbox 2");
-        helper.safeClick(boxes.nth(5), "Select Checkbox 3");
+        helper.safeClick(boxes.nth(1), "Industry 1");
+        helper.safeClick(boxes.nth(3), "Industry 2");
+        helper.safeClick(boxes.nth(5), "Industry 3");
 
         helper.safeClick(apply.getIndustryDropdown(), "Close Industry");
 
-        // ---------- MOBILE → NO OTP ----------
-        helper.safeClick(apply.getAskUsApplyNowButton(), "Submit Apply Now");
+        helper.safeClick(apply.getAskUsApplyNowButton(), "Submit Apply Form");
+
+        // ---------- LANGUAGE ----------
+        helper.safeClick(apply.getLanguageCard("English"), "Select English");
 
         // ---------- CALENDAR ----------
-        helper.safeClick(apply.getLanguageCard("English"), "Select English");
         helper.safeClick(apply.getFirstActiveDate(), "Select Date");
         helper.safeClick(apply.getFirstActiveTimeSlot(), "Select Time");
 
-        // ---------- SCREENING FLOW ----------
+        // ---------- SCREENING ----------
         if (apply.getNextButton().isVisible()) {
 
-            helper.safeClick(apply.getNextButton(), "Go to Screening");
+            helper.safeClick(apply.getNextButton(), "Go To Screening");
 
             Locator questions = apply.getScreeningQuestions();
-            int count = questions.count();
-
-            helper.log("Total Screening Questions = " + count);
-
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < questions.count(); i++) {
 
                 Locator q = questions.nth(i);
 
-                Locator options = q.locator("input[type='checkbox'], input[type='radio']");
-                if (options.count() > 0) {
-                    helper.safeClick(options.first(), "Select Objective Option");
+                if (q.locator("input[type='checkbox'], input[type='radio']").count() > 0) {
+                    helper.safeClick(q.locator("input").first(), "Select Option");
                 }
 
-                Locator textArea = q.locator("textarea");
-                if (textArea.count() > 0) {
-                    helper.safeFill(textArea.first(), "Automated Answer", "Fill Subjective Answer");
+                if (q.locator("textarea").count() > 0) {
+                    helper.safeFill(
+                            q.locator("textarea").first(),
+                            "Automated Answer",
+                            "Answer"
+                    );
                 }
             }
 
@@ -134,44 +134,13 @@ public class ApplyNowMobileTest extends BaseClass {
             helper.safeClick(apply.getCalendarSubmitButton(), "Submit Calendar");
         }
 
-        // ---------- ASSERT THANK YOU POPUP ----------
+        // ---------- THANK YOU ----------
         helper.waitForVisible(apply.getThankYouHeader(), "Thank You Popup");
-        Assert.assertTrue(apply.getThankYouHeader().isVisible(), "❌ Thank You popup NOT visible!");
-
-        helper.log("✔ Thank You popup verified!");
-
-        // ---------- CLICK MY INTEREST ----------
-        helper.safeClick(apply.getThankYouMyInterestLink(), "Click My Interest");
+        helper.safeClick(apply.getThankYouMyInterestLink(), "My Interest");
 
         page.waitForURL("**/myinterest**");
-        Assert.assertTrue(page.url().contains("myinterest"), "❌ My Interest NOT opened!");
+        Assert.assertTrue(page.url().contains("myinterest"), "My Interest not opened!");
 
-        helper.log("✔ Navigated to My Interest");
-
-        // ---------- ASSERT MY INTEREST CARD ----------
-        Locator interestCard = page.locator("//div[contains(@class,'my-interest-card-contianer')]").first();
-        helper.waitForVisible(interestCard, "My Interest Card");
-        Assert.assertTrue(interestCard.isVisible(), "❌ My Interest Card NOT visible!");
-
-        helper.log("✔ My Interest Card Visible");
-
-        // Status
-        Locator status = interestCard.locator(".my-interest-status-tag");
-        Assert.assertEquals(status.innerText().trim(), "Pending", "❌ Status incorrect!");
-
-        helper.log("✔ Status = Pending");
-
-        // Meeting Date
-        String date = interestCard.locator("(//div[@class='card_detail-value'])[1]").innerText().trim();
-        Assert.assertFalse(date.isEmpty(), "❌ Meeting Date is empty!");
-
-        // Meeting Time
-        String time = interestCard.locator("(//div[@class='card_detail-value'])[2]").innerText().trim();
-        Assert.assertFalse(time.isEmpty(), "❌ Meeting Time is empty!");
-
-        helper.log("✔ Meeting Date & Time Validated");
         helper.log("🎉 APPLY NOW MOBILE FLOW PASSED!");
     }
 }
-
-

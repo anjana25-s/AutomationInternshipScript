@@ -5,7 +5,8 @@ import com.automation.pages.*;
 import com.automation.utils.HelperUtility;
 import com.microsoft.playwright.Locator;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 public class FeedbackMobileTest extends BaseClass {
 
@@ -18,18 +19,17 @@ public class FeedbackMobileTest extends BaseClass {
     private static final String OTP = "9999";
     private static final String PASSWORD = "Test@123";
     private static final String INTERNSHIP = "Finance- Job role";
-    private static final String FEEDBACK_TEXT = "This is feedback after mobile signup.";
+    private static final String FEEDBACK_TEXT =
+            "This is feedback after mobile signup.";
 
-    @BeforeClass
-    public void initPages() {
-        home = new HomepagePage(page);
-        signup = new SignUpPage(page);
-        feedback = new FeedbackPopupPage(page);
-        helper = new HelperUtility(page);
-    }
-
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void openBase() {
+
+        home     = new HomepagePage(page);
+        signup   = new SignUpPage(page);
+        feedback = new FeedbackPopupPage(page);
+        helper   = new HelperUtility(page);
+
         helper.log("[Step 1] Navigating to Homepage…");
         page.navigate(BASE_URL);
         page.waitForLoadState();
@@ -42,70 +42,90 @@ public class FeedbackMobileTest extends BaseClass {
     @Test
     public void verifyFeedbackPopupViaMobileSignup() {
 
-        // ----------- Test Data (Helper Based) -----------
-        String name = helper.generateRandomName();
+        // ---------- TEST DATA ----------
+        String name   = helper.generateRandomName();
         String mobile = helper.generateRandomPhone();
-        String email = helper.generateEmailFromName(name);
+        String email  = helper.generateEmailFromName(name);
 
         helper.log("Generated Name = " + name);
         helper.log("Generated Mobile = " + mobile);
         helper.log("Generated Email = " + email);
 
-        // ----------- SIGNUP USING MOBILE -----------
+        // ---------- SIGNUP (MOBILE) ----------
         helper.safeClick(signup.getInitialSignupButton(), "Click SignUp");
         helper.safeFill(signup.getEmailOrPhoneInput(), mobile, "Enter Mobile");
-        helper.safeClick(signup.getSendVerificationCodeButton(), "Send Verification Code");
+        helper.safeClick(signup.getSendVerificationCodeButton(),
+                "Send Verification Code");
 
         helper.safeFill(signup.getOtpInput(), OTP, "Enter OTP");
-        helper.safeFill(signup.getPasswordInput(), PASSWORD, "Enter Password");
-        helper.safeClick(signup.getFinalSignupButton(), "Complete Signup");
+        helper.safeFill(signup.getPasswordInput(),
+                PASSWORD, "Enter Password");
+        helper.safeClick(signup.getFinalSignupButton(),
+                "Complete Signup");
 
-        // Assert login success by checking Internships tab
-        Assert.assertTrue(home.getInternshipsTab().isVisible(),
-                "❌ Signup might have failed — Internships Tab not visible!");
+        // ---------- ASSERT LOGIN ----------
+        Assert.assertTrue(
+                home.getInternshipsTab().isVisible(),
+                "❌ Signup failed — Internships tab not visible"
+        );
         helper.log("✔ Signup successful via Mobile");
 
-        // ----------- INTERNSHIPS TAB -----------
-        helper.safeClick(home.getInternshipsTab(), "Open Internships");
+        // ---------- OPEN INTERNSHIP ----------
+        helper.safeClick(home.getInternshipsTab(),
+                "Open Internships");
 
         Locator card = home.getInternshipCard(INTERNSHIP);
         helper.waitForVisible(card, "Internship Card");
         helper.scrollAndClick(card, "Open Internship");
 
-        // ----------- FEEDBACK MODAL -----------
-        Locator feedbackModal = page.locator("div.Job-Feedback-modal");
+        // ---------- FEEDBACK MODAL ----------
+        Locator feedbackModal =
+                page.locator("div.Job-Feedback-modal");
+
         helper.waitForVisible(feedbackModal, "Feedback Modal");
-        Assert.assertTrue(feedbackModal.isVisible(), "❌ Feedback modal not visible!");
+        Assert.assertTrue(feedbackModal.isVisible(),
+                "❌ Feedback modal not visible");
+
         helper.log("✔ Feedback Modal Visible");
 
-        // ----------- ENTER FEEDBACK -----------
-        helper.safeFill(feedback.getFeedbackTextarea(), FEEDBACK_TEXT, "Enter Feedback");
-        helper.safeClick(feedback.getFeedbackSubmitBtn(), "Submit Feedback");
+        // ---------- SUBMIT FEEDBACK ----------
+        helper.safeFill(feedback.getFeedbackTextarea(),
+                FEEDBACK_TEXT, "Enter Feedback");
+        helper.safeClick(feedback.getFeedbackSubmitBtn(),
+                "Submit Feedback");
 
-        // ----------- USER DETAILS FORM -----------
-        helper.safeFill(feedback.getNameField(), name, "Enter Name");
+        // ---------- USER DETAILS ----------
+        helper.safeFill(feedback.getNameField(),
+                name, "Enter Name");
 
         if (feedback.getMobileField().isEnabled()) {
-            helper.safeFill(feedback.getMobileField(), mobile, "Enter Mobile");
+            helper.safeFill(feedback.getMobileField(),
+                    mobile, "Enter Mobile");
         } else {
             helper.log("✔ Mobile auto-filled");
         }
 
-        helper.safeFill(feedback.getEmailField(), email, "Enter Email");
-        helper.safeClick(feedback.getPopupSubmitBtn(), "Submit User Details");
+        helper.safeFill(feedback.getEmailField(),
+                email, "Enter Email");
 
-        // ----------- THANK YOU POPUP -----------
-        helper.waitForVisible(feedback.getThankYouPopup(), "Thank You Popup");
+        helper.safeClick(feedback.getPopupSubmitBtn(),
+                "Submit User Details");
 
-        Assert.assertTrue(feedback.getThankYouPopup().isVisible(),
-                "❌ Thank You popup not visible!");
-        helper.log("✔ Thank You Popup Visible");
+        // ---------- THANK YOU ----------
+        helper.waitForVisible(feedback.getThankYouPopup(),
+                "Thank You Popup");
 
-        // Close Popup
-        helper.safeClick(feedback.getThankYouCloseBtn(), "Close Thank You Popup");
+        Assert.assertTrue(
+                feedback.getThankYouPopup().isVisible(),
+                "❌ Thank You popup not visible"
+        );
+
+        helper.safeClick(feedback.getThankYouCloseBtn(),
+                "Close Thank You Popup");
 
         helper.log("🎉 FEEDBACK FLOW VIA MOBILE PASSED!");
     }
 }
+
 
 

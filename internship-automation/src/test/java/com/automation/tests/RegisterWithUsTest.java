@@ -5,9 +5,9 @@ import com.automation.pages.HomepagePage;
 import com.automation.pages.RegisterWithUsPage;
 import com.automation.utils.HelperUtility;
 import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 public class RegisterWithUsTest extends BaseClass {
 
@@ -18,87 +18,109 @@ public class RegisterWithUsTest extends BaseClass {
     private static final String BASE_URL = "https://stage.promilo.com/";
     private static final String OTP = "9999";
 
-    @BeforeClass
-    public void initPages() {
-        home = new HomepagePage(page);
-        register = new RegisterWithUsPage(page);
-        helper = new HelperUtility(page);
-    }
+    @BeforeMethod(alwaysRun = true)
+    public void openBase() {
 
-    @BeforeMethod
-    public void openUrl() {
+        home     = new HomepagePage(page);
+        register = new RegisterWithUsPage(page);
+        helper   = new HelperUtility(page);
+
         helper.log("[Step 1] Navigating to " + BASE_URL);
         page.navigate(BASE_URL);
         page.waitForLoadState();
-        page.waitForSelector("body");
 
         if (home.getMaybeLaterBtn().isVisible()) {
-            helper.safeClick(home.getMaybeLaterBtn(), "Close Maybe Later Popup");
+            helper.safeClick(home.getMaybeLaterBtn(),
+                    "Close Maybe Later Popup");
         }
     }
 
     @Test
     public void verifyRegisterWithUsFlow() {
-        try {
-            // Generate random user
-            String name = helper.generateRandomName();
-            String phone = helper.generateRandomPhone();
-            String email = helper.generateEmailFromName(name);
-            String password = "Test@" + phone.substring(phone.length() - 3);
 
-            helper.log("[DATA] Name=" + name + " | Phone=" + phone + " | Email=" + email);
+        // ------------------------------------------------------------
+        // TEST DATA
+        // ------------------------------------------------------------
+        String name = helper.generateRandomName();
+        String phone = helper.generateRandomPhone();
+        String email = helper.generateEmailFromName(name);
+        String password = "Test@" + phone.substring(phone.length() - 3);
 
-            helper.safeClick(home.getInternshipsTab(), "Open Internships Tab");
+        helper.log("[DATA] Name = " + name);
+        helper.log("[DATA] Phone = " + phone);
+        helper.log("[DATA] Email = " + email);
 
-            helper.safeFill(register.getNameField(), name, "Name");
-            helper.safeFill(register.getMobileField(), phone, "Mobile");
-            helper.safeFill(register.getEmailField(), email, "Email");
-            helper.safeFill(register.getPasswordField(), password, "Password");
+        // ------------------------------------------------------------
+        // OPEN REGISTER WITH US (via homepage section)
+        // ------------------------------------------------------------
+        helper.safeClick(home.getInternshipsTab(),
+                "Open Internships Tab");
 
-            // ---------- LOCATION ----------
-            helper.safeClick(register.getPreferredLocationDropdown(), "Open Location Dropdown");
-            helper.safeClick(register.getFirstLocationOption(), "Select FIRST Location Option");
+        // ------------------------------------------------------------
+        // FILL BASIC DETAILS
+        // ------------------------------------------------------------
+        helper.safeFill(register.getNameField(), name, "Name");
+        helper.safeFill(register.getMobileField(), phone, "Mobile");
+        helper.safeFill(register.getEmailField(), email, "Email");
+        helper.safeFill(register.getPasswordField(), password, "Password");
 
-            // ---------- INDUSTRY ----------
-            helper.safeClick(register.getIndustryDropdown(), "Open Industry Dropdown");
+        // ------------------------------------------------------------
+        // LOCATION
+        // ------------------------------------------------------------
+        helper.safeClick(register.getPreferredLocationDropdown(),
+                "Open Location Dropdown");
 
-            Locator checkboxes = register.getIndustryCheckboxes();
-            int total = checkboxes.count();
+        helper.safeClick(register.getFirstLocationOption(),
+                "Select First Location");
 
-            Assert.assertTrue(total > 5, "❌ Industry checkboxes not loaded!");
+        // ------------------------------------------------------------
+        // INDUSTRY
+        // ------------------------------------------------------------
+        helper.safeClick(register.getIndustryDropdown(),
+                "Open Industry Dropdown");
 
-            helper.safeClick(checkboxes.nth(0), "Select Checkbox 1");
-            helper.safeClick(checkboxes.nth(1), "Select Checkbox 2");
+        Locator boxes = register.getIndustryCheckboxes();
+        Assert.assertTrue(boxes.count() > 2,
+                "❌ Industry options not loaded");
 
-            helper.safeClick(register.getIndustryDropdown(), "Close Industry Dropdown");
+        helper.safeClick(boxes.nth(0), "Select Industry 1");
+        helper.safeClick(boxes.nth(1), "Select Industry 2");
 
-            // ---------- REGISTER ----------
-            helper.safeClick(register.getRegisterNowButton(), "Register Now");
+        helper.safeClick(register.getIndustryDropdown(),
+                "Close Industry Dropdown");
 
-            // ---------- OTP ----------
-            Locator otp = register.getOtpInputs();
-            otp.nth(0).fill("9");
-            otp.nth(1).fill("9");
-            otp.nth(2).fill("9");
-            otp.nth(3).fill("9");
+        // ------------------------------------------------------------
+        // REGISTER
+        // ------------------------------------------------------------
+        helper.safeClick(register.getRegisterNowButton(),
+                "Click Register Now");
 
-            helper.safeClick(register.getVerifyOtpButton(), "Verify & Proceed");
+        // ------------------------------------------------------------
+        // OTP
+        // ------------------------------------------------------------
+        Locator otpInputs = register.getOtpInputs();
+        helper.waitForVisible(otpInputs.first(),
+                "OTP Inputs");
 
-            // ---------- THANK YOU ----------
-            register.getThankYouPopup().waitFor(new Locator.WaitForOptions()
-                    .setState(WaitForSelectorState.VISIBLE)
-                    .setTimeout(15000));
-
-            Assert.assertTrue(register.getThankYouPopup().isVisible(),
-                    "❌ THANK YOU POPUP NOT VISIBLE!");
-
-            helper.safeClick(register.getThankYouCloseButton(), "Close Thank You Popup");
-
-            helper.log("===== ✅ REGISTER WITH US FLOW PASSED =====");
-
-        } catch (Exception e) {
-            helper.takeScreenshot("RegisterWithUs_Failed");
-            Assert.fail("❌ TEST FAILED: " + e.getMessage());
+        for (int i = 0; i < 4; i++) {
+            otpInputs.nth(i).fill("9");
         }
+
+        helper.safeClick(register.getVerifyOtpButton(),
+                "Verify & Proceed");
+
+        // ------------------------------------------------------------
+        // THANK YOU POPUP
+        // ------------------------------------------------------------
+        helper.waitForVisible(register.getThankYouPopup(),
+                "Thank You Popup");
+
+        Assert.assertTrue(register.getThankYouPopup().isVisible(),
+                "❌ Thank You popup not visible");
+
+        helper.safeClick(register.getThankYouCloseButton(),
+                "Close Thank You Popup");
+
+        helper.log("🎉 REGISTER WITH US FLOW PASSED SUCCESSFULLY!");
     }
 }

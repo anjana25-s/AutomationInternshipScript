@@ -9,19 +9,14 @@ public class HomepagePage {
 
     // ------------------- Locators -------------------
     private final String maybeLaterBtn = "button:has-text('May be later!')";
-    private final String internshipsTab = "a.nav-link[data-rr-ui-event-key='/internships-listing']";
-
-    // Internship card locator base
-    private final String internshipCardBase =
-        "(//a[contains(@href, '/internships-description/') " +
-        "and .//h3[normalize-space(text())='%s']])[1]";
+    private final String internshipsTab = "a.nav-link:has-text('Internships')";
 
     // ------------------- Constructor -------------------
     public HomepagePage(Page page) {
         this.page = page;
     }
 
-    // ------------------- Locator Getters -------------------
+    // ------------------- Basic Getters -------------------
     public Locator getMaybeLaterBtn() {
         return page.locator(maybeLaterBtn);
     }
@@ -30,24 +25,26 @@ public class HomepagePage {
         return page.locator(internshipsTab);
     }
 
-    public Locator getInternshipCard(String internshipTitle) {
-        return page.locator(String.format(internshipCardBase, internshipTitle)).first();
-    }
+    // ------------------- INTERNSHIP (TITLE BASED – FINAL) -------------------
 
-    // ⭐ NEW — Internship Header
-    public Locator getInternshipHeader(String internshipTitle) {
+    /**
+     * Returns the <h3> element that contains the internship title text.
+     * Works for both card-title and additional-cards-title variants.
+     */
+    public Locator getInternshipTitle(String title) {
         return page.locator(
-            "h2.Job_Internship-Head_title:has-text('" + internshipTitle + "')"
-        );
+                "//h3[normalize-space()='" + title + "']"
+        ).first();
     }
 
-    // ------------------- Utility -------------------
-    public void scrollUntilVisible(Locator element, int maxScrolls) {
-        int attempts = 0;
-        while (!element.isVisible() && attempts < maxScrolls) {
-            page.mouse().wheel(0, 1000);
-            page.waitForTimeout(800);
-            attempts++;
-        }
+    /**
+     * Returns the clickable card/container for the given internship title.
+     * This is the element that should be clicked.
+     */
+    public Locator getInternshipCard(String title) {
+        return getInternshipTitle(title)
+                .locator("xpath=ancestor::a | ancestor::div[contains(@class,'card')]")
+                .first();
     }
 }
+

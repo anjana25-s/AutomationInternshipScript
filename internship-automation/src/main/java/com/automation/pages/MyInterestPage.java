@@ -28,10 +28,17 @@ public class MyInterestPage {
     }
 
     public Locator getMeetingDate() {
-        return page.locator("//div[contains(@class,'card_detail-label') and text()='Meeting Date']/following-sibling::div");
+        return page.locator(
+            "//div[contains(@class,'card_detail-label') and normalize-space()='Meeting Date']" +
+            "/following-sibling::div[contains(@class,'card_detail-value')]"
+        );
     }
 
     public Locator getMeetingTime() {
-        return page.locator("//div[contains(@class,'card_detail-label') and text()='Meeting Time']/following-sibling::div");
+        return page.locator(
+            "//div[contains(@class,'card_detail-label') and normalize-space()='Meeting Time']" +
+            "/following-sibling::div[contains(@class,'card_detail-value')]"
+        );
     }
+
 }

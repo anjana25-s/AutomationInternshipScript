@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>Default test</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>0/1/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>1/0/0</td>
 </tr><tr>
-<td>Started on:</td><td>Tue Nov 18 17:54:34 IST 2025</td>
+<td>Started on:</td><td>Mon Dec 22 17:57:24 IST 2025</td>
 </tr>
-<tr><td>Total time:</td><td>55 seconds (55560 ms)</td>
+<tr><td>Total time:</td><td>61 seconds (61010 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -67,8 +67,8 @@ function toggleAllBoxes() {
 </tr>
 </table><p/>
 <small><i>(Hover the method name to see the test class name)</i></small><p/>
-<table width='100%' border='1' class='invocation-failed'>
-<tr><td colspan='4' align='center'><b>FAILED TESTS</b></td></tr>
+<table width='100%' border='1' class='invocation-passed'>
+<tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
 <tr><td><b>Test method</b></td>
 <td><b>Attribute(s)</b></td>
 <td width="30%"><b>Exception</b></td>
@@ -76,169 +76,55 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='com.automation.tests.FeedbackNegativeTest.fullFeedbackNegativeFlow()'><b>fullFeedbackNegativeFlow</b><br>Test class: com.automation.tests.FeedbackNegativeTest<br/>
-<a href="#Output-252738640" onClick='toggleBox("Output-252738640", this, "Show output", "Hide output");'>Show output</a>
+<td title='com.automation.tests.ApplyNowEmailTest.verifyApplyNowViaEmail_fullStrictValidation()'><b>verifyApplyNowViaEmail_fullStrictValidation</b><br>Test class: com.automation.tests.ApplyNowEmailTest<br/>
+<a href="#Output-776484396" onClick='toggleBox("Output-776484396", this, "Show output", "Hide output");'>Show output</a>
 
-<a href="#Output-252738640" onClick="toggleAllBoxes();">Show all outputs</a>
-<div class='log' id="Output-252738640">
-======== FEEDBACK NEGATIVE FLOW STARTED ========<br/>
-[STEP] Navigate to website<br/>
-[Click] Close Maybe Later ✓<br/>
-📷 Screenshot: screenshots/Close Maybe Later_20251118_175449.png<br/>
-[Click] Open Internships ✓<br/>
-📷 Screenshot: screenshots/Open Internships_20251118_175451.png<br/>
-[Wait] Internship Card<br/>
-[Click] Open Internship ✓<br/>
-📷 Screenshot: screenshots/Open Internship_20251118_175455.png<br/>
-[Wait] Feedback Textarea<br/>
-[Fill] Feedback Text = Automated feedback for validation.<br/>
-📷 Screenshot: screenshots/Fill_Feedback Text_20251118_175456.png<br/>
-[Click] Submit Feedback Text ✓<br/>
-📷 Screenshot: screenshots/Submit Feedback Text_20251118_175457.png<br/>
-[Wait] Ask Us Popup<br/>
-[Click] Submit Blank Ask-Us Form ✓<br/>
-📷 Screenshot: screenshots/Submit Blank Ask-Us Form_20251118_175458.png<br/>
-[ERROR FOUND] Name is required<br/>
-[ERROR FOUND] Mobile number is required<br/>
-[ERROR FOUND] Email is required<br/>
+<a href="#Output-776484396" onClick="toggleAllBoxes();">Show all outputs</a>
+<div class='log' id="Output-776484396">
+[Generated Name] Diya N<br/>
+[Generated Email] testdiyan221@yopmail.com<br/>
+[Generated Phone] 9000015576<br/>
+Name: Diya N<br/>
+Email: testdiyan221@yopmail.com<br/>
+Phone: 9000015576<br/>
+[Click] Sign Up ✓<br/>
+[Fill] Email = testdiyan221@yopmail.com<br/>
+[Click] Send OTP ✓<br/>
+[Fill] OTP = 9999<br/>
+[Fill] Password = Test@123<br/>
+[Click] Complete Signup ✓<br/>
+[Click] Internships ✓<br/>
+[Click] Internship Card ✓<br/>
+[Click] Apply Now ✓<br/>
+Apply Header: Get an interview schedule from Technotion!<br/>
+Why Register Bullet 1: Take Charge of Your Career: Connect with recruiters and apply for internships that match your aspirations.<br/>
+Why Register Bullet 2: Stay Updated: Receive real-time notifications about internship openings tailored to your profile.<br/>
+Why Register Bullet 3: Direct HR Access: Ensure your application reaches the right recruiter for prompt Interview schedule opportunities.<br/>
+Why Register Bullet 4: Personalized Opportunities: Tailored internship alerts ensure you don't miss the right openings.<br/>
+Why Register Bullet 5: Exclusive Resources: Unlock premium tools and tips for acing interviews and securing your dream internship.<br/>
+Why Register Bullet 6: Privacy Guaranteed: Your data is safe—no unauthorized communication or spam.<br/>
+[Click] Industry ✓<br/>
+[Click] Industry 1 ✓<br/>
+[Click] Industry 2 ✓<br/>
+[Click] Close Industry ✓<br/>
+[Click] Submit ✓<br/>
+[Click] Verify OTP ✓<br/>
+[Click] English ✓<br/>
+[Click] Date ✓<br/>
+Selected Full Date Stored: 26/12/2025<br/>
+[Click] Time ✓<br/>
+Selected Time Stored: 12:45 AM<br/>
+[Click] Next ✓<br/>
+[Click] Select Option ✓<br/>
+[Fill] Answer = Automated Answer<br/>
+[Click] Submit Screening ✓<br/>
+[Click] My Interest ✓<br/>
+✅ APPLY NOW EMAIL – FULL STRICT VALIDATION PASSED<br/>
 </div>
 </td>
-<td><div><pre>com.microsoft.playwright.TimeoutError: Error {
-  message=&apos;Timeout 30000ms exceeded.
-  name=&apos;TimeoutError
-  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
-    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\progress.js:76:26)
-    at Frame.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\frames.js:615:23)
-    at FrameDispatcher.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\frameDispatcher.js:82:116)
-    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:88:40)
-    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:309:39)
-}
-Call log:
--   - waiting for locator(&quot;//div[contains(@class,&apos;AskUs-Modal&apos;) and contains(@class,&apos;show&apos;)]//div[contains(@class,&apos;text-danger&apos;) and normalize-space()=&apos;Must be 3 characters or greater&apos;]&quot;) to be visible
-
-	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
-	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:138)
-	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:131)
-	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:124)
-	at com.microsoft.playwright.impl.FrameImpl.waitForSelectorImpl(FrameImpl.java:985)
-	at com.microsoft.playwright.impl.LocatorImpl.waitFor(LocatorImpl.java:625)
-	at com.microsoft.playwright.Locator.waitFor(Locator.java:5418)
-	at com.automation.pages.FeedbackErrorMessagesPage.assertErrorVisible(FeedbackErrorMessagesPage.java:24)
-	at com.automation.pages.FeedbackErrorMessagesPage.assertRequiredErrorMessages(FeedbackErrorMessagesPage.java:37)
-	at com.automation.tests.FeedbackNegativeTest.fullFeedbackNegativeFlow(FeedbackNegativeTest.java:54)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
-	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
-	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
-	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
-	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
-	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
-	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
-	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at org.testng.TestRunner.privateRun(TestRunner.java:739)
-	at org.testng.TestRunner.run(TestRunner.java:614)
-	at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
-	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
-	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
-	at org.testng.SuiteRunner.run(SuiteRunner.java:312)
-	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
-	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
-	at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
-	at org.testng.TestNG.runSuites(TestNG.java:1112)
-	at org.testng.TestNG.run(TestNG.java:1079)
-	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
-	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
-	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
-Caused by: com.microsoft.playwright.TimeoutError: Error {
-  message=&apos;Timeout 30000ms exceeded.
-  name=&apos;TimeoutError
-  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
-    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\progress.js:76:26)
-    at Frame.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\frames.js:615:23)
-    at FrameDispatcher.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\frameDispatcher.js:82:116)
-    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:88:40)
-    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:309:39)
-}
-Call log:
--   - waiting for locator(&quot;//div[contains(@class,&apos;AskUs-Modal&apos;) and contains(@class,&apos;show&apos;)]//div[contains(@class,&apos;text-danger&apos;) and normalize-space()=&apos;Must be 3 characters or greater&apos;]&quot;) to be visible
-
-	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:257)
-	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:214)
-	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:136)
-	... 34 more
-</pre></div><a href='#' onClick='toggleBox("stack-trace252738640", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace252738640'><pre>com.microsoft.playwright.TimeoutError: Error {
-  message=&apos;Timeout 30000ms exceeded.
-  name=&apos;TimeoutError
-  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
-    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\progress.js:76:26)
-    at Frame.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\frames.js:615:23)
-    at FrameDispatcher.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\frameDispatcher.js:82:116)
-    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:88:40)
-    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:309:39)
-}
-Call log:
--   - waiting for locator(&quot;//div[contains(@class,&apos;AskUs-Modal&apos;) and contains(@class,&apos;show&apos;)]//div[contains(@class,&apos;text-danger&apos;) and normalize-space()=&apos;Must be 3 characters or greater&apos;]&quot;) to be visible
-
-	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
-	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:138)
-	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:131)
-	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:124)
-	at com.microsoft.playwright.impl.FrameImpl.waitForSelectorImpl(FrameImpl.java:985)
-	at com.microsoft.playwright.impl.LocatorImpl.waitFor(LocatorImpl.java:625)
-	at com.microsoft.playwright.Locator.waitFor(Locator.java:5418)
-	at com.automation.pages.FeedbackErrorMessagesPage.assertErrorVisible(FeedbackErrorMessagesPage.java:24)
-	at com.automation.pages.FeedbackErrorMessagesPage.assertRequiredErrorMessages(FeedbackErrorMessagesPage.java:37)
-	at com.automation.tests.FeedbackNegativeTest.fullFeedbackNegativeFlow(FeedbackNegativeTest.java:54)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
-	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
-	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
-	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
-	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
-	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
-	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
-	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at org.testng.TestRunner.privateRun(TestRunner.java:739)
-	at org.testng.TestRunner.run(TestRunner.java:614)
-	at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
-	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
-	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
-	at org.testng.SuiteRunner.run(SuiteRunner.java:312)
-	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
-	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
-	at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
-	at org.testng.TestNG.runSuites(TestNG.java:1112)
-	at org.testng.TestNG.run(TestNG.java:1079)
-	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
-	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
-	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
-Caused by: com.microsoft.playwright.TimeoutError: Error {
-  message=&apos;Timeout 30000ms exceeded.
-  name=&apos;TimeoutError
-  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
-    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\progress.js:76:26)
-    at Frame.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\frames.js:615:23)
-    at FrameDispatcher.waitForSelector (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\frameDispatcher.js:82:116)
-    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:88:40)
-    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-5690132527668056281\package\lib\server\dispatchers\dispatcher.js:309:39)
-}
-Call log:
--   - waiting for locator(&quot;//div[contains(@class,&apos;AskUs-Modal&apos;) and contains(@class,&apos;show&apos;)]//div[contains(@class,&apos;text-danger&apos;) and normalize-space()=&apos;Must be 3 characters or greater&apos;]&quot;) to be visible
-
-	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:257)
-	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:214)
-	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:136)
-	... 34 more
-</pre></div></td>
-<td>43</td>
-<td>com.automation.tests.FeedbackNegativeTest@7cc0cdad</td></tr>
+<td></td>
+<td>23</td>
+<td>com.automation.tests.ApplyNowEmailTest@4ec4f3a0</td></tr>
 </table><p>
 </body>
 </html>

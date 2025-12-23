@@ -1,196 +1,275 @@
 package com.automation.tests;
 
 import com.automation.base.BaseClass;
+import com.automation.constants.ApplyNowExpectedTexts;
 import com.automation.pages.ApplyNowPage;
 import com.automation.pages.HomepagePage;
+import com.automation.pages.MyInterestPage;
 import com.automation.pages.SignUpPage;
 import com.automation.utils.HelperUtility;
 import com.microsoft.playwright.Locator;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class ApplyNowEmailTest extends BaseClass {
 
     private HomepagePage home;
     private SignUpPage signup;
     private ApplyNowPage apply;
+    private MyInterestPage myInterest;
     private HelperUtility helper;
 
-    private final String BASE_URL = "https://stage.promilo.com/";
-    private final String OTP = "9999";
-    private final String PASSWORD = "Test@123";
-    private final String INTERNSHIP = "Designer1";
+    private static final String BASE_URL = "https://stage.promilo.com/";
+    private static final String OTP = "9999";
+    private static final String PASSWORD = "Test@123";
+    private static final String INTERNSHIP = "Tester 1";
 
-    @BeforeClass
-    public void initPages() {
+    private static final DateTimeFormatter DATE_FORMAT =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    @BeforeMethod(alwaysRun = true)
+    public void init() {
+
         home = new HomepagePage(page);
         signup = new SignUpPage(page);
         apply = new ApplyNowPage(page);
+        myInterest = new MyInterestPage(page);
         helper = new HelperUtility(page);
-    }
 
-    @BeforeMethod
-    public void openBase() {
         page.navigate(BASE_URL);
         page.waitForLoadState();
 
         if (home.getMaybeLaterBtn().isVisible()) {
-            helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
+            helper.safeClick(home.getMaybeLaterBtn(), "Close Preference Popup");
         }
-        Assert.assertTrue(page.url().contains("stage.promilo.com"), "❌ Base URL not loaded!");
+
+        BaseClass.screeningAnswers.clear();
     }
 
     @Test
-    public void verifyApplyNowViaEmail() {
+    public void verifyApplyNowViaEmail_fullStrictValidation() {
 
-        // ---------- Test Data ----------
+        // ================= TEST DATA =================
         String name = helper.generateRandomName();
         String email = helper.generateEmailFromName(name);
         String phone = helper.generateRandomPhone();
 
-        helper.log("Generated Name = " + name);
-        helper.log("Generated Email = " + email);
-        helper.log("Generated Phone = " + phone);
+        helper.log("Name: " + name);
+        helper.log("Email: " + email);
+        helper.log("Phone: " + phone);
 
-        // ---------- SIGNUP ----------
-        Assert.assertTrue(signup.getInitialSignupButton().isVisible(), "❌ Signup button not visible!");
-        helper.safeClick(signup.getInitialSignupButton(), "Click SignUp");
-
-        helper.safeFill(signup.getEmailOrPhoneInput(), email, "Enter Email");
-        Assert.assertEquals(signup.getEmailOrPhoneInput().inputValue(), email, "❌ Email not entered correctly!");
-
-        helper.safeClick(signup.getSendVerificationCodeButton(), "Send Verification Code");
-        Assert.assertTrue(signup.getOtpInput().isVisible(), "❌ OTP input not visible!");
-
-        helper.safeFill(signup.getOtpInput(), OTP, "Enter OTP");
-        helper.safeFill(signup.getPasswordInput(), PASSWORD, "Enter Password");
-
+        // ================= SIGN UP =================
+        helper.safeClick(signup.getInitialSignupButton(), "Sign Up");
+        helper.safeFill(signup.getEmailOrPhoneInput(), email, "Email");
+        helper.safeClick(signup.getSendVerificationCodeButton(), "Send OTP");
+        helper.safeFill(signup.getOtpInput(), OTP, "OTP");
+        helper.safeFill(signup.getPasswordInput(), PASSWORD, "Password");
         helper.safeClick(signup.getFinalSignupButton(), "Complete Signup");
-        Assert.assertTrue(home.getInternshipsTab().isVisible(), "❌ Signup failed, internships tab not visible!");
 
-        // ---------- INTERNSHIP ----------
-        helper.safeClick(home.getInternshipsTab(), "Open Internships");
+        // ================= OPEN INTERNSHIP =================
+        helper.safeClick(home.getInternshipsTab(), "Internships");
+        helper.scrollAndClick(home.getInternshipCard(INTERNSHIP), "Internship Card");
 
-        Locator card = home.getInternshipCard(INTERNSHIP);
-        helper.waitForVisible(card, "Internship Card");
-        Assert.assertTrue(card.isVisible(), "❌ Internship card not visible!");
+        // ================= APPLY NOW =================
+        helper.safeClick(apply.getApplyNowButton(), "Apply Now");
 
-        helper.scrollAndClick(card, "Open Internship");
-        Assert.assertTrue(apply.getApplyNowButton().isVisible(), "❌ Apply Now button missing!");
+        // ================= APPLY POPUP TEXTS =================
+        String applyHeader = apply.getApplyHeader().innerText().trim();
+        helper.log("Apply Header: " + applyHeader);
 
-        // ---------- APPLY NOW POPUP ----------
-        helper.safeClick(apply.getApplyNowButton(), "Click Apply Now");
+        Assert.assertTrue(
+                applyHeader.startsWith(ApplyNowExpectedTexts.APPLY_HEADER_PREFIX)
+        );
 
-        Assert.assertTrue(apply.getNameField().isVisible(), "❌ Name field missing!");
-        helper.safeFill(apply.getNameField(), name, "Fill Name");
-        Assert.assertEquals(apply.getNameField().inputValue(), name, "❌ Name not entered!");
+        BaseClass.campaignName = applyHeader
+                .replace(ApplyNowExpectedTexts.APPLY_HEADER_PREFIX, "")
+                .replace("!", "")
+                .trim();
 
-        helper.safeFill(apply.getPhoneField(), phone, "Fill Phone");
-        Assert.assertEquals(apply.getPhoneField().inputValue(), phone, "❌ Phone not entered!");
+        Assert.assertEquals(
+                apply.getWhyRegisterHeader().innerText().trim(),
+                ApplyNowExpectedTexts.WHY_REGISTER_HEADER
+        );
 
-        // email is disabled after signup → skip fill
-        Assert.assertFalse(apply.getEmailField().isEnabled(), "❌ Email field should be disabled!");
+        Locator bullets = apply.getWhyRegisterBullets();
+        Assert.assertEquals(bullets.count(),
+                ApplyNowExpectedTexts.WHY_REGISTER_POINTS.length);
 
-        // ---------- SELECT CHECKBOXES ----------
-        helper.safeClick(apply.getIndustryDropdown(), "Open Industry");
+        for (int i = 0; i < bullets.count(); i++) {
+            String bullet = bullets.nth(i).innerText().trim();
+            helper.log("Why Register Bullet " + (i + 1) + ": " + bullet);
 
-        Locator boxes = apply.getAllIndustryCheckboxes();
-        int total = boxes.count();
-        Assert.assertTrue(total >= 3, "❌ Less than 3 industry checkboxes!");
-
-        helper.safeClick(boxes.nth(1), "Select Checkbox 1");
-        helper.safeClick(boxes.nth(3), "Select Checkbox 2");
-        helper.safeClick(boxes.nth(5), "Select Checkbox 3");
-
-        helper.safeClick(apply.getIndustryDropdown(), "Close Industry");
-
-        helper.safeClick(apply.getAskUsApplyNowButton(), "Submit ApplyNow Form");
-
-        // ---------- OTP ----------
-        for (int i = 1; i <= 4; i++) {
-            helper.safeFill(apply.getOtpInputField(i), OTP.substring(i - 1, i), "OTP Digit " + i);
-            Assert.assertEquals(apply.getOtpInputField(i).inputValue(), OTP.substring(i - 1, i), "❌ OTP digit mismatch!");
+            Assert.assertEquals(
+                    bullet,
+                    ApplyNowExpectedTexts.WHY_REGISTER_POINTS[i]
+            );
         }
 
+        Assert.assertEquals(
+                apply.getWhatsappLabel().innerText().trim(),
+                ApplyNowExpectedTexts.WHATSAPP_LABEL
+        );
+
+        // ================= APPLY FORM =================
+        apply.getNameField().fill(name);
+        apply.getPhoneField().fill(phone);
+        Assert.assertFalse(apply.getEmailField().isEnabled());
+
+        helper.safeClick(apply.getIndustryDropdown(), "Industry");
+        Locator industries = apply.getAllIndustryCheckboxes();
+        helper.safeClick(industries.nth(1), "Industry 1");
+        helper.safeClick(industries.nth(3), "Industry 2");
+        helper.safeClick(apply.getIndustryDropdown(), "Close Industry");
+        helper.safeClick(apply.getAskUsApplyNowButton(), "Submit");
+
+        // ================= OTP =================
+        for (int i = 1; i <= 4; i++) {
+            apply.getOtpInputField(i)
+                    .fill(String.valueOf(OTP.charAt(i - 1)));
+        }
+
+        Assert.assertEquals(
+                apply.getOtpThankYouText().innerText().trim(),
+                ApplyNowExpectedTexts.OTP_THANK_YOU
+        );
+
+        Assert.assertEquals(
+                apply.getOtpHeader().innerText().trim(),
+                ApplyNowExpectedTexts.OTP_HEADER
+        );
+
+        Assert.assertTrue(
+                apply.getOtpInstructionText().innerText()
+                        .contains(ApplyNowExpectedTexts.OTP_INSTRUCTION)
+        );
+
+        Assert.assertEquals(
+                apply.getOtpStillCantFindText().innerText().trim(),
+                ApplyNowExpectedTexts.OTP_STILL_CANT_FIND
+        );
+
         helper.safeClick(apply.getVerifyAndProceedButton(), "Verify OTP");
-        Assert.assertTrue(apply.getLanguageCard("English").isVisible(), "❌ Language selection not loaded!");
 
-        // ---------- CALENDAR ----------
-        helper.safeClick(apply.getLanguageCard("English"), "Select English");
-        helper.safeClick(apply.getFirstActiveDate(), "Select Date");
-        helper.safeClick(apply.getFirstActiveTimeSlot(), "Select Time");
+        // ================= VIDEO INTERVIEW =================
+        Assert.assertEquals(
+                helper.normalizeText(apply.getVideoInterviewTitle().innerText()),
+                ApplyNowExpectedTexts.VIDEO_INTERVIEW_TITLE
+        );
 
-        // ---------- SCREENING (if present) ----------
-        if (apply.getNextButton().isVisible()) {
+        Assert.assertEquals(
+                helper.normalizeText(apply.getVideoInterviewDesc().innerText()),
+                ApplyNowExpectedTexts.VIDEO_INTERVIEW_DESC
+        );
 
-            helper.safeClick(apply.getNextButton(), "Go to Screening");
+        // ================= LANGUAGE =================
+        helper.safeClick(apply.getLanguageCard("English"), "English");
 
-            Locator questions = apply.getScreeningQuestions();
-            int count = questions.count();
-            Assert.assertTrue(count > 0, "❌ No screening questions found!");
+        // ================= DATE =================
+        Locator dateElement = apply.getFirstActiveDate();
+        helper.safeClick(dateElement, "Date");
 
-            for (int i = 0; i < count; i++) {
+        int selectedDay = Integer.parseInt(
+                dateElement.innerText().trim().split("\\s+")[0]
+        );
 
+        LocalDate today = LocalDate.now();
+        LocalDate selectedDate =
+                today.withDayOfMonth(selectedDay);
+
+        if (selectedDate.isBefore(today)) {
+            selectedDate = selectedDate.plusMonths(1);
+        }
+
+        BaseClass.selectedDate =
+                selectedDate.format(DATE_FORMAT);
+
+        helper.log("Selected Full Date Stored: " + BaseClass.selectedDate);
+
+        // ================= TIME =================
+        Locator timeElement = apply.getFirstActiveTimeSlot();
+        helper.safeClick(timeElement, "Time");
+
+        BaseClass.selectedTime =
+                timeElement.innerText().trim().replaceFirst("^0", "");
+
+        helper.log("Selected Time Stored: " + BaseClass.selectedTime);
+
+        // ================= SCREENING =================
+        Locator questions = apply.getScreeningQuestions();
+
+        if (questions.count() > 0) {
+            helper.safeClick(apply.getNextButton(), "Next");
+
+            for (int i = 0; i < questions.count(); i++) {
                 Locator q = questions.nth(i);
+                String question = helper.normalizeText(q.innerText());
 
-                Locator options = q.locator("input[type='checkbox'], input[type='radio']");
-                if (options.count() > 0) {
-                    helper.safeClick(options.first(), "Select Objective Option");
+                String answer = "";
+
+                if (q.locator("input").count() > 0) {
+                    helper.safeClick(q.locator("input").first(), "Select Option");
+                    answer = "Option Selected";
                 }
 
-                Locator textArea = q.locator("textarea");
-                if (textArea.count() > 0) {
-                    helper.safeFill(textArea.first(), "Automated Answer", "Fill Subjective Answer");
-                    Assert.assertEquals(textArea.first().inputValue(), "Automated Answer", "❌ Subjective answer mismatch!");
+                if (q.locator("textarea").count() > 0) {
+                    helper.safeFill(q.locator("textarea").first(),
+                            "Automated Answer", "Answer");
+                    answer = "Automated Answer";
                 }
+
+                Assert.assertFalse(answer.isEmpty());
+                BaseClass.screeningAnswers.put(question, answer);
             }
 
             helper.safeClick(apply.getScreeningSubmitButton(), "Submit Screening");
-
-        } else {
-            helper.safeClick(apply.getCalendarSubmitButton(), "Submit Calendar");
         }
 
-        // ---------- ASSERT THANK YOU POPUP ----------
-        helper.waitForVisible(apply.getThankYouHeader(), "Thank You Popup");
+        // ================= THANK YOU =================
+        Assert.assertEquals(
+                apply.getThankYouHeader().innerText().trim(),
+                ApplyNowExpectedTexts.THANK_YOU_HEADER
+        );
 
-        Assert.assertTrue(apply.getThankYouHeader().isVisible(), "❌ Thank You header NOT visible!");
+        helper.safeClick(apply.getThankYouMyInterestLink(), "My Interest");
 
-        helper.log("✔ Thank You popup verified!");
+        // ================= MY INTEREST =================
+        Assert.assertEquals(
+                myInterest.getCardStatus().first().innerText().trim(),
+                "Pending"
+        );
 
-        // ---------- CLICK MY INTEREST LINK ----------
-        helper.safeClick(apply.getThankYouMyInterestLink(), "Click My Interest");
+        Assert.assertEquals(
+                myInterest.getCardTitle().first().innerText().trim(),
+                INTERNSHIP
+        );
 
-        page.waitForURL("**/myinterest**");
-        Assert.assertTrue(page.url().contains("myinterest"), "❌ My Interest NOT opened!");
+        Assert.assertEquals(
+                myInterest.getCardCompany().first().innerText().trim(),
+                BaseClass.campaignName
+        );
 
-        helper.log("✔ Navigated to My Interest");
+        Assert.assertEquals(
+                myInterest.getMeetingDate().innerText().trim(),
+                BaseClass.selectedDate
+        );
 
-        // ---------- ASSERT INTEREST CARD ----------
-        Locator interestCard = page.locator("//div[contains(@class,'my-interest-card-contianer')]").first();
-        helper.waitForVisible(interestCard, "My Interest Card");
+        Assert.assertEquals(
+                myInterest.getMeetingTime().innerText().trim(),
+                BaseClass.selectedTime
+        );
 
-        Assert.assertTrue(interestCard.isVisible(), "❌ Interest Card not visible!");
-        helper.log("✔ Interest Card Visible");
+        Assert.assertEquals(
+                page.locator(".my_interest_footer-service-banner-wrapper span")
+                        .first().innerText().trim(),
+                "Online Interview"
+        );
 
-        // Status
-        Locator status = interestCard.locator(".my-interest-status-tag");
-        Assert.assertEquals(status.innerText().trim(), "Pending", "❌ Status incorrect!");
-        helper.log("✔ Status = Pending");
-
-        // Meeting Date
-        String date = interestCard.locator("(//div[@class='card_detail-value'])[1]").innerText().trim();
-        Assert.assertFalse(date.isEmpty(), "❌ Meeting Date empty!");
-
-        // Meeting Time
-        String time = interestCard.locator("(//div[@class='card_detail-value'])[2]").innerText().trim();
-        Assert.assertFalse(time.isEmpty(), "❌ Meeting Time empty!");
-
-        helper.log("✔ Meeting Date & Time Validated");
-        helper.log("🎉 APPLY NOW EMAIL FLOW PASSED!");
+        helper.log("✅ APPLY NOW EMAIL – FULL STRICT VALIDATION PASSED");
     }
 }
-
-
 
 

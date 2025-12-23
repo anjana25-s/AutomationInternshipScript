@@ -30,7 +30,7 @@ public class ApplyNowNegativeTest extends BaseClass {
 
         helper.safeClick(home.getInternshipsTab(), "Open Internships");
 
-        Locator card = home.getInternshipCard("Designer1");
+        Locator card = home.getInternshipCard("Tester 1");
         helper.waitForVisible(card, "Internship Card");
         helper.scrollAndClick(card, "Open Internship");
 
@@ -197,7 +197,7 @@ public class ApplyNowNegativeTest extends BaseClass {
 
         helper.safeClick(home.getInternshipsTab(), "Open Internships Again");
 
-        Locator card2 = home.getInternshipCard("Designer1");
+        Locator card2 = home.getInternshipCard("Tester 1");
         helper.waitForVisible(card2, "Internship Card");
         helper.scrollAndClick(card2, "Open Internship Again");
 

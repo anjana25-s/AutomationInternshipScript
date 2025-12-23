@@ -1,14 +1,13 @@
 package com.automation.tests;
 
 import com.automation.base.BaseClass;
-import com.automation.pages.HomepagePage;
 import com.automation.pages.GetConnectedPage;
+import com.automation.pages.HomepagePage;
 import com.automation.utils.HelperUtility;
 import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import org.testng.Assert;
-import org.testng.Reporter;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 public class GetConnectedTest extends BaseClass {
 
@@ -17,109 +16,128 @@ public class GetConnectedTest extends BaseClass {
     private HelperUtility helper;
 
     private static final String BASE_URL = "https://stage.promilo.com/";
-    private static final String INTERNSHIP = "Designer1";
+    private static final String INTERNSHIP = "Tester 1";
     private static final String OTP = "9999";
 
-    @BeforeClass
-    public void initPages() {
-        home = new HomepagePage(page);
+    @BeforeMethod(alwaysRun = true)
+    public void openBase() {
+
+        home    = new HomepagePage(page);
         connect = new GetConnectedPage(page);
-        helper = new HelperUtility(page);
-    }
+        helper  = new HelperUtility(page);
 
-    @BeforeMethod
-    public void openUrl() {
-
-        helper.log("[Step 1] Navigating to: " + BASE_URL);
+        helper.log("Navigating to Promilo");
         page.navigate(BASE_URL);
         page.waitForLoadState();
 
-        Assert.assertTrue(page.url().contains("promilo"), "❌ URL did not load correctly!");
+        Assert.assertTrue(page.url().contains("promilo"),
+                "❌ URL did not load correctly");
 
         if (home.getMaybeLaterBtn().isVisible()) {
-            helper.safeClick(home.getMaybeLaterBtn(), "Close 'Maybe later' popup");
+            helper.safeClick(home.getMaybeLaterBtn(),
+                    "Close Maybe Later Popup");
         }
     }
 
     @Test
     public void verifyGetConnectedFlow() {
 
-        try {
-            // ------------------- GENERATE DATA -------------------
-            String name = helper.generateRandomName();
-            String phone = helper.generateRandomPhone();
-            String email = helper.generateEmailFromName(name);
-            String password = "Test@" + phone.substring(6);
+        // ------------------------------------------------------------
+        // TEST DATA
+        // ------------------------------------------------------------
+        String name     = helper.generateRandomName();
+        String phone    = helper.generateRandomPhone();
+        String email    = helper.generateEmailFromName(name);
+        String password = "Test@" + phone.substring(6);
 
-            helper.log("[DATA] Name: " + name);
-            helper.log("[DATA] Phone: " + phone);
-            helper.log("[DATA] Email: " + email);
+        helper.log("Name = " + name);
+        helper.log("Phone = " + phone);
+        helper.log("Email = " + email);
 
-            // ------------------- OPEN INTERNSHIPS -------------------
-            helper.safeClick(home.getInternshipsTab(), "Open Internships");
+        // ------------------------------------------------------------
+        // OPEN INTERNSHIP
+        // ------------------------------------------------------------
+        helper.safeClick(home.getInternshipsTab(),
+                "Open Internships");
 
-            Locator card = home.getInternshipCard(INTERNSHIP);
-            helper.waitForVisible(card, "Internship Card");
+        Locator card = home.getInternshipCard(INTERNSHIP);
+        helper.waitForVisible(card,
+                "Internship Card");
 
-            helper.scrollAndClick(card, "Open Internship");
+        helper.scrollAndClick(card,
+                "Open Internship");
 
-            // ------------------- CLICK GET CONNECTED -------------------
-            helper.safeClick(connect.getGetConnectedBtn(), "Click Get Connected");
+        // ------------------------------------------------------------
+        // GET CONNECTED
+        // ------------------------------------------------------------
+        helper.waitForVisible(connect.getGetConnectedBtn(),
+                "Get Connected Button");
+        helper.safeClick(connect.getGetConnectedBtn(),
+                "Click Get Connected");
 
-            // ------------------- FILL FORM -------------------
-            helper.safeFill(connect.getNameField(), name, "Name");
-            helper.safeFill(connect.getMobileField(), phone, "Mobile");
-            helper.safeFill(connect.getEmailField(), email, "Email");
+        // ------------------------------------------------------------
+        // FILL FORM
+        // ------------------------------------------------------------
+        helper.safeFill(connect.getNameField(),
+                name, "Name");
+        helper.safeFill(connect.getMobileField(),
+                phone, "Mobile");
+        helper.safeFill(connect.getEmailField(),
+                email, "Email");
 
-            // ------------------- INDUSTRY DROPDOWN -------------------
-            helper.safeClick(connect.getIndustryDropdown(), "Open Industry");
+        // ------------------------------------------------------------
+        // INDUSTRY DROPDOWN
+        // ------------------------------------------------------------
+        helper.safeClick(connect.getIndustryDropdown(),
+                "Open Industry Dropdown");
 
-            Locator boxes = connect.getIndustryCheckboxes();
-            int total = boxes.count();
+        Locator industries = connect.getIndustryCheckboxes();
+        Assert.assertTrue(industries.count() >= 3,
+                "❌ Less than 3 industry options");
 
-            Assert.assertTrue(total >= 3, "❌ Less than 3 industry checkboxes available!");
+        helper.safeClick(industries.nth(1),
+                "Select Industry 1");
+        helper.safeClick(industries.nth(2),
+                "Select Industry 2");
+        helper.safeClick(industries.nth(3),
+                "Select Industry 3");
 
-            helper.safeClick(boxes.nth(1), "Select Industry Checkbox 1");
-            helper.safeClick(boxes.nth(2), "Select Industry Checkbox 2");
-            helper.safeClick(boxes.nth(3), "Select Industry Checkbox 3");
+        helper.safeClick(connect.getIndustryDropdown(),
+                "Close Industry Dropdown");
 
-            // Close dropdown (same locator used)
-            helper.safeClick(connect.getIndustryDropdown(), "Close Industry Dropdown");
+        helper.safeFill(connect.getPasswordField(),
+                password, "Password");
 
-            helper.safeFill(connect.getPasswordField(), password, "Password");
+        // ------------------------------------------------------------
+        // REGISTER
+        // ------------------------------------------------------------
+        helper.safeClick(connect.getRegisterBtn(),
+                "Click Register");
 
-            // ------------------- REGISTER -------------------
-            helper.safeClick(connect.getRegisterBtn(), "Click Register");
+        // ------------------------------------------------------------
+        // OTP
+        // ------------------------------------------------------------
+        helper.waitForVisible(connect.getOtpInput(1),
+                "OTP Screen");
 
-            // ------------------- OTP SCREEN -------------------
-            Locator otpBox = connect.getOtpInput(1);
-            otpBox.waitFor(new Locator.WaitForOptions()
-                    .setState(WaitForSelectorState.VISIBLE)
-                    .setTimeout(15000));
-
-            helper.log("OTP screen loaded!");
-
-            // ------------------- ENTER OTP -------------------
-            for (int i = 1; i <= 4; i++) {
-                helper.safeFill(connect.getOtpInput(i),
-                        OTP.substring(i - 1, i),
-                        "OTP Digit " + i);
-            }
-
-            Assert.assertFalse(connect.getVerifyOtpBtn().isDisabled(),
-                    "❌ Verify & Proceed button should be enabled!");
-
-            // ------------------- VERIFY OTP -------------------
-            helper.safeClick(connect.getVerifyOtpBtn(), "Verify OTP");
-
-            helper.log("===== ✅ GET CONNECTED FLOW COMPLETED SUCCESSFULLY =====");
-
-        } catch (Exception e) {
-            Reporter.log("❌ TEST FAILED: " + e.getMessage(), true);
-            helper.takeScreenshot("GetConnected_Failed");
-            Assert.fail("❌ Test crashed: " + e.getMessage());
+        for (int i = 1; i <= 4; i++) {
+            helper.safeFill(
+                    connect.getOtpInput(i),
+                    OTP.substring(i - 1, i),
+                    "OTP Digit " + i
+            );
         }
+
+        Assert.assertFalse(connect.getVerifyOtpBtn().isDisabled(),
+                "❌ Verify button should be enabled");
+
+        helper.safeClick(connect.getVerifyOtpBtn(),
+                "Verify OTP");
+
+        helper.log("🎉 GET CONNECTED FLOW PASSED!");
     }
 }
+
+
 
 

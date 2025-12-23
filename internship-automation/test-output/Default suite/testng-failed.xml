@@ -3,13 +3,14 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.automation.tests.FeedbackNegativeTest">
+      <class name="com.automation.tests.ApplyNowEmailTest">
         <methods>
+          <include name="verifyApplyNowViaEmail_fullStrictValidation"/>
           <include name="launchBrowser"/>
           <include name="closeBrowser"/>
-          <include name="fullFeedbackNegativeFlow"/>
+          <include name="init"/>
         </methods>
-      </class> <!-- com.automation.tests.FeedbackNegativeTest -->
+      </class> <!-- com.automation.tests.ApplyNowEmailTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

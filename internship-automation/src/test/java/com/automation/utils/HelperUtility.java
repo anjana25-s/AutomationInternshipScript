@@ -19,27 +19,31 @@ public class HelperUtility {
     }
 
     // ------------------------------------------------------------
-    // SCREENSHOT (VIEWPORT ONLY)
+    // SCREENSHOT (ONLY ON FAILURE)
     // ------------------------------------------------------------
-    public void takeScreenshot(String stepName) {
+    public String takeScreenshot(String stepName) {
         try {
+            new java.io.File("screenshots").mkdirs();
+
             String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             String fileName = "screenshots/" + stepName + "_" + timestamp + ".png";
 
             page.screenshot(new Page.ScreenshotOptions()
                     .setPath(Paths.get(fileName))
-                    .setFullPage(false)   // ⭐ ONLY VIEWPORT
+                    .setFullPage(false)
             );
 
-            Reporter.log("📷 Screenshot: " + fileName, true);
+            Reporter.log("📷 Screenshot saved: " + fileName, true);
+            return fileName;
 
         } catch (Exception e) {
             Reporter.log("⚠ Screenshot failed: " + stepName, true);
+            return null;
         }
     }
 
     // ------------------------------------------------------------
-    // SAFE CLICK (Screenshot only on FAILURE)
+    // SAFE CLICK
     // ------------------------------------------------------------
     public void safeClick(Locator locator, String stepName) {
         try {
@@ -58,26 +62,26 @@ public class HelperUtility {
     }
 
     // ------------------------------------------------------------
-    // SAFE FILL (Screenshot only on FAILURE)
+    // SAFE FILL
     // ------------------------------------------------------------
-    public void safeFill(Locator locator, String value, String field) {
+    public void safeFill(Locator locator, String value, String fieldName) {
         try {
             locator.waitFor(new Locator.WaitForOptions()
                     .setState(WaitForSelectorState.VISIBLE)
                     .setTimeout(timeout));
 
             locator.fill(value);
-            Reporter.log("[Fill] " + field + " = " + value, true);
+            Reporter.log("[Fill] " + fieldName + " = " + value, true);
 
         } catch (Exception e) {
-            Reporter.log("[Fill FAILED] " + field, true);
-            takeScreenshot("Fill_" + field + "_FAILED");
+            Reporter.log("[Fill FAILED] " + fieldName, true);
+            takeScreenshot("Fill_" + fieldName + "_FAILED");
             throw e;
         }
     }
 
     // ------------------------------------------------------------
-    // STABLE SCROLL + CLICK (Screenshot only on FAILURE)
+    // SCROLL + CLICK
     // ------------------------------------------------------------
     public void scrollAndClick(Locator locator, String stepName) {
         try {
@@ -87,29 +91,24 @@ public class HelperUtility {
 
             locator.scrollIntoViewIfNeeded();
             page.waitForTimeout(150);
-
-            page.evaluate("el => el.scrollIntoView({behavior:'auto', block:'center'})",
-                    locator.elementHandle());
-
-            page.waitForTimeout(100);
-
             locator.click();
+
             Reporter.log("[Click] " + stepName + " ✓", true);
 
-        } catch (Exception e1) {
-            Reporter.log("⚠ Scroll click failed. Trying JS click...", true);
-
-            try {
-                page.evaluate("el => el.click()", locator.elementHandle());
-                Reporter.log("[JS Click] " + stepName + " ✓", true);
-
-            } catch (Exception e2) {
-                Reporter.log("[Click FAILED] " + stepName, true);
-                takeScreenshot(stepName + "_FAILED");
-                throw e2;
-            }
+        } catch (Exception e) {
+            Reporter.log("[Scroll Click FAILED] " + stepName, true);
+            takeScreenshot(stepName + "_FAILED");
+            throw e;
         }
     }
+    
+    public String normalizeText(String text) {
+        return text
+                .replace('\u00A0', ' ')   // remove non-breaking space
+                .replaceAll("\\s+", " ")  // collapse extra spaces
+                .trim();
+    }
+
 
     // ------------------------------------------------------------
     // WAIT FOR ELEMENT
@@ -123,25 +122,12 @@ public class HelperUtility {
     }
 
     // ------------------------------------------------------------
-    // STABILIZE UI
-    // ------------------------------------------------------------
-    public void stabilize() {
-        page.waitForTimeout(120);
-    }
-
-    // ------------------------------------------------------------
     // RANDOM DATA GENERATORS
     // ------------------------------------------------------------
     public String generateRandomName() {
-        String[] firstNames = {
-                "Riya", "Kavya", "Megh", "Anu", "Ishani",
-                "Sana", "Diya", "Nisha", "Tara", "Aaradhya",
-                "Mira", "Jhanvi", "Kiara", "Ritu", "Devika"
-        };
-
-        String firstName = firstNames[new Random().nextInt(firstNames.length)];
-        char initial = (char) ('A' + new Random().nextInt(26));
-        String name = firstName + " " + initial;
+        String[] names = {"Riya", "Kavya", "Sana", "Diya", "Ritu", "Megha"};
+        String name = names[new Random().nextInt(names.length)] + " "
+                + (char) ('A' + new Random().nextInt(26));
 
         Reporter.log("[Generated Name] " + name, true);
         return name;
@@ -149,88 +135,94 @@ public class HelperUtility {
 
     public String generateEmailFromName(String name) {
         String cleaned = name.replace(" ", "").toLowerCase();
-        int digits = 100 + new Random().nextInt(900);
-        String email = "test" + cleaned + digits + "@yopmail.com";
+        String email = "test" + cleaned + (100 + new Random().nextInt(900)) + "@yopmail.com";
 
         Reporter.log("[Generated Email] " + email, true);
         return email;
     }
 
     public String generateRandomPhone() {
-        int four = 1000 + new Random().nextInt(9000);
-        String phone = "900001" + four;
-
+        String phone = "900001" + (1000 + new Random().nextInt(9000));
         Reporter.log("[Generated Phone] " + phone, true);
         return phone;
     }
 
+    // ------------------------------------------------------------
+    // LOG WRAPPER
+    // ------------------------------------------------------------
     public void log(String message) {
         Reporter.log(message, true);
     }
 
     // ------------------------------------------------------------
-    // ASSERTIONS (Screenshots ONLY on failure)
+    // ASSERT VISIBLE
     // ------------------------------------------------------------
     public void assertVisible(Locator locator, String message) {
         try {
             if (!locator.isVisible()) {
-                takeScreenshot("ASSERT_FAIL_visible_" + message);
+                takeScreenshot("ASSERT_VISIBLE_FAIL_" + message);
                 throw new AssertionError("❌ " + message);
             }
             Reporter.log("✔ " + message, true);
+
         } catch (Exception e) {
-            takeScreenshot("ASSERT_EXCEPTION_visible_" + message);
+            takeScreenshot("ASSERT_VISIBLE_EXCEPTION_" + message);
             throw e;
         }
     }
 
+    // ------------------------------------------------------------
+    // ASSERT TRUE
+    // ------------------------------------------------------------
+    public void assertTrue(boolean condition, String message) {
+        try {
+            if (!condition) {
+                takeScreenshot("ASSERT_TRUE_FAIL_" + message);
+                throw new AssertionError("❌ " + message);
+            }
+            Reporter.log("✔ " + message, true);
+
+        } catch (Exception e) {
+            takeScreenshot("ASSERT_TRUE_EXCEPTION_" + message);
+            throw e;
+        }
+    }
+
+    // ------------------------------------------------------------
+    // ASSERT EQUALS
+    // ------------------------------------------------------------
     public void assertEquals(String actual, String expected, String message) {
         try {
             if (!actual.equals(expected)) {
-                takeScreenshot("ASSERT_FAIL_equals_" + message);
+                takeScreenshot("ASSERT_EQUALS_FAIL_" + message);
                 throw new AssertionError(
                         "❌ " + message + " | Expected: " + expected + ", Found: " + actual
                 );
             }
             Reporter.log("✔ " + message, true);
-        } catch (Exception e) {
-            takeScreenshot("ASSERT_EXCEPTION_equals_" + message);
-            throw e;
-        }
-    }
 
-    public void assertTrue(boolean condition, String message) {
-        try {
-            if (!condition) {
-                takeScreenshot("ASSERT_FAIL_true_" + message);
-                throw new AssertionError("❌ " + message);
-            }
-            Reporter.log("✔ " + message, true);
         } catch (Exception e) {
-            takeScreenshot("ASSERT_EXCEPTION_true_" + message);
+            takeScreenshot("ASSERT_EQUALS_EXCEPTION_" + message);
             throw e;
         }
     }
 
     // ------------------------------------------------------------
-    // SPECIAL ASSERTION FOR TOASTS (ATTACHED instead of visible)
+    // ASSERT TOAST APPEARED
     // ------------------------------------------------------------
     public void assertToastAppeared(Locator locator, String message) {
         try {
             locator.waitFor(new Locator.WaitForOptions()
-                    .setState(WaitForSelectorState.ATTACHED) // ⭐ does NOT require visibility
+                    .setState(WaitForSelectorState.ATTACHED)
                     .setTimeout(3000)
             );
 
-            Reporter.log("✔ " + message, true);
+            Reporter.log("✔ Toast Appeared: " + message, true);
 
         } catch (Exception e) {
-            takeScreenshot("ASSERT_FAIL_TOAST_" + message);
-            throw new AssertionError("❌ Toast not found: " + message);
+            takeScreenshot("ASSERT_TOAST_FAIL_" + message);
+            throw new AssertionError("❌ Toast did not appear: " + message);
         }
     }
 }
-
-
-
 

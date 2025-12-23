@@ -2,25 +2,20 @@ package com.promilo.automation.mentorship.mentor.videoacceptance;
 
 import java.nio.file.Paths;
 
-import org.apache.xmlbeans.impl.soap.Text;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.mentor.myacceptance.MyAcceptance;
 import com.promilo.automation.pageobjects.myresume.MyResumePage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class MentorshipVideoServiceMyAcceptanceCardValidation extends Baseclass{
+public class MentorshipVideoServiceMyAcceptanceCardValidation extends BaseClass{
 	
 	
 	

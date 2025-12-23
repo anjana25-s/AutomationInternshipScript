@@ -7,20 +7,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
 import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
-import com.promilo.automation.mentorship.mentee.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
-import com.promilo.automation.mentorship.mentee.MentorshipFormComponents;
-import com.promilo.automation.mentorship.mentee.MentorshipMyintrest;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 
-public class MentorshipAskQueryPaid extends Baseclass {
+public class MentorshipAskQueryPaid extends BaseClass {
 
     private static final Logger log = LogManager.getLogger(MentorshipAskQueryPaid.class);
 
@@ -89,8 +86,9 @@ public class MentorshipAskQueryPaid extends Baseclass {
         int randomNum = 10000 + new Random().nextInt(90000);
         String randomEmail = "GetMentorCall" + randomNum + "@" + serverId + ".mailosaur.net";
         page.locator("//input[@id='userEmail']").nth(1).fill(randomEmail);
-        Baseclass.generatedEmail = randomEmail;
-        Baseclass.generatedPhone = randomPhone;
+
+        BaseClass.generatedEmail = randomEmail;
+        BaseClass.generatedPhone = randomPhone;
         System.out.println("Filled email field");
 
         page.locator("//button[normalize-space()='Ask Your Query']").nth(2)

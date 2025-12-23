@@ -12,18 +12,18 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.promilo.automation.mentorship.mentee.MentorshipErrorMessagesAndToasters;
-import com.promilo.automation.mentorship.mentee.MentorshipFormComponents;
 import com.promilo.automation.mentorship.mentee.DescriptionPage;
 import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
+import com.promilo.automation.mentorship.mentee.MentorshipErrorMessagesAndToasters;
+import com.promilo.automation.mentorship.mentee.MentorshipFormComponents;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPop;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class DownloadResourceNegativeValidations extends Baseclass {
+public class DownloadResourceNegativeValidations extends BaseClass {
 
     ExtentReports extent = ExtentManager.getInstance();
     ExtentTest test = extent.createTest("Brand Endorsement Error Messages Validation Functionality");
@@ -81,7 +81,7 @@ public class DownloadResourceNegativeValidations extends Baseclass {
         // =========================================================
         //                🔸 LANDING PAGE
         // =========================================================
-        LandingPop landingPop = new LandingPop(page);
+        MayBeLaterPopUp landingPop = new MayBeLaterPopUp(page);
 
         try {
             landingPop.getPopup().click();

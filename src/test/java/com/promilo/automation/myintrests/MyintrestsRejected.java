@@ -11,11 +11,11 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class MyintrestsRejected extends Baseclass {
+public class MyintrestsRejected extends BaseClass {
 
     @Test
     public void myInterestRejectedTest() throws Exception {

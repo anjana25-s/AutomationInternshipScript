@@ -25,12 +25,12 @@ import com.promilo.automation.pageobjects.emailnotifications.EmailnotificationsS
 import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignupWithMailosaurUI;
 
-public class UserRequestisRejectedByTheAdvertiser extends Baseclass {
+public class UserRequestisRejectedByTheAdvertiser extends BaseClass {
 
 	
 	ExtentReports extent = ExtentManager.getInstance();

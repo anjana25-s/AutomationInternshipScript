@@ -10,11 +10,11 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class AdvertiserValidLogin extends Baseclass {
+public class AdvertiserValidLogin extends BaseClass {
 
     @Test
     public void performLoginTest() {

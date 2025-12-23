@@ -1,17 +1,15 @@
 package com.promilo.automation.resources;
 
-import com.microsoft.playwright.*;
+import org.testng.annotations.Test;
+
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.PlaywrightException;
 import com.promilo.automation.pageobjects.signuplogin.CreateAccountpage;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.testng.annotations.Test;
-
-public class SignUpLogoutUtil extends Baseclass {
+public class SignUpLogoutUtil extends BaseClass {
 	
 	
 @Test

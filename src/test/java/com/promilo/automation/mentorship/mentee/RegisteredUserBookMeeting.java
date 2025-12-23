@@ -19,11 +19,11 @@ import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.registereduser.jobs.MaiLRegisteredUserInvalidJobApply;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignupWithMailosaurUI;
 
-public class RegisteredUserBookMeeting extends Baseclass{
+public class RegisteredUserBookMeeting extends BaseClass{
 	
 	
 	
@@ -110,7 +110,7 @@ public class RegisteredUserBookMeeting extends Baseclass{
 	        
 	        page.locator("//input[@name='userMobile']").fill(randomPhone);
 
-	        Baseclass.generatedPhone = randomPhone;
+	        BaseClass.generatedPhone = randomPhone;
 	        fillForm.getMentorCall().click();
 	        
 	     // -------------------- OTP Handling --------------------

@@ -9,12 +9,11 @@ import org.testng.annotations.Test;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.advertiser.MentorFilterTest;
-import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 
-public class MentorshipRegisterWithUS extends Baseclass{
+public class MentorshipRegisterWithUS extends BaseClass{
 
 	
 	private static final Logger log = LogManager.getLogger(MentorFilterTest.class);

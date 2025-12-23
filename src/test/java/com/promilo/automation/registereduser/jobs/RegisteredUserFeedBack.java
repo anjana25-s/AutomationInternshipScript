@@ -5,7 +5,6 @@ import java.nio.file.Paths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -15,12 +14,12 @@ import com.microsoft.playwright.Page;
 import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignUpLogoutUtil;
 
-public class RegisteredUserFeedBack extends Baseclass {
+public class RegisteredUserFeedBack extends BaseClass {
 
     private static final Logger logger = LogManager.getLogger(RegisteredUserFeedBack.class);
 

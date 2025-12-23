@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -18,12 +17,12 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignUpLogoutUtil;
 
-public class MailRegisteredUserJobApplicationWithINvalidotp extends Baseclass {
+public class MailRegisteredUserJobApplicationWithINvalidotp extends BaseClass {
 
     static final String SHEET_NAME = "PromiloTestData";
     static ExcelUtil excel;

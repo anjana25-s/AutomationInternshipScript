@@ -17,15 +17,15 @@ import com.promilo.automation.mentorship.mentornotifications.MentroOneOnOneCall;
 import com.promilo.automation.pageobjects.myresume.MyResumePage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.MailsaurCredentials;
 
-public class OneOnOneCallRejectFunctionality extends Baseclass {
+public class OneOnOneCallRejectFunctionality extends BaseClass {
 
-    String emailToLogin = Baseclass.generatedEmail;
-    String phoneToLogin = Baseclass.generatedPhone;
+    String emailToLogin = BaseClass.generatedEmail;
+    String phoneToLogin = BaseClass.generatedPhone;
 
     ExtentReports extent;
     ExtentTest test;
@@ -134,10 +134,11 @@ public class OneOnOneCallRejectFunctionality extends Baseclass {
                 LoginPage loginPage1 = new LoginPage(advertiserPage);
 
                 // ✅ Safe fill with null check
-                if (Baseclass.generatedPhone == null || Baseclass.generatedPhone.isEmpty()) {
+                if (BaseClass.generatedPhone == null || BaseClass
+                		.generatedPhone.isEmpty()) {
                     throw new RuntimeException("Generated phone/email is null or empty. Cannot fill login field.");
                 }
-                loginPage1.loginMailPhone().fill(Baseclass.generatedPhone);
+                loginPage1.loginMailPhone().fill(BaseClass.generatedPhone);
 
                 loginPage1.loginWithOtp().click();
 

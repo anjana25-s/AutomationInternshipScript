@@ -12,27 +12,23 @@ import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Page.LocatorOptions;
 import com.promilo.automation.mentor.myacceptance.MyAcceptance;
-import com.promilo.automation.pageobjects.myresume.MyResumePage;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class BrandEndorsementAccept extends com.promilo.automation.resources.Baseclass{
+public class BrandEndorsementAccept extends BaseClass{
 	
 	
 	
 	// ✅ Use generated email from previous test
-    String emailToLogin = Baseclass.generatedEmail;
-    String phoneToLogin = Baseclass.generatedPhone;
+    String emailToLogin = BaseClass.generatedEmail;
+    String phoneToLogin = BaseClass.generatedPhone;
 
 	 ExtentReports extent;
 	    ExtentTest test;
@@ -156,30 +152,25 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             String modalText = acceptRequest.modalContent().textContent();
             
             
-            // Create a new context
-            Browser actualBrowser = browser.get();
-            BrowserContext advertiserContext = actualBrowser.newContext();
-            Page mentorPage = advertiserContext.newPage();
-
             // Now use mentor page as usual
-            mentorPage.navigate(prop.getProperty("url"));
+            page.navigate(prop.getProperty("url"));
 
             
-            LandingPage login= new LandingPage(mentorPage);
+            LandingPage login= new LandingPage(page);
             login.dismissPopup();
             login.clickLoginButton();
             
          
-               LoginPage loginPage1 = new LoginPage(mentorPage);
-               loginPage1.loginMailPhone().fill(Baseclass.generatedPhone); // use the generated email
+               LoginPage loginPage1 = new LoginPage(page);
+               loginPage1.loginMailPhone().fill(BaseClass.generatedPhone); // use the generated email
                loginPage1.loginWithOtp().click();
                loginPage1.otpField().fill("9999");
                loginPage1.loginButton().click();
          
                
                //click on my interest tab and get the card details
-               mentorPage.locator("//span[text()='My Interest']").click();
-               mentorPage.locator("//div[@class='tab text-center w-50 ms-1 pointer ']").click();
+               page.locator("//span[text()='My Interest']").click();
+               page.locator("//div[@class='tab text-center w-50 ms-1 pointer ']").click();
                
                
                

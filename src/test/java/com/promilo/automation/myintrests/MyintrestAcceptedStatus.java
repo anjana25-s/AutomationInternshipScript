@@ -2,7 +2,6 @@ package com.promilo.automation.myintrests;
 
 import java.nio.file.Paths;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -12,11 +11,11 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class MyintrestAcceptedStatus extends Baseclass {
+public class MyintrestAcceptedStatus extends BaseClass {
 
     @Test
     public void verifyAcceptedInterestTag() throws Exception {

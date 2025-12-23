@@ -16,11 +16,11 @@ import com.microsoft.playwright.Page;
 import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class GuestUserJobApplyWithExistingPhoneAndEmail extends Baseclass{
+public class GuestUserJobApplyWithExistingPhoneAndEmail extends BaseClass{
 	
 	
     @DataProvider(name = "jobApplicationData")

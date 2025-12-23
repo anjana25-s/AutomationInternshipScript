@@ -17,12 +17,12 @@ import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.registereduser.jobs.MaiLRegisteredUserInvalidJobApply;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.MailsaurCredentials;
 import com.promilo.automation.resources.SignupWithMailosaurUI;
 
-public class RegisteredUserBrandEndorsement extends Baseclass{
+public class RegisteredUserBrandEndorsement extends BaseClass{
 
 	
 	
@@ -102,7 +102,7 @@ page.locator("//input[@name='userName']").fill("karthik");
         // Fill phone and email fields
 page.locator("//input[@name='userMobile']").fill(randomPhone);
         // Store in Baseclass
-        Baseclass.generatedPhone = randomPhone;
+        BaseClass.generatedPhone = randomPhone;
 
         // Print the randomly generated email and phone
         System.out.println("✅ Randomly generated phone: " + randomPhone);

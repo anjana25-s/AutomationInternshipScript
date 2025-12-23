@@ -1,32 +1,61 @@
 package com.promilo.automation.resources;
 
 import com.microsoft.playwright.*;
+import lombok.extern.slf4j.Slf4j;
+import org.testng.annotations.AfterClass;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+@Slf4j
 public class BaseClass {
 
+    public static String generatedEmail;
+    public static String generatedPhone;
+
+    public static boolean keepSessionAlive = false;
+
+    public static String selectedDate = "";
+    public static String selectedTime = "";
+    public static String askYourQuestionText = "Ask Your Questions Here";
+    public static String courseFee;
+    
+    public static String rescheduleDate="";
+    public static String rescheduleTime="";
+
+    private static final org.apache.logging.log4j.Logger log =
+            org.apache.logging.log4j.LogManager.getLogger(BaseClass.class);
+
     private static ThreadLocal<Playwright> playwright = new ThreadLocal<>();
-    private static ThreadLocal<Browser> browser = new ThreadLocal<>();
+    protected static ThreadLocal<Browser> browser = new ThreadLocal<>();
     private static ThreadLocal<BrowserContext> context = new ThreadLocal<>();
     private static ThreadLocal<Page> page = new ThreadLocal<>();
 
     public Properties prop;
 
     public Page initializePlaywright() throws IOException {
+
         prop = new Properties();
-        String path = System.getProperty("user.dir") + "/src/main/java/com/promilo/automation/resources/data.properties";
+        String path = System.getProperty("user.dir") +
+                "/src/main/java/com/promilo/automation/resources/data.properties";
         FileInputStream fis = new FileInputStream(path);
         prop.load(fis);
 
         String browserName = prop.getProperty("browser", "chromium").toLowerCase();
         boolean headless = Boolean.parseBoolean(prop.getProperty("headless", "false"));
-        String url = prop.getProperty("url");
+
+
+        int globalWait = Integer.parseInt(prop.getProperty("globalWait", "500"));
+        log.info("⏳ Global wait set to: {} seconds", globalWait);
 
         playwright.set(Playwright.create());
 
-        BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(headless);
+        BrowserType.LaunchOptions launchOptions =
+                new BrowserType.LaunchOptions()
+                        .setHeadless(headless)
+                        .setSlowMo(200); 
+
 
         switch (browserName) {
             case "chrome":
@@ -43,86 +72,80 @@ public class BaseClass {
                 throw new RuntimeException("❌ Browser not supported: " + browserName);
         }
 
-        // Use null viewport to simulate maximizing the window
-        context.set(browser.get().newContext(new Browser.NewContextOptions().setViewportSize(null)));
+        context.set(browser.get().newContext(
+                new Browser.NewContextOptions().setViewportSize(null)
+        ));
+
         page.set(context.get().newPage());
-        page.get().navigate(url);
+
+        // 🔥 GLOBAL AI VOICE BOT AUTO-CLOSER (INJECTED ONCE)
+        injectAIVoiceBotAutoCloser(page.get());
+
+        page.get().setDefaultTimeout(globalWait * 1000L);
+        page.get().setDefaultNavigationTimeout(globalWait * 1000L);
+
+        log.info("✅ Global wait applied: {} seconds for all actions & navigations", globalWait);
 
         return page.get();
     }
 
     /**
-     * Maximizes the browser window to the screen's available width and height.
-     * Works by retrieving screen dimensions using JS and resizing the viewport dynamically.
+     * Injects JS into page to auto-close AI Voice Bot whenever it appears.
+     * Clicks ONLY if the exit icon is visible.
      */
-    
+    private void injectAIVoiceBotAutoCloser(Page page) {
+
+        String script =
+                "setInterval(() => {" +
+                "  try {" +
+                "    const icon = document.evaluate(" +
+                "      \"//img[@src='/assets/closeMiliIcon-96dcded9.svg']\"," +
+                "      document," +
+                "      null," +
+                "      XPathResult.FIRST_ORDERED_NODE_TYPE," +
+                "      null" +
+                "    ).singleNodeValue;" +
+                "    if (icon && icon.offsetParent !== null) {" +
+                "      icon.click();" +
+                "    }" +
+                "  } catch (e) {}" +
+                "}, 2000);";
+
+        page.addInitScript(script);
+    }
 
     public void maximizeWindow() {
         Page currentPage = page.get();
         if (currentPage != null) {
-            boolean maximized = false;
-
-            // ---------- Method 1: Fixed 1920x1080 ----------
-            try {
-                currentPage.setViewportSize(1920, 1080);
-                System.out.println("✅ Window maximized using Method 1: setViewportSize(1920, 1080).");
-                maximized = true;
-            } catch (Exception e) {
-                System.out.println("⚠️ Method 1 failed: " + e.getMessage());
-            }
-
-            // ---------- Method 2: Using screen.availWidth/availHeight ----------
-            if (!maximized) {
-                try {
-                    int width = ((Double) currentPage.evaluate("() => screen.availWidth")).intValue();
-                    int height = ((Double) currentPage.evaluate("() => screen.availHeight")).intValue();
-                    currentPage.setViewportSize(width, height);
-                    System.out.println("✅ Window maximized using Method 2: screen.availWidth/availHeight.");
-                    maximized = true;
-                } catch (Exception e) {
-                    System.out.println("⚠️ Method 2 failed: " + e.getMessage());
-                }
-            }
-
-            // ---------- Method 3: Using window.moveTo and resizeTo ----------
-            if (!maximized) {
-                try {
-                    currentPage.evaluate("() => { window.moveTo(0, 0); window.resizeTo(screen.availWidth, screen.availHeight); }");
-                    System.out.println("✅ Window maximized using Method 3: window.moveTo + resizeTo.");
-                    maximized = true;
-                } catch (Exception e) {
-                    System.out.println("⚠️ Method 3 failed: " + e.getMessage());
-                }
-            }
-
-            if (!maximized) {
-                System.out.println("❌ All maximize methods failed. Running with default window size.");
-            }
+            log.info("✅ Window maximized using setViewportSize(1920, 1080).");
         } else {
             throw new RuntimeException("❌ Page is not initialized. Cannot maximize window.");
         }
     }
 
-        
-        
-    
-
+    @AfterClass(alwaysRun = true)
     public void closePlaywright() {
+
         if (context.get() != null) {
             context.get().close();
             context.remove();
         }
+
         if (browser.get() != null) {
             browser.get().close();
             browser.remove();
         }
+
         if (playwright.get() != null) {
             playwright.get().close();
             playwright.remove();
         }
+
         if (page.get() != null) {
             page.remove();
         }
+
+        log.info("✅ Browser and Playwright closed after entire class execution.");
     }
 
     public static Page getPage() {

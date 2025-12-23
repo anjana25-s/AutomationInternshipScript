@@ -10,9 +10,9 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 
-public class DescriptionPageValidation extends Baseclass {
+public class DescriptionPageValidation extends BaseClass {
 
     private static final Logger log = LogManager.getLogger(ShortListWithExistingPhoneAndEmail.class);
 

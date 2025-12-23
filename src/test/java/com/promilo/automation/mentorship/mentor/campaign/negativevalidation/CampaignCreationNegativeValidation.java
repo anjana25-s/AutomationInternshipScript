@@ -17,12 +17,12 @@ import com.promilo.automation.mentorship.mentee.MentorshipErrorMessagesAndToaste
 import com.promilo.automation.mentorship.mentor.BecomeMentor;
 import com.promilo.automation.mentorship.mentor.CreateProfile;
 import com.promilo.automation.pageobjects.myresume.Hamburger;
-import com.promilo.automation.pageobjects.signuplogin.LandingPop;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.SignupWithMailosaurUI;
 
-public class CampaignCreationNegativeValidation extends Baseclass {
+public class CampaignCreationNegativeValidation extends BaseClass {
 
 	private static final Logger log = LogManager.getLogger(AskUsWithInvalidData.class);
 
@@ -49,7 +49,7 @@ public class CampaignCreationNegativeValidation extends Baseclass {
 		page.navigate(prop.getProperty("url"));
 		page.setViewportSize(1080, 720);
 
-		LandingPop landingPop = new LandingPop(page);
+		MayBeLaterPopUp landingPop = new MayBeLaterPopUp(page);
 		try { landingPop.getPopup().click(); } catch (Exception e) {}
 
 		landingPop.clickLoginButton();

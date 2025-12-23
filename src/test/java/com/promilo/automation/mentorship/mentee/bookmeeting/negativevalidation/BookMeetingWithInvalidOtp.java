@@ -21,11 +21,11 @@ import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class BookMeetingWithInvalidOtp extends Baseclass {
+public class BookMeetingWithInvalidOtp extends BaseClass {
 
     ExtentReports extent = ExtentManager.getInstance();
     private static final Logger logger = LogManager.getLogger(RegisteredUserShortList.class);

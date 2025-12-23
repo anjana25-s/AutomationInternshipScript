@@ -16,10 +16,12 @@ import com.microsoft.playwright.Page;
 import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.*;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.ExcelUtil;
+import com.promilo.automation.resources.ExtentManager;
 
 
-public class AskUsWithInvalidData extends Baseclass {
+public class AskUsWithInvalidData extends BaseClass {
 
 	@DataProvider(name = "jobApplicationData")
 	public Object[][] jobApplicationData() throws Exception {

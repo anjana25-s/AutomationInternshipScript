@@ -3,7 +3,6 @@ package com.promilo.automation.registereduser.jobs;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
-import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,12 +17,12 @@ import com.microsoft.playwright.Page;
 import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignUpLogoutUtil;
 
-public class MaiLRegisteredUserInvalidJobApply extends Baseclass {
+public class MaiLRegisteredUserInvalidJobApply extends BaseClass {
 
     private static final Logger logger = LogManager.getLogger(MaiLRegisteredUserInvalidJobApply.class);
 

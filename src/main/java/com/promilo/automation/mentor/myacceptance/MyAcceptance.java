@@ -2,9 +2,8 @@ package com.promilo.automation.mentor.myacceptance;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.promilo.automation.resources.Baseclass;
 
-public class MyAcceptance extends Baseclass {
+public class MyAcceptance  {
 
     private final Page page;
     private final Locator myAcceptance;

@@ -1,27 +1,18 @@
 package com.promilo.automation.mentorship.mentee;
 
-import static org.testng.Assert.assertEquals;
-
 import java.io.IOException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.WaitForSelectorState;
-import com.promilo.automation.mentorship.mentee.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
-import com.promilo.automation.mentorship.mentee.MentorshipFormComponents;
-import com.promilo.automation.mentorship.mentee.MentorshipMyintrest;
-import com.promilo.automation.mentorship.mentee.ThankYouPopup;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 
-public class ShortListWithExistingPhoneAndEmail extends Baseclass {
+public class ShortListWithExistingPhoneAndEmail extends BaseClass {
 
     private static final Logger log = LogManager.getLogger(ShortListWithExistingPhoneAndEmail.class);
 

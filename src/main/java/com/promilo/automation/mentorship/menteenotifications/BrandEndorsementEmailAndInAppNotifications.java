@@ -1,7 +1,5 @@
 package com.promilo.automation.mentorship.menteenotifications;
 
-import java.time.LocalDate;
-
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 

@@ -5,7 +5,6 @@ import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.microsoft.playwright.FrameLocator;
@@ -13,16 +12,11 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
-import com.promilo.automation.mentorship.mentee.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
-import com.promilo.automation.mentorship.mentee.MentorshipFormComponents;
-import com.promilo.automation.mentorship.mentee.MentorshipMyintrest;
-import com.promilo.automation.mentorship.mentee.ThankYouPopup;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 
-public class RequestVideoTest extends Baseclass{
+public class RequestVideoTest extends BaseClass{
 	
 	
 	 private static final Logger log = LogManager.getLogger(ShortListWithExistingPhoneAndEmail.class);
@@ -79,8 +73,8 @@ public class RequestVideoTest extends Baseclass{
 	        int randomNum = 10000 + new Random().nextInt(90000);
 	        String randomEmail = "PersonalizedVideo" + randomNum + "@" + serverId + ".mailosaur.net";
 	        page.locator("//input[@id='userEmail']").nth(1).fill(randomEmail);
-	        Baseclass.generatedEmail = randomEmail;
-	        Baseclass.generatedPhone = randomPhone;	     
+	        BaseClass.generatedEmail = randomEmail;
+	        BaseClass.generatedPhone = randomPhone;	     
 	        form.RequestVideoMessageButton().click();
 	        
 	        

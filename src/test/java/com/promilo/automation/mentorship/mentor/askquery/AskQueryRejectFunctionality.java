@@ -8,25 +8,22 @@ import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.mentor.myacceptance.MyAcceptance;
 import com.promilo.automation.pageobjects.myresume.MyResumePage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.MailsaurCredentials;
 
-public class AskQueryRejectFunctionality extends Baseclass {
+public class AskQueryRejectFunctionality extends BaseClass {
 
 	
 	 // ✅ Use generated email from previous test
-    String emailToLogin = Baseclass.generatedEmail;
-    String phoneToLogin = Baseclass.generatedPhone;
+    String emailToLogin = BaseClass.generatedEmail;
+    String phoneToLogin = BaseClass.generatedPhone;
 
 	 ExtentReports extent;
 	    ExtentTest test;

@@ -1,7 +1,5 @@
 package com.promilo.automation.emailnotifications.user.gethrcall;
 
-import static org.testng.Assert.assertTrue;
-
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -18,25 +16,23 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
-import com.promilo.automation.advertiser.campaign.ProspectApproveFunctionality;
 import com.promilo.automation.pageobjects.emailnotifications.gethrcall.InitiateHrCallNotification;
 import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignupWithMailosaurUI;
 
-public class GetHrCallRequestRejected  extends Baseclass{
+public class GetHrCallRequestRejected  extends BaseClass{
 	
 	 ExtentReports extent = ExtentManager.getInstance();
      ExtentTest test = extent.createTest("🚀 Promilo Staging Signup - Passes if 'My Stuff' is visible after signup (Playwright)");

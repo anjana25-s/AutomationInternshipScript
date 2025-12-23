@@ -19,11 +19,11 @@ import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.registereduser.jobs.MaiLRegisteredUserInvalidJobApply;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignupWithMailosaurUI;
 
-public class RegisteredUserAskQuery extends Baseclass{
+public class RegisteredUserAskQuery extends BaseClass{
 	
 	
 	
@@ -114,7 +114,7 @@ public class RegisteredUserAskQuery extends Baseclass{
 
 	        int randomNum = 10000 + new Random().nextInt(90000);
 	        
-	        Baseclass.generatedPhone = randomPhone;
+	        BaseClass.generatedPhone = randomPhone;
 
 	        page.locator("//button[normalize-space()='Ask Your Query']").nth(2)
 	            .click(new Locator.ClickOptions().setForce(true));

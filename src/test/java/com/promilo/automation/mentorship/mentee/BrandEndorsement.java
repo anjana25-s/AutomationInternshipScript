@@ -11,17 +11,12 @@ import org.testng.annotations.Test;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
-import com.promilo.automation.mentorship.mentee.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
-import com.promilo.automation.mentorship.mentee.MentorshipFormComponents;
-import com.promilo.automation.mentorship.mentee.MentorshipMyintrest;
-import com.promilo.automation.mentorship.mentee.ThankYouPopup;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.MailsaurCredentials;
 
-public class BrandEndorsement extends Baseclass {
+public class BrandEndorsement extends BaseClass {
 
     private static final Logger log = LogManager.getLogger(BrandEndorsement.class);
 
@@ -80,8 +75,8 @@ public class BrandEndorsement extends Baseclass {
         fillForm.emailTextfield().fill(randomEmail);
 
         // Store in Baseclass
-        Baseclass.generatedEmail = randomEmail;
-        Baseclass.generatedPhone = randomPhone;
+        BaseClass.generatedEmail = randomEmail;
+        BaseClass.generatedPhone = randomPhone;
 
         // Print the randomly generated email and phone
         System.out.println("✅ Randomly generated email: " + randomEmail);

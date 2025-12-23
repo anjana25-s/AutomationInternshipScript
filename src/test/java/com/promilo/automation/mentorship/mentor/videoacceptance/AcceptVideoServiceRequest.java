@@ -1,6 +1,5 @@
 package com.promilo.automation.mentorship.mentor.videoacceptance;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 
 import org.testng.Assert;
@@ -17,18 +16,17 @@ import com.microsoft.playwright.Page;
 import com.promilo.automation.mentor.myacceptance.MyAcceptance;
 import com.promilo.automation.mentor.mybilling.MentorMyBilling;
 import com.promilo.automation.pageobjects.myresume.MyResumePage;
-import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class AcceptVideoServiceRequest extends Baseclass {
+public class AcceptVideoServiceRequest extends BaseClass {
 	
 	 // ✅ Use generated email from previous test
-    String emailToLogin = Baseclass.generatedEmail;
-    String phoneToLogin = Baseclass.generatedPhone;
+    String emailToLogin = BaseClass.generatedEmail;
+    String phoneToLogin = BaseClass.generatedPhone;
 
 	 ExtentReports extent;
 	    ExtentTest test;
@@ -144,7 +142,7 @@ public class AcceptVideoServiceRequest extends Baseclass {
            
                  // Login as advertiser (different MailSaur email)
                  LoginPage loginPage1 = new LoginPage(advertiserPage);
-                 loginPage1.loginMailPhone().fill(Baseclass.generatedPhone); // use the generated email
+                 loginPage1.loginMailPhone().fill(BaseClass.generatedPhone); // use the generated email
                  loginPage1.loginWithOtp().click();
                  loginPage1.otpField().fill("9999");
                  loginPage1.loginButton().click();

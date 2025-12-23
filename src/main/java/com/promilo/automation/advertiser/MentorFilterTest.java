@@ -1,17 +1,19 @@
 package com.promilo.automation.advertiser;
 
 import java.io.IOException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.annotations.Test;
+
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.promilo.automation.resources.BaseClass;
 
-public class MentorFilterTest extends Baseclass {
+public class MentorFilterTest extends BaseClass {
 
     private static final Logger log = LogManager.getLogger(MentorFilterTest.class);
 

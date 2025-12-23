@@ -1,7 +1,5 @@
 package com.promilo.automation.mentorship.mentor;
 
-import java.awt.print.Pageable;
-
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 

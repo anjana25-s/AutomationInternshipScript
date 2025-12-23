@@ -12,11 +12,11 @@ import com.promilo.automation.mentorship.mentor.CampaignlistPage;
 import com.promilo.automation.pageobjects.myresume.MyResumePage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class MentorshipCampaignDuplication extends Baseclass{
+public class MentorshipCampaignDuplication extends BaseClass{
 
 	
 	  @Test

@@ -1,35 +1,29 @@
 package com.promilo.automation.mentorship.mentor.brandendorsement;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
 import java.nio.file.Paths;
 
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Page.LocatorOptions;
 import com.promilo.automation.mentor.myacceptance.MyAcceptance;
 import com.promilo.automation.pageobjects.myresume.MyResumePage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class BrandEndorsementReject extends com.promilo.automation.resources.Baseclass{
+public class BrandEndorsementReject extends BaseClass{
 	
 	
 	
 	// ✅ Use generated email from previous test
-    String emailToLogin = Baseclass.generatedEmail;
-    String phoneToLogin = Baseclass.generatedPhone;
+    String emailToLogin = BaseClass.generatedEmail;
+    String phoneToLogin = BaseClass.generatedPhone;
 
 	 ExtentReports extent;
 	    ExtentTest test;

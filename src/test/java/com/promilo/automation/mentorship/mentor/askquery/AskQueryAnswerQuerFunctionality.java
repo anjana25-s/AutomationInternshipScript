@@ -14,19 +14,19 @@ import com.promilo.automation.mentor.mybilling.MentorMyBilling;
 import com.promilo.automation.pageobjects.myresume.MyResumePage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.MailsaurCredentials;
 
-public class AskQueryAnswerQuerFunctionality extends Baseclass {
+public class AskQueryAnswerQuerFunctionality extends BaseClass {
 
 	
 	
 	
 	 // ✅ Use generated email from previous test
-    String emailToLogin = Baseclass.generatedEmail;
-    String phoneToLogin = Baseclass.generatedPhone;
+    String emailToLogin = BaseClass.generatedEmail;
+    String phoneToLogin = BaseClass.generatedPhone;
 
 	 ExtentReports extent;
 	    ExtentTest test;

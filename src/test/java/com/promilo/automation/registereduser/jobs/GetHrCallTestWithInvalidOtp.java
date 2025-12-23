@@ -19,11 +19,11 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class GetHrCallTestWithInvalidOtp extends Baseclass {
+public class GetHrCallTestWithInvalidOtp extends BaseClass {
 
     /**
      * DataProvider to dynamically fetch test data for invalid OTP HR call scenario.

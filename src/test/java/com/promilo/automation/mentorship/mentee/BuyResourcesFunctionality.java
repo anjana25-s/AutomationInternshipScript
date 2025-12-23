@@ -13,16 +13,11 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
-import com.promilo.automation.mentorship.mentee.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
-import com.promilo.automation.mentorship.mentee.MentorshipFormComponents;
-import com.promilo.automation.mentorship.mentee.MentorshipMyintrest;
-import com.promilo.automation.mentorship.mentee.ThankYouPopup;
 import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 
-public class BuyResourcesFunctionality extends Baseclass {
+public class BuyResourcesFunctionality extends BaseClass {
     private static final Logger log = LogManager.getLogger(BuyResourcesFunctionality.class);
 
     @Test

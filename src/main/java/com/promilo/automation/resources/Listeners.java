@@ -1,20 +1,26 @@
 package com.promilo.automation.resources;
 
-import com.aventstack.extentreports.*;
-import com.aventstack.extentreports.MediaEntityBuilder;
-import com.microsoft.playwright.Page;
-
-import org.testng.*;
-import org.testng.annotations.ITestAnnotation;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+
+import org.testng.IAnnotationTransformer;
+import org.testng.ISuite;
+import org.testng.ISuiteListener;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+import org.testng.annotations.ITestAnnotation;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
+import com.microsoft.playwright.Page;
 
 /**
  * Listener class for TestNG suite.
  * Sends a single emailable report email after entire suite finishes.
  */
-public class Listeners extends Baseclass implements ITestListener, ISuiteListener, IAnnotationTransformer {
+public class Listeners extends BaseClass implements ITestListener, ISuiteListener, IAnnotationTransformer {
 
     private static ExtentReports extent = ExtentManager.getInstance();
     private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
@@ -97,7 +103,7 @@ public class Listeners extends Baseclass implements ITestListener, ISuiteListene
     // -------------------- Screenshot capture for Extent --------------------
     private void attachScreenshot(ExtentTest currentTest, String title) {
         try {
-            Page page = Baseclass.getPage();
+            Page page = BaseClass.getPage();
             if (page != null) {
                 byte[] screenshotBytes = page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
                 String base64Screenshot = java.util.Base64.getEncoder().encodeToString(screenshotBytes);

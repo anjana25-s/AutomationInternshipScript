@@ -1,20 +1,18 @@
 package com.promilo.automation.mentorship.mentor.videoacceptance;
 
-import java.nio.file.Paths;
-
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Dialog;
 import com.microsoft.playwright.Page;
-import com.promilo.automation.pageobjects.Mymeetings.MymeetingPage;
+import com.promilo.automation.pageobjects.mymeetings.MymeetingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExtentManager;
 
-public class MentorshipMeeting extends Baseclass{
+public class MentorshipMeeting extends BaseClass{
 	
 	
 	@Test

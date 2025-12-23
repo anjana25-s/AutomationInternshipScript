@@ -13,11 +13,11 @@ import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class CallbackOrTalktoShortListFunctionality extends Baseclass {
+public class CallbackOrTalktoShortListFunctionality extends BaseClass {
 
     @Test
     public void verifyBasicDetailsFunctionality() throws InterruptedException, IOException {

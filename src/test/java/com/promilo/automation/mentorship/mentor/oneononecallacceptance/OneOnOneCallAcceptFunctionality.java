@@ -11,7 +11,6 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.promilo.automation.mentor.myacceptance.MyAcceptance;
@@ -20,17 +19,17 @@ import com.promilo.automation.mentorship.mentornotifications.MentroOneOnOneCall;
 import com.promilo.automation.pageobjects.myresume.MyResumePage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.MailsaurCredentials;
 
-public class OneOnOneCallAcceptFunctionality extends Baseclass {
+public class OneOnOneCallAcceptFunctionality extends BaseClass {
 
 	
 	 // ✅ Use generated email from previous test
-    String emailToLogin = Baseclass.generatedEmail;
-    String phoneToLogin = Baseclass.generatedPhone;
+    String emailToLogin = BaseClass.generatedEmail;
+    String phoneToLogin = BaseClass.generatedPhone;
 
 	 ExtentReports extent;
 	    ExtentTest test;
@@ -142,6 +141,7 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             mailsaurCredenatinals.MailsaurLogin();
             
             
+            
             MentroOneOnOneCall mailNotification=  new MentroOneOnOneCall(page);
             Thread.sleep(3000);
             mailNotification.detailUnlockedNotification().first().click();
@@ -163,42 +163,37 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             
             
             
-            // Create a new context
-            Browser actualBrowser = browser.get();
-            BrowserContext advertiserContext = actualBrowser.newContext();
-            Page advertiserPage = advertiserContext.newPage();
-
-            // Now use advertiserPage as usual
-            advertiserPage.navigate(prop.getProperty("url"));
+                        // Now use page as usual
+            page.navigate(prop.getProperty("url"));
 
             
-            LandingPage login= new LandingPage(advertiserPage);
+            LandingPage login= new LandingPage(page);
             login.dismissPopup();
             login.clickLoginButton();
             
          
                // Login as advertiser (different MailSaur email)
-               LoginPage loginPage1 = new LoginPage(advertiserPage);
-               loginPage1.loginMailPhone().fill(Baseclass.generatedPhone); // use the generated email
+               LoginPage loginPage1 = new LoginPage(page);
+               loginPage1.loginMailPhone().fill(BaseClass.generatedPhone); // use the generated email
                loginPage1.loginWithOtp().click();
                loginPage1.otpField().fill("9999");
                loginPage1.loginButton().click();
          
                
                
-               advertiserPage.locator("//span[text()='My Interest']").click();
+               page.locator("//span[text()='My Interest']").click();
                
                
                
                
-               MyResumePage hamburger2 = new MyResumePage(advertiserPage);
+               MyResumePage hamburger2 = new MyResumePage(page);
                hamburger2.Mystuff().click();
                hamburger2.MyAccount().click();
 
                
                
                
-               MentorMyBilling menteebillingValidation= new MentorMyBilling(advertiserPage);
+               MentorMyBilling menteebillingValidation= new MentorMyBilling(page);
                menteebillingValidation.myBillingButton().click();
                System.out.println(menteebillingValidation.billingtableHead().textContent()); 
                String billingText = menteebillingValidation.billingData().textContent();

@@ -1,13 +1,18 @@
 package com.promilo.automation.signupandlogin;
 
 import org.testng.annotations.Test;
-import com.aventstack.extentreports.*;
-import com.microsoft.playwright.*;
-import com.promilo.automation.pageobjects.signuplogin.*;
-import com.promilo.automation.resources.*;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.LoginPage;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.ExtentManager;
 
 
-public class BlankFieldLoginValidation extends Baseclass {
+public class BlankFieldLoginValidation extends BaseClass {
 
     @Test
     public void blankFieldSignupValidation() throws Exception { 

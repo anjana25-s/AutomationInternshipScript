@@ -19,11 +19,11 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class GetHrCallTest extends Baseclass {
+public class GetHrCallTest extends BaseClass {
 
 	@DataProvider(name = "jobApplicationData")
 	public Object[][] jobApplicationData() throws Exception {

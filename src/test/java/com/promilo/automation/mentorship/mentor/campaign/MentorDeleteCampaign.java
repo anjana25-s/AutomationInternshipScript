@@ -1,7 +1,5 @@
 package com.promilo.automation.mentorship.mentor.campaign;
 
-import static org.testng.Assert.assertTrue;
-
 import java.nio.file.Paths;
 
 import org.testng.Assert;
@@ -16,11 +14,11 @@ import com.promilo.automation.mentorship.mentor.CampaignlistPage;
 import com.promilo.automation.pageobjects.myresume.MyResumePage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class MentorDeleteCampaign extends Baseclass {
+public class MentorDeleteCampaign extends BaseClass {
 	
 	
 	

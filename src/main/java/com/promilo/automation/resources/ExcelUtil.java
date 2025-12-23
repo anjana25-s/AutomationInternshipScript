@@ -149,4 +149,9 @@ public class ExcelUtil {
     public int getRowCount() {
         return sheet.getLastRowNum(); // ✅ Fix: return total row count
     }
+
+	public String getCellData(String string, int r) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

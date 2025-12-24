@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Promilo Automation Suite" verbose="1">
+
+    <test name="Package Execution">
+        <packages>
+        
+        
+        <package name="com.promilo.automation.signupandlogin"></package>
+        
+        </packages>
+    </test>
+    <listeners>
+        <listener class-name="com.promilo.automation.resources.Listeners" />
+    </listeners>
+
+</suite>

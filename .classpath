@@ -37,7 +37,16 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Admin/.p2/pool/plugins/org.testng_7.11.0.r202503091654.jar" sourcepath="C:/Users/Admin/.p2/pool/plugins/org.testng.source_7.11.0.r202503091654.jar"/>
-	<classpathentry kind="src" path="/promiloAutomationWebProject"/>
+	<classpathentry kind="src" path="target/generated-sources/annotations">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">
+		<attributes>
+			<attribute name="test" value="true"/>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

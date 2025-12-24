@@ -7,9 +7,6 @@ import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -22,12 +19,12 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignUpLogoutUtil;
 
-public class RegisteredUserShortList extends Baseclass {
+public class RegisteredUserShortList extends BaseClass {
 
     private static final Logger logger = LogManager.getLogger(RegisteredUserShortList.class);
 

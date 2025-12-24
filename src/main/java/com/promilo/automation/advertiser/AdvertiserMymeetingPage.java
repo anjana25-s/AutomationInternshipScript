@@ -108,10 +108,10 @@ public class AdvertiserMymeetingPage {
         this.hangUpButton = page.locator("div[class='flex items-center justify-center  rounded-lg']");
         this.riseHandButton = page.locator("//p[text()='Raise Hand']");
         this.presentScreen = page.locator("//p[text()='Present Screen']");
-        this.chatButton = page.locator("//p[text()='Chat' and @class='text-gray-900 text-sm']");
+        this.chatButton = page.locator("//p[text()='Chat']");
         this.participants = page.locator("//p[text()='Participants' and @class='text-gray-900 text-sm']");
-        this.chatTextfield = page.locator("input[class='py-50 ps-1 text-white bg-dark rounded pr-10 focus:outline-none w-full']");
-        this.chatSendButton = page.locator("span[class='absolute inset-y-0 right-0 flex mr-50 rotate-90 ']");
+        this.chatTextfield = page.locator("//input[@placeholder='Write your message']");
+        this.chatSendButton = page.locator("//button[@type='submit']");
         this.chatExitButton = page.locator("button[class='text-white']");
         this.remarksExitIcon = page.locator("img[class='pointer close-icon']");
 

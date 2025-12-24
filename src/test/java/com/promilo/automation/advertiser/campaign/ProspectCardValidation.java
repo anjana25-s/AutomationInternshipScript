@@ -31,13 +31,17 @@ import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
+<<<<<<< HEAD
 import org.json.JSONObject;
 
 public class ProspectCardValidation extends Baseclass {
+=======
+public class ProspectCardValidation extends BaseClass {
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 
     @Test(dependsOnMethods = "com.promilo.automation.emailnotifications.jobapply.UserInitiatesApplyingForJob.applyForJobTestFromExcel")
     public void ProspectCardValidationTest() throws InterruptedException, IOException {

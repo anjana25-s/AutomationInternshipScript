@@ -12,12 +12,11 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class GuestUserAskUsWithInvalidData extends Baseclass{
+public class GuestUserAskUsWithInvalidData extends BaseClass{
 	
 	
 	 @DataProvider(name = "jobApplicationData")

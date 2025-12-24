@@ -1,34 +1,23 @@
 package com.promilo.automation.advertiser.mybilling;
 
-import static org.testng.Assert.assertTrue;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
-
-
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Download;
-import com.microsoft.playwright.Frame;
-import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class Sendmail extends  Baseclass {
+public class Sendmail extends  BaseClass {
 	 ExtentReports extent = ExtentManager.getInstance();
 	    ExtentTest test = extent.createTest("🚀 Advertiser Add Funds Test | Data-Driven");
 

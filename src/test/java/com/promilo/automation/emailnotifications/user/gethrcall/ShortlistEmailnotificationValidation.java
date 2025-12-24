@@ -8,15 +8,19 @@ import org.testng.annotations.Test;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Page;
+<<<<<<< HEAD
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.emailnotifications.CancelMeeting;
+=======
+import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class ShortlistEmailnotificationValidation extends Baseclass{
+public class ShortlistEmailnotificationValidation extends BaseClass{
 ExtentReports extent = ExtentManager.getInstance();
 	    ExtentTest test = extent.createTest("🚀 Advertiser Add Funds Test | Data-Driven");
 

@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+<<<<<<< HEAD
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
@@ -42,6 +43,35 @@ public class ShortlistWithInvalidEmailAndPhone extends Baseclass {
 
         // -------------------- Mentorship Module --------------------
         HomePage dashboard = new HomePage(page);
+=======
+import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.resources.BaseClass;
+
+public class ShortlistWithInvalidEmailAndPhone extends BaseClass {
+
+    private static final Logger log = LogManager.getLogger(ShortlistWithInvalidEmailAndPhone.class);
+
+    @Test
+    public void mentorshipShortListFunctionalityTest() throws IOException, InterruptedException {
+
+        log.info("===== Starting Mentorship ShortList Functionality Test =====");
+
+        // -------------------- Initialize Playwright --------------------
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        log.info("Navigated to URL: " + prop.getProperty("url"));
+        page.waitForTimeout(2000);
+
+        // -------------------- Landing Page --------------------
+        LandingPage landingPage = new LandingPage(page);
+        landingPage.getPopup().click(new Locator.ClickOptions().setForce(true));
+        log.info("Closed landing page popup");
+        page.waitForTimeout(2000);
+
+        // -------------------- Mentorship Module --------------------
+        DashboardPage dashboard = new DashboardPage(page);
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
         dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
         log.info("Clicked on Mentorship module");
 

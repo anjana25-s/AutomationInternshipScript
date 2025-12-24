@@ -1,6 +1,5 @@
 package com.promilo.automation.advertiser.campaign;
 
-import com.promilo.automation.advertiser.campaign.*;
 import java.nio.file.Paths;
 
 import org.testng.Assert;
@@ -21,12 +20,11 @@ import com.promilo.automation.advertiser.jobcampaign.CreateJobPosting;
 import com.promilo.automation.advertiser.jobcampaign.Feedback;
 import com.promilo.automation.advertiser.jobcampaign.Myaudience;
 import com.promilo.automation.advertiser.jobcampaign.ScreeningQuestions;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
-import com.promilo.automation.resources.ToasterUtil;
 
-public class CreateCampaign extends Baseclass {
+public class CreateCampaign extends BaseClass {
 
     private ExtentReports extent;
     private ExtentTest test;

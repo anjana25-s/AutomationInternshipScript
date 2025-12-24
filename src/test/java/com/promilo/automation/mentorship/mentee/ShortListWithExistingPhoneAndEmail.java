@@ -1,5 +1,6 @@
 package com.promilo.automation.mentorship.mentee;
 
+<<<<<<< HEAD
 import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
@@ -44,6 +45,43 @@ public class ShortListWithExistingPhoneAndEmail extends Baseclass {
 
         // -------------------- Mentorship Module --------------------
         HomePage dashboard = new HomePage(page);
+=======
+import java.io.IOException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.testng.annotations.Test;
+
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.resources.BaseClass;
+
+public class ShortListWithExistingPhoneAndEmail extends BaseClass {
+
+    private static final Logger log = LogManager.getLogger(ShortListWithExistingPhoneAndEmail.class);
+
+    @Test
+    public void mentorshipShortListFunctionalityTest() throws IOException, InterruptedException {
+
+        log.info("===== Starting Mentorship ShortList Functionality Test =====");
+
+        // -------------------- Initialize Playwright --------------------
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        log.info("Navigated to URL: " + prop.getProperty("url"));
+        page.waitForTimeout(2000);
+
+        // -------------------- Landing Page --------------------
+        LandingPage landingPage = new LandingPage(page);
+        landingPage.getPopup().click(new Locator.ClickOptions().setForce(true));
+        log.info("Closed landing page popup");
+        page.waitForTimeout(2000);
+
+        // -------------------- Mentorship Module --------------------
+        DashboardPage dashboard = new DashboardPage(page);
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
         dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
         log.info("Clicked on Mentorship module");
 

@@ -16,6 +16,7 @@ public class BasicDetailsPage {
     private final Locator LocationName;
     private final Locator MobileNumber;
     private final Locator Email;
+    private final Locator UploadPicture;
     private final Locator SaveButton;
     
     public BasicDetailsPage(Page page) {
@@ -29,6 +30,7 @@ this.LocationName = page.locator("//input[@id='react-select-4-input']");
 this.MobileNumber = page.locator("#mobile_number");
 this.Email = page.locator("//input[@placeholder='Enter Email']");
 this.SaveButton = page.locator("//button[@type='submit']']");
+this.UploadPicture = page.locator("//img[@alt='prolet']");
 
  
         
@@ -43,6 +45,7 @@ this.SaveButton = page.locator("//button[@type='submit']']");
     public Locator LocationName() {return LocationName; }
     public Locator MobileNumber() {return MobileNumber;}
     public Locator Email() {return Email;}
+    public Locator UploadPicture() {return UploadPicture;}
     public Locator SaveButton() {return SaveButton;} 
 
     

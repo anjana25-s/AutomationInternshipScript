@@ -1,6 +1,7 @@
 package com.promilo.automation.pageobjects.myresume;
 
 import java.nio.file.Paths;
+
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
@@ -87,7 +88,7 @@ public class MyResumePage {
         this.CropButton = page.locator("//button[text()='Crop']");
 
         this.cameraOption = page.locator("//div[text()='Camera']");
-        this.captureButton = page.locator("//img[@src='/assets/camera-btn-5488c5a8.png']");
+        this.captureButton = page.locator("(//img[@alt='Camera'])[1]");
     }
 
     public Locator Mystuff() { return Mystuff; }

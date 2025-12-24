@@ -1,7 +1,5 @@
 package com.promilo.automation.advertiser.jobcampaign;
 
-import java.rmi.registry.LocateRegistry;
-
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
@@ -51,15 +49,15 @@ public class CreateJobPosting {
 	this.Saturday= page.locator("input[id='SATURDAY']");
 	this.Sunday= page.locator("input[id='SUNDAY']");
 	
-	this.English= page.locator("label[for='English']");
-	this.Hindi= page.locator("label[for='Hindi']");
+	this.English= page.locator("label[for='English_video']");
+	this.Hindi= page.locator("label[for='Hindi_video']");
 	this.Bangla= page.locator("label[for='Bangla']");
 	this.Marathi= page.locator("label[for='Marathi']");
 	this.Telugu= page.locator("label[for='Telugu']");
 	this.Tamil= page.locator("label[for='Tamil']");
 	this.Gujarati= page.locator("label[for='Gujarati']");
 	this.Urdu= page.locator("label[for='Urdu']");
-	this.Kannada= page.locator("label[for='Kannada']");
+	this.Kannada= page.locator("label[for='Kannada_video']");
 	this.Odia= page.locator("label[for='Odia']");
 	this.Malayalam= page.locator("label[for='Malayalam']");
 	this.Punjabi= page.locator("label[for='Punjabi']");

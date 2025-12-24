@@ -1,17 +1,23 @@
 package com.promilo.automation.signupandlogin;
 
-import com.microsoft.playwright.*;
-import com.microsoft.playwright.assertions.PlaywrightAssertions;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-import com.aventstack.extentreports.*;
-import com.promilo.automation.pageobjects.signuplogin.*;
-import com.promilo.automation.resources.*;
-
 import java.nio.file.Paths;
 
-public class SigninWithLinkedin extends Baseclass {
+import org.testng.annotations.Test;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.PlaywrightException;
+import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.SocialLogins;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.ExcelUtil;
+import com.promilo.automation.resources.ExtentManager;
+
+public class SigninWithLinkedin extends BaseClass {
 
     @Test
     public void signinWithLinkedin() throws Exception {

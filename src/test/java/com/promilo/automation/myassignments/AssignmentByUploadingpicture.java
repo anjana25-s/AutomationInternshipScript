@@ -11,11 +11,11 @@ import com.microsoft.playwright.Page;
 import com.promilo.automation.pageobjects.myresume.MyResumePage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class AssignmentByUploadingpicture extends Baseclass {
+public class AssignmentByUploadingpicture extends BaseClass {
 
     @Test
     public void uploadAssignmentWithImageDataDriven() throws Exception {

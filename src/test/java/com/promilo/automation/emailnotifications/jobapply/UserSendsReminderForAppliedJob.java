@@ -21,12 +21,12 @@ import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.emailnotifications.EmailnotificationsShortlisted;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignupWithMailosaurUI;
 
-public class UserSendsReminderForAppliedJob extends Baseclass{
+public class UserSendsReminderForAppliedJob extends BaseClass{
 	
 	 ExtentReports extent = ExtentManager.getInstance();
      //Test Description

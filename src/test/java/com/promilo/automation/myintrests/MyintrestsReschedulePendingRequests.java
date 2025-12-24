@@ -9,11 +9,11 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
-import com.promilo.automation.resources.*;
 
-public class MyintrestsReschedulePendingRequests extends Baseclass {
+public class MyintrestsReschedulePendingRequests extends BaseClass {
 
     @Test
     public void reschedulePendingRequestsTest() throws Exception {

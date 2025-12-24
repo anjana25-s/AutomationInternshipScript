@@ -1,5 +1,6 @@
 package com.promilo.automation.mentorship.mentee;
 
+<<<<<<< HEAD
 import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
@@ -85,6 +86,86 @@ public class RegisteredUserBuyResource extends Baseclass {
         
 	        // -------------------- Mentorship Module --------------------
 	        HomePage dashboard = new HomePage(page);
+=======
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.testng.Assert;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Test;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.microsoft.playwright.FrameLocator;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.WaitForSelectorState;
+import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.LoginPage;
+import com.promilo.automation.registereduser.jobs.MaiLRegisteredUserInvalidJobApply;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.ExtentManager;
+import com.promilo.automation.resources.SignupWithMailosaurUI;
+
+public class RegisteredUserBuyResource extends BaseClass {
+
+	
+	
+	
+	
+	private static final Logger logger = LogManager.getLogger(MaiLRegisteredUserInvalidJobApply.class);
+
+    private static String registeredEmail = null;
+    private static String registeredPassword = null;
+
+    @BeforeSuite
+    public void performSignupOnce() throws Exception {
+        SignupWithMailosaurUI signupWithMailosaur = new SignupWithMailosaurUI();
+        String[] creds = signupWithMailosaur.performSignupAndReturnCredentials();
+        registeredEmail = creds[0];
+        registeredPassword = creds[1];
+        logger.info("✅ Signup completed for suite. Email: " + registeredEmail);
+    }
+
+    @Test
+    public void applyForJobWithInvalidData() throws Exception {
+
+        if (registeredEmail == null || registeredPassword == null) {
+            Assert.fail("❌ Signup credentials not found for suite.");
+        }
+
+        ExtentReports extent = ExtentManager.getInstance();
+        ExtentTest test = extent.createTest("❌ Apply for Job Invalid OTP | Hardcoded Test");
+
+        
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        page.setViewportSize(1000, 768);
+
+        LandingPage landingPage = new LandingPage(page);
+        try { landingPage.getPopup().click(); } catch (Exception ignored) {}
+        landingPage.clickLoginButton();
+
+        LoginPage loginPage = new LoginPage(page);
+        loginPage.loginMailPhone().fill(registeredEmail);
+        loginPage.passwordField().fill(registeredPassword);
+        loginPage.loginButton().click();
+        test.info("Logged in as registered user: " + registeredEmail);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+	        // -------------------- Mentorship Module --------------------
+	        DashboardPage dashboard = new DashboardPage(page);
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 	        Thread.sleep(2000);
 	        dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
 

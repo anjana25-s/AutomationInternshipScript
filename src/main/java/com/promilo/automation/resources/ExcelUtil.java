@@ -1,9 +1,22 @@
 package com.promilo.automation.resources;
 
+<<<<<<< HEAD
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+=======
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 
 public class ExcelUtil {
 
@@ -149,9 +162,12 @@ public class ExcelUtil {
     public int getRowCount() {
         return sheet.getLastRowNum(); // ✅ Fix: return total row count
     }
+<<<<<<< HEAD
 
 	public String getCellData(String string, int r) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+=======
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 }

@@ -13,6 +13,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
+<<<<<<< HEAD
 import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipFormComponents;
@@ -71,6 +72,61 @@ public class GetMentorCall extends Baseclass{
 	        page.locator("//input[@id='userEmail']").nth(1).fill(randomEmail);
 	        Baseclass.generatedEmail = randomEmail;
 	        Baseclass.generatedPhone = randomPhone;
+=======
+import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.resources.BaseClass;
+
+public class GetMentorCall extends BaseClass{
+	
+	 private static final Logger log = LogManager.getLogger(ShortListWithExistingPhoneAndEmail.class);
+
+	    @Test
+	    public void mentorshipShortListFunctionalityTest() throws IOException, InterruptedException {
+
+	        log.info("===== Starting Mentorship ShortList Functionality Test =====");
+
+	        // -------------------- Initialize Playwright --------------------
+	        Page page = initializePlaywright();
+	        page.navigate(prop.getProperty("url"));
+	        log.info("Navigated to URL: " + prop.getProperty("url"));
+	        page.waitForTimeout(2000);
+
+	        // -------------------- Landing Page --------------------
+	        LandingPage landingPage = new LandingPage(page);
+	        landingPage.getPopup().click(new Locator.ClickOptions().setForce(true));
+	        log.info("Closed landing page popup");
+	        page.waitForTimeout(2000);
+
+	        // -------------------- Mentorship Module --------------------
+	        DashboardPage dashboard = new DashboardPage(page);
+	        dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
+	        log.info("Clicked on Mentorship module");
+
+	        // Search for mentor
+	        MeetupsListingPage searchPage = new MeetupsListingPage(page);
+	        searchPage.SearchTextField().click();
+	        searchPage.SearchTextField().fill("karthik");
+	        page.keyboard().press("Enter");
+	        page.waitForTimeout(2000);
+	        
+	        DescriptionPage GetMentorCall= new DescriptionPage(page);
+	        GetMentorCall.allLink().click();
+	        GetMentorCall.getMentorCall().click();
+	        
+	        MentorshipFormComponents fillForm= new MentorshipFormComponents(page);
+	        fillForm.name().fill("karthik");
+	     // Generate phone number starting with 90000 + 5 random digits
+	        String randomPhone = "90000" + String.format("%05d", (int) (Math.random() * 100000));
+	        fillForm.MobileTextField().fill(randomPhone);
+
+	        String serverId = "8mgfvj1x";
+	        int randomNum = 10000 + new Random().nextInt(90000);
+	        String randomEmail = "GetMentorCall" + randomNum + "@" + serverId + ".mailosaur.net";
+	        page.locator("//input[@id='userEmail']").nth(1).fill(randomEmail);
+	        BaseClass.generatedEmail = randomEmail;
+	        BaseClass.generatedPhone = randomPhone;
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 
 	        fillForm.getMentorCall().click();
 	        

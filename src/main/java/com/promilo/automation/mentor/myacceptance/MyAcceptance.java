@@ -2,9 +2,14 @@ package com.promilo.automation.mentor.myacceptance;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+<<<<<<< HEAD
 import com.promilo.automation.resources.Baseclass;
 
 public class MyAcceptance extends Baseclass {
+=======
+
+public class MyAcceptance  {
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 
     private final Page page;
     private final Locator myAcceptance;

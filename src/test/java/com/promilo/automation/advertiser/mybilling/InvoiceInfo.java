@@ -10,11 +10,11 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class InvoiceInfo extends Baseclass {
+public class InvoiceInfo extends BaseClass {
 	
 	ExtentReports extent = ExtentManager.getInstance();
     ExtentTest test = extent.createTest("🚀 Advertiser Add Funds Test | Data-Driven");

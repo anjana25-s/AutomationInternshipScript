@@ -49,7 +49,7 @@ public class CreateJobCampaign {
 	   this.Descrption= page.locator("textarea[name='description']");
 	   this.minExperiance= page.locator("//div[text()='Min Experience']");
 	   this.maxExperiance= page.locator("//div[text()='Max Experience']");
-	   this.CampaingnStartDate= page.locator("//input[@placeholder='Campaign Start Date']");
+	   this.CampaingnStartDate= page.locator("//input[@class='react-select form-control']");
 	   this.CampaignEndDate= page.locator("[placeholder='Campaign End Date']");
 	   this.Workmode= page.locator("//div[text()='Work Mode']");
 	   this.UploadCompanyLogo= page.locator("//span[text()='Upload Company Logo']");

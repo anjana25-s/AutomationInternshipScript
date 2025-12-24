@@ -13,10 +13,7 @@ public class AddEmploymentDetails {
     private Locator InternshipButton;
     private Locator CurrentCompanyDropdown;
     private Locator AddCompanyManually;
-    private Locator CurrentDesignation;
-    private Locator AddDesignationManually;
-    private Locator DesignationAddButton;
-    private Locator CompanyAddButton;
+    private Locator Currentdesignatipondropdown;
     private Locator JoiningYear;
     private Locator JoiningMonth;
     private Locator SkillsUsed;
@@ -24,6 +21,14 @@ public class AddEmploymentDetails {
     private Locator NoticePeriod;
     private Locator SaveButton;
     private Locator currentSalary;
+    private Locator joiningYearoption;
+    private Locator joiningMonthoption;
+    private Locator noticePeriodoption;
+    private Locator currentSalaryoption;
+    private Locator currentCompanyoption;
+    private Locator currentDesignationoption;
+    private Locator skillsOption;
+    private Locator description;
     
     public AddEmploymentDetails(Page page) {
         this.page = page;
@@ -32,19 +37,24 @@ public class AddEmploymentDetails {
         this.NoRadioBox = page.locator("//input[@id='No']");
         this.FullTimeButton = page.locator("//button[@id='FullTime']");
         this.InternshipButton = page.locator("//button[@id='Internship']");
-        this.CurrentCompanyDropdown = page.locator("//div[@id='react-select-19-placeholder']");
-        this.CurrentDesignation = page.locator("//div[text()='Search or select current designation']");
-        this.AddCompanyManually = page.locator("//input[@placeholder='Add your Company Name']");
-        this.AddDesignationManually = page.locator("//input[@placeholder='Add your Designation']");
-        this.DesignationAddButton = page.locator("//button[@class='add-skills-btn add-company-name p-0 btn btn-primary']");
-        this.CompanyAddButton = page.locator("//input[@placeholder='Add your Company Name']/following::button[contains(@class, 'add-company-name') and text()='Add'][1]");
-        this.JoiningYear = page.locator("//input[@id='react-select-66-input']");
-        this.JoiningMonth = page.locator("//div[text()='Select Month']/following-sibling::div//input[@type='text' and not(@aria-hidden='true')]");
-        this.SkillsUsed = page.locator("//div[@id='react-select-69-placeholder']");
+        this.CurrentCompanyDropdown = page.locator("(//div[@class='react-select__input-container css-19bb58m'])[1]");
+        this.Currentdesignatipondropdown = page.locator("div.react-select__value-container");
+        this.JoiningYear = page.locator("//div[contains(text(), 'Select Year')]/ancestor::div[contains(@class, 'custom-select')]//div[contains(@class, 'react-select__control')]");
+        this.JoiningMonth = page.locator("//div[contains(text(), 'Select Month')]/ancestor::div[contains(@class, 'custom-select')]//div[contains(@class, 'react-select__control')]");
+        this.SkillsUsed = page.locator("//div[@class='css-19bb58m']");
         this.Jobprofile = page.locator("//textarea[@placeholder='Job Profile ...']");
-        this.NoticePeriod = page.locator("//div[text()='Choose notice period']");
+        this.NoticePeriod = page.locator("//div[contains(text(), 'Choose notice period')]/ancestor::div[contains(@class, 'custom-select')]//div[contains(@class, 'react-select__control')]");
         this.SaveButton = page.locator("button[class='save-resume-btn']");
         this.currentSalary = page.locator("//div[contains(text(), 'Current Salary')]/ancestor::div[contains(@class, 'custom-select')]//div[contains(@class, 'react-select__control')]");
+        this.joiningYearoption = page.locator("//div[text()='2022']");
+        this.joiningMonthoption= page.locator("(//div[@id='react-select-5-option-0'])[1]");
+        this.noticePeriodoption = page.locator("//div[text()='Serving Notice period']");
+        this.currentSalaryoption= page.locator("//div[text()='50 k - 1 LPA']");
+        this.currentCompanyoption= page.locator("//div[text()='Berkadia']");
+        this.currentDesignationoption= page.locator("//div[text()='Sales - Financial Services (Insurance/Unit Trust/O ...']");
+        this.skillsOption= page.locator("//div[text()='Automation']");
+        this.description = page.locator("textarea[id='name']");
+        
     }
     
     public Locator YesRadioBox() {return YesRadioBox;}
@@ -53,15 +63,21 @@ public class AddEmploymentDetails {
     public Locator InternshipButton() {return InternshipButton;}
     public Locator CurrentCompanyDropdown() {return CurrentCompanyDropdown;}
     public Locator AddCompanyManually() {return AddCompanyManually;}
-    public Locator AddDesignationManually(){return AddDesignationManually;}
-    public Locator DesignationAddButton(){return DesignationAddButton;}
-    public Locator CompanyAddButton() {return CompanyAddButton;}
     public Locator JoiningYear() {return JoiningYear;}
     public Locator JoiningMonth() {return JoiningMonth;}
     public Locator SkillsUsed() {return SkillsUsed;}
     public Locator NoticePeriod() {return NoticePeriod;}
     public Locator SaveButton() {return SaveButton;}
     public Locator currentSalary() {return currentSalary;}
+    public Locator joiningYearoption() {return joiningYearoption;}
+    public Locator joiningMonthoption() {return joiningMonthoption;}
+    public Locator noticePeriodoption() {return noticePeriodoption;}
+    public Locator currentSalaryoption() {return currentSalaryoption;}
+    public Locator currentCompanyoption() {return currentCompanyoption;}
+    public Locator currentDesignationoption() {return currentDesignationoption;}
+    public Locator skillsOption() {return skillsOption;}
+    public Locator description() {return description;}
+    public Locator Currentdesignatipondropdown() {return Currentdesignatipondropdown;}
 
     
 

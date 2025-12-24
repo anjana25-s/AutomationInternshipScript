@@ -20,7 +20,11 @@ public class CampaignDetails {
 		this.campaignName= page.locator("//input[@id='campaign_name']");
 		this.skills= page.locator("//input[@placeholder='Search or add keyword...']");
 		this.startDate= page.locator("#start_date");
+<<<<<<< HEAD
 		this.endDate= page.locator("//input[@id='end_date']");
+=======
+		this.endDate= page.locator("(//input[@id='end_date'])[1]");
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 		this.saveButton= page.locator("//button[text()='Save and Next']");
 		this.clickheretoAddskills= page.locator("//div[text()='+ Click here to add']");
 		this.skillName= page.locator("//div[text()='Automation Testing']");

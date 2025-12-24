@@ -1,5 +1,6 @@
 package com.promilo.automation.mentorship.mentor.videoacceptance;
 
+<<<<<<< HEAD
 import java.nio.file.Paths;
 
 import org.testng.annotations.Test;
@@ -46,6 +47,52 @@ public class MentorshipMeeting extends Baseclass{
 
                 // Login
                 mayBeLaterPopUp.clickLoginButton();
+=======
+import org.testng.annotations.Test;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.microsoft.playwright.Dialog;
+import com.microsoft.playwright.Page;
+import com.promilo.automation.pageobjects.mymeetings.MymeetingPage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.LoginPage;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.ExtentManager;
+
+public class MentorshipMeeting extends BaseClass{
+	
+	
+	@Test
+    public void JoinmeetingFunctionalityTest() throws Exception {
+        ExtentReports extent = ExtentManager.getInstance();
+        ExtentTest test = extent.createTest("📅 Join Meeting Functionality | Hardcoded Data Test");
+
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        page.setViewportSize(1366,1000 );
+        test.info("🌐 Navigated to URL: " + prop.getProperty("url"));
+        System.out.println("🌐 Navigated to URL: " + prop.getProperty("url"));
+
+        String[][] credentials = {
+                {"testuser08622@gmail.com", "9999"},
+        };
+
+        for (String[] creds : credentials) {
+            String email = creds[0];
+            String password = creds[1];
+
+            try {
+                LandingPage landingPage = new LandingPage(page);
+
+                // Popup
+                landingPage.getPopup().click();
+                test.info("✅ Popup closed.");
+                System.out.println("✅ Popup closed.");
+
+                // Login
+                landingPage.clickLoginButton();
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
                 test.info("➡️ Clicked Login button.");
                 System.out.println("➡️ Clicked Login button.");
 

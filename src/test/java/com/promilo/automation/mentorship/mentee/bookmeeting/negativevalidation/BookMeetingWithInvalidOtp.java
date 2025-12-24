@@ -15,6 +15,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
+<<<<<<< HEAD
 import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipErrorMessagesAndToasters;
@@ -130,6 +131,123 @@ public class BookMeetingWithInvalidOtp extends Baseclass {
 
                 // Step 5: Fill in valid data
                 MentorshipErrorMessagesAndToasters err = new MentorshipErrorMessagesAndToasters(page);
+=======
+import com.promilo.automation.mentorship.mentee.BookMeetingErrorMessagesAndToasters;
+import com.promilo.automation.mentorship.mentee.DescriptionPage;
+import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
+import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.ExcelUtil;
+import com.promilo.automation.resources.ExtentManager;
+
+public class BookMeetingWithInvalidOtp extends BaseClass {
+
+    ExtentReports extent = ExtentManager.getInstance();
+    private static final Logger logger = LogManager.getLogger(RegisteredUserShortList.class);
+
+    // ✅ Filter only BookMeetingOtpValidation rows dynamically
+    @DataProvider(name = "BookAMeetingErrorValidation")
+    public Object[][] jobApplicationData() throws Exception {
+        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "Mentorship Test Data.xlsx").toString();
+        ExcelUtil excel = new ExcelUtil(excelPath, "Mentorship");
+
+        int rowCount = excel.getRowCount();
+        int colCount = excel.getColumnCount();
+
+        List<Object[]> filteredRows = new ArrayList<>();
+
+        for (int i = 1; i <= rowCount; i++) {
+            String keyword = excel.getCellData(i, 1);
+            if (keyword != null && keyword.trim().equalsIgnoreCase("BookMeetingOtpValidation")) {
+                Object[] rowData = new Object[colCount];
+                for (int j = 0; j < colCount; j++) {
+                    rowData[j] = excel.getCellData(i, j);
+                }
+                filteredRows.add(rowData);
+            }
+        }
+
+        Object[][] data = new Object[filteredRows.size()][colCount];
+        for (int i = 0; i < filteredRows.size(); i++) {
+            data[i] = filteredRows.get(i);
+        }
+
+        return data;
+    }
+
+    @Test(dataProvider = "BookAMeetingErrorValidation")
+    public void applyForJobTestFromExcel(
+            String testCaseId,
+            String keyword,
+            String registeredEmail,
+            String password,
+            String name,
+            String otp,
+            String mailphone,
+            String nameIsRequired,
+            String mobileNumberIsRequired,
+            String emailIsRequired,
+            String nameMinimumCharacter,
+            String invalidMobileNumber,
+            String invalidEmailAdress,
+            String MentorName,
+            String NameMinimum,
+            String Toaster,
+            String userName,
+            String mobile,
+            String Email
+    ) throws Exception {
+
+        ExtentTest test = extent.createTest("Mentorship Book A Meeting Validation | " + testCaseId);
+
+        Page page = initializePlaywright();
+        test.info("✅ Browser initialized successfully.");
+
+        page.navigate(prop.getProperty("url"));
+        test.info("🌐 Navigated to URL: " + prop.getProperty("url"));
+
+        page.setViewportSize(1000, 768);
+        logger.info("Executing BookMeetingOtpValidation for TestCaseID: {}", testCaseId);
+
+        try {
+            // Execute only for BookMeetingOtpValidation keyword
+            if ("BookMeetingOtpValidation".equalsIgnoreCase(keyword.trim())) {
+                test.info("🔍 Test started for keyword: " + keyword);
+
+                // Step 1: Close popup if present
+                LandingPage landingPage = new LandingPage(page);
+                try {
+                    landingPage.getPopup().click();
+                    test.info("✅ Popup closed successfully.");
+                } catch (Exception ignored) {
+                    test.info("ℹ️ No popup found.");
+                }
+
+                // Step 2: Navigate to Mentorships
+                DashboardPage dashboard = new DashboardPage(page);
+                page.waitForTimeout(3000);
+                dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
+                test.info("🧭 Clicked on Mentorships tab.");
+
+                // Step 3: Search Mentor
+                MeetupsListingPage searchPage = new MeetupsListingPage(page);
+                searchPage.SearchTextField().click();
+                searchPage.SearchTextField().fill(MentorName);
+                page.keyboard().press("Enter");
+                page.waitForTimeout(2000);
+                test.info("👤 Searched for mentor: " + MentorName);
+
+                // Step 4: Navigate to Description & Book Meeting
+                DescriptionPage serviceClick = new DescriptionPage(page);
+                serviceClick.allLink().click();
+                serviceClick.bookOnlineMeeting().click();
+                test.info("📅 Opened Book Meeting section.");
+
+                // Step 5: Fill in valid data
+                BookMeetingErrorMessagesAndToasters err = new BookMeetingErrorMessagesAndToasters(page);
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
                 err.nameTextField().fill("karthik");
 
                 int randomNum = (int) (Math.random() * 90000) + 10000;

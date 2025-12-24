@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
+<<<<<<< HEAD
 import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipFormComponents;
@@ -82,6 +83,74 @@ public class BrandEndorsement extends Baseclass {
         // Store in Baseclass
         Baseclass.generatedEmail = randomEmail;
         Baseclass.generatedPhone = randomPhone;
+=======
+import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.MailsaurCredentials;
+
+public class BrandEndorsement extends BaseClass {
+
+    private static final Logger log = LogManager.getLogger(BrandEndorsement.class);
+
+    @Test
+    public void mentorshipBrandEndorsement() throws IOException, InterruptedException {
+
+        log.info("===== Starting Mentorship Brand Endorsement Test =====");
+
+        // -------------------- Initialize Playwright --------------------
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        log.info("Navigated to URL: " + prop.getProperty("url"));
+        page.waitForTimeout(2000);
+
+        // -------------------- Landing Page --------------------
+        LandingPage landingPage = new LandingPage(page);
+        landingPage.getPopup().click(new Locator.ClickOptions().setForce(true));
+        log.info("Closed landing page popup");
+        page.waitForTimeout(2000);
+
+        // -------------------- Mentorship Module --------------------
+        DashboardPage dashboard = new DashboardPage(page);
+        dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
+        log.info("Clicked on Mentorship module");
+
+        // Search for mentor
+        MeetupsListingPage searchPage = new MeetupsListingPage(page);
+        searchPage.SearchTextField().click();
+        searchPage.SearchTextField().fill("karthik");
+        page.keyboard().press("Enter");
+        page.waitForTimeout(2000);
+        
+
+        // Navigate to mentor details
+        DescriptionPage GetMentorCall = new DescriptionPage(page);
+        GetMentorCall.allLink().click();
+        GetMentorCall.brandEndorsement().click();
+        GetMentorCall.bookEnquiry().nth(1).click();
+
+        // -------------------- Fill Brand Endorsement Form --------------------
+        MentorshipFormComponents fillForm = new MentorshipFormComponents(page);
+        fillForm.name().fill("karthik");
+
+        // Generate random 5-digit number
+        int randomNum = 10000 + new Random().nextInt(90000);
+
+        // Generate random phone number
+        String randomPhone = "90000" + randomNum;
+
+        // Generate random Mailosaur email
+        String serverId = "8mgfvj1x";
+        String randomEmail = "testAutomation-" + randomNum + "@" + serverId + ".mailosaur.net";
+
+        // Fill phone and email fields
+        fillForm.MobileTextField().fill(randomPhone);
+        fillForm.emailTextfield().fill(randomEmail);
+
+        // Store in Baseclass
+        BaseClass.generatedEmail = randomEmail;
+        BaseClass.generatedPhone = randomPhone;
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 
         // Print the randomly generated email and phone
         System.out.println("✅ Randomly generated email: " + randomEmail);

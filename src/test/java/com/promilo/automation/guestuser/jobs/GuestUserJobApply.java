@@ -16,11 +16,11 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class GuestUserJobApply extends Baseclass {
+public class GuestUserJobApply extends BaseClass {
 
 	
 	

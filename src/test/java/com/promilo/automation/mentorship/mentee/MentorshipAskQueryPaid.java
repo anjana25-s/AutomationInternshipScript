@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+<<<<<<< HEAD
 import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -91,6 +92,90 @@ public class MentorshipAskQueryPaid extends Baseclass {
         page.locator("//input[@id='userEmail']").nth(1).fill(randomEmail);
         Baseclass.generatedEmail = randomEmail;
         Baseclass.generatedPhone = randomPhone;
+=======
+
+import com.microsoft.playwright.FrameLocator;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.WaitForSelectorState;
+import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.resources.BaseClass;
+
+public class MentorshipAskQueryPaid extends BaseClass {
+
+    private static final Logger log = LogManager.getLogger(MentorshipAskQueryPaid.class);
+
+    @Test
+    public void mentorshipShortListFunctionalityTest() throws IOException, InterruptedException {
+        log.info("===== Starting Mentorship ShortList Functionality Test =====");
+        System.out.println("===== Starting Mentorship ShortList Functionality Test =====");
+
+        // -------------------- Initialize Playwright --------------------
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        log.info("Navigated to URL: " + prop.getProperty("url"));
+        System.out.println("Navigated to URL: " + prop.getProperty("url"));
+        page.waitForTimeout(2000);
+
+        // -------------------- Landing Page --------------------
+        LandingPage landingPage = new LandingPage(page);
+        if (landingPage.getPopup().isVisible()) {
+            landingPage.getPopup().click(new Locator.ClickOptions().setForce(true));
+            log.info("Closed landing page popup");
+            System.out.println("Closed landing page popup");
+        }
+        page.waitForTimeout(2000);
+
+        // -------------------- Mentorship Module --------------------
+        DashboardPage dashboard = new DashboardPage(page);
+        dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
+        log.info("Clicked on Mentorship module");
+        System.out.println("Clicked on Mentorship module");
+
+        // Search for mentor
+        MeetupsListingPage searchPage = new MeetupsListingPage(page);
+        searchPage.SearchTextField().click();
+        System.out.println("Clicked search text field");
+        searchPage.SearchTextField().fill("karthik");
+        System.out.println("Entered mentor name: karthik");
+        page.keyboard().press("Enter");
+        System.out.println("Pressed Enter for mentor search");
+        page.waitForTimeout(2000);
+        
+        // -------------------- Mentor Description --------------------
+        DescriptionPage descriptionValidation = new DescriptionPage(page);
+        page.waitForTimeout(3000);
+        descriptionValidation.askQuery().click();
+        log.info("Clicked on 'Ask Query'");
+        System.out.println("Clicked on 'Ask Query'");
+        page.waitForTimeout(2000);
+        
+       
+
+        descriptionValidation.askYourQuery().nth(1).click();
+        log.info("Selected 'Ask Your Query' option");
+        System.out.println("Selected 'Ask Your Query' option");
+        page.waitForTimeout(2000);
+
+        // -------------------- Ask Query Form --------------------
+        MentorshipFormComponents askQuery = new MentorshipFormComponents(page);
+        askQuery.name().fill("karthik Ask Query paid");
+        System.out.println("Filled name: karthik Ask Query paid");
+
+     // Generate phone number starting with 90000 + 5 random digits
+        String randomPhone = "90000" + String.format("%05d", (int) (Math.random() * 100000));
+        askQuery.MobileTextField().fill(randomPhone);
+
+        String serverId = "8mgfvj1x";
+        int randomNum = 10000 + new Random().nextInt(90000);
+        String randomEmail = "GetMentorCall" + randomNum + "@" + serverId + ".mailosaur.net";
+        page.locator("//input[@id='userEmail']").nth(1).fill(randomEmail);
+
+        BaseClass.generatedEmail = randomEmail;
+        BaseClass.generatedPhone = randomPhone;
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
         System.out.println("Filled email field");
 
         page.locator("//button[normalize-space()='Ask Your Query']").nth(2)

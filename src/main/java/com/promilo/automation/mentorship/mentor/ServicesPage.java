@@ -1,5 +1,6 @@
 package com.promilo.automation.mentorship.mentor;
 
+<<<<<<< HEAD
 import java.rmi.registry.LocateRegistry;
 
 import com.microsoft.playwright.Locator;
@@ -66,6 +67,72 @@ public class ServicesPage {
 		this.noserviceAdded= page.locator("//h4[text()='No Services Added']");
 		this.saveAndNextButton= page.locator("//button[@class='btn btn-primary']");
 		this.serviceCard= page.locator("//div[@class='service-card']").first();
+=======
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+
+public class ServicesPage {
+	
+	
+	private final Page page;
+	
+	private final Locator oneonecall;
+	private final Locator serviceName;
+	private final Locator langauges;
+	private final Locator serviceFee;
+	private final Locator evaluate;
+	private final Locator addService;
+	private final Locator noserviceAdded;
+	private final Locator saveAndNextButton;
+	private final Locator serviceCard;
+	
+	//Video call
+	private final Locator videoCall;
+	private final Locator calenderButton;
+	private Locator Monday;
+	private Locator Tuesday;
+	private Locator Wednsday;
+	private Locator Thursday;
+	private Locator Friday;
+	private Locator Saturday;
+	private Locator Sunday;
+	private Locator plusIcon;
+	private Locator submitButton;
+	
+	
+	private final Locator askQuery;
+	
+	
+	
+	private final Locator resources;
+	private final Locator uploadFile;
+	
+	private final Locator brandEndoursement;
+	private final Locator personalizedVideo;
+	private final Locator videoDuration;
+	private final Locator deliveryTime;
+	
+	
+	
+	
+	public ServicesPage(Page page) {
+		
+		this.page= page;
+		this.oneonecall= page.locator("//span[text()='1:1 Call']");
+		this.videoCall= page.locator("//span[text()='Video Call']");
+		this.askQuery= page.locator("//span[text()='Ask Query']");
+		this.resources= page.locator("//span[text()='Resources']");
+		this.brandEndoursement= page.locator("//span[text()='Brand Endorsement']");
+		this.personalizedVideo= page.locator("//span[text()='Personalized Video']");
+		this.serviceName= page.locator("#serviceName");
+		this.langauges= page.locator("//div[@class='rmsc service-react-multi-select font-12']//div[@class='dropdown-heading']");
+		this.serviceFee= page.locator("#serviceFee");
+		this.evaluate= page.locator("//button[text()='Evaluate']");
+		this.addService= page.locator("//button[text()='Add Service']");
+		this.noserviceAdded= page.locator("//h4[text()='No Services Added']");
+		this.saveAndNextButton= page.locator("//button[@class='btn btn-primary']");
+		this.serviceCard= page.locator("//div[@class='service-card']");
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 		this.calenderButton= page.locator("//img[@alt='calendar']");
 		
 		this.Monday= page.locator("input[id='MONDAY']");  

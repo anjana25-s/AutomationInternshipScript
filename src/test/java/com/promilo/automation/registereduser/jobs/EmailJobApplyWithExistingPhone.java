@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
-import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -17,11 +16,11 @@ import com.microsoft.playwright.Page;
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class EmailJobApplyWithExistingPhone extends Baseclass {
+public class EmailJobApplyWithExistingPhone extends BaseClass {
 
 	@DataProvider(name = "jobApplicationData")
 	public Object[][] jobApplicationData() throws Exception {

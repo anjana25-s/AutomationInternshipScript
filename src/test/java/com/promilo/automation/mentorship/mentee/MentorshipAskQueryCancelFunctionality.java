@@ -12,6 +12,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
+<<<<<<< HEAD
 import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipFormComponents;
@@ -44,6 +45,36 @@ public class MentorshipAskQueryCancelFunctionality extends Baseclass {
 
         // -------------------- Mentorship Module --------------------
         HomePage dashboard = new HomePage(page);
+=======
+import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.resources.BaseClass;
+
+public class MentorshipAskQueryCancelFunctionality extends BaseClass {
+
+    private static final Logger log = LogManager.getLogger(MentorshipAskQueryCancelFunctionality.class);
+
+    @Test
+    public void mentorshipShortListFunctionalityTest() throws IOException, InterruptedException {
+        log.info("===== Starting Mentorship ShortList Functionality Test =====");
+
+        // -------------------- Initialize Playwright --------------------
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        log.info("Navigated to URL: " + prop.getProperty("url"));
+        page.waitForTimeout(2000);
+
+        // -------------------- Landing Page --------------------
+        LandingPage landingPage = new LandingPage(page);
+        if (landingPage.getPopup().isVisible()) {
+            landingPage.getPopup().click(new Locator.ClickOptions().setForce(true));
+            log.info("Closed landing page popup");
+        }
+        page.waitForTimeout(2000);
+
+        // -------------------- Mentorship Module --------------------
+        DashboardPage dashboard = new DashboardPage(page);
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
         dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
         log.info("Clicked on Mentorship module");
 

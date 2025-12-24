@@ -1,22 +1,30 @@
 package com.promilo.automation.signupandlogin;
 
-import com.microsoft.playwright.*;
-import com.microsoft.playwright.options.WaitForSelectorState;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-import com.aventstack.extentreports.*;
-import com.promilo.automation.pageobjects.signuplogin.CreateAccountpage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.Baseclass;
-import com.promilo.automation.resources.ExtentManager;
-import com.promilo.automation.resources.ExcelUtil;
-
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class InvalidEmailSignUp extends Baseclass {
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserContext;
+import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.PlaywrightException;
+import com.microsoft.playwright.options.WaitForSelectorState;
+import com.promilo.automation.pageobjects.signuplogin.CreateAccountpage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.ExcelUtil;
+import com.promilo.automation.resources.ExtentManager;
+
+public class InvalidEmailSignUp extends BaseClass {
 
     @Test
     public void signupWithExistingUserMail() throws Exception {

@@ -13,6 +13,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
+<<<<<<< HEAD
 import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
 import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipFormComponents;
@@ -108,6 +109,98 @@ page.locator("//input[@name='userName']").fill("karthik");
 page.locator("//input[@name='userMobile']").fill(randomPhone);
         // Store in Baseclass
         Baseclass.generatedPhone = randomPhone;
+=======
+import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
+import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.LoginPage;
+import com.promilo.automation.registereduser.jobs.MaiLRegisteredUserInvalidJobApply;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.ExtentManager;
+import com.promilo.automation.resources.MailsaurCredentials;
+import com.promilo.automation.resources.SignupWithMailosaurUI;
+
+public class RegisteredUserBrandEndorsement extends BaseClass{
+
+	
+	
+	
+	private static final Logger logger = LogManager.getLogger(MaiLRegisteredUserInvalidJobApply.class);
+
+    private static String registeredEmail = null;
+    private static String registeredPassword = null;
+
+    @BeforeSuite
+    public void performSignupOnce() throws Exception {
+        SignupWithMailosaurUI signupWithMailosaur = new SignupWithMailosaurUI();
+        String[] creds = signupWithMailosaur.performSignupAndReturnCredentials();
+        registeredEmail = creds[0];
+        registeredPassword = creds[1];
+        logger.info("✅ Signup completed for suite. Email: " + registeredEmail);
+    }
+
+    @Test
+    public void applyForJobWithInvalidData() throws Exception {
+
+        if (registeredEmail == null || registeredPassword == null) {
+            Assert.fail("❌ Signup credentials not found for suite.");
+        }
+
+        ExtentReports extent = ExtentManager.getInstance();
+        ExtentTest test = extent.createTest("❌ Apply for Job Invalid OTP | Hardcoded Test");
+
+        
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        page.setViewportSize(1000, 768);
+
+        LandingPage landingPage = new LandingPage(page);
+        try { landingPage.getPopup().click(); } catch (Exception ignored) {}
+        landingPage.clickLoginButton();
+
+        LoginPage loginPage = new LoginPage(page);
+        loginPage.loginMailPhone().fill(registeredEmail);
+        loginPage.passwordField().fill(registeredPassword);
+        loginPage.loginButton().click();
+        test.info("Logged in as registered user: " + registeredEmail);
+        
+        
+        
+        
+     // -------------------- Mentorship Module --------------------
+        DashboardPage dashboard = new DashboardPage(page);
+        Thread.sleep(2000);
+        dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
+
+        // Search for mentor
+        MeetupsListingPage searchPage = new MeetupsListingPage(page);
+        searchPage.SearchTextField().click();
+        searchPage.SearchTextField().fill("karthik");
+        page.keyboard().press("Enter");
+        page.waitForTimeout(2000);
+        
+
+        // Navigate to mentor details
+        DescriptionPage GetMentorCall = new DescriptionPage(page);
+        GetMentorCall.allLink().click();
+        GetMentorCall.brandEndorsement().click();
+        GetMentorCall.bookEnquiry().nth(1).click();
+        
+
+        // -------------------- Fill Brand Endorsement Form --------------------
+        MentorshipFormComponents fillForm = new MentorshipFormComponents(page);
+page.locator("//input[@name='userName']").fill("karthik");
+        // Generate random 5-digit number
+        int randomNum = 10000 + new Random().nextInt(90000);
+
+        // Generate random phone number
+        String randomPhone = "90000" + randomNum;
+
+
+        // Fill phone and email fields
+page.locator("//input[@name='userMobile']").fill(randomPhone);
+        // Store in Baseclass
+        BaseClass.generatedPhone = randomPhone;
+>>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 
         // Print the randomly generated email and phone
         System.out.println("✅ Randomly generated phone: " + randomPhone);

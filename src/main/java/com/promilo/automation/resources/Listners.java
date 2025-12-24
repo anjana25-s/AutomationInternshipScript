@@ -1,17 +1,16 @@
 package com.promilo.automation.resources;
 
-import com.aventstack.extentreports.*;
-import com.aventstack.extentreports.MediaEntityBuilder;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.microsoft.playwright.Page;
-import com.promilo.automation.resources.BaseClass;
-import com.promilo.automation.resources.ExtentManager;
 
 
-public class Listners extends BaseClass implements ITestListener {
+public class Listners extends Baseclass implements ITestListener {
 
     private static ExtentReports extent = ExtentManager.getInstance();
     private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
@@ -40,7 +39,7 @@ public class Listners extends BaseClass implements ITestListener {
         currentTest.fail(result.getThrowable());
 
         try {
-            Page page = BaseClass.getPage();
+            Page page = Baseclass.getPage();
             if (page != null) {
                 byte[] screenshotBytes = page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
                 String base64Screenshot = java.util.Base64.getEncoder().encodeToString(screenshotBytes);

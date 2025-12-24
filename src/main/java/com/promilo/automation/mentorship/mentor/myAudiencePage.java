@@ -21,6 +21,12 @@ public class myAudiencePage {
 	private final Locator Keywords;
 	private final Locator Savebutton;
 	
+	
+	
+	
+	
+	
+	
 
 	
 	public myAudiencePage(Page page) {
@@ -39,8 +45,12 @@ public class myAudiencePage {
 
 		   this.Maxage= page.locator("//input[@id='react-select-29-input']");
 		   this.Savebutton= page.locator("//button[@class='btn-next mx-1 btn btn-primary']");
+		   
+		   
+		   
+		   
 
-	}
+		   	}
 	
 	public Locator audienceIndustry() {return audienceIndustry;}
 	public Locator industryOption() {return industryOption;}
@@ -54,6 +64,9 @@ public class myAudiencePage {
 	   public Locator Maxage() {return Maxage;}
 	   public Locator  MinAge () {return MinAge;}
 	   public Locator Savebutton() {return Savebutton;}
+	   
+	   
+	   
 
 
 }

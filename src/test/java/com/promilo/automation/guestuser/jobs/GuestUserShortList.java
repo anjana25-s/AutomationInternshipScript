@@ -12,7 +12,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
-import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
+import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.Baseclass;

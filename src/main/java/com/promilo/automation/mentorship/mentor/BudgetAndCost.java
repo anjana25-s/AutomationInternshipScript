@@ -26,7 +26,11 @@ public class BudgetAndCost {
 	private final Locator saveButton;
 	
 	
-	//add
+	private final Locator savePreviewButton;
+	private final Locator previewClose;
+	private final Locator publishButton;
+	private final Locator publishConfirmation;
+	private final Locator publishSuccessMessage;
 	
 	
 	public BudgetAndCost(Page page) {
@@ -48,6 +52,11 @@ public class BudgetAndCost {
 		this.panNumber= page.locator("//input[@placeholder='Enter PAN Number']");
 		this.billingCountry= page.locator("//div[@class='react-select__input-container css-19bb58m']");
 		this.saveButton= page.locator("//button[normalize-space()='Save']");
+		this.savePreviewButton= page.locator("//button[text()='Save & Preview']");
+		this.previewClose= page.locator("//img[@alt='close']");
+		this.publishButton= page.locator("//span[text()='Publish']");
+		this.publishConfirmation= page.locator("//span[text()='Publish']");
+		this.publishSuccessMessage= page.locator("(//h4[normalize-space()=\"We'll notify you as soon as it goes live!\"])[1]");
 	}
 	
 	
@@ -65,6 +74,11 @@ public class BudgetAndCost {
 	public Locator panNumber() {return panNumber;}
 	public Locator billingCountry() {return billingCountry;}
 	public Locator saveButton() {return saveButton;}
+	public Locator savePreviewButton() {return savePreviewButton;}
+	public Locator previewClose() {return previewClose;}
+	public Locator publishButton() {return publishButton;}
+	public Locator publishConfirmation() {return publishConfirmation;}
+	public Locator publishSuccessMessage() {return publishSuccessMessage;}
 	 
 
 }

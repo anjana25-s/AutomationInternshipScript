@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class BaseClass {
+public class Baseclass {
 
     private static ThreadLocal<Playwright> playwright = new ThreadLocal<>();
     private static ThreadLocal<Browser> browser = new ThreadLocal<>();

@@ -13,6 +13,7 @@ public class MentorshipFormComponents {
     private final Locator emailTextfield;
     private final Locator shortListButton;
     
+    
     //ask us
     private final Locator askUsSubmit;
     private final Locator askUsTextarea;
@@ -36,6 +37,21 @@ public class MentorshipFormComponents {
     private final Locator yesRadrioBox;
     private final Locator gstNumber;
     private final Locator panNumber;
+    private final Locator verifyAndProceed;
+    private final Locator typeofBrand;
+    private final Locator brandOptions;
+    private final Locator typeYourMessage;
+    private final Locator brandEndorsementSubmit;
+    private final Locator thankYouPopup;
+    
+    
+    private final Locator registeredUserName;
+    private final Locator registeredUserMobile;
+    
+    
+    
+    
+    
     
     
     
@@ -65,6 +81,17 @@ public class MentorshipFormComponents {
         this.occationOptions= page.locator("//input[@type='radio']");
         this.contentDescriptionBox= page.locator("//textarea[@placeholder='Type your content here...']");
         this.toggleButton= page.locator("//input[@id='switch-primary pointer']");
+        this.verifyAndProceed= page.locator("//button[text()='Verify & Proceed']");
+        this.typeofBrand= page.locator("//span[text()='Type of brand endorsement']");
+        this.brandOptions= page.locator("(//label)");
+        this.typeYourMessage= page.locator("//textarea[@placeholder='Type your message here...']");
+        this.brandEndorsementSubmit= page.locator("(//button[text()='Submit'])[2]");
+        this.thankYouPopup= page.locator("//div[contains(text(),'Thank You!')]");
+        this.registeredUserName= page.locator("//input[@name='userName']");  
+        this.registeredUserMobile= page.locator("//input[@name='userMobile']");
+        
+        
+             
     }
 
     public Locator name() {return name; }
@@ -88,5 +115,13 @@ public class MentorshipFormComponents {
     public Locator occationOptions() {return occationOptions;}
     public Locator contentDescriptionBox() {return contentDescriptionBox;}
     public Locator toggleButton() {return toggleButton;}
-     
+    public Locator verifyAndProceed() {return verifyAndProceed;}
+    public Locator typeofBrand() {return typeofBrand;}
+    public Locator brandOptions() {return brandOptions;}
+    public Locator typeYourMessage() {return typeYourMessage;}
+    public Locator brandEndorsementSubmit() {return brandEndorsementSubmit;}
+    public Locator thankYouPopup() {return thankYouPopup;}
+    public Locator registeredUserName() {return registeredUserName;	}
+    public Locator registeredUserMobile() {return registeredUserMobile;}
+         
 }

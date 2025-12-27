@@ -1,5 +1,7 @@
 package com.promilo.automation.emailnotifications.user.gethrcall;
 
+import static org.testng.Assert.assertTrue;
+
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -14,21 +16,20 @@ import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
-<<<<<<< HEAD
 import com.promilo.automation.advertiser.campaign.ProspectApproveFunctionality;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-=======
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 import com.promilo.automation.pageobjects.emailnotifications.gethrcall.InitiateHrCallNotification;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
 import com.promilo.automation.resources.BaseClass;
@@ -122,13 +123,13 @@ public class GetHrCallRequestAccepted  extends BaseClass{
 	    }
 
 	    public void applyForJobAsRegisteredUser(Page page, String inputvalue, String password, String name, String otp, String mailphone) throws Exception {
-	        LandingPage landingPage = new LandingPage(page);
+	        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
 	        try {
-	            landingPage.getPopup().click();
+	            mayBeLaterPopUp.getPopup().click();
 	            test.info("Closed initial popup");
 	        } catch (Exception ignored) {}
 
-	        landingPage.clickLoginButton();
+	        mayBeLaterPopUp.clickLoginButton();
 	        test.info("Clicked on Login button");
 
 	        LoginPage loginPage = new LoginPage(page);
@@ -146,17 +147,8 @@ public class GetHrCallRequestAccepted  extends BaseClass{
 	        homePage.homepageJobs().click();
 	        test.info("Navigated to Jobs section");
 
-	        homePage.fintech();
-	        test.info("Selected Fintech jobs category");
-
-	        Thread.sleep(5000);
-	        Locator fintechJobCard = page.locator("//p[text()='Developer']").first();
-	        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
-	        fintechJobCard.scrollIntoViewIfNeeded();
-	        fintechJobCard.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(5000));
-	        fintechJobCard.click();
-	        test.info("Opened Python Developer job card");
-
+	        page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
+	        page.keyboard().press("Enter");
 	        Thread.sleep(2000);
 	        homePage.getHrCall().first().click();
 	        test.info("Clicked on Get HR Call button");
@@ -192,7 +184,8 @@ public class GetHrCallRequestAccepted  extends BaseClass{
 	        page.waitForTimeout(4000);
 	        homePage.getAnHrCallButton().click();
 	        test.info("Clicked on Get An HR Call");
-
+	        
+	        
 	        if (otp == null || otp.length() < 4) {
 	            throw new IllegalArgumentException("OTP must be 4 characters: " + otp);
 	        }
@@ -208,6 +201,7 @@ public class GetHrCallRequestAccepted  extends BaseClass{
 	                attempts++;
 	                otpField.click();
 	                otpField.fill("");
+	    	        page.waitForTimeout(4000);
 	                otpField.fill(otpChar);
 
 	                String currentValue = otpField.evaluate("el => el.value").toString().trim();
@@ -226,6 +220,9 @@ public class GetHrCallRequestAccepted  extends BaseClass{
 	        
 	        page.locator("//button[text()='Verify & Proceed']").click();
 	        test.info("Clicked Verify & Proceed");
+	        
+	        page.locator("//button[text()='Next']").click();
+
 
 	        page.locator("//button[text()='Submit']").nth(1).click();
 	        test.info("Clicked Submit on HR call popup");
@@ -251,8 +248,8 @@ public class GetHrCallRequestAccepted  extends BaseClass{
 	        Assert.assertTrue(login2.signInContent().isVisible(), "❌ Sign-in content is not visible.");
 	        Assert.assertTrue(login2.talkToAnExpert().isVisible(), "Talk To expert content should be visible");
 
-	        login2.loginMailField().fill("vikas78@yopmail.com");
-	        login2.loginPasswordField().fill("Abcd12345");
+	        login2.loginMailField().fill("fewer-produce@qtvjnqv9.mailosaur.net");
+	        login2.loginPasswordField().fill("Karthik@88");
 	        login2.signInButton().click();
 
 	        // ✅ Navigate to My Account → Prospects
@@ -290,10 +287,10 @@ public class GetHrCallRequestAccepted  extends BaseClass{
 
 	        // ✅ Open Mailosaur inbox in new tab
 	        Page mailPage = page.context().newPage();
-	        mailPage.navigate("https://mailosaur.com/app/servers/ofuk8kzb/messages/inbox");
+	        mailPage.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
 	        test.info("Opened Mailosaur inbox");
 
-	        mailPage.locator("//input[@placeholder='Enter your email address']").fill("karthiku7026@gmail.com");
+	        mailPage.locator("//input[@placeholder='Enter your email address']").fill("karthikmailsaur@gmail.com");
 	        mailPage.locator("//button[text()='Continue']").click();
 	        mailPage.locator("//input[@placeholder='Enter your password']").fill("Karthik@88");
 	        mailPage.locator("//button[text()='Log in']").click();
@@ -301,7 +298,7 @@ public class GetHrCallRequestAccepted  extends BaseClass{
 
 
 	        // ✅ Work inside Mailosaur tab
-	        Locator firstEmail = mailPage.locator("//p[text()='HR Call Request with BCFORWARD is Pending – We’ll Be in Touch Soon!']").first();
+	        Locator firstEmail = mailPage.locator("//p[contains(text(),'Your Get HR Call Request with ')]").first();
 	        firstEmail.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
 	        firstEmail.click();
 	        test.info("Opened first HR Call Request email");

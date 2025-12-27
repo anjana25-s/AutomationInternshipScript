@@ -14,18 +14,21 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
-import com.promilo.automation.resources.SignUpLogoutUtil;
+import com.promilo.automation.resources.SignupWithMailosaurUI;
 
 public class MailRegisteredUserJobApplicationWithINvalidotp extends BaseClass {
 
     static final String SHEET_NAME = "PromiloTestData";
     static ExcelUtil excel;
+
+    private static String registeredEmail = null;
+    private static String registeredPassword = null;
 
     @DataProvider(name = "jobApplicationData")
     public Object[][] jobApplicationData() throws Exception {
@@ -33,29 +36,47 @@ public class MailRegisteredUserJobApplicationWithINvalidotp extends BaseClass {
         excel = new ExcelUtil(excelPath, SHEET_NAME);
 
         int rowCount = 0;
+        // Count only rows with matching keyword
         for (int i = 1; i <= 1000; i++) {
+            String keyword = excel.getCellData(i, 1);
             String testCaseId = excel.getCellData(i, 0);
             if (testCaseId == null || testCaseId.isEmpty()) break;
-            rowCount++;
+            if ("MailJobInvalidOtp".equalsIgnoreCase(keyword)) {
+                rowCount++;
+            }
         }
 
         Object[][] data = new Object[rowCount][1];
-        for (int i = 1; i <= rowCount; i++) {
-            data[i - 1][0] = i;
+        int index = 0;
+        for (int i = 1; i <= 1000; i++) {
+            String keyword = excel.getCellData(i, 1);
+            String testCaseId = excel.getCellData(i, 0);
+            if (testCaseId == null || testCaseId.isEmpty()) break;
+            if ("MailJobInvalidOtp".equalsIgnoreCase(keyword)) {
+                data[index++][0] = i;  // Only include matching row
+            }
         }
 
         return data;
     }
 
-    @Test(dataProvider = "jobApplicationData")
+    // Mailosaur signup before any test
+    @Test(priority = 0)
+    public void performSignupOnce() throws Exception {
+        if (registeredEmail == null || registeredPassword == null) {
+            SignupWithMailosaurUI signupWithMailosaur = new SignupWithMailosaurUI();
+            String[] creds = signupWithMailosaur.performSignupAndReturnCredentials();
+            registeredEmail = creds[0];
+            registeredPassword = creds[1];
+            System.out.println("✅ Mailosaur Signup completed. Email: " + registeredEmail);
+        }
+    }
+
+    @Test(dataProvider = "jobApplicationData", priority = 1)
     public void applyForJobAsRegisteredUser(int rowIndex) throws Exception {
         String testCaseId = excel.getCellData(rowIndex, 0);
         String keyword = excel.getCellData(rowIndex, 1);
-        String fieldType = excel.getCellData(rowIndex, 2);
-        String inputValue = excel.getCellData(rowIndex, 3);
-        String expectedResult = excel.getCellData(rowIndex, 4);
         String otp = excel.getCellData(rowIndex, 5);
-        String password = excel.getCellData(rowIndex, 6);
         String name = excel.getCellData(rowIndex, 7);
         String mailPhone = excel.getCellData(rowIndex, 8);
 
@@ -67,27 +88,23 @@ public class MailRegisteredUserJobApplicationWithINvalidotp extends BaseClass {
             return;
         }
 
-        // Handle dynamic signup if specified in keyword
-        if (keyword.equalsIgnoreCase("PhoneRegisteredJobApplyWithSignup")) {
-            SignUpLogoutUtil signupUtil = new SignUpLogoutUtil();
-            String[] creds = signupUtil.createAccountAndLoginFromExcel(
-                    new ExcelUtil(Paths.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString(), "PromiloTestData"),
-                    rowIndex
-            );
+        // Use Mailosaur credentials instead of Excel
+        String inputValue = registeredEmail;
+        String password = registeredPassword;
 
         Page page = initializePlaywright();
         page.navigate(prop.getProperty("url"));
         page.setViewportSize(1280, 1000);
 
-        LandingPage landingPage = new LandingPage(page);
-        landingPage.getPopup().click();
-        landingPage.clickLoginButton();
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
+        try { mayBeLaterPopUp.getPopup().click(); } catch (Exception ignored) {}
+        mayBeLaterPopUp.clickLoginButton();
 
         LoginPage loginPage = new LoginPage(page);
-
         loginPage.loginMailPhone().fill(inputValue);
         loginPage.passwordField().fill(password);
         loginPage.loginButton().click();
+        test.info("✅ Logged in as Mailosaur user: " + inputValue);
 
         JobListingPage homePage = new JobListingPage(page);
         homePage.homepageJobs().click();
@@ -117,6 +134,7 @@ public class MailRegisteredUserJobApplicationWithINvalidotp extends BaseClass {
         page.locator("//button[contains(@class,'submit-btm-askUs')]").click();
         Thread.sleep(2000);
 
+        // OTP input
         if (otp == null || otp.length() < 4) {
             throw new IllegalArgumentException("Invalid OTP: " + otp);
         }
@@ -164,5 +182,6 @@ public class MailRegisteredUserJobApplicationWithINvalidotp extends BaseClass {
 
         page.close();
         test.info("✅ Test completed and browser closed for TestCaseID: " + testCaseId);
+        extent.flush();
     }
-    }}
+}

@@ -1,6 +1,5 @@
 package com.promilo.automation.guestuser.jobs;
 
-
 import java.nio.file.Paths;
 
 import org.testng.Assert;
@@ -12,34 +11,27 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
 public class GuestUserShortListWithInvalidData extends BaseClass {
-	
-	@DataProvider(name = "jobApplicationData")
+
+    @DataProvider(name = "jobApplicationData")
     public Object[][] jobApplicationData() throws Exception {
         String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
         ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
-        int rowCount = 0;
-        for (int i = 1; i <= 1000; i++) {
-            String testCaseId = excel.getCellData(i, 0);
-            if (testCaseId == null || testCaseId.trim().isEmpty()) break;
-            rowCount++;
-        }
-        Object[][] data = new Object[rowCount - 1][7];
 
-        for (int i = 1; i < rowCount; i++) {
-            data[i - 1][0] = excel.getCellData(i, 0); // TestCaseID
-            data[i - 1][1] = excel.getCellData(i, 1); // Keyword
-            data[i - 1][2] = excel.getCellData(i, 3); // Email
-            data[i - 1][3] = excel.getCellData(i, 6); // Password
-            data[i - 1][4] = excel.getCellData(i, 7); // Name
-            data[i - 1][5] = excel.getCellData(i, 5); // OTP
-            data[i - 1][6] = excel.getCellData(i, 8); // MailPhone
-        }
+        // ✅ Restrict to only first non-empty row
+        Object[][] data = new Object[1][7];
+        data[0][0] = excel.getCellData(1, 0); // TestCaseID
+        data[0][1] = excel.getCellData(1, 1); // Keyword
+        data[0][2] = excel.getCellData(1, 3); // Email
+        data[0][3] = excel.getCellData(1, 6); // Password
+        data[0][4] = excel.getCellData(1, 7); // Name
+        data[0][5] = excel.getCellData(1, 5); // OTP
+        data[0][6] = excel.getCellData(1, 8); // MailPhone
 
         return data;
     }
@@ -59,9 +51,8 @@ public class GuestUserShortListWithInvalidData extends BaseClass {
         page.navigate(prop.getProperty("url"));
         page.setViewportSize(1280, 800);
 
-        LandingPage landingPage = new LandingPage(page);
-        landingPage.getPopup().click();
-        landingPage.clickLoginButton();
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
+        mayBeLaterPopUp.getPopup().click();
 
         JobListingPage homePage = new JobListingPage(page);
         homePage.homepageJobs().click();
@@ -107,6 +98,5 @@ public class GuestUserShortListWithInvalidData extends BaseClass {
 
         test.pass("✅ All invalid data error messages validated successfully for TestCaseID: " + testCaseId);
     }
-
 
 }

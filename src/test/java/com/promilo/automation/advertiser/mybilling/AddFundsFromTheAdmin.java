@@ -2,12 +2,13 @@ package com.promilo.automation.advertiser.mybilling;
 
 import java.nio.file.Paths;
 
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.resources.BaseClass;
@@ -17,10 +18,12 @@ import com.promilo.automation.resources.ExtentManager;
 public class AddFundsFromTheAdmin extends BaseClass {
 
     ExtentReports extent = ExtentManager.getInstance();
-    ExtentTest test = extent.createTest("🚀 Advertiser Add Funds Test | Data-Driven");
+    ExtentTest test = extent.createTest("🚀 Advertiser AddFundsFromTheAdmin Test | Data-Driven");
 
     @Test
-    public void runAddFundsTest() {
+    @Parameters("browser")
+
+    public void AddFundsFromTheAdminTest() {
         try {
             // Step 1: Load Excel Data
             String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
@@ -29,6 +32,7 @@ public class AddFundsFromTheAdmin extends BaseClass {
             test.info("📂 Loaded Excel data from: " + excelPath);
 
             // Step 2: Admin Login
+            
             Page page = initializePlaywright();
             page.navigate(prop.getProperty("adminUrl"));
             page.setViewportSize(1000, 768);
@@ -45,13 +49,21 @@ public class AddFundsFromTheAdmin extends BaseClass {
             // Step 3: Select company & Add funds
             page.locator("//div[text()='Manage Company']").click();
             test.info("📂 Navigated to Manage Company");
+            
+            page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Search by keywords")).fill("indiapromilo");
+            Thread.sleep(2000);
+            page.keyboard().press("Enter");
+
 
             page.waitForSelector("//td[normalize-space(text())='indiapromilo']");
             page.locator("//td[normalize-space(text())='indiapromilo']/preceding-sibling::td//input[@type='checkbox']").click();
             test.info("✅ Selected company: indiapromilo");
+            
+            
 
-            page.locator("//span[text()='Add fund']").click();
-            page.waitForSelector("//label[text()='Postpaid']");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add Fund Add Fund")).click();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add Fund").setExact(true)).click();
+                      page.waitForSelector("//label[text()='Postpaid']");
             page.locator("//label[text()='Postpaid']").click();
             page.locator("//input[@placeholder='Enter amount']").fill("35000");
             page.locator("//textarea[@placeholder='Write a remark with only 500 characters']").fill("promiloindia Funds Added");
@@ -81,8 +93,7 @@ public class AddFundsFromTheAdmin extends BaseClass {
             homepage.myBilling().click();
             stagePage.waitForSelector("//table");
             test.info("📂 Navigated to My Billing section");
-         // Step 6: Search for transaction entry directly
-         // Step 6: Get the first matching row that contains "Promiloindia funds added"
+         //  6: Get the first matching row that contains "Promiloindia funds added"
             Locator matchingRow = stagePage
                 .locator("//table//tr[td//div[contains(normalize-space(.), 'Promiloindia funds added')]]")
                 .first();

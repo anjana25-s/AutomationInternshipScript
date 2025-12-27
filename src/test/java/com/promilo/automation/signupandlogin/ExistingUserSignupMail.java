@@ -1,22 +1,20 @@
 package com.promilo.automation.signupandlogin;
 
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.Set;
-
+import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.WaitForSelectorState;
+import com.aventstack.extentreports.*;
 import com.promilo.automation.pageobjects.signuplogin.CreateAccountpage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.resources.BaseClass;
-import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
+import com.promilo.automation.resources.ExcelUtil;
+
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.Set;
 
 public class ExistingUserSignupMail extends BaseClass {
 
@@ -25,7 +23,7 @@ public class ExistingUserSignupMail extends BaseClass {
         Page page = initializePlaywright(); // Initializes browser & properties
 
         ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("🚀 Promilo Staging Invalid - Signup with existing user email - error toaster validation");
+        ExtentTest test = extent.createTest("ExistingUserSignupMail");
 
         String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
         ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
@@ -38,7 +36,7 @@ public class ExistingUserSignupMail extends BaseClass {
         test.info("✅ Loaded " + rowCount + " rows from Excel.");
 
         // ✅ Match the correct keyword from Excel (case-sensitive)
-        Set<String> signupKeywords = Collections.singleton("existing-user");
+        Set<String> signupKeywords = Collections.singleton("ExistingSignupMail");
         boolean testCaseExecuted = false;
 
         for (int i = 1; i < rowCount; i++) {
@@ -57,9 +55,11 @@ public class ExistingUserSignupMail extends BaseClass {
 
             try {
                 page.navigate(prop.getProperty("url"));
+                page.setViewportSize(1000, 768);
+
                 test.info("🌐 Navigated to: " + prop.getProperty("url"));
 
-                LandingPage landing = new LandingPage(page);
+                MayBeLaterPopUp landing = new MayBeLaterPopUp(page);
                 try {
                     landing.getPopup().click();
                     test.info("✅ Closed popup.");

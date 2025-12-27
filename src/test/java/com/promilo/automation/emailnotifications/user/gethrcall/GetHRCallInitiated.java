@@ -1,5 +1,6 @@
 package com.promilo.automation.emailnotifications.user.gethrcall;
 
+
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -17,20 +18,18 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
-<<<<<<< HEAD
-import com.promilo.automation.advertiser.campaign.ProspectApproveFunctionality;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-import com.promilo.automation.pageobjects.emailnotifications.advertiser.gethrcall.GetHrCallNotification;
-=======
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 import com.promilo.automation.pageobjects.emailnotifications.gethrcall.InitiateHrCallNotification;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignupWithMailosaurUI;
+
+
+
 
 public class GetHRCallInitiated  extends BaseClass{
 	
@@ -118,13 +117,13 @@ public class GetHRCallInitiated  extends BaseClass{
 	    }
 
 	    public void applyForJobAsRegisteredUser(Page page, String inputvalue, String password, String name, String otp, String mailphone) throws Exception {
-	        LandingPage landingPage = new LandingPage(page);
+	        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
 	        try {
-	            landingPage.getPopup().click();
+	            mayBeLaterPopUp.getPopup().click();
 	            test.info("Closed initial popup");
 	        } catch (Exception ignored) {}
 
-	        landingPage.clickLoginButton();
+	        mayBeLaterPopUp.clickLoginButton();
 	        test.info("Clicked on Login button");
 
 	        LoginPage loginPage = new LoginPage(page);
@@ -142,11 +141,13 @@ public class GetHRCallInitiated  extends BaseClass{
 	        homePage.homepageJobs().click();
 	        test.info("Navigated to Jobs section");
 	        
+	        
 
-	        page.locator("a").filter(new Locator.FilterOptions().setHasText("DeveloperGoogleChennai")).first().click();
-	       
+page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
+page.keyboard().press("Enter");
 
-	        Thread.sleep(2000);
+
+	        Thread.sleep(3000);
 	        homePage.getHrCall().first().click();
 	        test.info("Clicked on Get HR Call button");
 
@@ -196,13 +197,13 @@ public class GetHRCallInitiated  extends BaseClass{
 	                attempts++;
 	                otpField.click();
 	                otpField.fill("");
+	    	        page.waitForTimeout(2000);
 	                otpField.fill(otpChar);
 
 	                String currentValue = otpField.evaluate("el => el.value").toString().trim();
 	                if (currentValue.equals(otpChar)) {
 	                    filled = true;
 	                } else {
-	                    page.waitForTimeout(500);
 	                }
 	            }
 
@@ -214,6 +215,8 @@ public class GetHRCallInitiated  extends BaseClass{
 	        
 	        page.locator("//button[text()='Verify & Proceed']").click();
 	        test.info("Clicked Verify & Proceed");
+	        
+	        page.locator("//button[text()='Next']").click();
 
 	        page.locator("//button[text()='Submit']").nth(1).click();
 	        test.info("Clicked Submit on HR call popup");
@@ -229,10 +232,10 @@ public class GetHRCallInitiated  extends BaseClass{
 	        
 	        
 	        Page page1 = page.context().newPage();
-	        page1.navigate("https://mailosaur.com/app/servers/ofuk8kzb/messages/inbox");
+	        page1.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
 	        test.info("Opened Mailosaur inbox");
 
-	        page1.locator("//input[@placeholder='Enter your email address']").fill("karthiku7026@gmail.com");
+	        page1.locator("//input[@placeholder='Enter your email address']").fill("karthikmailsaur@gmail.com");
 	        page1.locator("//button[text()='Continue']").click();
 	        page1.locator("//input[@placeholder='Enter your password']").fill("Karthik@88");
 	        page1.locator("//button[text()='Log in']").click();
@@ -249,6 +252,8 @@ public class GetHRCallInitiated  extends BaseClass{
 	     hrcall2.GetHRcallText().textContent();
 	     hrcall2.jobCard();
 	     hrcall2.myPreference().click();
+	     
+	     
 
 
 test.info("redirected to respective prospect page");

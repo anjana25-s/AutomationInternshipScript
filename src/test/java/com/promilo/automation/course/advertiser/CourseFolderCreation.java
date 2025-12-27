@@ -16,7 +16,7 @@ import com.promilo.automation.resources.*;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.ExtentReports;
 
-public class CourseFolderCreation extends Baseclass {
+public class CourseFolderCreation extends BaseClass {
 
     @Test
     public void verifyMyProspectFolderCreation() throws InterruptedException, IOException {

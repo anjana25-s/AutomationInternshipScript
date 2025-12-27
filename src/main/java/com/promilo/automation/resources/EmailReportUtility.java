@@ -1,23 +1,12 @@
 package com.promilo.automation.resources;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import javax.mail.*;
+import javax.mail.internet.*;
+import java.nio.file.*;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Properties;
-
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import java.util.Comparator;
 
 /**
  * Utility to email the latest TestNG emailable report (dynamic HTML file).
@@ -25,7 +14,7 @@ import javax.mail.internet.MimeMultipart;
 public class EmailReportUtility {
 
     // Sender details
-    private static final String FROM_EMAIL = "karthiktestuser42@gmail.com";
+    private static final String FROM_EMAIL = "karthikmailsaur@gmail.com";
     private static final String APP_PASSWORD = "wihf lvuh gqkx bbdf";
 
     // Recipients

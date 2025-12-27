@@ -23,25 +23,19 @@ import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
-<<<<<<< HEAD
 import com.promilo.automation.advertiser.campaign.ProspectApproveFunctionality;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-=======
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 import com.promilo.automation.pageobjects.emailnotifications.gethrcall.InitiateHrCallNotification;
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
-<<<<<<< HEAD
-import com.promilo.automation.resources.Baseclass;
-=======
 import com.promilo.automation.resources.BaseClass;
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.SignupWithMailosaurUI;
 
-public class AcceptTheGetHrCallRequest  extends Baseclass{
+public class AcceptTheGetHrCallRequest  extends BaseClass{
 	
 	 ExtentReports extent = ExtentManager.getInstance();
      ExtentTest test = extent.createTest("🚀 Promilo Staging Signup - Passes if 'My Stuff' is visible after signup (Playwright)");

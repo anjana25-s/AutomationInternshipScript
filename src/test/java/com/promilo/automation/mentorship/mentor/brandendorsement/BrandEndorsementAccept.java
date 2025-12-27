@@ -1,9 +1,14 @@
 package com.promilo.automation.mentorship.mentor.brandendorsement;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -12,28 +17,28 @@ import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-<<<<<<< HEAD
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Page.LocatorOptions;
+import com.promilo.automation.courses.intrestspages.ViewedIntrestPage;
 import com.promilo.automation.mentor.myacceptance.MyAcceptance;
 import com.promilo.automation.pageobjects.myresume.Hamburger;
 import com.promilo.automation.pageobjects.signuplogin.HomePage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class BrandEndorsementAccept extends com.promilo.automation.resources.Baseclass{
+public class BrandEndorsementAccept extends com.promilo.automation.resources.BaseClass{
 	
 	
 	
 	// ✅ Use generated email from previous test
-    String emailToLogin = Baseclass.generatedEmail;
-    String phoneToLogin = Baseclass.generatedPhone;
+    String emailToLogin = BaseClass.generatedEmail;
+    String phoneToLogin = BaseClass.generatedPhone;
 
 	 ExtentReports extent;
 	    ExtentTest test;
@@ -52,7 +57,7 @@ public class BrandEndorsementAccept extends com.promilo.automation.resources.Bas
 
 	    @Test(
 	        dependsOnMethods = {
-	            "com.promilo.automation.mentorship.mentee.pagepbjects.BrandEndorsement.mentorshipBrandEndorsement"
+	            "com.promilo.automation.mentorship.mentee.intrests.BrandEndorsement.mentorshipBrandEndorsement"
 	        } 
 	    )
 public void AcceptVideoServiceRequestTest() throws Exception {
@@ -61,51 +66,55 @@ public void AcceptVideoServiceRequestTest() throws Exception {
     ExtentTest test = extent.createTest("✅ Accept video service - Positive Test");
 
    
-    Page page = initializePlaywright();
-    page.navigate(prop.getProperty("url"));
-    page.setViewportSize(1080, 720);
-
-    test.info("🌐 Navigated to application URL.");
-
+ // LOAD EXCEL
     String excelPath = Paths.get(System.getProperty("user.dir"),
-            "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
-    ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
+            "Testdata", "Mentorship Test Data.xlsx").toString();
+    ExcelUtil excel = new ExcelUtil(excelPath, "CampaignCreation");
 
-    int rowCount = 0;
-    for (int i = 1; i <= 1000; i++) {
-        String testCaseId = excel.getCellData(i, 0);
-        if (testCaseId == null || testCaseId.trim().isEmpty()) break;
-        rowCount++;
+
+    int totalRows = excel.getRowCount();
+    if (totalRows < 2) {
+        test.fail("❌ No data found in Excel.");
+        Assert.fail("No data in Excel");
     }
-    test.info("📘 Loaded " + rowCount + " rows from Excel.");
 
-    for (int i = 1; i < rowCount; i++) {
-        String keyword = excel.getCellData(i, 1);
-        if (!"AddEmployment".equalsIgnoreCase(keyword)) continue;
+    // BUILD HEADER MAP
+    int totalCols = excel.getColumnCount();
+    Map<String, Integer> headerMap = new HashMap<>();
+    for (int c = 0; c < totalCols; c++) {
+        String header = excel.getCellData(0, c);
+        if (header != null && !header.trim().isEmpty()) {
+            headerMap.put(header.trim().replace("\u00A0", "").toLowerCase(), c);
+        }
+    }
 
-        String inputValue = excel.getCellData(i, 3);
-        String description = excel.getCellData(i, 10);
+    // FIND ROWS WITH KEYWORD = AddEmployment (or your relevant keyword)
+    for (int i = 1; i < totalRows; i++) {
+        String keyword = excel.getCellData(i, headerMap.get("keyword"));
+        if (!"BrandEndorsementAccept".equalsIgnoreCase(keyword)) continue;
+
+        String InputValue = excel.getCellData(i, headerMap.get("inputvalue"));
+        String password = excel.getCellData(i, headerMap.get("password"));
+
+        test.info("📘 Executing Excel row " + i + " | InputValue: " + InputValue);
+
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        page.setViewportSize(1080, 720);
 
         try {
-            test.info("➡️ Starting execution for row " + i + " with input: " + inputValue);
+            // HANDLE OPTIONAL POPUP
+            MayBeLaterPopUp popup = new MayBeLaterPopUp(page);
+            try { popup.getPopup().click(); test.info("✅ Popup closed"); } catch (Exception ignored) {}
 
-            MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
-            try {
-                mayBeLaterPopUp.getPopup().click();
-                test.info("✅ Popup closed.");
-            } catch (Exception ignored) {
-                test.info("ℹ️ No popup found.");
-            }
+            popup.clickLoginButton();
 
-            mayBeLaterPopUp.clickLoginButton();
-            test.info("🔑 Navigating to Login Page.");
-
+            // LOGIN
             LoginPage loginPage = new LoginPage(page);
-            loginPage.loginMailPhone().fill("rest-missing@8mgfvj1x.mailosaur.net");
+            loginPage.loginMailPhone().fill("812de0aa@qtvjnqv9.mailosaur.net");
             loginPage.passwordField().fill("Karthik@88");
             loginPage.loginButton().click();
-            test.info("✅ Logged in with registered credentials: " );
-
+            test.info("✅ Logged in with credentials: " + InputValue);
             HomePage myStuff= new HomePage(page);
             myStuff.mystuff().click();
 
@@ -118,6 +127,23 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             //click on my-acceptance button
             MyAcceptance acceptRequest= new MyAcceptance(page);
             acceptRequest.myAcceptance().click();
+            
+            
+            
+            String actualCampaignName=acceptRequest.brandEndorsementCampaignName().textContent().trim();
+            assertEquals(actualCampaignName, "December Automation");
+            
+            String actualMenteeName=acceptRequest.brandEndorsementMenteeName().textContent().trim();
+            assertEquals(actualMenteeName , "December");
+            
+            String actualHighlightTex=acceptRequest.brandEndorsementHighLightText().textContent().trim();
+            assertEquals(actualHighlightTex, "dxgfchvjbng vbnm");
+            
+            String actualMoney=acceptRequest.brandEndorsementMoney().textContent().trim();
+            assertEquals(actualMoney, "₹ 3,250");
+            
+            String actualStatus=acceptRequest.brandEndorsementStatus().textContent().trim();
+            assertEquals(actualStatus, "Completed");
             
             //click on brand Endorsement
             acceptRequest.brandEndorsementAccept().click();
@@ -147,8 +173,8 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             System.out.println("Copied number: " + copiedNumber);
 
             // Expected dynamic values from signup utility
-            String expectedEmail = Baseclass.generatedEmail.trim().toLowerCase();
-            String expectedPhone = Baseclass.generatedPhone.trim();
+            String expectedEmail = BaseClass.generatedEmail.trim().toLowerCase();
+            String expectedPhone = BaseClass.generatedPhone.trim();
 
             // Normalize copied values
             String copiedMailNormalized = copiedMail.trim().toLowerCase();
@@ -189,184 +215,36 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             mentorPage.navigate(prop.getProperty("url"));
 
             
-            MayBeLaterPopUp login= new MayBeLaterPopUp(mentorPage);
-            login.dismissPopup();
-            login.clickLoginButton();
-            
-         
-               LoginPage loginPage1 = new LoginPage(mentorPage);
-               loginPage1.loginMailPhone().fill(Baseclass.generatedPhone); // use the generated email
-               loginPage1.loginWithOtp().click();
-               loginPage1.otpField().fill("9999");
-               loginPage1.loginButton().click();
-         
-               
-               //click on My-Intrest 
-               mentorPage.locator("//span[text()='My Interest']").click();
-               
-               //click on my preference
-               mentorPage.locator("//div[@class='tab text-center w-50 ms-1 pointer ']").click();
-=======
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
-import com.promilo.automation.mentor.myacceptance.MyAcceptance;
-import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.BaseClass;
-import com.promilo.automation.resources.ExcelUtil;
-import com.promilo.automation.resources.ExtentManager;
-
-public class BrandEndorsementAccept extends BaseClass{
-	
-	
-	
-	// ✅ Use generated email from previous test
-    String emailToLogin = BaseClass.generatedEmail;
-    String phoneToLogin = BaseClass.generatedPhone;
-
-	 ExtentReports extent;
-	    ExtentTest test;
-
-	    @BeforeClass
-	    public void setUpExtent() {
-	        extent = ExtentManager.getInstance(); // Initialize ExtentReports
-	    }
-
-	    @AfterClass
-	    public void tearDownExtent() {
-	        if (extent != null) {
-	            extent.flush();
-	        }
-	    }
-
-	    @Test(
-	        dependsOnMethods = {
-	            "com.promilo.automation.mentorship.mentee.BrandEndorsement.mentorshipBrandEndorsement"
-	        } 
-	    )
-public void AcceptVideoServiceRequestTest() throws Exception {
-
-    ExtentReports extent = ExtentManager.getInstance();
-    ExtentTest test = extent.createTest("✅ Accept video service - Positive Test");
-
-   
-    Page page = initializePlaywright();
-    page.navigate(prop.getProperty("url"));
-    page.setViewportSize(1080, 720);
-
-    test.info("🌐 Navigated to application URL.");
-
-    String excelPath = Paths.get(System.getProperty("user.dir"),
-            "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
-    ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
-
-    int rowCount = 0;
-    for (int i = 1; i <= 1000; i++) {
-        String testCaseId = excel.getCellData(i, 0);
-        if (testCaseId == null || testCaseId.trim().isEmpty()) break;
-        rowCount++;
-    }
-    test.info("📘 Loaded " + rowCount + " rows from Excel.");
-
-    for (int i = 1; i < rowCount; i++) {
-        String keyword = excel.getCellData(i, 1);
-        if (!"AddEmployment".equalsIgnoreCase(keyword)) continue;
-
-        String inputValue = excel.getCellData(i, 3);
-        String description = excel.getCellData(i, 10);
-
-        try {
-            test.info("➡️ Starting execution for row " + i + " with input: " + inputValue);
-
-            LandingPage landingPage = new LandingPage(page);
+            MayBeLaterPopUp mayBeLaterPopUp2 = new MayBeLaterPopUp(mentorPage);
             try {
-                landingPage.getPopup().click();
+          	  mayBeLaterPopUp2.getPopup().click();
                 test.info("✅ Popup closed.");
             } catch (Exception ignored) {
                 test.info("ℹ️ No popup found.");
             }
 
-            landingPage.clickLoginButton();
-            test.info("🔑 Navigating to Login Page.");
+            mayBeLaterPopUp2.clickLoginButton();              
 
-            LoginPage loginPage = new LoginPage(page);
-            loginPage.loginMailPhone().fill("rest-missing@8mgfvj1x.mailosaur.net");
-            loginPage.passwordField().fill("Karthik@88");
-            loginPage.loginButton().click();
-            test.info("✅ Logged in with registered credentials: " );
-            
-            
 
-            //click on my stuff button
-            DashboardPage myStuff= new DashboardPage(page);
-            myStuff.mystuff().click();
-            
-            
-            //click on my acceptance button
-            MyAcceptance acceptRequest= new MyAcceptance(page);
-            acceptRequest.myAcceptance().click();
-            acceptRequest.brandEndorsementAccept().click();
-            System.out.println(acceptRequest.modalContent().textContent()); 
-            
-            
-            //click on exit icon of the request accepted  modal
-            page.locator("img[alt='Add New']").click();
-            
-            
-            
-            
-         // Click the copy icon of the mail
-            Locator mailcopyIcon = page.locator("(//p[text()='Brand Endorsement']//following::img[@alt='copyIcon'])[1]");
-            mailcopyIcon.click();
-            
-            // Get clipboard content
-            Clipboard clipboard2 = Toolkit.getDefaultToolkit().getSystemClipboard();
-            String copiedMail = (String) clipboard2.getData(DataFlavor.stringFlavor);
-            
-            System.out.println("Copied mail: "+ copiedMail );
-
-            
-            //click the copy icon of the phone Number
-            Locator phonecopyIcon = page.locator("(//p[text()='Brand Endorsement']//following::img[@alt='copyIcon'])[2]");
-            phonecopyIcon.click();
-            
-            
-            // Get clipboard content
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            String copiedNumber = (String) clipboard.getData(DataFlavor.stringFlavor);
-
-            System.out.println("Copied number: " + copiedNumber);
-            
-            
-            
-
-            // Assertion: check if the copied value is digits only (valid number)
-            Assert.assertTrue(copiedNumber.matches("\\d+"), "Copied value is not a valid number: " + copiedNumber);
-            acceptRequest.brandEnodorsementViewMessage().click();
-            String modalText = acceptRequest.modalContent().textContent();
-            
-            
-            // Now use mentor page as usual
-            page.navigate(prop.getProperty("url"));
-
-            
-            LandingPage login= new LandingPage(page);
-            login.dismissPopup();
-            login.clickLoginButton();
             
          
-               LoginPage loginPage1 = new LoginPage(page);
+               LoginPage loginPage1 = new LoginPage(mentorPage);
                loginPage1.loginMailPhone().fill(BaseClass.generatedPhone); // use the generated email
                loginPage1.loginWithOtp().click();
                loginPage1.otpField().fill("9999");
                loginPage1.loginButton().click();
          
                
-               //click on my interest tab and get the card details
-               page.locator("//span[text()='My Interest']").click();
-               page.locator("//div[@class='tab text-center w-50 ms-1 pointer ']").click();
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
+               
+               
+               ViewedIntrestPage cardValidation= new ViewedIntrestPage(mentorPage);
+               cardValidation.myInterestTab().click();
+               cardValidation.myPreferenceTab().click();
+               Locator intrestCard=cardValidation.mentorshipCard();
+               intrestCard.textContent().trim();
+               assertTrue(intrestCard.isVisible());
+               
+               
                
                
                

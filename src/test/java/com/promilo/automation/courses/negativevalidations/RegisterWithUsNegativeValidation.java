@@ -16,11 +16,11 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.job.pageobjects.FormComponents;
 import com.promilo.automation.mentorship.mentee.intrests.MentorshipErrorMessagesAndToasters;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class RegisterWithUsNegativeValidation extends Baseclass {
+public class RegisterWithUsNegativeValidation extends BaseClass {
 
 	 // ✅ Move static boolean OUTSIDE method (required by Java)
     private static boolean hasRun = false;

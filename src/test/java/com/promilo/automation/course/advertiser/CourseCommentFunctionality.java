@@ -15,11 +15,11 @@ import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class CourseCommentFunctionality extends Baseclass {
+public class CourseCommentFunctionality extends BaseClass {
 
     @Test
     public void CommentFunctionalityTest() throws InterruptedException, IOException {

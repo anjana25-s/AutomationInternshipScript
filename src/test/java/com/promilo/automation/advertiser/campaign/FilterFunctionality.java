@@ -6,8 +6,6 @@ import java.nio.file.Paths;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.advertiser.AdverstiserMyaccount;
@@ -17,11 +15,13 @@ import com.promilo.automation.advertiser.AdvertiserProspects;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.ExtentReports;
 
 public class FilterFunctionality extends BaseClass {
 
     @Test
-    public void verifyFilterFunctionalityDataDriven() throws InterruptedException, IOException {
+    public void verifyFilterFunctionalityTest() throws InterruptedException, IOException {
         ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("🚀 Filter Functionality | Data Driven");
 
@@ -47,33 +47,52 @@ public class FilterFunctionality extends BaseClass {
                 continue;
             }
 
-            test.info("🔐 Executing: " + testCaseId + " | Email: " + email);
+            test.info("🔐 Executing test case: " + testCaseId + " | Email: " + email);
 
             Page page = initializePlaywright();
+            test.info("🌐 Initialized Playwright and launched browser.");
+
             page.navigate(prop.getProperty("stageUrl"));
+            test.info("🌍 Navigated to Stage URL: " + prop.getProperty("stageUrl"));
+
             page.setViewportSize(1000, 768);
+            test.info("🖥 Set viewport size to 1000x768.");
+
             Thread.sleep(3000);
 
             AdvertiserLoginPage login = new AdvertiserLoginPage(page);
             Assert.assertTrue(login.signInContent().isVisible(), "❌ Sign-in content not visible.");
-            Assert.assertTrue(login.talkToAnExpert().isVisible(), "Talk To Expert should be visible");
+            test.info("✅ Sign-in content is visible.");
 
-            login.loginMailField().fill(email);
-            login.loginPasswordField().fill(password);
+            Assert.assertTrue(login.talkToAnExpert().isVisible(), "Talk To Expert should be visible");
+            test.info("✅ Talk To Expert content is visible.");
+
+            login.loginMailField().fill("agree-laugh@ofuk8kzb.mailosaur.net");
+            test.info("✉ Entered email for login.");
+
+            login.loginPasswordField().fill("Karthik@88");
+            test.info("🔑 Entered password for login.");
+
             login.signInButton().click();
+            test.info("🔓 Clicked Sign In button.");
 
             // Navigation
-
             AdvertiserHomepage homepage = new AdvertiserHomepage(page);
             homepage.hamburger().click();
-            
+            test.info("☰ Clicked Hamburger menu.");
+
             homepage.myAccount().click();
+            test.info("📁 Navigated to My Account.");
 
             AdverstiserMyaccount myAccount = new AdverstiserMyaccount(page);
             myAccount.myProspect().click();
+            test.info("📋 Opened My Prospects section.");
 
             AdvertiserProspects prospects = new AdvertiserProspects(page);
             prospects.Jobs().click();
+            test.info("💼 Clicked Jobs tab.");
+            
+            
 
             // Filters to test
             String[] filters = {
@@ -83,6 +102,8 @@ public class FilterFunctionality extends BaseClass {
 
             for (String filter : filters) {
                 prospects.AllDropdown().click();
+                test.info("🔽 Opened filter dropdown.");
+
                 switch (filter) {
                     case "All":
                         prospects.All().click();
@@ -115,17 +136,22 @@ public class FilterFunctionality extends BaseClass {
                         test.warning("⚠️ Unknown filter: " + filter);
                         continue;
                 }
+                
 
+                test.info("✅ Selected filter: " + filter);
                 Thread.sleep(2000); // Optionally replace with explicit wait
 
                 Locator result = prospects.FilterResult();
                 Assert.assertTrue(result.isVisible(), "❌ Filter result should be visible for: " + filter);
                 String text = result.textContent().trim();
                 System.out.println("Filter Result (" + filter + "): " + text);
-                test.info("✅ Filter '" + filter + "' result: " + text);
+                test.info("📊 Filter '" + filter + "' result: " + text);
             }
 
             test.pass("✅ Filter functionality passed for: " + email);
         }
+
+        extent.flush();
+        test.info("🧹 Flushed Extent report and test completed.");
     }
 }

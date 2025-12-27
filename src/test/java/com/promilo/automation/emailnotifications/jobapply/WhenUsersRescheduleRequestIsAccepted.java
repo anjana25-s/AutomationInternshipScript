@@ -21,7 +21,7 @@ import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -110,7 +110,6 @@ public class WhenUsersRescheduleRequestIsAccepted extends BaseClass {
         applyForJobAsRegisteredUser(page, inputvalue, password, name, otp, mailphone);
 
         test.pass("✅ Job application & reschedule flow passed for TestCase: " + testCaseId);
-        extent.flush();
     }
 
     public void applyForJobAsRegisteredUser(Page page, String inputvalue, String password, String name, String otp,
@@ -118,15 +117,15 @@ public class WhenUsersRescheduleRequestIsAccepted extends BaseClass {
 
         test.info("🔑 Logging in with registered user");
 
-        LandingPage landingPage = new LandingPage(page);
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
         try {
-            landingPage.getPopup().click();
+            mayBeLaterPopUp.getPopup().click();
             test.info("✅ Closed popup successfully");
         } catch (Exception ignored) {
             test.warning("⚠️ Popup not displayed");
         }
 
-        landingPage.clickLoginButton();
+        mayBeLaterPopUp.clickLoginButton();
         test.info("➡️ Clicked Login button");
 
         LoginPage loginPage = new LoginPage(page);
@@ -144,8 +143,9 @@ public class WhenUsersRescheduleRequestIsAccepted extends BaseClass {
         Thread.sleep(5000);
         jobPage.homepageJobs().click();
         test.info("✅ Clicked on homepage Jobs");
-        Locator developerJob = page.locator("//p[text()='Developer']").first();
-        developerJob.click();
+        page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
+        page.keyboard().press("Enter");
+
         test.info("Clicked on Developer job listing");
         
         Thread.sleep(4000);
@@ -220,6 +220,8 @@ public class WhenUsersRescheduleRequestIsAccepted extends BaseClass {
         
         page.locator("//li[@class='time-slot-box list-group-item']").first().click();
 
+        page.locator("//button[text()='Next']").click();
+
         page.locator("//button[text()='Submit']").nth(1).click();
         test.info("✅ Submitted Job Application");
 
@@ -238,8 +240,9 @@ public class WhenUsersRescheduleRequestIsAccepted extends BaseClass {
         page.locator("img[alt='Reschedule']").first().click();
         test.info("🔄 Initiated Reschedule Request");
 
-        page.locator("span.flatpickr-day[aria-current='date']").click();
-        page.locator("li.time-slot-box.list-group-item").first().click();
+        page.locator("span.flatpickr-day:not(.flatpickr-disabled)").first().click();
+        page.locator("//li[@class='time-slot-box list-group-item']").first().click();
+
         page.locator("//button[text()='Continue']").click();
         test.info("✅ Submitted Reschedule Request");
 
@@ -250,7 +253,7 @@ public class WhenUsersRescheduleRequestIsAccepted extends BaseClass {
         test.info("🌐 Opened Advertiser Portal");
 
         AdvertiserLoginPage login = new AdvertiserLoginPage(page3);
-        login.loginMailField().fill("agree-laugh@ofuk8kzb.mailosaur.net");
+        login.loginMailField().fill("fewer-produce@qtvjnqv9.mailosaur.net");
         login.loginPasswordField().fill("Karthik@88");
         login.signInButton().click();
         test.info("✅ Advertiser logged in");

@@ -22,17 +22,14 @@ import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
-<<<<<<< HEAD
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.emailnotifications.EmailnotificationsShortlisted;
-=======
-import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
+import com.promilo.automation.resources.MailsaurCredentials;
 import com.promilo.automation.resources.SignupWithMailosaurUI;
 
 public class UserReceivesRescheduleRequestFromAdvertiser extends BaseClass {
@@ -123,12 +120,12 @@ public class UserReceivesRescheduleRequestFromAdvertiser extends BaseClass {
    }
 
    public void applyForJobAsRegisteredUser(Page page, String inputvalue, String password, String name, String otp, String mailphone) throws Exception {
-       LandingPage landingPage = new LandingPage(page);
+       MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
        try {
-           landingPage.getPopup().click();
+           mayBeLaterPopUp.getPopup().click();
        } catch (Exception ignored) {}
 
-       landingPage.clickLoginButton();
+       mayBeLaterPopUp.clickLoginButton();
 
        LoginPage loginPage = new LoginPage(page);
        loginPage.loginMailPhone().fill(inputvalue);
@@ -138,17 +135,8 @@ public class UserReceivesRescheduleRequestFromAdvertiser extends BaseClass {
        
        JobListingPage jobPage = new JobListingPage(page);
        jobPage.homepageJobs().click();
-       page.locator("//input[@placeholder='Search Jobs']").fill("Hiring for Software Developer Duplicate");
+       page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
        page.keyboard().press("Enter");
-
-
-       Thread.sleep(5000);
-       Locator developerJob = page.locator("//p[text()='Developer']").first();
-       developerJob.click();
-       test.info("Clicked on Developer job listing");
-       
-       Locator developerJob1 = page.locator("//p[text()='Developer']").first();
-       developerJob.click();
        
 
        page.locator("//button[text()='Apply Now']").first().click();
@@ -221,6 +209,7 @@ public class UserReceivesRescheduleRequestFromAdvertiser extends BaseClass {
        
        page.locator("//li[@class='time-slot-box list-group-item']").first().click();
 
+       page.locator("//button[text()='Next']").click();
 
 
     page.locator("//button[text()='Submit']").nth(1).click(); 
@@ -235,7 +224,7 @@ public class UserReceivesRescheduleRequestFromAdvertiser extends BaseClass {
        test.info("🌐 Opened Advertiser Portal");
 
        AdvertiserLoginPage login = new AdvertiserLoginPage(page3);
-       login.loginMailField().fill("agree-laugh@ofuk8kzb.mailosaur.net");
+       login.loginMailField().fill("fewer-produce@qtvjnqv9.mailosaur.net");
        login.loginPasswordField().fill("Karthik@88");
        login.signInButton().click();
        test.info("✅ Advertiser logged in");
@@ -256,7 +245,7 @@ public class UserReceivesRescheduleRequestFromAdvertiser extends BaseClass {
        
        
     // Select today's date dynamically
-       page3.locator("//span[@class='flatpickr-day']").click();
+       page3.locator("//span[@class='flatpickr-day']").first().click();
 
        // Select the first available time slot dynamically
        page3.locator("li.time-slot-box.list-group-item").first().click();	
@@ -268,20 +257,21 @@ public class UserReceivesRescheduleRequestFromAdvertiser extends BaseClass {
        
        Page page1 = page.context().newPage();
 
-       page1.navigate("https://mailosaur.com/app/servers/ofuk8kzb/messages/inbox");
+       page1.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
 
-       page1.locator("//input[@placeholder='Enter your email address']").fill("karthiku7026@gmail.com");
-       page1.locator("//button[text()='Continue']").click();
 
-       page1.locator("//input[@placeholder='Enter your password']").fill("Karthik@88");
-       page1.locator("//button[text()='Log in']").click();
-
+       MailsaurCredentials approveMail = new MailsaurCredentials(page1);
+       approveMail.MialsaurMail();
+       approveMail.MailsaurContinue();
+       approveMail.MailsaurPassword();
+       approveMail.MailsaurLogin();
 
       
-      page1.locator("//p[text()='Developer Wants to Reschedule Your Meeting: Approve Now! 📅']").first().click(); 
+       page1.locator("//p[contains(text(),'Wants to Reschedule Your Meeting: Approve Now! 📅')]").first().click();
        
+       Thread.sleep(2000);
        
-       page1.locator("//span[contains(text(),'Dear ')]").textContent();
+       page1.locator("//span[contains(text(),'Dear')]").textContent();
        page1.locator("(//td[@class='pad'])[4]").textContent();
        page1.locator("//p[contains(text(),'Your journey with Promilo is')]").textContent();
        page1.locator("//p[contains(text(),'We’re cheering you on as you')]").textContent();

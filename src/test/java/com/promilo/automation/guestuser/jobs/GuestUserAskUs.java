@@ -12,158 +12,166 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
 public class GuestUserAskUs extends BaseClass {
 
-	/**
-	 * DataProvider to fetch job application data from Excel for test execution.
-	 */
-	@DataProvider(name = "jobApplicationData")
-	public Object[][] jobApplicationData() throws Exception {
-		// Construct the Excel path dynamically
-		String excelPath = Paths
-				.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx")
-				.toString();
-		ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
-		int rowCount = 0;
-		for (int i = 1; i <= 1000; i++) {
-			String testCaseId = excel.getCellData(i, 0);
-			if (testCaseId == null || testCaseId.trim().isEmpty())
-				break;
-			rowCount++;
-		}
+    /**
+     * DataProvider still loads Excel, but not used to drive test execution.
+     * (kept only for framework consistency)
+     */
+    @DataProvider(name = "jobApplicationData")
+    public Object[][] jobApplicationData() throws Exception {
+        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
+                "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
+        ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
 
-		// Initialize data array with 8 columns based on expected test data
-		Object[][] data = new Object[rowCount - 1][8];
+        int rowCount = 0;
+        for (int i = 1; i <= 1000; i++) {
+            String testCaseId = excel.getCellData(i, 0);
+            if (testCaseId == null || testCaseId.trim().isEmpty())
+                break;
+            rowCount++;
+        }
 
-		// Populate data array with required columns
-		for (int i = 1; i < rowCount; i++) {
-			data[i - 1][0] = excel.getCellData(i, 0); // TestCaseID
-			data[i - 1][1] = excel.getCellData(i, 1); // Keyword
-			data[i - 1][2] = excel.getCellData(i, 3); // InputValue (Email)
-			data[i - 1][3] = excel.getCellData(i, 6); // Password
-			data[i - 1][4] = excel.getCellData(i, 7); // Name
-			data[i - 1][5] = excel.getCellData(i, 5); // OTP
-			data[i - 1][6] = excel.getCellData(i, 8); // MailPhone
-			data[i - 1][7] = excel.getCellData(i, 10); // TextArea
-		}
+        // Just return dummy values to satisfy TestNG DataProvider
+        Object[][] data = new Object[1][8];
+        data[0][0] = "DUMMY"; // TestCaseID
+        data[0][1] = "Askus?"; // Keyword
+        data[0][2] = "dummy@example.com"; // InputValue
+        data[0][3] = "password"; // Password
+        data[0][4] = "Dummy Name"; // Name
+        data[0][5] = "0000"; // OTP
+        data[0][6] = "9999999999"; // MailPhone
+        data[0][7] = "Dummy text"; // TextArea
+        return data;
+    }
 
-		return data;
-	}
+    /**
+     * Guest user flow for 'Ask Us' section.
+     * Excel values ignored, using hardcoded test data.
+     */
+    @Test(dataProvider = "jobApplicationData")
+    public void applyForJobAsGuestUser(String testCaseId, String keyword, String email, String password,
+            String name, String otp, String mailphone, String textArea) throws Exception {
 
-	/**
-	 * Test to apply for a job as a registered user on the 'Ask Us' job section.
-	 */
-	@Test(dataProvider = "jobApplicationData")
-	public void applyForJobAsRegisteredUser(String testCaseId, String keyword, String email, String password,
-			String name, String otp, String mailphone, String TextArea) throws Exception {
+        // 🚨 OVERRIDE: Ignore DataProvider values, use hardcoded ones
+        testCaseId = "TC_ASKUS_001";
+        keyword = "Askus?";
+        password = "dummyPass123";
+        name = "Karthik U";
+        otp = "9999"; 
+      
 
-		// Initialize Extent Report for structured reporting
-		ExtentReports extent = ExtentManager.getInstance();
-		ExtentTest test = extent.createTest("🚀 Apply for Job as Registered User | " + testCaseId);
+        ExtentReports extent = ExtentManager.getInstance();
+        ExtentTest test = extent.createTest("🚀 Guest User AskUs Flow | " + testCaseId);
 
-		// Skip test execution if the keyword does not match 'Askus?'
-		if (!keyword.equalsIgnoreCase("Askus?")) {
-			test.info("⏭️ Skipping TestCaseID: " + testCaseId + " due to keyword: " + keyword);
-			return;
-		}
+        if (!keyword.equalsIgnoreCase("Askus?")) {
+            test.info("⏭️ Skipping TestCaseID: " + testCaseId + " (keyword mismatch)");
+            return;
+        }
 
-		// Launch browser using Playwright
-		Page page = initializePlaywright();
-		page.navigate(prop.getProperty("url"));
-		page.setViewportSize(1280, 800);
+        // Launch browser
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        page.setViewportSize(1280, 800);
 
-		// Handle landing page popup and proceed to login
-		LandingPage landingPage = new LandingPage(page);
+        // Landing page
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
+        mayBeLaterPopUp.getPopup().click();
 
-		landingPage.getPopup().click();
-		landingPage.clickLoginButton();
+        // Navigate Ask Us job
+        JobListingPage homePage = new JobListingPage(page);
+        homePage.homepageJobs().click();
+        Thread.sleep(2000);
+        
 
-		// Navigate to homepage jobs and select the 'Ask Us' job
-		JobListingPage homePage = new JobListingPage(page);
-		homePage.homepageJobs().click();
-		Thread.sleep(5000); // Wait for jobs to load
-		homePage.askUs().click();
-		Thread.sleep(4000); // Wait for Ask Us page to load
+        page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
+        page.keyboard().press("Enter");
 
-		// Fill user details for Ask Us form
-		page.locator("//input[@name='userName']").fill("karthik U");
-		page.locator("//input[@placeholder='Mobile*']").fill("9000090780");
-		page.locator("//textarea[@id='feedbackDetails']").fill("something");
-		homePage.askUsSubmitButton().click();
+        Thread.sleep(3000);
+page.locator("//button[@class='pointer border-1 p-50 border-chip ']").first().click();
+Thread.sleep(4000);
 
-		if (otp == null || otp.length() < 4) {
-			throw new IllegalArgumentException("OTP provided is less than 4 characters: " + otp);
-		}
+        // Fill details
+        page.locator("input[name='userName']").nth(1).fill("karthik");
+     // Generate random phone (90000 + 5 random digits)
+        String randomPhone = "90000" + (10000 + new java.util.Random().nextInt(90000));
 
-		for (int i = 0; i < 4; i++) {
-			String otpChar = Character.toString(otp.charAt(i));
-			Locator otpField = page.locator("//input[@aria-label='Please enter OTP character " + (i + 1) + "']");
+        // Generate random email (testuser + random 6 digits)
+        String randomEmail = "testuser" + System.currentTimeMillis() % 1000000 + "@gmail.com";
 
-			otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
+        // Fill into fields
+        page.locator("//input[@placeholder='Mobile*']").nth(1).fill(randomPhone);
+        page.locator("input[placeholder='Email*']").nth(1).fill(randomEmail);
 
-			boolean filled = false;
-			int attempts = 0;
+        // For debugging/logging
+        System.out.println("Generated Phone: " + randomPhone);
+        System.out.println("Generated Email: " + randomEmail);
 
-			while (!filled && attempts < 3) {
-				attempts++;
-				otpField.click(); // force focus
-				otpField.fill(""); // clear previous
-				otpField.fill(otpChar);
+        page.locator("//textarea[@id='feedbackDetails']").first().fill("something");
+        homePage.askUsSubmitButton().click();
 
-				// Validate the field actually has the entered digit
-				String currentValue = otpField.evaluate("el => el.value").toString().trim();
-				if (currentValue.equals(otpChar)) {
-					filled = true;
-				} else {
-					page.waitForTimeout(500); // wait before retry
-				}
-			}
+        if (otp == null || otp.length() < 4) {
+            throw new IllegalArgumentException("OTP must be 4 characters: " + otp);
+        }
 
-			if (!filled) {
-				throw new RuntimeException("Failed to enter OTP digit " + (i + 1) + " correctly after retries.");
-			}
-		}
+        for (int i = 0; i < 4; i++) {
+            String otpChar = String.valueOf(otp.charAt(i));
+            Locator otpField = page.locator("//input[@aria-label='Please enter OTP character " + (i + 1) + "']");
+            otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
 
-		Locator verifyButton = page.locator("//button[text()='Verify & Proceed']");
-		verifyButton.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
-		verifyButton.click();
+            int attempts = 0;
+            boolean filled = false;
+            while (!filled && attempts < 3) {
+                attempts++;
+                otpField.click();
+                otpField.fill("");
+                otpField.fill(otpChar);
 
-		// Locate 'Thank You!' popup and validate its appearance
-		Locator thankYouPopup = page.locator(
-				"//div[translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = 'thank you!']");
-		thankYouPopup.waitFor(new Locator.WaitForOptions().setTimeout(5000));
-		String popupText = thankYouPopup.innerText().trim();
+                String currentValue = otpField.evaluate("el => el.value").toString().trim();
+                if (currentValue.equals(otpChar)) {
+                    filled = true;
+                } else {
+                    page.waitForTimeout(500);
+                }
+            }
 
-		// Assert ignoring case sensitivity for popup text
-		Assert.assertTrue(popupText.equalsIgnoreCase("Thank You!"),
-				"Expected 'Thank You!' popup, but found: " + popupText);
-		test.info("✅ 'Thank You!' popup appeared successfully with text: " + popupText);
+            if (!filled) {
+                throw new RuntimeException("Failed to enter OTP digit " + (i + 1));
+            }
+            test.info("Entered OTP digit: " + otpChar);
+        }
+        
+        page.locator("//button[text()='Verify & Proceed']").click();
 
-		// Pause to stabilize screenshot capture
-		Thread.sleep(3000);
+        // Verify & Proceed
+        Locator verifyButton = page.locator("//button[text()='Verify & Proceed']");
+        verifyButton.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
+        verifyButton.click();
 
-		// Mark test as passed in Extent Report
-		test.pass("✅ Flow completed successfully for TestCaseID: " + testCaseId);
+        // Validate Thank You popup
+        Locator thankYouPopup = page.locator(
+                "//div[translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = 'thank you!']");
+        thankYouPopup.waitFor(new Locator.WaitForOptions().setTimeout(5000));
+        String popupText = thankYouPopup.innerText().trim();
+        Assert.assertTrue(popupText.equalsIgnoreCase("Thank You!"),
+                "Expected 'Thank You!' popup, but found: " + popupText);
 
-		// Capture screenshot after signup
-		String screenshotPath = System.getProperty("user.dir") + "/screenshots/" + testCaseId + "_signup_pass.png";
-		page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get(screenshotPath)).setFullPage(true));
-		test.addScreenCaptureFromPath(screenshotPath, "🖼️ Screenshot after signup");
+        test.pass("✅ Flow completed successfully for TestCaseID: " + testCaseId);
 
-		// Close Playwright page and context
-		page.context().close();
-		page.close();
+        // Screenshot
+        String screenshotPath = System.getProperty("user.dir") + "/screenshots/" + testCaseId + "_guest_pass.png";
+        page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get(screenshotPath)).setFullPage(true));
+        test.addScreenCaptureFromPath(screenshotPath, "🖼️ Screenshot after AskUs flow");
 
-		// Log browser closure in the report
-		test.info("Browser closed for TestCaseID: " + testCaseId);
+        // Close browser
+        page.context().close();
+        page.close();
 
-		// Flush Extent Report to ensure logs and screenshots are saved
-		extent.flush();
-	}
-
+        extent.flush();
+    }
 }

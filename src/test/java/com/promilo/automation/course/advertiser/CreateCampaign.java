@@ -19,7 +19,7 @@ import com.promilo.automation.advertiser.jobcampaign.*;
 import com.promilo.automation.courses.pageobjects.CreateCampaignPage;
 import com.promilo.automation.resources.*;
 
-public class CreateCampaign extends Baseclass {
+public class CreateCampaign extends BaseClass {
 
     private ExtentReports extent;
     private ExtentTest test;

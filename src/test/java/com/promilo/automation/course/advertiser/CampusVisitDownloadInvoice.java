@@ -22,12 +22,12 @@ import com.microsoft.playwright.options.AriaRole;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.mybilling.Billing;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.PDFOCRUtility;
 
-public class CampusVisitDownloadInvoice extends Baseclass {
+public class CampusVisitDownloadInvoice extends BaseClass {
 
     // ✅ CLASS-LEVEL VARIABLE (USED CORRECTLY)
     private static Integer previousGstNumber = null;

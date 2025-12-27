@@ -181,7 +181,7 @@ public class MeetupsListingPage {
         this.searchskill= page.locator("#skills-filter");
         this.experianceOptions= page.locator("//span[@class='font-14 text-primary label-text pointer text-align-start-filter']");
         this.associatedCompanyoptions= page.locator("//input[@placeholder='Search Assosiated Company']");
-        this.Registermentortype= page.locator("//span[text()='Academic Guidance']");
+        this.Registermentortype= page.locator("//label[text()='Academic Guidance']");
 	}
 	
 	public Locator MentorshiButton() {return MentorshiButton;}

@@ -9,6 +9,7 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.resources.BaseClass;
@@ -20,10 +21,10 @@ public class InvoicePreview extends BaseClass {
 	
 	
 	ExtentReports extent = ExtentManager.getInstance();
-    ExtentTest test = extent.createTest("🚀 Advertiser Add Funds Test | Data-Driven");
+    ExtentTest test = extent.createTest("🚀 Advertiser InvoicePreview Test | Data-Driven");
 
     @Test
-    public void runAddFundsTest() {
+    public void InvoicePreviewTest() {
         try {
             String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
                     "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
@@ -57,6 +58,8 @@ public class InvoicePreview extends BaseClass {
 
             // Assert image is visible on the page
             Assert.assertTrue(imageLocator.isVisible(), "Image with id 'image-generated' should be visible.");
+
+            
 
 
 

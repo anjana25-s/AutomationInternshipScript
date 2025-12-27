@@ -46,6 +46,7 @@ public class Hamburger {
 
     private final Locator cameraOption;
     private final Locator captureButton;
+    private final Locator myBilling;
 
     public Hamburger(Page page) {
         this.page = page;
@@ -88,6 +89,8 @@ public class Hamburger {
 
         this.cameraOption = page.locator("//div[text()='Camera']");
         this.captureButton = page.locator("(//img[@alt='Camera'])[1]");
+        this.myBilling= page.locator("//a[text()='My Billing']");
+        
     }
 
     public Locator Mystuff() { return Mystuff; }
@@ -130,4 +133,5 @@ public class Hamburger {
 
     public Locator cameraOption() { return cameraOption; }
     public Locator captureButton() { return captureButton; }
+    public Locator myBilling() {return myBilling;}
 }

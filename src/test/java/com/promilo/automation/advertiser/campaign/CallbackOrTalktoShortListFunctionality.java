@@ -2,13 +2,16 @@ package com.promilo.automation.advertiser.campaign;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
@@ -20,7 +23,7 @@ import com.promilo.automation.resources.ExtentManager;
 public class CallbackOrTalktoShortListFunctionality extends BaseClass {
 
     @Test
-    public void verifyBasicDetailsFunctionality() throws InterruptedException, IOException {
+    public void CallbackOrTalktoShortListFunctionalityTest() throws InterruptedException, IOException {
         ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("📋 Callback/Shortlist Functionality | Data-Driven");
 
@@ -59,13 +62,14 @@ public class CallbackOrTalktoShortListFunctionality extends BaseClass {
                 Assert.assertTrue(login.talkToAnExpert().isVisible(), "Talk To expert content should be visible");
 
                 // Login
-                login.loginMailField().fill(email);
-                login.loginPasswordField().fill(password);
+                login.loginMailField().fill("fewer-produce@qtvjnqv9.mailosaur.net");
+                login.loginPasswordField().fill("Karthik@88");
                 login.signInButton().click();
 
                 // Navigate to My Account
 AdvertiserHomepage hamburger= new AdvertiserHomepage(page);
                 AdvertiserHomepage homepage = new AdvertiserHomepage(page);
+                homepage.hamburger().click();
                 homepage.myAccount().click();
 
                 AdverstiserMyaccount myaccount = new AdverstiserMyaccount(page);
@@ -77,7 +81,16 @@ AdvertiserHomepage hamburger= new AdvertiserHomepage(page);
                 Thread.sleep(3000);
 
                 prospects.CallbackOrTalktoExpert().click();
-                prospects.ShortlistButton().click();
+                prospects.ShortlistButton().first().click();
+                
+                page.getByRole(AriaRole.IMG, new Page.GetByRoleOptions().setName("folder")).first().click();
+
+                
+                Thread.sleep(3000);
+                
+               page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Move")).click();
+              
+                
 
                 test.pass("✅ TestCaseID: " + testCaseId + " - Callback Shortlist successful with email: " + email);
             } catch (Exception e) {

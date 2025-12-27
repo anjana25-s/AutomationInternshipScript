@@ -10,7 +10,7 @@ import com.aventstack.extentreports.MediaEntityBuilder;
 import com.microsoft.playwright.Page;
 
 
-public class Listners extends Baseclass implements ITestListener {
+public class Listners extends BaseClass implements ITestListener {
 
     private static ExtentReports extent = ExtentManager.getInstance();
     private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
@@ -39,7 +39,7 @@ public class Listners extends Baseclass implements ITestListener {
         currentTest.fail(result.getThrowable());
 
         try {
-            Page page = Baseclass.getPage();
+            Page page = BaseClass.getPage();
             if (page != null) {
                 byte[] screenshotBytes = page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
                 String base64Screenshot = java.util.Base64.getEncoder().encodeToString(screenshotBytes);

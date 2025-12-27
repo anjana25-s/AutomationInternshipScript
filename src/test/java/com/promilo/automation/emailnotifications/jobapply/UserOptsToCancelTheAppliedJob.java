@@ -8,17 +8,15 @@ import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -112,13 +110,13 @@ public class UserOptsToCancelTheAppliedJob extends BaseClass {
 
     public void applyForJobAsRegisteredUser(Page page, String inputvalue, String password, String name, String otp,
             String mailphone) throws Exception {
-        LandingPage landingPage = new LandingPage(page);
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
         try {
-            landingPage.getPopup().click();
+            mayBeLaterPopUp.getPopup().click();
         } catch (Exception ignored) {
         }
 
-        landingPage.clickLoginButton();
+        mayBeLaterPopUp.clickLoginButton();
 
         LoginPage loginPage = new LoginPage(page);
         loginPage.loginMailPhone().fill(inputvalue);
@@ -134,7 +132,8 @@ public class UserOptsToCancelTheAppliedJob extends BaseClass {
 
         jobPage.homepageJobs().click();
 
-        page.locator("a").filter(new Locator.FilterOptions().setHasText("DeveloperGoogleChennai")).first().click();
+        page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
+        page.keyboard().press("Enter");
 
         Thread.sleep(2000);
 
@@ -189,6 +188,7 @@ public class UserOptsToCancelTheAppliedJob extends BaseClass {
         page.locator("span.flatpickr-day:not(.flatpickr-disabled)").first().click();
         Thread.sleep(2000);
         page.locator("//li[@class='time-slot-box list-group-item']").first().click();
+        page.locator("//button[text()='Next']").click();
         page.locator("//button[text()='Submit']").nth(1).click();
 
         Locator thankYouPopup = page.locator(
@@ -206,9 +206,9 @@ public class UserOptsToCancelTheAppliedJob extends BaseClass {
         
         Page page1 = page.context().newPage();
 
-        page1.navigate("https://mailosaur.com/app/servers/ofuk8kzb/messages/inbox");
+        page1.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
 
-        page1.locator("//input[@placeholder='Enter your email address']").fill("karthiku7026@gmail.com");
+        page1.locator("//input[@placeholder='Enter your email address']").fill("karthikmailsaur@gmail.com");
         page1.locator("//button[text()='Continue']").click();
 
         page1.locator("//input[@placeholder='Enter your password']").fill("Karthik@88");

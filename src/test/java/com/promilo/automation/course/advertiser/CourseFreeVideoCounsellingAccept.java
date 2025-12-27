@@ -25,7 +25,7 @@ import com.promilo.automation.resources.*;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.ExtentReports;
 
-public class CourseFreeVideoCounsellingAccept extends Baseclass {
+public class CourseFreeVideoCounsellingAccept extends BaseClass {
     @Test(
         dependsOnMethods = {
             "com.promilo.automation.guestuser.courses.interest.FreeVideoCounsellingTest.freeVideoCounsellingFlow"
@@ -144,7 +144,7 @@ public class CourseFreeVideoCounsellingAccept extends Baseclass {
             
          
                LoginPage loginPage1 = new LoginPage(userPage);
-               loginPage1.loginMailPhone().fill(Baseclass.generatedPhone); // use the generated email
+               loginPage1.loginMailPhone().fill(BaseClass.generatedPhone); // use the generated email
                loginPage1.loginWithOtp().click();
                loginPage1.otpField().fill("9999");
                loginPage1.loginButton().click();
@@ -178,7 +178,7 @@ public class CourseFreeVideoCounsellingAccept extends Baseclass {
                if (m.find()) displayedDayStr = m.group(1);
                else Assert.fail("❌ Could not extract day from Meeting Date: " + meetingDate);
                int displayedDay = Integer.parseInt(displayedDayStr);
-               int storedDay = Integer.parseInt(Baseclass.selectedDate.trim());
+               int storedDay = Integer.parseInt(BaseClass.selectedDate.trim());
                Assert.assertEquals(displayedDay, storedDay);
 
                String meetingTime = freeVideoCounselling.meetingTime().first().textContent().trim();
@@ -186,7 +186,7 @@ public class CourseFreeVideoCounsellingAccept extends Baseclass {
                Matcher timeMatcher = timePattern.matcher(meetingTime);
                String displayedTime = "";
                if (timeMatcher.find()) displayedTime = timeMatcher.group(1).replaceAll("\\s+", " ").trim();
-               String storedTime = Baseclass.selectedTime.replaceAll("\\s+", " ").trim();
+               String storedTime = BaseClass.selectedTime.replaceAll("\\s+", " ").trim();
                storedTime = storedTime.replaceFirst("^0", "");
                displayedTime = displayedTime.replaceFirst("^0", "");
                Assert.assertEquals(displayedTime, storedTime);

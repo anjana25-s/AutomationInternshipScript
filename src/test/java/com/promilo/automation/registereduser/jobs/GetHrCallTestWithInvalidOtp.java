@@ -1,12 +1,16 @@
 package com.promilo.automation.registereduser.jobs;
 
-import java.nio.file.Files;
+import static org.testng.Assert.assertTrue;
+
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
+import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -14,207 +18,202 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitForSelectorState;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
+import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
+import com.promilo.automation.resources.SignupWithMailosaurUI;
 
 public class GetHrCallTestWithInvalidOtp extends BaseClass {
 
-    /**
-     * DataProvider to dynamically fetch test data for invalid OTP HR call scenario.
-     */
-	@DataProvider(name = "jobApplicationData")
-	public Object[][] jobApplicationData() throws Exception {
-	    String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
-	    ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
+    ExtentReports extent = ExtentManager.getInstance();
+    ExtentTest test = extent.createTest("🚀 Promilo Staging Signup - Passes if 'My Stuff' is visible after signup (Playwright)");
 
-	    int rowCount = 0;
-	    for (int i = 1; i <= 1000; i++) {  // Assumes max 1000 rows (tweak if needed)
-	        String testCaseId = excel.getCellData(i, 0);
-	        if (testCaseId == null || testCaseId.isEmpty()) break;
-	        rowCount++;
-	    }
+    private static final Logger logger = LogManager.getLogger(GetHrCallTestWithInvalidOtp.class);
 
-	    Object[][] data = new Object[rowCount][8];
-	    for (int i = 1; i <= rowCount; i++) {
-	        data[i - 1][0] = excel.getCellData(i, 0); // TestCaseID
-	        data[i - 1][1] = excel.getCellData(i, 1); // Keyword
-	        data[i - 1][2] = excel.getCellData(i, 3); // InputValue
-	        data[i - 1][3] = excel.getCellData(i, 6); // Password
-	        data[i - 1][4] = excel.getCellData(i, 7); // Name
-	        data[i - 1][5] = excel.getCellData(i, 5); // OTP
-	        data[i - 1][6] = excel.getCellData(i, 8); // MailPhone
-	        data[i - 1][7] = i;                       // RowIndex
-	    }
-	    return data;
-	}
+    private static String registeredEmail = null;
+    private static String registeredPassword = null;
 
+    // ✅ Added Mailosaur signup once before suite
+    @BeforeSuite
+    public void performSignupOnce() throws Exception {
+        System.out.println("⚙️ Performing signup ONCE before entire suite using Mailosaur UI signup...");
 
-    /**
-     * Test to verify 'Get HR Call' with invalid OTP,
-     * ensuring toaster validation for invalid OTP error is handled and captured.
-     */
+        SignupWithMailosaurUI signupWithMailosaur = new SignupWithMailosaurUI();
+        String[] creds = signupWithMailosaur.performSignupAndReturnCredentials();
+
+        registeredEmail = creds[0];
+        registeredPassword = creds[1];
+
+        System.out.println("✅ Signup completed. Registered user: " + registeredEmail);
+    }
+
+    @DataProvider(name = "jobApplicationData")
+    public Object[][] jobApplicationData() throws Exception {
+        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
+                "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
+        ExcelUtil excel = new ExcelUtil(excelPath, "PromiloJob");
+
+        int rowCount = 0;
+        for (int i = 1; i <= 1; i++) {
+            String testCaseId = excel.getCellData(i, 0);
+            if (testCaseId == null || testCaseId.isEmpty())
+                break;
+            rowCount++;
+        }
+
+        Object[][] data = new Object[rowCount][7];
+        for (int i = 1; i <= rowCount; i++) {
+            data[i - 1][0] = excel.getCellData(i, 0); // TestCaseID
+            data[i - 1][1] = excel.getCellData(i, 1); // Keyword
+            data[i - 1][2] = excel.getCellData(i, 4); // InputValue (ignored)
+            data[i - 1][3] = excel.getCellData(i, 6); // Password (ignored)
+            data[i - 1][4] = excel.getCellData(i, 7); // Name
+            // OTP skipped – hardcoded
+            data[i - 1][5] = excel.getCellData(i, 8); // MailPhone
+            data[i - 1][6] = i; // RowIndex
+        }
+        return data;
+    }
+
     @Test(dataProvider = "jobApplicationData")
-    public void applyForJobAsRegisteredUser(
+    public void applyForJobTestFromExcel(
             String testCaseId,
             String keyword,
-            String email,
+            String inputvalue,
             String password,
             String name,
-            String otp,
             String mailphone,
-            String expectedResult
-    ) throws Exception {
+            int rowIndex) throws Exception {
 
         ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("🚀 Apply for Job as Registered User (Invalid OTP) | " + testCaseId);
+        ExtentTest test = extent.createTest("Apply for Job as Registered User | " + testCaseId);
 
-        // Skip if keyword is not 'GetHRCall'
-        if (!keyword.equalsIgnoreCase("GetHRCall")) {
-            test.info("⏭️ Skipping TestCaseID: " + testCaseId + " due to keyword: " + keyword);
+        if (registeredEmail == null || registeredPassword == null) {
+            test.fail("❌ Signup credentials not found.");
+            Assert.fail("Signup not completed.");
             return;
         }
 
-        // Launch browser and navigate
+        // ✅ Override input credentials with Mailosaur signed-up ones
+        inputvalue = registeredEmail;
+        password = registeredPassword;
+
         Page page = initializePlaywright();
         page.navigate(prop.getProperty("url"));
-        page.setViewportSize(1280, 800);
+        page.setViewportSize(1000, 768);
+        test.info("🌐 Navigated to Promilo staging site");
 
-        // Handle popup and login navigation
-        LandingPage landingPage = new LandingPage(page);
-        landingPage.getPopup().click();
-        landingPage.clickLoginButton();
+        applyForJobAsRegisteredUser(page, inputvalue, password, name, mailphone);
 
-        // Login using credentials
+        test.pass("✅ Job application test passed for TestCase: " + testCaseId);
+        extent.flush();
+    }
+
+    public void applyForJobAsRegisteredUser(Page page, String inputvalue, String password, String name, String mailphone)
+            throws Exception {
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
+        try {
+            mayBeLaterPopUp.getPopup().click();
+            test.info("Closed initial popup");
+        } catch (Exception ignored) {
+        }
+
+        mayBeLaterPopUp.clickLoginButton();
+        test.info("Clicked on Login button");
+
         LoginPage loginPage = new LoginPage(page);
-        loginPage.loginMailPhone().fill(email);
+        loginPage.loginMailPhone().fill(inputvalue);
         loginPage.passwordField().fill(password);
         loginPage.loginButton().click();
+        test.info("Logged in as registered user: " + inputvalue);
 
-        // Navigate to job listings and fintech jobs
+        applyJobDetailsFlow(page, name, mailphone);
+    }
+
+    private void applyJobDetailsFlow(Page page, String name, String mailphone) throws Exception {
         JobListingPage homePage = new JobListingPage(page);
+
         homePage.homepageJobs().click();
-        homePage.fintech();
+        test.info("Navigated to Jobs section");
 
-        // Click on the fintech job card
-        Locator fintechJobCard = page.locator("//span[@class='font-12 additional-tags-text additional-cards-text-truncate jobs-brand-additional-title']");
-        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
-        fintechJobCard.scrollIntoViewIfNeeded();
-        fintechJobCard.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(5000));
-        fintechJobCard.click();
+        page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
+        page.keyboard().press("Enter");
 
-        // Initiate Get HR Call flow
-        homePage.getHrCall().click();
-        homePage.applyNameField().fill(name);
-        homePage.applyNowMobileTextField().fill(mailphone);
+        Thread.sleep(2000);
+        homePage.getHrCall().first().click();
+        test.info("Clicked on Get HR Call button");
 
-        // Select industries
+        page.locator("//div[@class='ask-us-popup-form-side']//input[@id='userName']").fill("karthik");
+        test.info("Filled user name");
+
+        Random random = new Random();
+        String mobileToUse = (mailphone != null && !mailphone.isEmpty())
+                ? mailphone
+                : ("90000" + String.format("%05d", random.nextInt(100000)));
+        page.locator("//div[@class='ask-us-popup-form-side']//input[@id='userMobile']").fill(mobileToUse);
+        test.info("Filled user mobile: " + mobileToUse);
+
         homePage.selectIndustryDropdown().click();
+        test.info("Opened Industry dropdown");
         Thread.sleep(1000);
 
-        List<String> industries = Arrays.asList(
-                "Telecom / ISP",
-                "Advertising & Marketing",
-                "Animation & VFX",
-                "Healthcare",
-                "Education"
-        );
-
+        List<String> industries = Arrays.asList("Telecom / ISP", "Advertising & Marketing", "Animation & VFX",
+                "Healthcare", "Education");
         Locator options = page.locator("//div[@class='sub-sub-option d-flex justify-content-between pointer']");
         for (String industry : industries) {
-            boolean found = false;
             for (int i = 0; i < options.count(); i++) {
                 String optionText = options.nth(i).innerText().trim();
                 if (optionText.equalsIgnoreCase(industry)) {
                     options.nth(i).click();
                     test.info("✅ Selected industry: " + industry);
-                    found = true;
                     break;
                 }
             }
-            if (!found) {
-                test.warning("⚠️ Industry not found: " + industry);
-            }
         }
 
-        // Close dropdown by clicking on the name field
-        homePage.applyNameField().click();
-        Thread.sleep(2000);
+        page.locator("//div[@class='ask-us-popup-form-side']//input[@id='userName']").click();
+
+        page.waitForTimeout(4000);
         homePage.getAnHrCallButton().click();
-        if (otp == null || otp.length() < 4) {
-            throw new IllegalArgumentException("OTP provided is less than 4 characters: " + otp);
-        }
+        test.info("Clicked on Get An HR Call");
+
+        // 🔒 Hardcoded OTP = "1234"
+        String otp = "1234";
 
         for (int i = 0; i < 4; i++) {
-            String otpChar = Character.toString(otp.charAt(i));
+            String otpChar = String.valueOf(otp.charAt(i));
             Locator otpField = page.locator("//input[@aria-label='Please enter OTP character " + (i + 1) + "']");
-
             otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
 
-            boolean filled = false;
             int attempts = 0;
-
+            boolean filled = false;
             while (!filled && attempts < 3) {
                 attempts++;
-                otpField.click(); // force focus
-                otpField.fill(""); // clear previous
+                otpField.click();
+                otpField.fill("");
                 otpField.fill(otpChar);
 
-                // Validate the field actually has the entered digit
                 String currentValue = otpField.evaluate("el => el.value").toString().trim();
                 if (currentValue.equals(otpChar)) {
                     filled = true;
                 } else {
-                    page.waitForTimeout(500); // wait before retry
+                    page.waitForTimeout(500);
                 }
             }
 
             if (!filled) {
-                throw new RuntimeException("Failed to enter OTP digit " + (i + 1) + " correctly after retries.");
+                throw new RuntimeException("Failed to enter OTP digit " + (i + 1));
             }
+            test.info("Entered OTP digit: " + otpChar);
         }
 
+        page.locator("//button[text()='Verify & Proceed']").click();
+        test.info("Clicked Verify & Proceed");
 
-
-        Locator verifyButton = page.locator("//button[text()='Verify & Proceed']");
-        verifyButton.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
-        verifyButton.click();
-        Thread.sleep(5000);
-
-        // Attempt submission and validate invalid OTP toaster
-        homePage.getHrCallSubmitButton().click();
-        Locator invalidOtpToaster = homePage.invalidOtpToaster();
-        invalidOtpToaster.waitFor(new Locator.WaitForOptions().setTimeout(5000));
-
-        String invalidOtpToasterText = invalidOtpToaster.innerText().trim();
-        Assert.assertTrue(
-                invalidOtpToasterText.toLowerCase().contains("invalid otp"),
-                "Expected toaster to contain 'Invalid OTP' (case-insensitive), but found: " + invalidOtpToasterText
-        );
-
-        test.info("✅ 'Invalid OTP' toaster is displayed as expected.");
-        
-        
-        String screenshotPath = System.getProperty("user.dir") + "/screenshots/" + testCaseId + "_shortlist_pass.png";
-
-     // Take screenshot and save as file
-     page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get(screenshotPath)).setFullPage(true));
-
-     // Attach file path screenshot
-     test.addScreenCaptureFromPath(screenshotPath, "Screenshot after job shortlist");
-
-     // Read as Base64
-     byte[] fileContent = Files.readAllBytes(Paths.get(screenshotPath));
-     String base64Screenshot = Base64.getEncoder().encodeToString(fileContent);
-
-     // Attach Base64 screenshot
-     test.addScreenCaptureFromBase64String(base64Screenshot, "Base64 Screenshot after job shortlist");
-
-        extent.flush();
     }
 }

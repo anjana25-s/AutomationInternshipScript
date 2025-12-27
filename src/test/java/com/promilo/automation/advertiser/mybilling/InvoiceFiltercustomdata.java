@@ -18,10 +18,10 @@ import com.promilo.automation.resources.ExtentManager;
 public class InvoiceFiltercustomdata extends BaseClass{
 	
 	ExtentReports extent = ExtentManager.getInstance();
-    ExtentTest test = extent.createTest("🚀 Advertiser Add Funds Test | Data-Driven");
+    ExtentTest test = extent.createTest("🚀 Advertiser InvoiceFiltercustomdata Test | Data-Driven");
 
     @Test
-    public void runAddFundsTest() {
+    public void InvoiceFiltercustomdataTest() {
         try {
             String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
                     "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
@@ -59,8 +59,8 @@ public class InvoiceFiltercustomdata extends BaseClass{
             test.info("🔘 Clicked Previous Month button on start date picker");
 
             // Select specific start date
-            page.locator("//td[@title='2024-07-13']").click();
-            test.info("✅ Selected start date: 2024-07-13");
+            page.locator("//td[@title='2024-09-13']").click();
+            test.info("✅ Selected start date: 2024-10-13");
 
             Thread.sleep(5000); // wait for UI to update/load data
 
@@ -77,8 +77,8 @@ public class InvoiceFiltercustomdata extends BaseClass{
             // test.info("🔘 Clicked Next Month button on end date picker");
 
             // Select specific end date
-            page.locator("(//td[@title='2025-08-08'])[2]").click();
-            test.info("✅ Selected end date: 2025-08-08");
+            page.getByTitle("-09-14").locator("div").click();
+            test.info("✅ Selected end date: 2025-10-08");
 
             Thread.sleep(5000); // wait for UI to update/load data
 

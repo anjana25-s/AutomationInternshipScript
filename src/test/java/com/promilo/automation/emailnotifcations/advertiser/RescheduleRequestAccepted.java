@@ -22,12 +22,8 @@ import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
-<<<<<<< HEAD
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.emailnotifications.EmailnotificationsShortlisted;
-=======
-import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;

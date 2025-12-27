@@ -20,11 +20,11 @@ import com.promilo.automation.advertiser.AdvertiserProspects;
 import com.promilo.automation.courses.intrestspages.FreeVideoCounsellingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class AdvertiserRejectsUsersRescheduleRequest extends Baseclass {
+public class AdvertiserRejectsUsersRescheduleRequest extends BaseClass {
 
     ExtentReports extent;
     ExtentTest test;
@@ -148,7 +148,7 @@ public class AdvertiserRejectsUsersRescheduleRequest extends Baseclass {
                 
              
                    LoginPage loginPage1 = new LoginPage(userPage);
-                   loginPage1.loginMailPhone().fill(Baseclass.generatedPhone); // use the generated email
+                   loginPage1.loginMailPhone().fill(BaseClass.generatedPhone); // use the generated email
                    loginPage1.loginWithOtp().click();
                    loginPage1.otpField().fill("9999");
                    loginPage1.loginButton().click();

@@ -1,5 +1,7 @@
 package com.promilo.automation.advertiser.jobcampaign;
 
+import java.rmi.registry.LocateRegistry;
+
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 

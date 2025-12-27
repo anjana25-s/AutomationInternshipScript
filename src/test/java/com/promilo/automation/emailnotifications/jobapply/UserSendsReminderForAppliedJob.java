@@ -19,7 +19,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.emailnotifications.EmailnotificationsShortlisted;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -113,12 +113,12 @@ public class UserSendsReminderForAppliedJob extends BaseClass{
     }
 
     public void applyForJobAsRegisteredUser(Page page, String inputvalue, String password, String name, String otp, String mailphone) throws Exception {
-        LandingPage landingPage = new LandingPage(page);
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
         try {
-            landingPage.getPopup().click();
+            mayBeLaterPopUp.getPopup().click();
         } catch (Exception ignored) {}
 
-        landingPage.clickLoginButton();
+        mayBeLaterPopUp.clickLoginButton();
 
         LoginPage loginPage = new LoginPage(page);
         loginPage.loginMailPhone().fill(inputvalue);
@@ -128,8 +128,8 @@ public class UserSendsReminderForAppliedJob extends BaseClass{
         
         JobListingPage jobPage = new JobListingPage(page);
         jobPage.homepageJobs().click();
-        Locator developerJob = page.locator("//p[text()='Developer']").first();
-        developerJob.click();
+        page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
+        page.keyboard().press("Enter");
         test.info("Clicked on Developer job listing");
         
         Thread.sleep(4000);
@@ -214,6 +214,10 @@ public class UserSendsReminderForAppliedJob extends BaseClass{
         
         page.locator("//li[@class='time-slot-box list-group-item']").first().click();
 
+        page.locator("//button[text()='Next']").click();
+
+
+
 
         page.locator("//button[text()='Submit']").nth(1).click(); 
        page.locator("img[alt='closeIcon Ask us']").first().click();
@@ -226,9 +230,9 @@ public class UserSendsReminderForAppliedJob extends BaseClass{
         
         Page page1 = page.context().newPage();
 
-        page1.navigate("https://mailosaur.com/app/servers/ofuk8kzb/messages/inbox");
+        page1.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
 
-        page1.locator("//input[@placeholder='Enter your email address']").fill("karthiku7026@gmail.com");
+        page1.locator("//input[@placeholder='Enter your email address']").fill("karthikmailsaur@gmail.com");
         page1.locator("//button[text()='Continue']").click();
 
         page1.locator("//input[@placeholder='Enter your password']").fill("Karthik@88");
@@ -238,7 +242,7 @@ public class UserSendsReminderForAppliedJob extends BaseClass{
         
         page.reload();
 
-        Locator firstEmail = page1.locator("//p[text()='Reminder Sent Successfully for Developer Application']").first();
+        Locator firstEmail = page1.locator("//p[contains(text(),'Reminder Sent Successfully for ')]").first();
         
         firstEmail.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
 

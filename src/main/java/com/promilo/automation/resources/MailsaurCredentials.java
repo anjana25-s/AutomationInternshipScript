@@ -19,7 +19,7 @@ public class MailsaurCredentials {
 		
 		
 		this.MialsaurMail=	 page.locator("//input[@placeholder='Enter your email address']");
-		MialsaurMail.fill("karthiktestuser42@gmail.com");
+		MialsaurMail.fill("karthikmailsaur@gmail.com");
 		
 		
 		

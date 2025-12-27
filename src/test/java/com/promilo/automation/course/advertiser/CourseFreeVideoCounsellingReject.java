@@ -20,14 +20,14 @@ import com.promilo.automation.advertiser.AdvertiserProspects;
 import com.promilo.automation.courses.intrestspages.FreeVideoCounsellingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.MailsaurCredentials;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.ExtentReports;
 
-public class CourseFreeVideoCounsellingReject extends Baseclass {
+public class CourseFreeVideoCounsellingReject extends BaseClass {
 
     
     
@@ -134,7 +134,7 @@ public class CourseFreeVideoCounsellingReject extends Baseclass {
             
          
                LoginPage loginPage1 = new LoginPage(userPage);
-               loginPage1.loginMailPhone().fill(Baseclass.generatedPhone); // use the generated email
+               loginPage1.loginMailPhone().fill(BaseClass.generatedPhone); // use the generated email
                loginPage1.loginWithOtp().click();
                loginPage1.otpField().fill("9999");
                loginPage1.loginButton().click();
@@ -168,7 +168,7 @@ public class CourseFreeVideoCounsellingReject extends Baseclass {
                if (m.find()) displayedDayStr = m.group(1);
                else Assert.fail("❌ Could not extract day from Meeting Date: " + meetingDate);
                int displayedDay = Integer.parseInt(displayedDayStr);
-               int storedDay = Integer.parseInt(Baseclass.selectedDate.trim());
+               int storedDay = Integer.parseInt(BaseClass.selectedDate.trim());
                Assert.assertEquals(displayedDay, storedDay);
 
                String meetingTime = freeVideoCounselling.meetingTime().first().textContent().trim();
@@ -176,7 +176,7 @@ public class CourseFreeVideoCounsellingReject extends Baseclass {
                Matcher timeMatcher = timePattern.matcher(meetingTime);
                String displayedTime = "";
                if (timeMatcher.find()) displayedTime = timeMatcher.group(1).replaceAll("\\s+", " ").trim();
-               String storedTime = Baseclass.selectedTime.replaceAll("\\s+", " ").trim();
+               String storedTime = BaseClass.selectedTime.replaceAll("\\s+", " ").trim();
                storedTime = storedTime.replaceFirst("^0", "");
                displayedTime = displayedTime.replaceFirst("^0", "");
                Assert.assertEquals(displayedTime, storedTime);

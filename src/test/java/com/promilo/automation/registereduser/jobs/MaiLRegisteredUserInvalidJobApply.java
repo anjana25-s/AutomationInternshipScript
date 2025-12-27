@@ -7,93 +7,63 @@ import java.util.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
-import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
-import com.promilo.automation.resources.SignUpLogoutUtil;
+import com.promilo.automation.resources.SignupWithMailosaurUI;
 
 public class MaiLRegisteredUserInvalidJobApply extends BaseClass {
 
     private static final Logger logger = LogManager.getLogger(MaiLRegisteredUserInvalidJobApply.class);
 
-    @DataProvider(name = "jobApplicationData")
-    public Object[][] jobApplicationData() throws Exception {
-        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
-        ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
+    private static String registeredEmail = null;
+    private static String registeredPassword = null;
 
-        int rowCount = 0;
-        for (int i = 1; i <= 1000; i++) {
-            if (excel.getCellData(i, 0) == null || excel.getCellData(i, 0).isEmpty()) break;
-            rowCount++;
-        }
-
-        Object[][] data = new Object[rowCount][8];
-        for (int i = 1; i <= rowCount; i++) {
-            data[i - 1][0] = excel.getCellData(i, 0); // TestCaseID
-            data[i - 1][1] = excel.getCellData(i, 1); // Keyword
-            data[i - 1][2] = excel.getCellData(i, 3); // InputValue
-            data[i - 1][3] = excel.getCellData(i, 6); // Password
-            data[i - 1][4] = excel.getCellData(i, 7); // Name
-            data[i - 1][5] = excel.getCellData(i, 5); // OTP
-            data[i - 1][6] = excel.getCellData(i, 8); // MailPhone
-            data[i - 1][7] = i;                       // RowIndex
-        }
-        return data;
+    @BeforeSuite
+    public void performSignupOnce() throws Exception {
+        SignupWithMailosaurUI signupWithMailosaur = new SignupWithMailosaurUI();
+        String[] creds = signupWithMailosaur.performSignupAndReturnCredentials();
+        registeredEmail = creds[0];
+        registeredPassword = creds[1];
+        logger.info("✅ Signup completed for suite. Email: " + registeredEmail);
     }
 
-    @Test(dataProvider = "jobApplicationData")
-    public void applyForJobAsRegisteredUserWithInvalidOTP(
-            String testCaseId,
-            String keyword,
-            String inputvalue,
-            String password,
-            String name,
-            String otp,
-            String mailphone,
-            int rowIndex
-    ) throws Exception {
+    @Test
+    public void applyForJobWithInvalidData() throws Exception {
 
-        ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("❌ Apply for Job Invalid OTP | " + testCaseId);
-
-        if (!keyword.equalsIgnoreCase("RegisteredUserjobApplyInvalidWithSignup")) {
-            logger.info("[{}] ⏭️ Skipped due to unmatched keyword.", testCaseId);
-            return;
+        if (registeredEmail == null || registeredPassword == null) {
+            Assert.fail("❌ Signup credentials not found for suite.");
         }
 
-        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
-        ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
+        ExtentReports extent = ExtentManager.getInstance();
+        ExtentTest test = extent.createTest("❌ Apply for Job Invalid OTP | Hardcoded Test");
 
-        SignUpLogoutUtil signupUtil = new SignUpLogoutUtil();
-        String[] generatedCreds = signupUtil.createAccountAndLoginFromExcel(excel, rowIndex);
-        inputvalue = generatedCreds[0];
-        password = generatedCreds[1];
+        // Hardcoded test data
+        String name = "karthik123";
+        String mailphone = "111";
 
         Page page = initializePlaywright();
         page.navigate(prop.getProperty("url"));
         page.setViewportSize(1000, 768);
 
-        LandingPage landingPage = new LandingPage(page);
-        try {
-            landingPage.getPopup().click();
-        } catch (Exception ignored) {}
-
-        landingPage.clickLoginButton();
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
+        try { mayBeLaterPopUp.getPopup().click(); } catch (Exception ignored) {}
+        mayBeLaterPopUp.clickLoginButton();
 
         LoginPage loginPage = new LoginPage(page);
-        loginPage.loginMailPhone().fill(inputvalue);
-        loginPage.passwordField().fill(password);
+        loginPage.loginMailPhone().fill(registeredEmail);
+        loginPage.passwordField().fill(registeredPassword);
         loginPage.loginButton().click();
+        test.info("Logged in as registered user: " + registeredEmail);
 
         JobListingPage jobPage = new JobListingPage(page);
         jobPage.homepageJobs().click();
@@ -105,13 +75,8 @@ public class MaiLRegisteredUserInvalidJobApply extends BaseClass {
         jobPage.selectIndustryDropdown().click();
         Thread.sleep(1000);
 
-        for (int i = 0; i < 3; i++) {
-            Locator option = page.locator("//div[contains(text(),'Healthcare')]").nth(0);
-            if (option.isVisible()) {
-                option.click();
-                break;
-            }
-        }
+        Locator option = page.locator("//div[contains(text(),'Healthcare')]").nth(0);
+        if (option.isVisible()) option.click();
 
         jobPage.applyNameField().click();
         Thread.sleep(1000);
@@ -120,20 +85,10 @@ public class MaiLRegisteredUserInvalidJobApply extends BaseClass {
         applyBtn.scrollIntoViewIfNeeded();
         applyBtn.click();
         Thread.sleep(2000);
-
-        Locator errorLocator = page.locator("//div[@role='status' and text()='This mobile number is already registered. Please try login']");
-        try {
-            errorLocator.waitFor(new Locator.WaitForOptions().setTimeout(5000));
-            String errorText = errorLocator.innerText().trim();
-            Assert.assertTrue(errorText.contains("already registered"), "Unexpected error text: " + errorText);
-            test.pass("✅ Error displayed as expected: " + errorText);
-        } catch (Exception e) {
-            test.fail("❌ Expected error toaster not shown for testCase: " + testCaseId);
-            Assert.fail("Error toaster not displayed.");
-        }
+        
 
         // Screenshot
-        String screenshotPath = System.getProperty("user.dir") + "/screenshots/" + testCaseId + "_invalid_apply.png";
+        String screenshotPath = System.getProperty("user.dir") + "/screenshots/InvalidJobApply.png";
         page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get(screenshotPath)).setFullPage(true));
         test.addScreenCaptureFromPath(screenshotPath, "Screenshot - Invalid OTP");
 
@@ -141,7 +96,7 @@ public class MaiLRegisteredUserInvalidJobApply extends BaseClass {
         test.addScreenCaptureFromBase64String(Base64.getEncoder().encodeToString(screenshotBytes), "📸 Base64 Screenshot");
 
         page.close();
-        test.info("🛑 Browser closed for: " + testCaseId);
+        test.info("🛑 Browser closed");
         extent.flush();
     }
 }

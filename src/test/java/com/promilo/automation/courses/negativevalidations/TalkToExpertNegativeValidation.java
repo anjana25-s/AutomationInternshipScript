@@ -12,11 +12,11 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.mentorship.mentee.intrests.MentorshipErrorMessagesAndToasters;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class TalkToExpertNegativeValidation extends Baseclass {
+public class TalkToExpertNegativeValidation extends BaseClass {
 
     // ✅ Move static boolean OUTSIDE method (required by Java)
     private static boolean hasRun = false;

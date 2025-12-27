@@ -1,10 +1,12 @@
 package com.promilo.automation.mentorship.mentor;
 
+import java.time.LocalDate;
+
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
 public class BudgetAndCost {
-
+	
 	private final Page page;
 	private final Locator emailCheckbox;
 	private final Locator smsCheckbox;
@@ -12,8 +14,9 @@ public class BudgetAndCost {
 	private final Locator whatsappCheckbox;
 	private final Locator addbankAccount;
 	private final Locator addInvoiceinfo;
-
-	// add bank account
+	
+	
+	//add bank account
 	private final Locator accountHoldername;
 	private final Locator accountNumber;
 	private final Locator ifscCode;
@@ -21,78 +24,61 @@ public class BudgetAndCost {
 	private final Locator panNumber;
 	private final Locator billingCountry;
 	private final Locator saveButton;
-
-	// add
-
+	
+	
+	private final Locator savePreviewButton;
+	private final Locator previewClose;
+	private final Locator publishButton;
+	private final Locator publishConfirmation;
+	private final Locator publishSuccessMessage;
+	
+	
 	public BudgetAndCost(Page page) {
-
-		this.page = page;
-		this.emailCheckbox = page.locator("//label[@for='email-checkbox']");
-		this.smsCheckbox = page.locator("//label[normalize-space()='SMS']");
-		this.notificationCheckboc = page.locator("//label[normalize-space()='Notification']");
-		this.whatsappCheckbox = page.locator("//label[normalize-space()='Whatsapp']");
-		this.addbankAccount = page.locator("//span[@class='d-flex flex-nowrap']");
-		this.addInvoiceinfo = page.locator("//button[normalize-space()='Add Invoice Info']");
-
-		this.accountHoldername = page.locator("//input[@placeholder='Enter account holder name']");
-		this.accountNumber = page.locator("//input[@placeholder='Enter account number']");
-		this.ifscCode = page.locator("//input[@placeholder='Enter IFSC Code']");
-		this.branchName = page.locator("//input[@placeholder='Enter branch name']");
-		this.panNumber = page.locator("//input[@placeholder='Enter PAN Number']");
-		this.billingCountry = page.locator("//div[@class='react-select__input-container css-19bb58m']");
-		this.saveButton = page.locator("//button[normalize-space()='Save']");
+		
+		
+		this.page= page;
+		this.emailCheckbox= page.locator("//label[@for='email-checkbox']");
+		this.smsCheckbox= page.locator("//label[normalize-space()='SMS']");
+		this.notificationCheckboc= page.locator("//label[normalize-space()='Notification']");
+		this.whatsappCheckbox= page.locator("//label[normalize-space()='Whatsapp']");
+		this.addbankAccount= page.locator("//span[@class='d-flex flex-nowrap']");
+		this.addInvoiceinfo= page.locator("//button[normalize-space()='Add Invoice Info']");
+		
+		
+		this.accountHoldername= page.locator("//input[@placeholder='Enter account holder name']");
+		this.accountNumber= page.locator("//input[@placeholder='Enter account number']");
+		this.ifscCode= page.locator("//input[@placeholder='Enter IFSC Code']");
+		this.branchName= page.locator("//input[@placeholder='Enter branch name']");
+		this.panNumber= page.locator("//input[@placeholder='Enter PAN Number']");
+		this.billingCountry= page.locator("//div[@class='react-select__input-container css-19bb58m']");
+		this.saveButton= page.locator("//button[normalize-space()='Save']");
+		this.savePreviewButton= page.locator("//button[text()='Save & Preview']");
+		this.previewClose= page.locator("//img[@alt='close']");
+		this.publishButton= page.locator("//span[text()='Publish']");
+		this.publishConfirmation= page.locator("//span[text()='Publish']");
+		this.publishSuccessMessage= page.locator("(//h4[normalize-space()=\"We'll notify you as soon as it goes live!\"])[1]");
 	}
-
-	public Locator emailCheckbox() {
-		return emailCheckbox;
-	}
-
-	public Locator smsCheckbox() {
-		return smsCheckbox;
-	}
-
-	public Locator notificationCheckboc() {
-		return notificationCheckboc;
-	}
-
-	public Locator whatsappCheckbox() {
-		return whatsappCheckbox;
-	}
-
-	public Locator addbankAccount() {
-		return addbankAccount;
-	}
-
-	public Locator addInvoiceinfo() {
-		return addInvoiceinfo;
-	}
-
-	public Locator accountHoldername() {
-		return accountHoldername;
-	}
-
-	public Locator accountNumber() {
-		return accountNumber;
-	}
-
-	public Locator ifscCode() {
-		return ifscCode;
-	}
-
-	public Locator branchName() {
-		return branchName;
-	}
-
-	public Locator panNumber() {
-		return panNumber;
-	}
-
-	public Locator billingCountry() {
-		return billingCountry;
-	}
-
-	public Locator saveButton() {
-		return saveButton;
-	}
+	
+	
+	public Locator emailCheckbox() {return emailCheckbox;}
+	public Locator smsCheckbox() {return smsCheckbox;}
+	public Locator notificationCheckboc() {return notificationCheckboc;}
+	public Locator whatsappCheckbox() {return whatsappCheckbox;}
+	public Locator addbankAccount() {return addbankAccount;}
+	public Locator addInvoiceinfo() {return addInvoiceinfo;}
+	
+	public Locator accountHoldername() {return accountHoldername;}
+	public Locator accountNumber() {return accountNumber;}
+	public Locator ifscCode() {return ifscCode;}
+	public Locator branchName() {return branchName;}
+	public Locator panNumber() {return panNumber;}
+	public Locator billingCountry() {return billingCountry;}
+	public Locator saveButton() {return saveButton;}
+	public Locator savePreviewButton() {return savePreviewButton;}
+	public Locator previewClose() {return previewClose;}
+	public Locator publishButton() {return publishButton;}
+	public Locator publishConfirmation() {return publishConfirmation;}
+	public Locator publishSuccessMessage() {return publishSuccessMessage;}
+	 
 
 }

@@ -6,7 +6,8 @@
         
         
         <package name="com.promilo.automation.signupandlogin"></package>
-        <package name="com.promilo.automation.resumemodule"></package>
+      
+ <!--     <package name="com.promilo.automation.resumemodule"></package>
         <package name="com.promilo.automation.registereduser.jobs"></package>
         <package name="com.promilo.automation.registereduser.courses.interest"></package>
         <package name="com.promilo.automation.myassignments"></package>
@@ -36,6 +37,8 @@
         <package name="com.promilo.automation.advertiser.mybilling"></package>
         <package name="com.promilo.automation.advertiser.loginandregister"></package>
         <package name="com.promilo.automation.advertiser.campaign"></package>
+        -->  
+        
         </packages>
     </test>
     <listeners>

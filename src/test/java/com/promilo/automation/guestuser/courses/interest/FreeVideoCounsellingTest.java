@@ -28,7 +28,7 @@ import com.promilo.automation.resources.MailsaurCredentials;
 public class FreeVideoCounsellingTest extends BaseClass {
 
     @Test
-    public void freeVideoCounsellingFlow() throws InterruptedException, IOException {
+    public void FreeVideoCounsellingFlow() throws InterruptedException, IOException {
         ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("🧪 FreeVideoCounselling Functionality | Data-Driven");
 

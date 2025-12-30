@@ -1,15 +1,10 @@
 package com.promilo.automation.signupandlogin;
 
 import org.testng.annotations.Test;
-
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.BaseClass;
-import com.promilo.automation.resources.ExtentManager;
+import com.aventstack.extentreports.*;
+import com.microsoft.playwright.*;
+import com.promilo.automation.pageobjects.signuplogin.*;
+import com.promilo.automation.resources.*;
 
 
 public class BlankFieldLoginValidation extends BaseClass {
@@ -22,27 +17,19 @@ public class BlankFieldLoginValidation extends BaseClass {
 
 
         ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("Promilo Staging - Blank Field Signup Validation");
+        ExtentTest test = extent.createTest(" Blank Field Login Validation");
 
         test.info("🚀 Test started: Blank Field Signup Validation");
 
         page.navigate(prop.getProperty("url"));
         test.info("🌐 Navigated to URL: " + prop.getProperty("url"));
 
-LandingPage landingPage = new LandingPage(page);
-        try {
-            Locator popup = landingPage.getPopup();
-            if (popup.isVisible()) {
-                popup.click();
-                test.info("✅ Popup closed.");
-            } else {
-                test.info("ℹ️ No popup detected, continuing...");
-            }
-        } catch (Exception e) {
-            test.info("ℹ️ No popup detected, continuing...");
-        }
+MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
+Thread.sleep(3000);
 
-        landingPage.clickLoginButton();
+mayBeLaterPopUp.dismissPopup();
+
+        mayBeLaterPopUp.clickLoginButton();
         test.info("✅ Signup button clicked.");
 
 LoginPage loginpage = new LoginPage(page);

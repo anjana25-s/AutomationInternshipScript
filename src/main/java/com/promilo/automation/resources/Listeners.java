@@ -1,24 +1,17 @@
 package com.promilo.automation.resources;
 
+import com.aventstack.extentreports.*;
+import com.aventstack.extentreports.MediaEntityBuilder;
+import com.microsoft.playwright.Page;
+import org.testng.*;
+import org.testng.annotations.ITestAnnotation;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import org.testng.IAnnotationTransformer;
-import org.testng.ISuite;
-import org.testng.ISuiteListener;
-import org.testng.ITestContext;
-import org.testng.ITestListener;
-import org.testng.ITestResult;
-import org.testng.annotations.ITestAnnotation;
-
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.MediaEntityBuilder;
-import com.microsoft.playwright.Page;
-
 /**
  * Listener class for TestNG suite.
- * Sends a single emailable report email after entire suite finishes.
+ * Sends a single e-mailable report email after entire suite finishes.
  */
 public class Listeners extends BaseClass implements ITestListener, ISuiteListener, IAnnotationTransformer {
 
@@ -36,6 +29,7 @@ public class Listeners extends BaseClass implements ITestListener, ISuiteListene
                 result.getMethod().getMethodName(),
                 result.getMethod().getDescription()
         );
+
         test.set(extentTest);
     }
 
@@ -43,31 +37,39 @@ public class Listeners extends BaseClass implements ITestListener, ISuiteListene
     public void onTestSuccess(ITestResult result) {
         ExtentTest currentTest = test.get();
         currentTest.pass("✅ Test Passed: " + result.getMethod().getMethodName());
-        attachScreenshot(currentTest, "Pass Screenshot");
+
+        // No screenshot for passed tests
+        test.remove();
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
         ExtentTest currentTest = test.get();
         currentTest.fail(result.getThrowable());
+
+        // Screenshot ONLY for failed tests
         attachScreenshot(currentTest, "Failure Screenshot");
+
+        test.remove();
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
         ExtentTest currentTest = test.get();
+
         if (result.getThrowable() != null) {
             currentTest.skip("⚠️ Test Skipped: " + result.getThrowable());
         } else {
             currentTest.skip("⚠️ Test Skipped: " + result.getMethod().getMethodName());
         }
-        attachScreenshot(currentTest, "Skipped Screenshot");
+
+        // No screenshot for skipped tests
+        test.remove();
     }
 
     @Override
     public void onFinish(ITestContext context) {
-        // Flush ExtentReports at the end of each <test> tag
-        extent.flush();
+        // Do NOT flush here → only flush at suite level
         test.remove();
     }
 
@@ -75,10 +77,10 @@ public class Listeners extends BaseClass implements ITestListener, ISuiteListene
     @Override
     public void onFinish(ISuite suite) {
         System.out.println("📧 Sending consolidated TestNG emailable report for entire suite...");
-        // Flush ExtentReports just in case
+
+        // Final flush at suite end
         extent.flush();
 
-        // Send email with static TestNG report
         try {
             EmailReportUtility.sendReport();
         } catch (Exception e) {
@@ -88,13 +90,14 @@ public class Listeners extends BaseClass implements ITestListener, ISuiteListene
 
     @Override
     public void onStart(ISuite suite) {
-        // Can initialize something at suite start if needed
+        System.out.println("🚀 Test Suite Started: " + suite.getName());
     }
 
-    // -------------------- Retry Analyzer for test annotations --------------------
+    // -------------------- Retry Analyzer --------------------
     @Override
     public void transform(ITestAnnotation annotation, Class testClass,
                           Constructor testConstructor, Method testMethod) {
+
         if (annotation.getRetryAnalyzerClass() == null) {
             annotation.setRetryAnalyzer(RetryAnalyzer.class);
         }
@@ -104,15 +107,31 @@ public class Listeners extends BaseClass implements ITestListener, ISuiteListene
     private void attachScreenshot(ExtentTest currentTest, String title) {
         try {
             Page page = BaseClass.getPage();
-            if (page != null) {
-                byte[] screenshotBytes = page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
-                String base64Screenshot = java.util.Base64.getEncoder().encodeToString(screenshotBytes);
-                currentTest.info(title, MediaEntityBuilder.createScreenCaptureFromBase64String(base64Screenshot, title).build());
-            } else {
+
+            if (page == null) {
                 currentTest.info("❗ Page is null, unable to capture screenshot.");
+                return;
             }
+
+            if (page.isClosed()) {
+                currentTest.info("❗ Page is already closed. Screenshot skipped.");
+                return;
+            }
+
+            // Take screenshot
+            byte[] screenshotBytes = page.screenshot(
+                    new Page.ScreenshotOptions().setFullPage(true)
+            );
+            String base64 = java.util.Base64.getEncoder().encodeToString(screenshotBytes);
+
+                        // Inline embedded base64 image
+            String htmlImage =
+                    "<b>" + title + "</b><br>" +
+                    "<img src='data:image/png;base64," + base64 + "' height='450' />";
+
+
         } catch (Exception e) {
-            currentTest.info("❗ Exception while capturing screenshot: " + e.getMessage());
+            currentTest.info("❗ Error capturing screenshot: " + e.toString());
         }
     }
 }

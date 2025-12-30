@@ -9,21 +9,22 @@ import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.Assert;
+import org.testng.annotations.*;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-<<<<<<< HEAD
 import com.microsoft.playwright.options.WaitForSelectorState;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-=======
-import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
-import com.promilo.automation.resources.ExcelUtil;
+import com.promilo.automation.resources.ExcelUtil; // keep snippet
+import com.promilo.automation.resources.ExtentManager;
+import com.promilo.automation.resources.SignUpLogoutUtil;
+import com.promilo.automation.resources.SignupWithMailosaurUI; // Mailosaur helper
 
 public class RegisteredUserShortListWithInvalidData extends BaseClass {
 
@@ -101,12 +102,12 @@ public class RegisteredUserShortListWithInvalidData extends BaseClass {
     }
 
     public void applyForJobAsRegisteredUser(Page page, String inputvalue, String password, String name, String otp, String mailphone) throws Exception {
-        LandingPage landingPage = new LandingPage(page);
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
         try {
-            landingPage.getPopup().click();
+            mayBeLaterPopUp.getPopup().click();
         } catch (Exception ignored) {}
 
-        landingPage.clickLoginButton();
+        mayBeLaterPopUp.clickLoginButton();
 
         LoginPage loginPage = new LoginPage(page);
         loginPage.loginMailPhone().fill(inputvalue);

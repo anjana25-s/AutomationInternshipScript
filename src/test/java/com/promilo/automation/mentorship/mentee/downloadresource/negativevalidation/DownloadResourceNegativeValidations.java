@@ -12,19 +12,18 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-<<<<<<< HEAD
-import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
-import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipErrorMessagesAndToasters;
-import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipFormComponents;
+import com.promilo.automation.mentorship.mentee.DescriptionPage;
+import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
+import com.promilo.automation.mentorship.mentee.intrests.MentorshipErrorMessagesAndToasters;
+import com.promilo.automation.mentorship.mentee.intrests.MentorshipFormComponents;
 import com.promilo.automation.pageobjects.signuplogin.HomePage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class DownloadResourceNegativeValidations extends Baseclass {
+public class DownloadResourceNegativeValidations extends BaseClass {
 
     ExtentReports extent = ExtentManager.getInstance();
     ExtentTest test = extent.createTest("Brand Endorsement Error Messages Validation Functionality");
@@ -95,90 +94,6 @@ public class DownloadResourceNegativeValidations extends Baseclass {
         //                🔸 DASHBOARD NAVIGATION
         // =========================================================
         HomePage dashboard = new HomePage(page);
-=======
-import com.promilo.automation.mentorship.mentee.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
-import com.promilo.automation.mentorship.mentee.MentorshipErrorMessagesAndToasters;
-import com.promilo.automation.mentorship.mentee.MentorshipFormComponents;
-import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
-import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
-import com.promilo.automation.resources.BaseClass;
-import com.promilo.automation.resources.ExcelUtil;
-import com.promilo.automation.resources.ExtentManager;
-
-public class DownloadResourceNegativeValidations extends BaseClass {
-
-    ExtentReports extent = ExtentManager.getInstance();
-    ExtentTest test = extent.createTest("Brand Endorsement Error Messages Validation Functionality");
-
-    private static final Logger logger = LogManager.getLogger(RegisteredUserShortList.class);
-
-    // =========================================================
-    //                🔹 DATA PROVIDER SECTION
-    // =========================================================
-    @DataProvider(name = "BrandEndorsementErrorMessagesValidation")
-    public Object[][] mentorshipDataProvider() throws Exception {
-        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "Mentorship Test Data.xlsx").toString();
-        ExcelUtil excel = new ExcelUtil(excelPath, "Mentorship");
-        return new Object[][] { { excel } };
-    }
-
-    // =========================================================
-    //                🔹 MAIN TEST SECTION
-    // =========================================================
-    @Test(dataProvider = "BrandEndorsementErrorMessagesValidation")
-    public void mentorshipShortListFunctionalityTest(ExcelUtil excel) throws Exception {
-
-        // ✅ Read all test data values from Excel
-        int testCaseIdCol = excel.getColumnIndex("testCaseId");
-        int mentorNameCol = excel.getColumnIndex("MentorName");
-        int nameIsRequiredCol = excel.getColumnIndex("nameIsRequired");
-        int mobileIsRequiredCol = excel.getColumnIndex("mobileNumberIsRequired");
-        int emailIsRequiredCol = excel.getColumnIndex("emailIsRequired");
-        int nameMinCharCol = excel.getColumnIndex("nameMinimumCharacter");
-        int invalidMobileCol = excel.getColumnIndex("invalidMobileNumber");
-        int invalidEmailCol = excel.getColumnIndex("invalidEmailAdress");
-        int nameMinimumCol = excel.getColumnIndex("NameMinimum");
-
-        // Assuming test data is on row 1 for simplicity
-        String testCaseId = excel.getCellData(1, testCaseIdCol).trim();
-        String MentorName = excel.getCellData(1, mentorNameCol).trim();
-        String nameIsRequired = excel.getCellData(1, nameIsRequiredCol).trim();
-        String mobileNumberIsRequired = excel.getCellData(1, mobileIsRequiredCol).trim();
-        String emailIsRequired = excel.getCellData(1, emailIsRequiredCol).trim();
-        String nameMinimumCharacter = excel.getCellData(1, nameMinCharCol).trim();
-        String invalidMobileNumber = excel.getCellData(1, invalidMobileCol).trim();
-        String invalidEmailAdress = excel.getCellData(1, invalidEmailCol).trim();
-        String NameMinimum = excel.getCellData(1, nameMinimumCol).trim();
-
-        // =========================================================
-        //                🔸 PLAYWRIGHT INITIALIZATION
-        // =========================================================
-        Page page = initializePlaywright();
-        page.navigate(prop.getProperty("url"));
-        page.setViewportSize(1000, 768);
-
-        // ✅ This will only run for filtered rows
-        logger.info("Executing BrandEndorsementErrorMessagesValidation for TestCaseID: {}", testCaseId);
-
-        // =========================================================
-        //                🔸 LANDING PAGE
-        // =========================================================
-        MayBeLaterPopUp landingPop = new MayBeLaterPopUp(page);
-
-        try {
-            landingPop.getPopup().click();
-            test.info("✅ Popup closed.");
-        } catch (Exception ignored) {
-            test.info("ℹ️ No popup found.");
-        }
-
-        // =========================================================
-        //                🔸 DASHBOARD NAVIGATION
-        // =========================================================
-        DashboardPage dashboard = new DashboardPage(page);
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
         page.waitForTimeout(3000);
         dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
         logger.info("Clicked on Mentorship module");

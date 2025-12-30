@@ -26,12 +26,14 @@ import com.promilo.automation.advertiser.AdvertiserProspects;
 import com.promilo.automation.courses.intrestspages.TalkToExpertPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.MailsaurCredentials;
 
-public class AdvertiserTalkToExpertAcceptFunctionality extends Baseclass {
+import io.qameta.allure.internal.shadowed.jackson.databind.deser.Deserializers.Base;
+
+public class AdvertiserTalkToExpertAcceptFunctionality extends BaseClass {
 
     ExtentReports extent;
     ExtentTest test;
@@ -220,7 +222,7 @@ public class AdvertiserTalkToExpertAcceptFunctionality extends Baseclass {
                 
              
                    LoginPage loginPage1 = new LoginPage(userPage);
-                   loginPage1.loginMailPhone().fill(Baseclass.generatedPhone); // use the generated email
+                   loginPage1.loginMailPhone().fill(BaseClass.generatedPhone); // use the generated email
                    loginPage1.loginWithOtp().click();
                    loginPage1.otpField().fill("9999");
                    loginPage1.loginButton().click();

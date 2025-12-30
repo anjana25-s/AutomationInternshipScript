@@ -19,10 +19,10 @@ public class InvoiceSearchFunctionality extends BaseClass {
 
 	
 	ExtentReports extent = ExtentManager.getInstance();
-    ExtentTest test = extent.createTest("🚀 Advertiser Add Funds Test | Data-Driven");
+    ExtentTest test = extent.createTest("🚀 Advertiser InvoiceSearchFunctionality Test | Data-Driven");
 
     @Test
-    public void runAddFundsTest() {
+    public void InvoiceSearchFunctionalityTest() {
         try {
             String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
                     "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();

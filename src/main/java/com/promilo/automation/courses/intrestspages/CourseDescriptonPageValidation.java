@@ -22,11 +22,11 @@ import com.microsoft.playwright.Page;
 import com.promilo.automation.courses.intrestspages.DescriptionPageValidation;
 import com.promilo.automation.courses.pageobjects.CoursesMainPageobjects;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class CourseDescriptonPageValidation extends Baseclass {
+public class CourseDescriptonPageValidation extends BaseClass {
 
     private static final Logger log = LogManager.getLogger(CourseDescriptonPageValidation.class);
 

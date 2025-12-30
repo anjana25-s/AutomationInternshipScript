@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -15,186 +15,152 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class GuestUserHrCall extends BaseClass{
-	
-	 /**
-     * DataProvider to fetch test data dynamically from Excel for GetHrCall scenarios.
-     */
-    @DataProvider(name = "jobApplicationData")
-    public Object[][] jobApplicationData() throws Exception {
-        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
+public class GuestUserHrCall extends BaseClass {
+
+    // Keep Excel logic for reference but don't use it for launching
+    private void readExcelForReference() throws Exception {
+        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
+                "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
         ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
-        int rowCount = 0;
-        for (int i = 1; i <= 1000; i++) {
-            String testCaseId = excel.getCellData(i, 0);
-            if (testCaseId == null || testCaseId.trim().isEmpty()) break;
-            rowCount++;
-        }
+        // Example: read first row only
+        String testCaseId = excel.getCellData(1, 0);
+        String keyword = excel.getCellData(1, 1);
+        String email = excel.getCellData(1, 3);
+        String password = excel.getCellData(1, 6);
+        String name = excel.getCellData(1, 7);
+        String otp = excel.getCellData(1, 5);
+        String mailphone = excel.getCellData(1, 8);
+        String expectedResult = excel.getCellData(1, 4);
 
-        Object[][] data = new Object[rowCount - 1][8];
-
-        for (int i = 1; i < rowCount; i++) {
-            data[i - 1][0] = excel.getCellData(i, 0); // TestCaseID
-            data[i - 1][1] = excel.getCellData(i, 1); // Keyword
-            data[i - 1][2] = excel.getCellData(i, 3); // InputValue (Email)
-            data[i - 1][3] = excel.getCellData(i, 6); // Password
-            data[i - 1][4] = excel.getCellData(i, 7); // Name
-            data[i - 1][5] = excel.getCellData(i, 5); // OTP
-            data[i - 1][6] = excel.getCellData(i, 8); // MailPhone
-            data[i - 1][7] = excel.getCellData(i, 4); // ExpectedResult
-        }
-        return data;
+        System.out.println("Excel read for reference: " + testCaseId + ", " + keyword);
     }
 
-    /**
-     * Test to apply for 'Get HR Call' using registered user login, applying OTP, industry selection, and validating the thank you popup.
-     */
-    @Test(dataProvider = "jobApplicationData")
-    public void applyForJobAsRegisteredUser(
-            String testCaseId,
-            String keyword,
-            String email,
-            String password,
-            String name,
-            String otp,
-            String mailphone,
-            String expectedResult
-    ) throws Exception {
+    @Test
+    public void applyForJobAsGuestUser() throws Exception {
 
         ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("🚀 Apply for Job as Registered User | " + testCaseId);
+        ExtentTest test = extent.createTest("🚀 Apply for Job as Guest User | Single Run");
 
-        // Skip if keyword does not match
-        if (!keyword.equalsIgnoreCase("GetHRCall")) {
-            test.info("⏭️ Skipping TestCaseID: " + testCaseId + " due to keyword: " + keyword);
-            return;
-        }
+        // Example hardcoded test data
+        String name = "Test User";
+        String otp = "9999"; 
 
-        // Initialize browser and navigate to URL
+        // Initialize Playwright and navigate
         Page page = initializePlaywright();
         page.navigate(prop.getProperty("url"));
         page.setViewportSize(1280, 800);
 
-        // Close popup and click login
-        LandingPage landingPage = new LandingPage(page);
-        landingPage.getPopup().click();
-        landingPage.clickLoginButton();
+        // Close popup
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
+        mayBeLaterPopUp.getPopup().click();
 
-       
-        // Navigate to job listing page and go to fintech jobs
+        // Navigate to fintech job
         JobListingPage homePage = new JobListingPage(page);
         homePage.homepageJobs().click();
-        homePage.fintech();
 
-        // Scroll into view and click on fintech job card
-        Locator fintechJobCard = page.locator("//span[@class='font-12 additional-tags-text additional-cards-text-truncate jobs-brand-additional-title']");
-        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
-        fintechJobCard.scrollIntoViewIfNeeded();
-        fintechJobCard.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(5000));
-        fintechJobCard.click();
 
-        // Click on 'Get HR Call' and fill user details
-        homePage.getHrCall().click();
-        homePage.applyNameField().fill(name);
-        homePage.applyNowMobileTextField().fill(mailphone);
+        Thread.sleep(5000);
+        page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
+        page.keyboard().press("Enter");
 
-        // Open industry dropdown and select industries
-        homePage.selectIndustryDropdown().click();
+       page.waitForTimeout(15000);
+        // Fill Get HR Call form
+page.locator("//button[@class='functional_btn-Get-call']").click();
+homePage.applyNameField().nth(1).fill("karthik");
+//Generate random phone (90000 + 5 random digits)
+String randomPhone = "90000" + (10000 + new java.util.Random().nextInt(90000));
+
+//Generate random email (testuser + random 6 digits)
+String randomEmail = "testuser" + System.currentTimeMillis() % 1000000 + "@gmail.com";
+
+//Fill into fields
+page.locator("//input[@placeholder='Mobile*']").nth(1).fill(randomPhone);
+page.locator("input[placeholder='Email*']").nth(1).fill(randomEmail);
+
+//For debugging/logging
+System.out.println("Generated Phone: " + randomPhone);
+System.out.println("Generated Email: " + randomEmail);
+
+      
+        
+        homePage.selectIndustryDropdown().nth(1).click();
+        test.info("Opened Industry dropdown");
         Thread.sleep(1000);
 
-        List<String> industries = Arrays.asList(
-                "Telecom / ISP",
-                "Advertising & Marketing",
-                "Animation & VFX",
-                "Healthcare",
-                "Education"
-        );
-
+        List<String> industries = Arrays.asList("Telecom / ISP", "Advertising & Marketing", "Animation & VFX", "Healthcare", "Education");
         Locator options = page.locator("//div[@class='sub-sub-option d-flex justify-content-between pointer']");
         for (String industry : industries) {
-            boolean found = false;
             for (int i = 0; i < options.count(); i++) {
                 String optionText = options.nth(i).innerText().trim();
                 if (optionText.equalsIgnoreCase(industry)) {
                     options.nth(i).click();
                     test.info("✅ Selected industry: " + industry);
-                    found = true;
                     break;
                 }
             }
-            if (!found) {
-                test.warning("⚠️ Industry not found: " + industry);
-            }
         }
-
-        // Close dropdown focus by clicking name field
-        homePage.applyNameField().click();
+        homePage.applyNameField().nth(1).click();
         Thread.sleep(2000);
 
-        // Click on 'Get an HR Call' button
         homePage.getAnHrCallButton().click();
 
         if (otp == null || otp.length() < 4) {
-            throw new IllegalArgumentException("OTP provided is less than 4 characters: " + otp);
+            throw new IllegalArgumentException("OTP must be 4 characters: " + otp);
         }
 
         for (int i = 0; i < 4; i++) {
-            String otpChar = Character.toString(otp.charAt(i));
+            String otpChar = String.valueOf(otp.charAt(i));
             Locator otpField = page.locator("//input[@aria-label='Please enter OTP character " + (i + 1) + "']");
-
             otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
 
-            boolean filled = false;
             int attempts = 0;
-
+            boolean filled = false;
             while (!filled && attempts < 3) {
                 attempts++;
-                otpField.click(); // force focus
-                otpField.fill(""); // clear previous
+                otpField.click();
+                otpField.fill("");
                 otpField.fill(otpChar);
 
-                // Validate the field actually has the entered digit
                 String currentValue = otpField.evaluate("el => el.value").toString().trim();
                 if (currentValue.equals(otpChar)) {
                     filled = true;
                 } else {
-                    page.waitForTimeout(500); // wait before retry
+                    page.waitForTimeout(500);
                 }
             }
 
             if (!filled) {
-                throw new RuntimeException("Failed to enter OTP digit " + (i + 1) + " correctly after retries.");
+                throw new RuntimeException("Failed to enter OTP digit " + (i + 1));
             }
+            test.info("Entered OTP digit: " + otpChar);
         }
 
+        page.locator("//button[text()='Verify & Proceed']").click();
+        Thread.sleep(3000);
+        
+        page.locator("//button[text()='Next']").click();
 
+        Locator submitButton=homePage.getHrCallSubmitButton().nth(1);
+        submitButton.scrollIntoViewIfNeeded();
+        submitButton.click();
+        
+        Thread.sleep(5000);
+        
 
-        Locator verifyButton = page.locator("//button[text()='Verify & Proceed']");
-        verifyButton.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
-        verifyButton.click();        Thread.sleep(5000);
+        Locator thankYouPopup = page.locator("//div[translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = 'thank you!']");
+        thankYouPopup.waitFor(new Locator.WaitForOptions().setTimeout(5000).setState(WaitForSelectorState.VISIBLE));
 
-        // Submit the Get HR Call form
-        homePage.getHrCallSubmitButton().click();
-
-        // Validate 'Thank You' popup
-        Locator thankYouPopup = homePage.getHrCallThankYouPopup();
-        thankYouPopup.waitFor(new Locator.WaitForOptions().setTimeout(5000));
-        String popupText = thankYouPopup.innerText().trim();
-
-        Assert.assertTrue(
-                popupText.toLowerCase().contains("thank you"),
-                "Expected popup to contain 'Thank You' (case-insensitive), but found: " + popupText
-        );
-
-        test.info("✅ 'Thank You' popup is displayed as expected.");
-
-        // Flush Extent Report to persist logs and screenshots
+        Assert.assertTrue(thankYouPopup.isVisible(), "'Thank You' popup not displayed.");
+       
+        
+        test.pass("✅ 'Thank You' popup displayed");
+        
+        
         extent.flush();
     }
-
 }

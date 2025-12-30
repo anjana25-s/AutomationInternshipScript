@@ -1,6 +1,8 @@
 package com.promilo.automation.mentorship.mentor.campaign;
 
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.testng.annotations.Test;
 
@@ -9,250 +11,117 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.mentorship.mentor.BecomeMentor;
 import com.promilo.automation.mentorship.mentor.CampaignlistPage;
-<<<<<<< HEAD
 import com.promilo.automation.pageobjects.myresume.Hamburger;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
-import com.promilo.automation.resources.ExcelUtil;
-import com.promilo.automation.resources.ExtentManager;
-
-public class MentorCampaignListSearchAndFilter extends Baseclass{
-	
-	
-	  @Test
-	    public void addEmploymentPositiveTest() throws Exception {
-
-	        ExtentReports extent = ExtentManager.getInstance();
-	        ExtentTest test = extent.createTest("✅ Add Employment - Positive Test");
-
-	        Page page = initializePlaywright();
-	        page.navigate(prop.getProperty("url"));
-	        page.setViewportSize(1080, 720);
-
-	        test.info("🌐 Navigated to application URL.");
-
-	        String excelPath = Paths.get(System.getProperty("user.dir"),
-	                "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
-	        ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
-
-	        int rowCount = 0;
-	        for (int i = 1; i <= 1000; i++) {
-	            String testCaseId = excel.getCellData(i, 0);
-	            if (testCaseId == null || testCaseId.trim().isEmpty()) break;
-	            rowCount++;
-	        }
-	        test.info("📘 Loaded " + rowCount + " rows from Excel.");
-
-	        for (int i = 1; i < rowCount; i++) {
-	            String keyword = excel.getCellData(i, 1);
-	            if (!"AddEmployment".equalsIgnoreCase(keyword)) continue;
-
-	            String inputValue = excel.getCellData(i, 3);
-	            String description = excel.getCellData(i, 10);
-
-	            try {
-	                test.info("➡️ Starting execution for row " + i + " with input: " + inputValue);
-
-	                MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
-	                try {
-	                    mayBeLaterPopUp.getPopup().click();
-	                    test.info("✅ Popup closed.");
-	                } catch (Exception ignored) {
-	                    test.info("ℹ️ No popup found.");
-	                }
-
-	                mayBeLaterPopUp.clickLoginButton();
-	                test.info("🔑 Navigating to Login Page.");
-
-	                LoginPage loginPage = new LoginPage(page);
-	                loginPage.loginMailPhone().fill("testradha68@yopmail.com");
-	                loginPage.passwordField().fill("Karthik@88");
-	                loginPage.loginButton().click();
-	                test.info("✅ Logged in with registered credentials.");
-
-	                // Navigate to My Resume
-	                Hamburger resumePage = new Hamburger(page);
-=======
-import com.promilo.automation.pageobjects.myresume.MyResumePage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class MentorCampaignListSearchAndFilter extends BaseClass{
-	
-	
-	  @Test
-	    public void addEmploymentPositiveTest() throws Exception {
+public class MentorCampaignListSearchAndFilter extends BaseClass {
 
-	        ExtentReports extent = ExtentManager.getInstance();
-	        ExtentTest test = extent.createTest("✅ Add Employment - Positive Test");
+    @Test
+    public void campaignListSearchAndFilterTest() throws Exception {
 
-	        Page page = initializePlaywright();
-	        page.navigate(prop.getProperty("url"));
-	        page.setViewportSize(1080, 720);
+        ExtentReports extent = ExtentManager.getInstance();
+        ExtentTest test = extent.createTest("MentorCampaignListSearchAndFilter");
 
-	        test.info("🌐 Navigated to application URL.");
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        page.setViewportSize(1080, 720);
+        test.info("🌐 Navigated to application URL.");
 
-	        String excelPath = Paths.get(System.getProperty("user.dir"),
-	                "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
-	        ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
+        // LOAD EXCEL
+        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
+                "Mentorship Test Data.xlsx").toString();
+        ExcelUtil excel = new ExcelUtil(excelPath, "CampaignCreation");
 
-	        int rowCount = 0;
-	        for (int i = 1; i <= 1000; i++) {
-	            String testCaseId = excel.getCellData(i, 0);
-	            if (testCaseId == null || testCaseId.trim().isEmpty()) break;
-	            rowCount++;
-	        }
-	        test.info("📘 Loaded " + rowCount + " rows from Excel.");
+        int totalRows = excel.getRowCount();
+        int totalCols = excel.getColumnCount();
 
-	        for (int i = 1; i < rowCount; i++) {
-	            String keyword = excel.getCellData(i, 1);
-	            if (!"AddEmployment".equalsIgnoreCase(keyword)) continue;
-
-	            String inputValue = excel.getCellData(i, 3);
-	            String description = excel.getCellData(i, 10);
-
-	            try {
-	                test.info("➡️ Starting execution for row " + i + " with input: " + inputValue);
-
-	                LandingPage landingPage = new LandingPage(page);
-	                try {
-	                    landingPage.getPopup().click();
-	                    test.info("✅ Popup closed.");
-	                } catch (Exception ignored) {
-	                    test.info("ℹ️ No popup found.");
-	                }
-
-	                landingPage.clickLoginButton();
-	                test.info("🔑 Navigating to Login Page.");
-
-	                LoginPage loginPage = new LoginPage(page);
-	                loginPage.loginMailPhone().fill("testradha68@yopmail.com");
-	                loginPage.passwordField().fill("Karthik@88");
-	                loginPage.loginButton().click();
-	                test.info("✅ Logged in with registered credentials.");
-
-	                // Navigate to My Resume
-	                MyResumePage resumePage = new MyResumePage(page);
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
-	                resumePage.Mystuff().click();
-
-	                // Become a Mentor actions
-	                BecomeMentor becomeMentor = new BecomeMentor(page);
-	                becomeMentor.becomeMentorButton().click();
-	                becomeMentor.campaignList().click();
-	                
-	                
-	                CampaignlistPage SearchAndFilter= new CampaignlistPage(page);
-	                SearchAndFilter.searchField().fill("Health");
-	                SearchAndFilter.searchIcon().click();
-	                System.out.println(SearchAndFilter.campaignName().first().textContent()); 	    
-	                
-	                
-	                CampaignlistPage dataValidation= new CampaignlistPage(page);
-	                System.out.println(dataValidation.createdDate().first().textContent()); 
-	                System.out.println(dataValidation.createdDate().nth(1).textContent()); 
-	                System.out.println(dataValidation.createdDate().nth(2).textContent()); 
+        // CREATE HEADER MAP
+        Map<String, Integer> headerMap = new HashMap<>();
+        for (int c = 0; c < totalCols; c++) {
+            String header = excel.getCellData(0, c);
+            if (header != null && !header.trim().isEmpty()) {
+                headerMap.put(header.trim().replace("\u00A0", "").toLowerCase(), c);
+            }
+        }
 
 
-	                dataValidation.campaignStatus().first().textContent();
-	             // First row
-	                String firstRowText = page.locator("//tr").first().textContent();
+        // FIND ROW WITH TARGET KEYWORD
+        int matchRow = -1;
+        for (int i = 1; i < totalRows; i++) {
+            String keyword = excel.getCellData(i, headerMap.get("keyword"));
+            if ("MentorCampaignListSearchAndFilter".equalsIgnoreCase(keyword)) {
+                matchRow = i;
+                break;
+            }
+        }
 
-	                // Split by spaces
-	                String[] sections = firstRowText.split("\\s+");
+        if (matchRow == -1) {
+            test.fail("❌ No row found with keyword MentorCampaignListSearchAndFilter");
+            throw new RuntimeException("No matching keyword in Excel");
+        }
+        test.info("📘 Executing Excel Row: " + matchRow);
 
-	                // Print each section with a gap
-	                for (String section : sections) {
-	                    System.out.print(section + "   ");  // 3 spaces gap between each word
-	                }
+        // FETCH DATA DYNAMICALLY
+        String inputValue = excel.getCellData(matchRow, headerMap.get("inputvalue"));
+        String password   = excel.getCellData(matchRow, headerMap.get("password"));
 
-	                System.out.println(); // new line after the row
+        try {
+            // CLOSE POPUP IF PRESENT
+            MayBeLaterPopUp popup = new MayBeLaterPopUp(page);
+            try { popup.getPopup().click(); } catch (Exception ignored) {}
 
-	                // Second row
-	                String secondRowText = page.locator("//tr").nth(1).textContent();
-	                String[] sections2 = secondRowText.split("\\s+");
+            popup.clickLoginButton();
 
-	                for (String section : sections2) {
-	                    System.out.print(section + "   ");  // same gap
-	                }
+            // LOGIN
+            LoginPage loginPage = new LoginPage(page);
+            loginPage.loginMailPhone().fill(inputValue);
+            loginPage.passwordField().fill(password);
+            loginPage.loginButton().click();
+            test.info("✅ Logged in with Excel credentials.");
 
-	                System.out.println();
-	                
-	                
-	                
-	                
-	                //Filter Section
-	                
-	                CampaignlistPage filter= new CampaignlistPage(page);
-	                page.locator("//button[text()='Start Date - End Date']").click();
-	                filter.fromTextfield().click();
-	                page.locator("//span[text()='1']").first().click();
-	                filter.toTextfield().click();
-	                page.locator("//span[text()='1']").first().click();
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	             // Get all elements
-	                int count = page.locator("//span[@class='rdrStaticRangeLabel']").count();
+            // NAVIGATE TO CAMPAIGN LIST
+            Hamburger hamburger = new Hamburger(page);
+            hamburger.Mystuff().click();
 
-	                // Iterate and click each
-	                for (int range = 0; range < count; range++) {
-	                    // Get the range label text
-	                    String rangeLabel = page.locator("//span[@class='rdrStaticRangeLabel']").nth(range).textContent().trim();
+            BecomeMentor mentor = new BecomeMentor(page);
+            mentor.becomeMentorButton().click();
+            mentor.campaignList().click();
 
-	                    // Click the range button
-	                    page.locator("//span[@class='rdrStaticRangeLabel']").nth(range).click();
-	                    
-	                    // Optional wait if UI updates dynamically
-	                    page.waitForTimeout(500); // 0.5 second
+            CampaignlistPage searchAndFilter = new CampaignlistPage(page);
 
-	                    // Validation: count rows starting from nth(1)
-	                    int totalRows = page.locator("//tr").count();
-	                    int rowsFromSecond = totalRows - 1; // include nth(1) itself
+            // SEARCH
+            searchAndFilter.searchField().fill("campaign Issue");
+            searchAndFilter.searchIcon().click();
+            System.out.println(searchAndFilter.campaignName().first().textContent());
 
-	                    System.out.println("After clicking \"" + rangeLabel + "\": Rows from nth(1) = " + rowsFromSecond);
-	                }
+            // FILTER & VALIDATE
+            searchAndFilter.calenderButton().click();
+            searchAndFilter.fromTextfield().click();
+            page.locator("//span[text()='1']").first().click();
+            searchAndFilter.toTextfield().click();
+            page.locator("//span[text()='1']").first().click();
 
+            int totalRanges = page.locator("//span[@class='rdrStaticRangeLabel']").count();
+            for (int r = 0; r < totalRanges; r++) {
+                String rangeLabel = page.locator("//span[@class='rdrStaticRangeLabel']").nth(r).textContent().trim();
+                page.locator("//span[@class='rdrStaticRangeLabel']").nth(r).click();
+                page.waitForTimeout(500);
 
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	                
-	            
+                int totalRowsInTable = page.locator("//tr").count() - 1;
+                System.out.println("After selecting '" + rangeLabel + "': Rows = " + totalRowsInTable);
+            }
 
-	                
-	                
+        } catch (Exception e) {
+            test.fail("❌ Error: " + e.getMessage());
+            throw e;
+        } finally {
+            closePlaywright();
+        }
 
-	                
-	                
-	                
-	                
-	                
-	                
-	            }
-	            
-	            
-	            
-	            catch (Exception e) {
-	                test.fail("❌ Error in row " + i + ": " + e.getMessage());
-	                throw e;
-	            }
-	
-	        }}
+        extent.flush();
+    }
 }

@@ -6,8 +6,6 @@ import java.nio.file.Paths;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
@@ -16,13 +14,15 @@ import com.promilo.automation.advertiser.AdvertiserProspects;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.ExtentReports;
 
 public class ProspectRejectFunctionality extends BaseClass {
 
     @Test
-    public void verifyProspectRejectFunctionality() throws InterruptedException, IOException {
+    public void ProspectRejectFunctionalityTest() throws InterruptedException, IOException {
         ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("🚀 Prospect Reject Functionality | Data-Driven Test");
+        ExtentTest test = extent.createTest("🚀 Prospect Reject Functionality | Data Driven");
 
         String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
         ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
@@ -42,43 +42,59 @@ public class ProspectRejectFunctionality extends BaseClass {
             String email = excel.getCellData(i, 7);
             String password = excel.getCellData(i, 6);
 
-            if (!"ProspectReject".equalsIgnoreCase(keyword)) {
-                continue;
-            }
+            if (!"FilterFunctionality".equalsIgnoreCase(keyword)) continue;
 
-            test.info("▶ Running row " + i + " | TestCaseID: " + testCaseId);
+            test.info("🔐 Executing: " + testCaseId + " | Email: " + email);
 
             Page page = initializePlaywright();
-            page.navigate(prop.getProperty("stageUrl"));
-            page.setViewportSize(1000, 768);
+            test.info("🌐 Playwright page initialized");
 
-            Thread.sleep(5000);
+            page.navigate(prop.getProperty("stageUrl"));
+            test.info("🌍 Navigated to URL: " + prop.getProperty("stageUrl"));
+
+            page.setViewportSize(1000, 768);
+            Thread.sleep(3000);
+            test.info("🖥 Viewport set to 1000x768 and waited 3 seconds");
 
             AdvertiserLoginPage login = new AdvertiserLoginPage(page);
+            Assert.assertTrue(login.signInContent().isVisible(), "❌ Sign-in content not visible.");
+            test.info("✅ Sign-in content is visible");
 
-            Assert.assertTrue(login.signInContent().isVisible(), "❌ Sign-in content is not visible.");
-            Assert.assertTrue(login.talkToAnExpert().isVisible(), "Talk To expert content should be visible");
+            Assert.assertTrue(login.talkToAnExpert().isVisible(), "Talk To Expert should be visible");
+            test.info("✅ Talk To Expert is visible");
 
-            login.loginMailField().fill(email);
-            login.loginPasswordField().fill(password);
+            login.loginMailField().fill("fewer-produce@qtvjnqv9.mailosaur.net");
+            test.info("✉ Entered email");
+
+            login.loginPasswordField().fill("Karthik@88");
+            test.info("🔑 Entered password");
+
             login.signInButton().click();
+            test.info("🔓 Clicked Sign-in button");
 
-            // Navigate to My Account
             page.locator("//a[@class='nav-menu-main menu-toggle hidden-xs is-active nav-link']").click();
+            test.info("☰ Clicked main menu toggle");
 
             AdvertiserHomepage myaccount = new AdvertiserHomepage(page);
             myaccount.myAccount().click();
+            test.info("📁 Clicked My Account");
 
             AdverstiserMyaccount prospect = new AdverstiserMyaccount(page);
             prospect.myProspect().click();
+            test.info("📋 Clicked My Prospect");
 
             AdvertiserProspects approveFunctionality = new AdvertiserProspects(page);
             approveFunctionality.Jobs().click();
+            test.info("💼 Clicked Jobs tab");
 
             Thread.sleep(3000);
             approveFunctionality.RejectButton().first().click();
+            test.info("❌ Clicked Reject button for the first prospect");
 
             test.pass("✅ Reject action completed successfully for row " + i);
         }
+
+        extent.flush();
+        test.info("🧹 Extent report flushed and test completed.");
     }
 }

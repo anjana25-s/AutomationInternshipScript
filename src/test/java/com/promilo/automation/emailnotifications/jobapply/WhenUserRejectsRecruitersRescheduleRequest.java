@@ -22,13 +22,9 @@ import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
-<<<<<<< HEAD
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.emailnotifications.EmailnotificationsShortlisted;
-=======
-import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -123,12 +119,12 @@ public class WhenUserRejectsRecruitersRescheduleRequest extends BaseClass {
    }
 
    public void applyForJobAsRegisteredUser(Page page, String inputvalue, String password, String name, String otp, String mailphone) throws Exception {
-       LandingPage landingPage = new LandingPage(page);
+       MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
        try {
-           landingPage.getPopup().click();
+           mayBeLaterPopUp.getPopup().click();
        } catch (Exception ignored) {}
 
-       landingPage.clickLoginButton();
+       mayBeLaterPopUp.clickLoginButton();
 
        LoginPage loginPage = new LoginPage(page);
        loginPage.loginMailPhone().fill(inputvalue);
@@ -142,8 +138,11 @@ public class WhenUserRejectsRecruitersRescheduleRequest extends BaseClass {
 
 
        
-       Locator developerJob = page.locator("//p[text()='Developer']").first();
-       developerJob.click();
+       page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
+       page.keyboard().press("Enter");
+       page.waitForTimeout(15000);
+
+
        test.info("Clicked on Developer job listing");
        
        Thread.sleep(4000);
@@ -211,6 +210,12 @@ public class WhenUserRejectsRecruitersRescheduleRequest extends BaseClass {
 
        // Verify and proceed
        page.locator("//button[text()='Verify & Proceed']").click();
+       
+       
+       
+       
+       Thread.sleep(2000);
+       
        Locator firstEnabledDate = page.locator("span.flatpickr-day:not(.flatpickr-disabled)").first();
        firstEnabledDate.click();
        
@@ -220,6 +225,7 @@ public class WhenUserRejectsRecruitersRescheduleRequest extends BaseClass {
        
        page.locator("//li[@class='time-slot-box list-group-item']").first().click();
 
+       page.locator("//button[text()='Next']").click();
 
 
 
@@ -235,7 +241,7 @@ public class WhenUserRejectsRecruitersRescheduleRequest extends BaseClass {
        test.info("🌐 Opened Advertiser Portal");
 
        AdvertiserLoginPage login = new AdvertiserLoginPage(page3);
-       login.loginMailField().fill("agree-laugh@ofuk8kzb.mailosaur.net");
+       login.loginMailField().fill("fewer-produce@qtvjnqv9.mailosaur.net");
        login.loginPasswordField().fill("Karthik@88");
        login.signInButton().click();
        test.info("✅ Advertiser logged in");
@@ -255,12 +261,14 @@ public class WhenUserRejectsRecruitersRescheduleRequest extends BaseClass {
        
        page3.locator("//span[normalize-space(text())='Reschedule']").first().click(new Locator.ClickOptions().setForce(true));
        
-       
+       // Select today's date dynamically
+       page3.locator("//span[@class='flatpickr-day']").first().click();
 
        // Select the first available time slot dynamically
        page3.locator("li.time-slot-box.list-group-item").first().click();	
        page3.locator("li.time-slot-box.list-group-item").nth(1).click();
        
+
        page3.locator("//button[text()='Submit']").click();
        page3.getByText("Your rescheduled request has been sent to the user.Once the user confirms the").click();
        page3.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Done")).click();
@@ -270,15 +278,17 @@ public class WhenUserRejectsRecruitersRescheduleRequest extends BaseClass {
        
        Page page1 = page.context().newPage();
 
-       page1.navigate("https://mailosaur.com/app/servers/ofuk8kzb/messages/inbox");
+       page1.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
 
-       page1.locator("//input[@placeholder='Enter your email address']").fill("karthiku7026@gmail.com");
+       page1.locator("//input[@placeholder='Enter your email address']").fill("karthikmailsaur@gmail.com");
        page1.locator("//button[text()='Continue']").click();
 
        page1.locator("//input[@placeholder='Enter your password']").fill("Karthik@88");
        page1.locator("//button[text()='Log in']").click();
        
-       page1.locator("//p[text()='Developer Wants to Reschedule Your Meeting: Approve Now! 📅']").first().click();
+       page1.waitForTimeout(2000);
+       
+       page1.locator("//p[contains(text(),'Wants to Reschedule Your Meeting: Approve Now! ')]").first().click();
     // Click on "Review" button and wait for the new page
        Page newPage = page1.waitForPopup(() -> {
            page1.locator("//span[contains(text(),'Review')]").click();
@@ -291,7 +301,8 @@ public class WhenUserRejectsRecruitersRescheduleRequest extends BaseClass {
        // Click on "Accept Request" button
        newPage.locator("//button[text()='Cancel Request']").click();
        newPage.locator("//button[text()='Yes']").click();
-      System.out.println(newPage.locator("//p[text()='Your meeting has been successfully cancelled.']").textContent()); 
+       page.waitForTimeout(5000);
+      System.out.println(newPage.locator("//p[text()='Your meeting has been successfully cancelled.']").isVisible()); 
        
 
        

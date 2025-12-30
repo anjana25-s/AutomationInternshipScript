@@ -18,11 +18,11 @@ import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipErrorMessa
 import com.promilo.automation.pageobjects.signuplogin.HomePage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class BrandEndorsementErrorMessagesValidation extends Baseclass {
+public class BrandEndorsementErrorMessagesValidation extends BaseClass {
 
     ExtentReports extent = ExtentManager.getInstance();
     ExtentTest test = extent.createTest("Brand Endorsement Error Messages Validation Functionality");

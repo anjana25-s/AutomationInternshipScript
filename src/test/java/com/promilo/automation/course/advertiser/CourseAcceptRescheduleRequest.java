@@ -20,11 +20,11 @@ import com.promilo.automation.advertiser.AdvertiserProspects;
 import com.promilo.automation.courses.intrestspages.FreeVideoCounsellingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class CourseAcceptRescheduleRequest extends Baseclass {
+public class CourseAcceptRescheduleRequest extends BaseClass {
 
     ExtentReports extent;
     ExtentTest test;
@@ -130,7 +130,7 @@ public class CourseAcceptRescheduleRequest extends Baseclass {
                 System.out.println("Success Message: " + successMsg);
                 test.info("Success Toaster: " + successMsg);
 
-                Assert.assertTrue(successMsg.contains("Success"), "❌ Accept success message not found");
+                Assert.assertTrue(successMsg.contains("Thanks for Accepting this reschedule request. Your meeting is confirmed."), "❌ Accept success message not found");
                 
                 
                 
@@ -158,7 +158,7 @@ public class CourseAcceptRescheduleRequest extends Baseclass {
                 
              
                    LoginPage loginPage1 = new LoginPage(userPage);
-                   loginPage1.loginMailPhone().fill(Baseclass.generatedPhone); // use the generated email
+                   loginPage1.loginMailPhone().fill(BaseClass.generatedPhone); // use the generated email
                    loginPage1.loginWithOtp().click();
                    loginPage1.otpField().fill("9999");
                    loginPage1.loginButton().click();
@@ -172,7 +172,7 @@ public class CourseAcceptRescheduleRequest extends Baseclass {
                    freeVideoCounselling.myInterestTab().click();
                    
                    userPage.waitForTimeout(2000);
-                   userPage.locator("//div[text()='Accepted']").click();
+                   userPage.locator("//div[text()='Accepted']").first().click();
                    
                    
                    userPage.waitForTimeout(2000);

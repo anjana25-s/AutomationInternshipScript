@@ -1,27 +1,18 @@
 package com.promilo.automation.signupandlogin;
 
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.microsoft.playwright.*;
+import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import com.microsoft.playwright.options.*;
 import org.testng.annotations.Test;
+import org.testng.Assert;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
-import com.microsoft.playwright.assertions.PlaywrightAssertions;
-import com.microsoft.playwright.options.LoadState;
-import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.BaseClass;
-import com.promilo.automation.resources.ExcelUtil;
-import com.promilo.automation.resources.ExtentManager;
+import com.promilo.automation.pageobjects.signuplogin.*;
+import com.promilo.automation.resources.*;
+
+import java.nio.file.Paths;
+import java.util.*;
 
 public class PhoneLoginWithValidOtp extends BaseClass {
 
@@ -35,7 +26,7 @@ public class PhoneLoginWithValidOtp extends BaseClass {
          
          
         ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("Promilo Staging - Mail Login with Invalid OTP (Playwright)");
+        ExtentTest test = extent.createTest("PhoneLoginWithValidOtp");
 
         String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
         ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
@@ -49,6 +40,7 @@ public class PhoneLoginWithValidOtp extends BaseClass {
 
         Set<String> loginKeywords = new HashSet<>(Collections.singletonList("PhoneValidOtpLogin"));
 
+       
         for (int i = 1; i < rowCount; i++) {
             String testCaseId = excel.getCellData(i, 0);
             String keyword = excel.getCellData(i, 1);
@@ -70,7 +62,7 @@ public class PhoneLoginWithValidOtp extends BaseClass {
                 page1.navigate(prop.getProperty("url"));
                 page1.waitForLoadState(LoadState.NETWORKIDLE);
 
-LandingPage landingpage= new LandingPage(page1);
+MayBeLaterPopUp landingpage= new MayBeLaterPopUp(page1);
 
              try {
             	 landingpage.getPopup().click();
@@ -95,7 +87,7 @@ LandingPage landingpage= new LandingPage(page1);
                 loginPage.loginButton().click();
                 test.info("🚀 Clicked Login button after OTP entry.");
 
-                DashboardPage mystuff= new DashboardPage(page1);
+                HomePage mystuff= new HomePage(page1);
                 PlaywrightAssertions.assertThat(mystuff.mystuff()).isVisible();
                 test.pass("✅ 'My Stuff' icon is visible after signup for " + testCaseId + ". Marking test as PASS.");                
                 

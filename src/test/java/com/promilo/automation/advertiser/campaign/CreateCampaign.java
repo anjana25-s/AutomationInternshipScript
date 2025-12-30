@@ -1,13 +1,16 @@
 package com.promilo.automation.advertiser.campaign;
 
+import com.promilo.automation.advertiser.campaign.*;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.advertiser.AddAssignment;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
@@ -19,10 +22,12 @@ import com.promilo.automation.advertiser.jobcampaign.CreateJobCampaign;
 import com.promilo.automation.advertiser.jobcampaign.CreateJobPosting;
 import com.promilo.automation.advertiser.jobcampaign.Feedback;
 import com.promilo.automation.advertiser.jobcampaign.Myaudience;
+import com.promilo.automation.advertiser.jobcampaign.SaveAndPreviewPage;
 import com.promilo.automation.advertiser.jobcampaign.ScreeningQuestions;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
+import com.promilo.automation.resources.ToasterUtil;
 
 public class CreateCampaign extends BaseClass {
 
@@ -31,7 +36,7 @@ public class CreateCampaign extends BaseClass {
     private Page page;
 
     @Test
-    public void performLoginTest() {
+    public void CreateCampaignTest() {
         try {
             extent = ExtentManager.getInstance();
             test = extent.createTest("🚀 Campaign Creation via Excel Data");
@@ -40,7 +45,7 @@ public class CreateCampaign extends BaseClass {
             ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
 
             String email = excel.getCellData(1, 2);
-            String password = excel.getCellData(1, 3);
+            String InputValue = excel.getCellData(1, 3);
             String campaignName = excel.getCellData(1, 4);
             String jobRole = excel.getCellData(1, 5);
             String brandName = excel.getCellData(1, 6);
@@ -65,12 +70,12 @@ public class CreateCampaign extends BaseClass {
             Assert.assertTrue(login.signInContent().isVisible(), "❌ Sign-in content is not visible.");
             Assert.assertTrue(login.talkToAnExpert().isVisible(), "Talk To expert content is visible");
 
-            login.loginMailField().fill(email);
-            login.loginPasswordField().fill(password);
+            login.loginMailField().fill("fewer-produce@qtvjnqv9.mailosaur.net");
+            login.loginPasswordField().fill("Karthik@88");
             login.signInButton().click();
 
-            page.locator("//a[@class='nav-menu-main menu-toggle hidden-xs is-active nav-link']").click();
             AdvertiserHomepage campaign = new AdvertiserHomepage(page);
+            campaign.hamburger().click();
             campaign.campaign().click();
 
             Campaign clickCampaign = new Campaign(page);
@@ -79,9 +84,9 @@ public class CreateCampaign extends BaseClass {
             clickCampaign.JobButton().click();
 
             CreateJobCampaign campaignDetails = new CreateJobCampaign(page);
-            campaignDetails.campaingnName().fill(campaignName);
+            campaignDetails.campaingnName().fill("December Automation");
             campaignDetails.JobRole().fill(jobRole);
-            campaignDetails.BrandName().fill(brandName);
+            campaignDetails.BrandName().fill("December Campaign Automation");
 
             campaignDetails.CompanyType().click();
             page.keyboard().type("Hospitality");
@@ -89,11 +94,11 @@ public class CreateCampaign extends BaseClass {
 
             Thread.sleep(3000);
             campaignDetails.IndustryDropdown().click();
-            page.locator("//div[contains(text(),'Accounting / Tax / Company Secretary / Audit')]").click();
+            campaignDetails.industryAccountingOption().click();
 
             campaignDetails.JobRoleDropdown().click();
             Thread.sleep(3000);
-            page.locator("//div[text()='Head/VP/GM-Finance/Audit']").click();
+            campaignDetails.jobRoleFinanceOption().click();
             campaignDetails.Descrption().fill(description);
 
             campaignDetails.minExperiance().click();
@@ -109,22 +114,22 @@ public class CreateCampaign extends BaseClass {
             page.keyboard().press("Enter");
 
             Thread.sleep(2000);
-            campaignDetails.CampaingnStartDate().fill(startDate);
-            campaignDetails.CampaignEndDate().fill(endDate);
+            campaignDetails.CampaingnStartDate().first().fill("2025-11-21");
+            campaignDetails.CampaignEndDate().fill("2026-07-10");
 
             campaignDetails.Workmode().click();
             page.keyboard().press("Enter");
 
             campaignDetails.UploadCompanyLogo().setInputFiles(Paths.get("C:/Users/Admin/Downloads/pexels-moh-adbelghaffar-771742.jpg"));
-            page.locator("button[class='crop-next-buttonN btn btn-secondary']").click();
+            campaignDetails.cropNextButton().click();
             campaignDetails.SaveButton().click();
 
-            campaignDetails.textArea().fill("Located in the heart of the city..."); // still hardcoded as discussed
+            campaignDetails.textArea().fill("Located in the heart of the city..."); 
             campaignDetails.AddTitle().click();
             campaignDetails.BenefitsAndPerks().click();
             campaignDetails.AddButton().click();
 
-            page.locator("//a[text()='Benefits & Perks']").click();
+            campaignDetails.previewBenefitsTab().click();
             campaignDetails.textArea().nth(1).fill("Located in the heart of the city...");
 
             campaignDetails.saveAndnextButton().click();
@@ -134,49 +139,51 @@ public class CreateCampaign extends BaseClass {
             page.keyboard().type("30");
             page.keyboard().press("Enter");
 
-            choseDateandTime.Monday().click();
-            page.locator("//button[@class='plus-icon btn btn-secondary']").click();
+          
+            campaignDetails.mondayCheckbox().click();
+                // Create 10 slots for the day
+                for (int i = 0; i < 10; i++) {
+                	campaignDetails.addSlotButton().click();
+                	Thread.sleep(1000);
 
-            page.locator("//div[@class='time-slot-select__input-container css-19bb58m']").nth(1).click();
-            page.keyboard().type("12");
-            page.keyboard().press("Enter");
+                    // Select nth slot
+                	campaignDetails.timeSlotContainer()
+                        .nth(i + 1).click();
+                    Thread.sleep(1000);
 
-            page.locator("//button[@class='plus-icon btn btn-secondary']").click();
-            page.locator("//div[@class='time-slot-select__input-container css-19bb58m']").nth(2).click();
-            page.keyboard().type("02");
-            page.keyboard().press("Enter");
+                    page.keyboard().type(String.format("%02d", (i % 24)));
+                    Thread.sleep(500);
 
-            choseDateandTime.English().click();
-            choseDateandTime.Hindi().click();
-            choseDateandTime.Kannada().click();
-            choseDateandTime.SaveButton().click();
+                    page.keyboard().press("Enter");
+                    Thread.sleep(500);
+                }
+
+                choseDateandTime.English().click();
+                    choseDateandTime.Hindi().click();
+                    choseDateandTime.Kannada().click();
+                    choseDateandTime.SaveButton().click();
+
 
             ScreeningQuestions screening = new ScreeningQuestions(page);
             Feedback feedback = new Feedback(page);
             screening.AddButton().click();
-            page.locator("input[placeholder='Type Question Here']").fill("are you an immediate joiner");
+            campaignDetails.questionInput().fill("are you an immediate joiner");
             feedback.EnteroptionField().fill("yes");
             
-            page.locator("//button[@class='py-0 px-1 ms-0 btn btn-primary']").click();
+            campaignDetails.addOptionButton().click();
             
-            page.locator("//input[@class='border-0 outline-0 ms-1 form-control']").nth(1).fill("no0");
+            campaignDetails.optionInput().nth(1).fill("no0");
             screening.SaveButton().click();
-
-            
-            
-            
-            
-            
-
 
             // Feedback again
             feedback.AddButton().click();
-            page.locator("input[placeholder='Type Question Here']").fill("are you an immediate joiner");
+            campaignDetails.questionInput().fill("are you an immediate joiner");
             feedback.EnteroptionField().fill("yes");
-            page.locator("//button[@class='py-0 px-1 ms-0 btn btn-primary']").click();
+            campaignDetails.addOptionButton().click();
             
-            page.locator("//input[@class='border-0 outline-0 ms-1 form-control']").nth(1).fill("no0");
-feedback.FeedbackSavebutton().click();
+            
+            campaignDetails.optionInput().nth(1).fill("no0");
+            feedback.FeedbackSavebutton().click();
 
             AddAssignment assignment = new AddAssignment(page);
             assignment.addAssignment().click();
@@ -189,9 +196,9 @@ feedback.FeedbackSavebutton().click();
             create.AssignmentTextarea().fill(assignmentDesc);
             create.SubmitButton().click();
             
+            create.SelectButton().first().click();
+            create.SaveAndNextButton().click();
 
-create.SelectButton().first().click();
-create.SaveAndNextButton().click();
             // My Audience
             Myaudience audience = new Myaudience(page);
             audience.AudienceIndustryDropdwon().first().click();
@@ -199,12 +206,26 @@ create.SaveAndNextButton().click();
             page.keyboard().press("Enter");
 
             audience.FunctionalAreadropdown().click();
-audience.FunctionalAreaOption().click();            audience.SelectRelevantTitle().click();
+            audience.FunctionalAreaOption().click();            
+            audience.SelectRelevantTitle().click();
             page.keyboard().type("accounts");
             page.keyboard().press("Enter");
 
-            audience.Keywords().fill("Promilo engineer9");
+            // Generate a random word (8 letters)
+            int wordLength = 8;
+            String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            StringBuilder randomWord = new StringBuilder();
+            Random random = new Random();
+
+            for (int i = 0; i < wordLength; i++) {
+                randomWord.append(alphabet.charAt(random.nextInt(alphabet.length())));
+            }
+
+            // Fill the random word
+            audience.Keywords().fill(randomWord.toString());
             page.keyboard().press("Enter");
+
+            System.out.println("✅ Entered Random Word: " + randomWord);
 
             audience.MinAge().first().click();
             page.keyboard().type("20");
@@ -231,13 +252,96 @@ audience.FunctionalAreaOption().click();            audience.SelectRelevantTitle
             
             Thread.sleep(2000);
             
-            
             budget.saveAndPreview().click();
+            Thread.sleep(3000);
+            
+         // ====== Role ======
+            SaveAndPreviewPage job= new SaveAndPreviewPage(page);
+            String title = job.title().textContent();
+            System.out.println("Title: " + title);
+            Assert.assertTrue(title.contains("Software Tester"),
+                    "❌ Title does NOT contain expected text");
+            
+            
 
-            Locator statusDiv = page.locator("//div[@role='status']");
-            Assert.assertTrue(statusDiv.isVisible(), "Status div should be visible");            
-            test.pass("✅ Campaign successfully created using Excel data for: " + email);
+            // ====== Campaign Name ======
+            String subTitle = job.subTitle().textContent();
+            System.out.println("Sub Title: " + subTitle);
+            Assert.assertTrue(subTitle.contains("December Campaign Automation"),
+                    "❌ Sub-title does NOT contain expected text");
 
+            // ====== Salary ======
+            String salary = job.salary().textContent();
+            System.out.println("salary" + salary);
+            Assert.assertTrue(salary.contains("₹ 5.7L - 10.0L"),
+                    "❌ Company & Location does NOT contain salary indicator");
+
+            // ====== JOB DETAILS ======
+            String Experience = job.experience().textContent();
+            System.out.println("Experience: " + Experience);
+            Assert.assertTrue(Experience.contains("Experience"),
+                    "❌ Job Detail 1 missing 'Experience'");
+
+            // ====== COMPANY & LOCATION ======
+            String Location = job.location().textContent();
+            System.out.println("Location: " + Location);
+            Assert.assertTrue(Location.contains("Location"),
+                    "❌ Job Detail 2 missing 'Location'");
+
+            // ====== Work Mode======
+            String workMode = job.workMode().textContent();
+            System.out.println("Work Mode: " + workMode);
+            Assert.assertTrue(workMode.contains("Work Mode"),
+                    "❌ Job Detail 3 missing 'Work Mode'");
+
+            // ====== JOB DESCRIPTION ======
+            job.jobDescriptionTab().click();
+            String jobDescription = job.ckContent().textContent();
+            System.out.println("Job Description: " + jobDescription);
+            Assert.assertTrue(jobDescription.contains("city"),
+                    "❌ Job Description missing expected content");
+
+            // ====== BENEFITS & PERKS ======
+            job.benefitsTab().click();
+            String perks = job.ckContent().textContent();
+            System.out.println("Benefits & Perks: " + perks);
+            Assert.assertTrue(perks.contains("city"),
+                    "❌ Benefits & Perks missing expected content");
+
+            // ====== OTHER DETAILS ======
+            String companyName = job.companyName().textContent();
+            System.out.println("Company Name: " + companyName);
+            Assert.assertTrue(companyName.contains("Company Name"),
+                    "❌ Other Detail 1 missing 'Company Name'");
+
+            String companyType = job.companyType().textContent();
+            System.out.println("Company Type: " + companyType);
+            Assert.assertTrue(companyType.contains("Company Type"),
+                    "❌ Other Detail 2 missing 'Company Type'");
+
+            String brandName1 = job.brandName().textContent();
+            System.out.println("Brand Name: " + brandName1);
+            Assert.assertTrue(brandName1.contains("Brand"),
+                    "❌ Other Detail 3 missing 'Brand'");
+
+            String companySize = job.companySize().textContent();
+            System.out.println("Company Size: " + companySize);
+            Assert.assertTrue(companySize.contains("Company Size"),
+                    "❌ Other Detail 4 missing 'Company Size'");
+
+            String aboutCompanyTitle = job.aboutCompanyTitle().textContent();
+            System.out.println("About Company Title : " + aboutCompanyTitle);
+            Assert.assertTrue(aboutCompanyTitle.contains("About"),
+                    "❌ Section title missing 'About'");
+
+            String companyDetails = job.paragraph9().textContent();
+            System.out.println("Paragraph 9: " + companyDetails);
+            Assert.assertTrue(companyDetails.contains("engineer"),
+                    "❌ Paragraph 9 missing expected keyword");
+
+            job.closeButton().click();
+            job.publishButton().click();
+        
         } catch (Exception e) {
             if (test != null) {
                 test.fail("❌ Test failed: " + e.getMessage());

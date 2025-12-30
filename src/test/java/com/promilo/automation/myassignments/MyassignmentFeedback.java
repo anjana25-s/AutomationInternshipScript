@@ -9,8 +9,8 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.promilo.automation.pageobjects.myresume.MyResumePage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.myresume.Hamburger;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -48,9 +48,9 @@ public class MyassignmentFeedback extends BaseClass {
             page.setViewportSize(1000, 768);
 
             // Landing page
-            LandingPage landingPage = new LandingPage(page);
-            landingPage.getPopup().click();
-            landingPage.clickLoginButton();
+            MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
+            mayBeLaterPopUp.getPopup().click();
+            mayBeLaterPopUp.clickLoginButton();
 
             // Login
             LoginPage loginPage = new LoginPage(page);
@@ -59,7 +59,7 @@ public class MyassignmentFeedback extends BaseClass {
             loginPage.loginButton().click();
 
             // MyResume navigation
-            MyResumePage resumePage = new MyResumePage(page);
+            Hamburger resumePage = new Hamburger(page);
             resumePage.Mystuff().click();
             Assert.assertTrue(resumePage.Mystuff().isVisible(), "Mystuff menu should be visible after login");
             resumePage.MyAccount().click();

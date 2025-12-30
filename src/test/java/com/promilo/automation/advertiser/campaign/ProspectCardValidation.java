@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.testng.Assert;
@@ -35,13 +35,15 @@ import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-<<<<<<< HEAD
-import org.json.JSONObject;
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.util.ImageHelper;
 
-public class ProspectCardValidation extends Baseclass {
-=======
+import org.json.JSONObject;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
 public class ProspectCardValidation extends BaseClass {
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
 
     @Test(dependsOnMethods = "com.promilo.automation.emailnotifications.jobapply.UserInitiatesApplyingForJob.applyForJobTestFromExcel")
     public void ProspectCardValidationTest() throws InterruptedException, IOException {
@@ -103,7 +105,8 @@ public class ProspectCardValidation extends BaseClass {
             prospect.Jobs().click();
             Thread.sleep(4000);
 
-            // Candidate Interest Count
+            // ---------------- EXISTING ASSERTIONS (unchanged) ----------------
+
             Assert.assertTrue(prospect.CandidateIntrestcount().first().isVisible(),
                     "Candidate Interest Count should be visible");
 
@@ -111,7 +114,6 @@ public class ProspectCardValidation extends BaseClass {
             String numberOnly = interestText.replaceAll("[^0-9]", "");
             System.out.println("Candidate Interest Count: " + interestText + " | Extracted Number: " + numberOnly);
 
-            // Profile Name
             String actualName = prospect.ProfileName().first().textContent().trim();
             System.out.println("Profile Name: " + actualName);
 
@@ -123,18 +125,17 @@ public class ProspectCardValidation extends BaseClass {
                     normalizedExpected,
                     "❌ Profile Name mismatch! Expected: Aarav Sharma | Actual: " + actualName
             );
+            
 
-            // Campaign Status
             Assert.assertTrue(prospect.CmpaignStatus().first().isVisible(), "Campaign Status should be visible");
             String campaignStatusFull = prospect.CmpaignStatus().first().textContent().trim();
             String campaignStatus = campaignStatusFull.split(":")[1].trim();
             Assert.assertEquals(campaignStatus, "Active", "Campaign Status is not Active");
-            System.out.println("Extracted Campaign Status: " + campaignStatus);
 
-            // Campaign Info Assertions
             Assert.assertTrue(prospect.campaignInfo().first().isVisible(), "Campaign Info should be visible");
             String campaignInfoText = prospect.campaignInfo().first().textContent().trim();
 
+            // interest shown + meeting status extraction logic remains unchanged
             String interestShownPrefix = "Interest Shown on";
             String interestShownDate = "";
             if (campaignInfoText.contains(interestShownPrefix)) {
@@ -143,6 +144,7 @@ public class ProspectCardValidation extends BaseClass {
                 interestShownDate = campaignInfoText.substring(startIndex, endIndex).trim();
             }
 
+            
             String meetingStatusPrefix = "Meeting Status";
             String meetingStatus = "";
             if (campaignInfoText.toLowerCase().contains(meetingStatusPrefix.toLowerCase())) {
@@ -150,24 +152,24 @@ public class ProspectCardValidation extends BaseClass {
                 int statusEnd = campaignInfoText.length();
                 meetingStatus = campaignInfoText.substring(statusStart, statusEnd).trim();
             }
-            Assert.assertTrue(meetingStatus.toLowerCase().contains("pending"), "❌ Meeting Status mismatch! Expected to contain 'Pending' | Actual: " + meetingStatus);
+            Assert.assertTrue(meetingStatus.toLowerCase().contains("pending"),
+                    "❌ Meeting Status mismatch! Expected to contain 'Pending' | Actual: " + meetingStatus);
 
             Assert.assertTrue(campaignInfoText.contains("English"), "❌ Preferred Language mismatch!");
             Assert.assertTrue(campaignInfoText.contains("N/A"), "❌ Industry mismatch!");
 
-            // Profile Card
             Assert.assertTrue(prospect.ProfileCard().first().isVisible(), "Profile Card should be visible");
-
-            // Skills Section
             Assert.assertTrue(prospect.SkillsSection().first().isVisible(), "Skills section should be visible");
 
             String skills = prospect.SkillsSection().first().textContent().trim();
             String normalizedSkills = skills.replaceAll("[^a-zA-Z]", "").toLowerCase();
+
             String[] expectedSkills = {
                     "Playwright","Selenium Webdriver","Java","Javascript","Python","TestNG","JUnit","Jenkins",
                     "Docker","Postman","REST Assured","MySQL","MongoDB","GIT","Github","Communication",
                     "Problem-Solving","Debugging"
             };
+
             boolean atLeastOneSkillFound = false;
             for (String skill : expectedSkills) {
                 String normalizedExpected1 = skill.replaceAll("[^a-zA-Z]", "").toLowerCase();
@@ -176,52 +178,67 @@ public class ProspectCardValidation extends BaseClass {
                     break;
                 }
             }
-            Assert.assertTrue(atLeastOneSkillFound, "❌ Skills mismatch! Expected at least one matching skill. Actual Skills: " + skills);
 
-            // Other Profile Fields
+            Assert.assertTrue(atLeastOneSkillFound,
+                    "❌ Skills mismatch! Expected at least one matching skill. Actual Skills: " + skills);
+
             Assert.assertTrue(prospect.Source().first().isVisible(), "Source should be visible");
 
-            // Meeting Date
             Assert.assertTrue(prospect.MeetingDate().first().isVisible(), "Meeting Date should be visible");
             String meetingDate = prospect.MeetingDate().first().textContent().trim();
+
             Pattern p = Pattern.compile("(\\d{1,2})");
             Matcher m = p.matcher(meetingDate);
             String displayedDayStr = "";
             if (m.find()) displayedDayStr = m.group(1);
             else Assert.fail("❌ Could not extract the day from Meeting Date: " + meetingDate);
-            int displayedDay = Integer.parseInt(displayedDayStr);
-            int storedDay = Integer.parseInt(Baseclass.selectedDate.trim());
-            Assert.assertEquals(displayedDay, storedDay, "❌ Meeting Date mismatch! Stored Date: " + storedDay + " | Displayed Day: " + displayedDay);
 
-            // Meeting Time
+            int displayedDay = Integer.parseInt(displayedDayStr);
+            int storedDay = Integer.parseInt(BaseClass.selectedDate.trim());
+            Assert.assertEquals(displayedDay, storedDay,
+                    "❌ Meeting Date mismatch! Stored Date: " + storedDay + " | Displayed Day: " + displayedDay);
+
             Assert.assertTrue(prospect.MeetingTime().first().isVisible(), "Meeting Time should be visible");
             String meetingTime = prospect.MeetingTime().first().textContent().trim();
+
             Pattern timePattern = Pattern.compile("(\\d{1,2}:\\d{2}\\s?[AP]M)");
             Matcher timeMatcher = timePattern.matcher(meetingTime);
             String displayedTime = "";
             if (timeMatcher.find()) displayedTime = timeMatcher.group(1).replaceAll("\\s+", " ").trim();
             else Assert.fail("❌ Could not extract time from Meeting Time: " + meetingTime);
-            String storedTime = Baseclass.selectedTime.replaceAll("\\s+", " ").trim();
-            Assert.assertEquals(displayedTime, storedTime, "❌ Meeting Time mismatch! Stored Time: " + storedTime + " | Displayed: " + displayedTime);
 
-            // Candidate Details and User Profile
+            String storedTime = BaseClass.selectedTime.replaceAll("\\s+", " ").trim();
+            Assert.assertEquals(displayedTime, storedTime,
+                    "❌ Meeting Time mismatch! Stored Time: " + storedTime + " | Displayed: " + displayedTime);
+
             Assert.assertTrue(prospect.CandidateDetails().first().isVisible(), "Candidate Details should be visible");
             Assert.assertTrue(prospect.UserProfile().first().isVisible(), "User Profile should be visible");
 
-            // Resume Preview
+            // ---------------------- RESUME PREVIEW ----------------------
             Thread.sleep(2000);
             page.locator("//span[text()='Uploaded Resume']").first().click();
             prospect.uploadedResume().first().click();
             Thread.sleep(3000);
 
-            // 1) Capture Screenshot
-            byte[] screenshotBytes = page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
+            String firstPage = page.locator("[id='image-generated']").first().textContent().trim();
+            System.out.println(firstPage);
+
+            String secondPage = page.locator("[id='image-generated']").first().textContent().trim();
+            System.out.println(secondPage);
+
+            // ================================================================
+            // 🚀 UPDATED: Capture ONLY the resume preview (not full page)
+            // ================================================================
+            Locator resumePreview = page.locator("[class='p-0 m-1 modal-body']");
+
+            byte[] screenshotBytes = resumePreview.screenshot();
             String base64Image = Base64.getEncoder().encodeToString(screenshotBytes);
 
-            // IMPORTANT: URL encode base64 for OCR.space
             String encodedBase64 = java.net.URLEncoder.encode(base64Image, java.nio.charset.StandardCharsets.UTF_8);
 
-            // 2) Send to OCR.space
+            // ================================================================
+            // 🚀 Send clean preview screenshot to OCR.space
+            // ================================================================
             String previewText = "";
             try {
                 String apiKey = "K89550115588957";
@@ -263,34 +280,66 @@ public class ProspectCardValidation extends BaseClass {
                 Assert.fail("❌ OCR failed: " + e.getMessage());
             }
 
-            // ------------------ 3) Extract Text from Uploaded PDF ------------------
+            // ======================================================================
+            // 🔥 INLINE TESSERACT 5 OCR FOR PDF FILE (unchanged)
+            // ======================================================================
+
             String uploadedFilePath = "C:\\Users\\Admin\\Downloads\\Updated_Resume_With_Location.pdf";
             String resumeText = "";
 
             try {
                 if (uploadedFilePath.endsWith(".pdf")) {
-                    PDDocument document = PDDocument.load(new File(uploadedFilePath));
-                    PDFTextStripper pdfStripper = new PDFTextStripper();
-                    resumeText = pdfStripper.getText(document);
-                    document.close();
+
+                    PDDocument doc = PDDocument.load(new File(uploadedFilePath));
+                    PDFRenderer renderer = new PDFRenderer(doc);
+
+                    Tesseract tesseract = new Tesseract();
+                    tesseract.setDatapath("C:/Program Files/Tesseract-OCR/tessdata");
+                    tesseract.setLanguage("eng");
+
+                    StringBuilder builder = new StringBuilder();
+
+                    for (int pageIndex = 0; pageIndex < doc.getNumberOfPages(); pageIndex++) {
+
+                        BufferedImage image = renderer.renderImageWithDPI(pageIndex, 300);
+
+                        BufferedImage gray = ImageHelper.convertImageToGrayscale(image);
+                        BufferedImage binarized = ImageHelper.convertImageToBinary(gray);
+                        BufferedImage deskewed = ImageHelper.rotateImage(binarized, 0);
+
+                        String pageText = tesseract.doOCR(deskewed);
+
+                        builder.append("\n--- Page ").append(pageIndex + 1).append(" ---\n");
+                        builder.append(pageText);
+                    }
+
+                    resumeText = builder.toString();
+                    doc.close();
+
                 } else if (uploadedFilePath.endsWith(".docx")) {
+
                     FileInputStream fis = new FileInputStream(uploadedFilePath);
                     XWPFDocument document = new XWPFDocument(fis);
                     XWPFWordExtractor extractor = new XWPFWordExtractor(document);
                     resumeText = extractor.getText();
                     extractor.close();
                     document.close();
+
                 } else {
                     Assert.fail("❌ Unsupported resume file format: " + uploadedFilePath);
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
-                Assert.fail("❌ Failed to extract uploaded resume text: " + e.getMessage());
+                Assert.fail("❌ Failed OCR on resume: " + e.getMessage());
             }
 
             resumeText = resumeText.replaceAll("\\s+", " ").trim();
+            System.out.println("✔ OCR Extracted PDF Text: "
+                    + resumeText.substring(0, Math.min(600, resumeText.length())) + "...");
 
-            // ------------------ 4) Compare OCR Text with PDF Text (Word by Word) ------------------
+            // ------------------ Compare Preview OCR vs PDF OCR ------------------
+
             Set<String> pdfWords = extractWords(resumeText);
             Set<String> ocrWords = extractWords(previewText);
 
@@ -302,12 +351,11 @@ public class ProspectCardValidation extends BaseClass {
             System.out.println("🔍 Matching Words: " + matchCount);
             System.out.println("📊 OCR to PDF Match Percentage: " + matchPercentage + "%");
 
-            // PASS if match > 40%
             Assert.assertTrue(matchPercentage > 40,
                     "❌ OCR text similarity too low! (" + matchPercentage + "%)");
 
-            // ------------------ 5) Save Full Page Screenshot ------------------
-            String previewPagePath = "C:\\Users\\Admin\\Downloads\\preview_fullpage.png";
+            // Save Screenshot
+            String previewPagePath = "C:\\Users\\Admin\\Downloads\\screenShot.png";
             page.screenshot(new Page.ScreenshotOptions()
                     .setPath(Paths.get(previewPagePath))
                     .setFullPage(true)

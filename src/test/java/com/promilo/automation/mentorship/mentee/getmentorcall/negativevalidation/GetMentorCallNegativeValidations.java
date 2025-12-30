@@ -12,18 +12,18 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
-import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipErrorMessagesAndToasters;
-import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipFormComponents;
+import com.promilo.automation.mentorship.mentee.DescriptionPage;
+import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
+import com.promilo.automation.mentorship.mentee.intrests.MentorshipErrorMessagesAndToasters;
+import com.promilo.automation.mentorship.mentee.intrests.MentorshipFormComponents;
 import com.promilo.automation.pageobjects.signuplogin.HomePage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class GetMentorCallNegativeValidations extends Baseclass {
+public class GetMentorCallNegativeValidations extends BaseClass {
 
     ExtentReports extent = ExtentManager.getInstance();
     ExtentTest test = extent.createTest("Brand Endorsement Error Messages Validation Functionality");
@@ -112,9 +112,9 @@ public class GetMentorCallNegativeValidations extends Baseclass {
         // =========================================================
         DescriptionPage serviceClick = new DescriptionPage(page);
         serviceClick.allLink().click();
-        Locator buyRessuource=  serviceClick.buyResources().first();
-        buyRessuource.scrollIntoViewIfNeeded();
-        buyRessuource.click();
+        Locator getMentorCall=  serviceClick.getMentorCall().first();
+        getMentorCall.scrollIntoViewIfNeeded();
+        getMentorCall.click();
         
         
         
@@ -128,8 +128,8 @@ public class GetMentorCallNegativeValidations extends Baseclass {
         
         
         //click on Download Resource button
-        MentorshipFormComponents clickDownloadResouce= new MentorshipFormComponents(page);
-        clickDownloadResouce.downloadResource().click();
+        MentorshipFormComponents clickgetMentorCall= new MentorshipFormComponents(page);
+        clickgetMentorCall.getMentorCall().click();
 
         // ✅ Required field validations
         String actualNameError = ErrorMessageValidation.nameIsRequired().textContent();
@@ -183,7 +183,7 @@ ErrorMessageValidation.mobileTextField().nth(1).fill(invalidMobileAlpha);
 ErrorMessageValidation.emailTextField().nth(1).fill(invalidEmailNoDomain);
 
 //click submit button again to trigger validation message
-clickDownloadResouce.downloadResource().click();
+clickgetMentorCall.getMentorCall().click();
 
 page.waitForTimeout(2000);
 

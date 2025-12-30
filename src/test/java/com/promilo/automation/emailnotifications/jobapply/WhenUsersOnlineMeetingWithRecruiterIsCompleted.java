@@ -23,7 +23,7 @@ import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserMymeetingPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -116,12 +116,12 @@ public class WhenUsersOnlineMeetingWithRecruiterIsCompleted extends BaseClass {
             String otp, String mailphone, ExtentTest test) throws Exception {
 
         // ---------- Candidate Flow ----------
-        LandingPage landingPage = new LandingPage(page);
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
         try {
-            landingPage.getPopup().click();
+            mayBeLaterPopUp.getPopup().click();
         } catch (Exception ignored) {}
 
-        landingPage.clickLoginButton();
+        mayBeLaterPopUp.clickLoginButton();
 
         LoginPage loginPage = new LoginPage(page);
         loginPage.loginMailPhone().fill(inputvalue);
@@ -173,8 +173,18 @@ public class WhenUsersOnlineMeetingWithRecruiterIsCompleted extends BaseClass {
         }
 
         page.locator("//button[text()='Verify & Proceed']").click();
-        page.locator("span.flatpickr-day:not(.flatpickr-disabled)").first().click();
+        
+        
+        Locator firstEnabledDate = page.locator("span.flatpickr-day:not(.flatpickr-disabled)").first();
+        firstEnabledDate.click();
+        
+        
+        
+        Thread.sleep(2000);
+        
         page.locator("//li[@class='time-slot-box list-group-item']").first().click();
+
+        page.locator("//button[text()='Next']").click();
         page.locator("(//button[text()='Submit'])[2]").click();
 
         // ---------- Recruiter Flow ----------
@@ -183,7 +193,7 @@ public class WhenUsersOnlineMeetingWithRecruiterIsCompleted extends BaseClass {
 
         AdvertiserLoginPage advLogin = new AdvertiserLoginPage(recruiterPage);
         advLogin.loginMailField().fill("adv@yopmail.com");
-        advLogin.loginPasswordField().fill("devuttan2023");
+        advLogin.loginPasswordField().fill("adv@1234");
         advLogin.signInButton().click();
 
         AdvertiserHomepage home = new AdvertiserHomepage(recruiterPage);
@@ -213,10 +223,9 @@ public class WhenUsersOnlineMeetingWithRecruiterIsCompleted extends BaseClass {
         meetingPage.hostButton().first().click();
         meetingPage.joinMeetingButton().click();
 
-        // ---------- Mailosaur Verification ----------
         Page mailPage = page.context().newPage();
-        mailPage.navigate("https://mailosaur.com/app/servers/ofuk8kzb/messages/inbox");
-        mailPage.locator("//input[@placeholder='Enter your email address']").fill("karthiku7026@gmail.com");
+        mailPage.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
+        mailPage.locator("//input[@placeholder='Enter your email address']").fill("karthikmailsaur@gmail.com");
         mailPage.locator("//button[text()='Continue']").click();
         mailPage.locator("//input[@placeholder='Enter your password']").fill("Karthik@88");
         mailPage.locator("//button[text()='Log in']").click();

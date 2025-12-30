@@ -3,7 +3,7 @@ package com.promilo.automation.mentor.mybilling;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
-public class MentorMyBilling  {
+public class MentorMyBilling extends com.promilo.automation.resources.BaseClass {
 
     private final Page page;
 

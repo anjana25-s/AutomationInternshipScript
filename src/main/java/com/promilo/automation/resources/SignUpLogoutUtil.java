@@ -1,13 +1,15 @@
 package com.promilo.automation.resources;
 
-import org.testng.annotations.Test;
-
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.PlaywrightException;
+import com.microsoft.playwright.*;
 import com.promilo.automation.pageobjects.signuplogin.CreateAccountpage;
-import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.HomePage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.testng.annotations.Test;
 
 public class SignUpLogoutUtil extends BaseClass {
 	
@@ -34,15 +36,15 @@ public class SignUpLogoutUtil extends BaseClass {
         page.setViewportSize(1366, 678);
 
         try {
-            LandingPage landingPage = new LandingPage(page);
+            MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
 
             try {
-                landingPage.getPopup().click(new Locator.ClickOptions().setTimeout(5000));
+                mayBeLaterPopUp.getPopup().click(new Locator.ClickOptions().setTimeout(5000));
             } catch (PlaywrightException ignored) {
                 System.out.println("⚠️ Popup not found. Skipping...");
             }
 
-            landingPage.getSignup().click();
+            mayBeLaterPopUp.getSignup().click();
             CreateAccountpage create = new CreateAccountpage(page);
 
             randomEmail = "testpromilo" + System.currentTimeMillis() + (int) (Math.random() * 1000) + "@mailinator.com";
@@ -58,8 +60,8 @@ public class SignUpLogoutUtil extends BaseClass {
             create.getSubmitButton().click();
 
             // ✅ Dashboard verification
-            DashboardPage dashboardPage = new DashboardPage(page);
-            dashboardPage.mystuff().click();
+            HomePage homePage = new HomePage(page);
+            homePage.mystuff().click();
             page.waitForTimeout(2000);
 
             // ✅ Logout

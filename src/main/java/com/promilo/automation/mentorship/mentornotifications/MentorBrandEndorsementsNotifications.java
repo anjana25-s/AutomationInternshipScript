@@ -16,6 +16,13 @@ public class MentorBrandEndorsementsNotifications{
 	private final Locator brandEndorsementInAppNotification;
 	private final Locator brandEndorsementRejectEmailNotification;
 	private final Locator brandEndorsementRejectInAppNotification;
+	
+	private final Locator intrestShownMailNotification;
+	private final Locator dearText;
+	private final Locator goodnewsText;
+	private final Locator pendingCard;
+	private final Locator acceptButton;
+	private final Locator backButton;
 
 
 	
@@ -32,8 +39,14 @@ public class MentorBrandEndorsementsNotifications{
 		this.brandEndorsementInAppNotification= page.locator("//h6[contains(text(),'waiting to connect with you for a Brand Endorsement opportunity! Accept the request to unlock their contact details')]");
 		this.brandEndorsementRejectEmailNotification= page.locator("//p[contains(text(),'Request Declined')]");
 		this.brandEndorsementRejectInAppNotification= page.locator("//h6[contains(text(),'You’ve declined the Brand Endorsement inquiry from ')]");
-
-
+		this.intrestShownMailNotification= page.locator("//p[contains(text(),'Opportunity Alert')]");
+		this.dearText= page.locator("//span[@class='tinyMce-placeholder']");
+		this.goodnewsText= page.locator("//p[contains(text(),'Good news!')]");
+		this.pendingCard= page.locator("//button[normalize-space()='Pending']");
+		this.acceptButton= page.locator("//span[contains(text(),'Accept')]");
+		this.backButton= page.locator("//a[@class='_btn_klaxo_2 _secondary_klaxo_2 _btnRound_klaxo_2 _iconNoChildren_klaxo_2']//div//*[name()='svg']//*[name()='path' and contains(@fill,'currentCol')]");
+				
+		
 		
 		
 	}
@@ -47,6 +60,12 @@ public class MentorBrandEndorsementsNotifications{
 	public Locator brandEndorsementInAppNotification() {return brandEndorsementInAppNotification;}
 	public Locator brandEndorsementRejectEmailNotification() {return brandEndorsementRejectEmailNotification;}
 	public Locator brandEndorsementRejectInAppNotification() {return brandEndorsementRejectInAppNotification;}
+	public Locator intrestShownMailNotification() {return intrestShownMailNotification;}
+	public Locator dearText() {return dearText;}
+	public Locator goodnewsText() {return goodnewsText;}
+	public Locator pendingCard() {return pendingCard;}
+	public Locator acceptButton() {return acceptButton;}
+	public Locator backButton() {return backButton;}
 
 
 	

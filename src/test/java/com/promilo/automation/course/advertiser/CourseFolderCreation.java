@@ -16,7 +16,7 @@ import com.promilo.automation.resources.*;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.ExtentReports;
 
-public class CourseFolderCreation extends Baseclass {
+public class CourseFolderCreation extends BaseClass {
 
     @Test
     public void verifyMyProspectFolderCreation() throws InterruptedException, IOException {
@@ -73,7 +73,7 @@ public class CourseFolderCreation extends Baseclass {
             test.info("✉ Entered email for login");
             System.out.println("Filled email field");
 
-            login.loginPasswordField().fill("devuttan2023");
+            login.loginPasswordField().fill("adv@1234");
             test.info("🔑 Entered password for login");
             System.out.println("Filled password field");
 

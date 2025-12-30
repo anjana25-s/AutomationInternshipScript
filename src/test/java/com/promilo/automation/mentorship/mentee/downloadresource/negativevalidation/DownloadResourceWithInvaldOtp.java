@@ -15,107 +15,11 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
-<<<<<<< HEAD
-import com.promilo.automation.mentorship.mentee.pagepbjects.DescriptionPage;
-import com.promilo.automation.mentorship.mentee.pagepbjects.MeetupsListingPage;
-import com.promilo.automation.mentorship.mentee.pagepbjects.MentorshipErrorMessagesAndToasters;
-import com.promilo.automation.pageobjects.signuplogin.HomePage;
-import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
-import com.promilo.automation.resources.Baseclass;
-import com.promilo.automation.resources.ExcelUtil;
-import com.promilo.automation.resources.ExtentManager;
-
-public class DownloadResourceWithInvaldOtp extends Baseclass {
-
-    ExtentReports extent = ExtentManager.getInstance();
-    private static final Logger logger = LogManager.getLogger(RegisteredUserShortList.class);
-
-    // ✅ Filter only BookMeetingOtpValidation rows dynamically
-    @DataProvider(name = "BookAMeetingErrorValidation")
-    public Object[][] jobApplicationData() throws Exception {
-        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "Mentorship Test Data.xlsx").toString();
-        ExcelUtil excel = new ExcelUtil(excelPath, "Mentorship");
-
-        int rowCount = excel.getRowCount();
-        int colCount = excel.getColumnCount();
-
-        List<Object[]> filteredRows = new ArrayList<>();
-
-        for (int i = 1; i <= rowCount; i++) {
-            String keyword = excel.getCellData(i, 1);
-            if (keyword != null && keyword.trim().equalsIgnoreCase("BookMeetingOtpValidation")) {
-                Object[] rowData = new Object[colCount];
-                for (int j = 0; j < colCount; j++) {
-                    rowData[j] = excel.getCellData(i, j);
-                }
-                filteredRows.add(rowData);
-            }
-        }
-
-        Object[][] data = new Object[filteredRows.size()][colCount];
-        for (int i = 0; i < filteredRows.size(); i++) {
-            data[i] = filteredRows.get(i);
-        }
-
-        return data;
-    }
-
-    @Test(dataProvider = "BookAMeetingErrorValidation")
-    public void PersonalizedVideoWithInvaldOtpTest(
-            String testCaseId,
-            String keyword,
-            String registeredEmail,
-            String password,
-            String name,
-            String otp,
-            String mailphone,
-            String nameIsRequired,
-            String mobileNumberIsRequired,
-            String emailIsRequired,
-            String nameMinimumCharacter,
-            String invalidMobileNumber,
-            String invalidEmailAdress,
-            String MentorName,
-            String NameMinimum,
-            String Toaster,
-            String userName,
-            String mobile,
-            String Email
-    ) throws Exception {
-
-        ExtentTest test = extent.createTest("Mentorship Book A Meeting Validation | " + testCaseId);
-
-        Page page = initializePlaywright();
-        test.info("✅ Browser initialized successfully.");
-
-        page.navigate(prop.getProperty("url"));
-        test.info("🌐 Navigated to URL: " + prop.getProperty("url"));
-
-        page.setViewportSize(1000, 768);
-        logger.info("Executing BookMeetingOtpValidation for TestCaseID: {}", testCaseId);
-
-        try {
-            // Execute only for BookMeetingOtpValidation keyword
-            if ("BookMeetingOtpValidation".equalsIgnoreCase(keyword.trim())) {
-                test.info("🔍 Test started for keyword: " + keyword);
-
-                // Step 1: Close popup if present
-                MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
-                try {
-                    mayBeLaterPopUp.getPopup().click();
-                    test.info("✅ Popup closed successfully.");
-                } catch (Exception ignored) {
-                    test.info("ℹ️ No popup found.");
-                }
-
-                // Step 2: Navigate to Mentorships
-                HomePage dashboard = new HomePage(page);
-=======
 import com.promilo.automation.mentorship.mentee.DescriptionPage;
 import com.promilo.automation.mentorship.mentee.MeetupsListingPage;
-import com.promilo.automation.mentorship.mentee.MentorshipErrorMessagesAndToasters;
-import com.promilo.automation.pageobjects.signuplogin.DashboardPage;
+import com.promilo.automation.mentorship.mentee.intrests.MentorshipErrorMessagesAndToasters;
+import com.promilo.automation.mentorship.mentee.intrests.MentorshipFormComponents;
+import com.promilo.automation.pageobjects.signuplogin.HomePage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.registereduser.jobs.RegisteredUserShortList;
 import com.promilo.automation.resources.BaseClass;
@@ -127,29 +31,36 @@ public class DownloadResourceWithInvaldOtp extends BaseClass {
     ExtentReports extent = ExtentManager.getInstance();
     private static final Logger logger = LogManager.getLogger(RegisteredUserShortList.class);
 
-    // ✅ Filter only BookMeetingOtpValidation rows dynamically
     @DataProvider(name = "BookAMeetingErrorValidation")
     public Object[][] jobApplicationData() throws Exception {
-        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "Mentorship Test Data.xlsx").toString();
+
+        String excelPath = Paths.get(System.getProperty("user.dir"), 
+                "Testdata", 
+                "Mentorship Test Data.xlsx").toString();
+
         ExcelUtil excel = new ExcelUtil(excelPath, "Mentorship");
 
         int rowCount = excel.getRowCount();
-        int colCount = excel.getColumnCount();
+        int requiredCols = 19;
 
         List<Object[]> filteredRows = new ArrayList<>();
 
+        // Filter only matching keyword rows
         for (int i = 1; i <= rowCount; i++) {
             String keyword = excel.getCellData(i, 1);
+
             if (keyword != null && keyword.trim().equalsIgnoreCase("BookMeetingOtpValidation")) {
-                Object[] rowData = new Object[colCount];
-                for (int j = 0; j < colCount; j++) {
+
+                Object[] rowData = new Object[requiredCols];
+                for (int j = 0; j < requiredCols; j++) {
                     rowData[j] = excel.getCellData(i, j);
                 }
                 filteredRows.add(rowData);
             }
         }
 
-        Object[][] data = new Object[filteredRows.size()][colCount];
+        // Convert list to Object[][]
+        Object[][] data = new Object[filteredRows.size()][requiredCols];
         for (int i = 0; i < filteredRows.size(); i++) {
             data[i] = filteredRows.get(i);
         }
@@ -180,58 +91,48 @@ public class DownloadResourceWithInvaldOtp extends BaseClass {
             String Email
     ) throws Exception {
 
-        ExtentTest test = extent.createTest("Mentorship Book A Meeting Validation | " + testCaseId);
+        ExtentTest test = extent.createTest("Mentorship Ask Query Invalid OTP | " + testCaseId);
 
         Page page = initializePlaywright();
-        test.info("✅ Browser initialized successfully.");
+        test.info("Browser initialized successfully.");
 
         page.navigate(prop.getProperty("url"));
-        test.info("🌐 Navigated to URL: " + prop.getProperty("url"));
-
+        test.info("Navigated to: " + prop.getProperty("url"));
         page.setViewportSize(1000, 768);
+
         logger.info("Executing BookMeetingOtpValidation for TestCaseID: {}", testCaseId);
 
         try {
-            // Execute only for BookMeetingOtpValidation keyword
+
             if ("BookMeetingOtpValidation".equalsIgnoreCase(keyword.trim())) {
-                test.info("🔍 Test started for keyword: " + keyword);
 
-                // Step 1: Close popup if present
-                MayBeLaterPopUp landingPop = new MayBeLaterPopUp(page);
-                try {
-                    landingPop.getPopup().click();
-                    test.info("✅ Popup closed successfully.");
-                } catch (Exception ignored) {
-                    test.info("ℹ️ No popup found.");
-                }
+                MayBeLaterPopUp popup = new MayBeLaterPopUp(page);
+                try { popup.getPopup().click(); } catch (Exception ignored) {}
 
-                // Step 2: Navigate to Mentorships
-                DashboardPage dashboard = new DashboardPage(page);
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
+                HomePage dashboard = new HomePage(page);
                 page.waitForTimeout(3000);
                 dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
-                test.info("🧭 Clicked on Mentorships tab.");
 
-                // Step 3: Search Mentor
                 MeetupsListingPage searchPage = new MeetupsListingPage(page);
                 searchPage.SearchTextField().click();
-                searchPage.SearchTextField().fill(MentorName);
+                searchPage.SearchTextField().fill("karthik");
                 page.keyboard().press("Enter");
                 page.waitForTimeout(2000);
-                test.info("👤 Searched for mentor: " + MentorName);
 
-                // Step 4: Navigate to Description & Book Meeting
                 DescriptionPage serviceClick = new DescriptionPage(page);
                 serviceClick.allLink().click();
-                serviceClick.bookOnlineMeeting().click();
-                test.info("📅 Opened Book Meeting section.");
+                serviceClick.buyResources().first().click();
 
-                // Step 5: Fill in valid data
                 MentorshipErrorMessagesAndToasters err = new MentorshipErrorMessagesAndToasters(page);
+
+                // Name
                 err.nameTextField().fill("karthik");
 
+                // Random phone
                 int randomNum = (int) (Math.random() * 90000) + 10000;
                 String randomPhone = "90000" + randomNum;
+
+                // Random email
                 String randomEmail = "testuser-" + randomNum + "@mailosaur.net";
 
                 mobile = randomPhone;
@@ -239,62 +140,40 @@ public class DownloadResourceWithInvaldOtp extends BaseClass {
 
                 err.mobileTextField().nth(1).fill(mobile);
                 err.emailTextField().nth(1).fill(Email);
-                err.bookVideoCallButton().click();
-                test.info("📞 Filled details: Name=karthik, Phone=" + mobile + ", Email=" + Email);
 
-                // Step 6: Handle OTP input
-                if (otp.length() < 4) {
-                    throw new IllegalArgumentException("OTP must be 4 digits: " + otp);
-                }
+                page.waitForTimeout(2000);
+                
+              //click on Download Resource button
+                MentorshipFormComponents clickDownloadResouce= new MentorshipFormComponents(page);
+                clickDownloadResouce.downloadResource().click();
+
+
+                page.waitForTimeout(3000);
+
+                // INVALID OTP
+                String otp1 = "1111";
 
                 for (int j = 0; j < 4; j++) {
-                    String otpChar = String.valueOf(otp.charAt(j));
-                    Locator otpField = page.locator("//input[@aria-label='Please enter OTP character " + (j + 1) + "']");
-                    otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
-
-                    boolean filled = false;
-                    for (int attempt = 1; attempt <= 3 && !filled; attempt++) {
-                        otpField.click();
-                        otpField.fill("");
-                        otpField.fill(otpChar);
-
-                        String currentValue = otpField.evaluate("el => el.value").toString().trim();
-                        if (currentValue.equals(otpChar)) {
-                            filled = true;
-                        } else {
-                            page.waitForTimeout(500);
-                        }
-                    }
-
-                    if (!filled) {
-                        throw new RuntimeException("❌ Failed to enter OTP digit: " + (j + 1));
-                    }
+                    String otpChar = String.valueOf(otp1.charAt(j));
+                    Locator otpField = page.locator(
+                            "//input[@aria-label='Please enter OTP character " + (j + 1) + "']");
+                    otpField.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+                    otpField.fill(otpChar);
                 }
 
-                test.info("🔢 OTP entered successfully.");
                 err.verifyAndProceedButton().click();
 
-                // Step 7: Validate toaster for invalid OTP
+                // Assertion
                 String actualToaster = err.invalidOtp().textContent().trim();
-                Assert.assertTrue(actualToaster.contains("Invalid OTP"), "❌ Invalid OTP toaster not displayed");
+                Assert.assertTrue(actualToaster.contains("Invalid OTP"), "Invalid OTP toaster not displayed");
 
-                test.pass("✅ Invalid OTP validation successful for " + testCaseId);
-                logger.info("✅ Invalid OTP validation passed for {}", testCaseId);
-            } else {
-                logger.info("Skipping TestCaseID: {} because keyword '{}' does not match.", testCaseId, keyword);
-                test.info("⏭️ Skipped TestCaseID: " + testCaseId);
+                test.pass("Invalid OTP validation passed successfully.");
+
             }
 
-        } catch (AssertionError ae) {
-            test.fail("❌ Assertion failed: " + ae.getMessage());
-            throw ae;
-        } catch (Exception e) {
-            test.fail("💥 Exception occurred: " + e.getMessage());
-            throw e;
         } finally {
             page.close();
             extent.flush();
-            test.info("📘 Test execution completed for TestCaseID: " + testCaseId);
         }
     }
 }

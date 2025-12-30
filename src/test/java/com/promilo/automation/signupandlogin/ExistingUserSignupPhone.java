@@ -1,28 +1,20 @@
 package com.promilo.automation.signupandlogin;
 
+import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.WaitForSelectorState;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import com.aventstack.extentreports.*;
+import com.promilo.automation.pageobjects.signuplogin.CreateAccountpage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.ExtentManager;
+import com.promilo.automation.resources.ExcelUtil;
+
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
-import com.microsoft.playwright.PlaywrightException;
-import com.microsoft.playwright.options.WaitForSelectorState;
-import com.promilo.automation.pageobjects.signuplogin.CreateAccountpage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.resources.BaseClass;
-import com.promilo.automation.resources.ExcelUtil;
-import com.promilo.automation.resources.ExtentManager;
 
 public class ExistingUserSignupPhone extends BaseClass {
 
@@ -31,7 +23,7 @@ public class ExistingUserSignupPhone extends BaseClass {
         Page dummyPage = initializePlaywright(); // Initializes prop
 
         ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("🚀 Promilo Staging Signup - Existing User Phone Validation");
+        ExtentTest test = extent.createTest("ExistingUserSignupPhone");
 
         String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
         System.out.println("Excel Path: " + excelPath);
@@ -79,7 +71,7 @@ public class ExistingUserSignupPhone extends BaseClass {
                 System.out.println("Navigated to: " + prop.getProperty("url"));
                 test.info("🌐 Navigated to URL.");
 
-                LandingPage landing = new LandingPage(page);
+                MayBeLaterPopUp landing = new MayBeLaterPopUp(page);
                 try {
                     landing.getPopup().click();
                     test.info("✅ Closed popup.");

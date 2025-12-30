@@ -23,7 +23,7 @@ import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.emailnotifications.EmailnotificationsShortlisted;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -118,12 +118,12 @@ public class UserRequestisRejectedByTheAdvertiser extends BaseClass {
    }
 
    public void applyForJobAsRegisteredUser(Page page, String inputvalue, String password, String name, String otp, String mailphone) throws Exception {
-       LandingPage landingPage = new LandingPage(page);
+       MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
        try {
-           landingPage.getPopup().click();
+           mayBeLaterPopUp.getPopup().click();
        } catch (Exception ignored) {}
 
-       landingPage.clickLoginButton();
+       mayBeLaterPopUp.clickLoginButton();
 
        LoginPage loginPage = new LoginPage(page);
        loginPage.loginMailPhone().fill(inputvalue);
@@ -133,11 +133,13 @@ public class UserRequestisRejectedByTheAdvertiser extends BaseClass {
        
        JobListingPage jobPage = new JobListingPage(page);
        jobPage.homepageJobs().click();
-       Locator developerJob = page.locator("//p[text()='Developer']").first();
-       developerJob.click();
-       test.info("Clicked on Developer job listing");
+       page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
+       page.keyboard().press("Enter");
+       page.waitForTimeout(15000);
+
+
        
-       Thread.sleep(4000);
+       Thread.sleep(1000);
        
        
 
@@ -214,7 +216,7 @@ public class UserRequestisRejectedByTheAdvertiser extends BaseClass {
        page.locator("//li[@class='time-slot-box list-group-item']").first().click();
 
 
-       
+       page.locator("//button[text()='Next']").click();
        page.locator("//button[text()='Submit']").nth(1).click(); 
        
        Page page3 = page.context().newPage();
@@ -228,7 +230,7 @@ public class UserRequestisRejectedByTheAdvertiser extends BaseClass {
        Assert.assertTrue(login.signInContent().isVisible(), "❌ Sign-in content is not visible.");
        Assert.assertTrue(login.talkToAnExpert().isVisible(), "Talk To expert content should be visible");
 
-       login.loginMailField().fill("agree-laugh@ofuk8kzb.mailosaur.net");
+       login.loginMailField().fill("fewer-produce@qtvjnqv9.mailosaur.net");
        login.loginPasswordField().fill("Karthik@88");
        login.signInButton().click();
 
@@ -253,9 +255,9 @@ public class UserRequestisRejectedByTheAdvertiser extends BaseClass {
        
        Page page2 = page.context().newPage();
 
-       page2.navigate("https://mailosaur.com/app/servers/ofuk8kzb/messages/inbox");
+       page2.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
 
-       page2.locator("//input[@placeholder='Enter your email address']").fill("karthiku7026@gmail.com");
+       page2.locator("//input[@placeholder='Enter your email address']").fill("karthikmailsaur@gmail.com");
        page2.locator("//button[text()='Continue']").click();
 
        page2.locator("//input[@placeholder='Enter your password']").fill("Karthik@88");
@@ -265,7 +267,7 @@ public class UserRequestisRejectedByTheAdvertiser extends BaseClass {
        
        page.reload();
 
-       Locator firstEmail = page2.locator("//p[contains(text(),'Update on Your Developer Application ')]").first();
+       Locator firstEmail = page2.locator("//p[contains(text(),'Update on')]").first();
        
        firstEmail.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
 

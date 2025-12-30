@@ -20,11 +20,11 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class AdvertiserAcceptsCampusVisitRequest extends Baseclass {
+public class AdvertiserAcceptsCampusVisitRequest extends BaseClass {
 
     // ✅ CLASS-LEVEL VARIABLE (USED CORRECTLY)
     private static Integer previousGstNumber = null;

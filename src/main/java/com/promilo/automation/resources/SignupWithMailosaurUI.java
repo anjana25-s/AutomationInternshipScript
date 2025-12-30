@@ -1,20 +1,18 @@
 package com.promilo.automation.resources;
 
+import java.nio.file.Paths;
 import java.util.UUID;
 
-import org.testng.annotations.Test;
-
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.PlaywrightException;
+import com.microsoft.playwright.*;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.WaitForSelectorState;
+import com.aventstack.extentreports.*;
+
 import com.promilo.automation.pageobjects.signuplogin.CreateAccountpage;
 import com.promilo.automation.pageobjects.signuplogin.HomePage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
+
+import org.testng.annotations.Test;
 
 public class SignupWithMailosaurUI extends BaseClass {
 
@@ -120,6 +118,7 @@ public class SignupWithMailosaurUI extends BaseClass {
         } catch (Exception e) {
             test.fail("❌ Signup failed: " + e.getMessage());
             throw e;
+            
         } finally {
             extent.flush();
         }

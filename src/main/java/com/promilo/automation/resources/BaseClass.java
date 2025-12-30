@@ -1,155 +1,175 @@
 package com.promilo.automation.resources;
 
+import com.microsoft.playwright.*;
+import lombok.extern.slf4j.Slf4j;
+import org.testng.annotations.AfterClass;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.testng.annotations.AfterClass;
-
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
-
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 public class BaseClass {
 
-	public static String generatedEmail;
-	public static String generatedPhone;
+    public static String name;
+	public static String registeredEmail;
 
-	public static boolean keepSessionAlive = false;
 
-	public static String selectedDate = "";
-	public static String selectedTime = "";
-	public static String askYourQuestionText = "Ask Your Questions Here";
-	public static String courseFee;
+    public static String generatedEmail;
+    public static String generatedPhone;
+    protected static String randomNumber;
 
-	public static String rescheduleDate = "";
-	public static String rescheduleTime = "";
+    
+    public static String addFundEMail;
+    public static String addFundPassword;
 
-	private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager
-			.getLogger(BaseClass.class);
+    public static boolean keepSessionAlive = false;
 
-	private static ThreadLocal<Playwright> playwright = new ThreadLocal<>();
-	protected static ThreadLocal<Browser> browser = new ThreadLocal<>();
-	private static ThreadLocal<BrowserContext> context = new ThreadLocal<>();
-	private static ThreadLocal<Page> page = new ThreadLocal<>();
+    public static String selectedDate = "";
+    public static String selectedTime = "";
+    public static String askYourQuestionText = "Ask Your Questions Here";
+    public static String courseFee;
+    
+    public static String rescheduleDate="";
+    public static String rescheduleTime="";
 
-	public Properties prop;
+    private static final org.apache.logging.log4j.Logger log =
+            org.apache.logging.log4j.LogManager.getLogger(BaseClass.class);
 
-	public Page initializePlaywright() throws IOException {
+    private static ThreadLocal<Playwright> playwright = new ThreadLocal<>();
+    protected static ThreadLocal<Browser> browser = new ThreadLocal<>();
+    private static ThreadLocal<BrowserContext> context = new ThreadLocal<>();
+    private static ThreadLocal<Page> page = new ThreadLocal<>();
 
-		prop = new Properties();
-		String path = System.getProperty("user.dir")
-				+ "/src/main/java/com/promilo/automation/resources/data.properties";
-		FileInputStream fis = new FileInputStream(path);
-		prop.load(fis);
+    public Properties prop;
 
-		String browserName = prop.getProperty("browser", "chromium").toLowerCase();
-		boolean headless = Boolean.parseBoolean(prop.getProperty("headless", "false"));
+    public Page initializePlaywright() throws IOException {
 
-		int globalWait = Integer.parseInt(prop.getProperty("globalWait", "500"));
-		log.info("⏳ Global wait set to: {} seconds", globalWait);
+        prop = new Properties();
+        String path = System.getProperty("user.dir") +
+                "/src/main/java/com/promilo/automation/resources/data.properties";
+        FileInputStream fis = new FileInputStream(path);
+        prop.load(fis);
 
-		playwright.set(Playwright.create());
+        String browserName = prop.getProperty("browser", "chromium").toLowerCase();
+        boolean headless = Boolean.parseBoolean(prop.getProperty("headless", "false"));
 
-		BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(headless).setSlowMo(200);
 
-		switch (browserName) {
-		case "chrome":
-		case "chromium":
-			browser.set(playwright.get().chromium().launch(launchOptions));
-			break;
-		case "firefox":
-			browser.set(playwright.get().firefox().launch(launchOptions));
-			break;
-		case "webkit":
-			browser.set(playwright.get().webkit().launch(launchOptions));
-			break;
-		default:
-			throw new RuntimeException("❌ Browser not supported: " + browserName);
-		}
+        int globalWait = Integer.parseInt(prop.getProperty("globalWait", "500"));
+        log.info("⏳ Global wait set to: {} seconds", globalWait);
 
-		context.set(browser.get().newContext(new Browser.NewContextOptions().setViewportSize(null)));
+        playwright.set(Playwright.create());
 
-		page.set(context.get().newPage());
+        BrowserType.LaunchOptions launchOptions =
+                new BrowserType.LaunchOptions()
+                        .setHeadless(headless)
+                        .setSlowMo(200); 
 
-		// 🔥 GLOBAL AI VOICE BOT AUTO-CLOSER (INJECTED ONCE)
-		injectAIVoiceBotAutoCloser(page.get());
 
-		page.get().setDefaultTimeout(globalWait * 1000L);
-		page.get().setDefaultNavigationTimeout(globalWait * 1000L);
+        switch (browserName) {
+            case "chrome":
+            case "chromium":
+                browser.set(playwright.get().chromium().launch(launchOptions));
+                break;
+            case "firefox":
+                browser.set(playwright.get().firefox().launch(launchOptions));
+                break;
+            case "webkit":
+                browser.set(playwright.get().webkit().launch(launchOptions));
+                break;
+            default:
+                throw new RuntimeException("❌ Browser not supported: " + browserName);
+        }
 
-		log.info("✅ Global wait applied: {} seconds for all actions & navigations", globalWait);
+        context.set(browser.get().newContext(
+                new Browser.NewContextOptions().setViewportSize(null)
+        ));
 
-		return page.get();
-	}
+        page.set(context.get().newPage());
 
-	/**
-	 * Injects JS into page to auto-close AI Voice Bot whenever it appears. Clicks
-	 * ONLY if the exit icon is visible.
-	 */
-	private void injectAIVoiceBotAutoCloser(Page page) {
+        // 🔥 GLOBAL AI VOICE BOT AUTO-CLOSER (INJECTED ONCE)
+        injectAIVoiceBotAutoCloser(page.get());
 
-		String script = "setInterval(() => {" + "  try {" + "    const icon = document.evaluate("
-				+ "      \"//img[@src='/assets/closeMiliIcon-96dcded9.svg']\"," + "      document," + "      null,"
-				+ "      XPathResult.FIRST_ORDERED_NODE_TYPE," + "      null" + "    ).singleNodeValue;"
-				+ "    if (icon && icon.offsetParent !== null) {" + "      icon.click();" + "    }" + "  } catch (e) {}"
-				+ "}, 2000);";
+        page.get().setDefaultTimeout(globalWait * 1000L);
+        page.get().setDefaultNavigationTimeout(globalWait * 1000L);
 
-		page.addInitScript(script);
-	}
+        log.info("✅ Global wait applied: {} seconds for all actions & navigations", globalWait);
 
-	public void maximizeWindow() {
-		Page currentPage = page.get();
-		if (currentPage != null) {
-			log.info("✅ Window maximized using setViewportSize(1920, 1080).");
-		} else {
-			throw new RuntimeException("❌ Page is not initialized. Cannot maximize window.");
-		}
-	}
+        return page.get();
+    }
 
-	@AfterClass(alwaysRun = true)
-	public void closePlaywright() {
+    /**
+     * Injects JS into page to auto-close AI Voice Bot whenever it appears.
+     * Clicks ONLY if the exit icon is visible.
+     */
+    private void injectAIVoiceBotAutoCloser(Page page) {
 
-		if (context.get() != null) {
-			context.get().close();
-			context.remove();
-		}
+        String script =
+                "setInterval(() => {" +
+                "  try {" +
+                "    const icon = document.evaluate(" +
+                "      \"//img[@src='/assets/closeMiliIcon-96dcded9.svg']\"," +
+                "      document," +
+                "      null," +
+                "      XPathResult.FIRST_ORDERED_NODE_TYPE," +
+                "      null" +
+                "    ).singleNodeValue;" +
+                "    if (icon && icon.offsetParent !== null) {" +
+                "      icon.click();" +
+                "    }" +
+                "  } catch (e) {}" +
+                "}, 2000);";
 
-		if (browser.get() != null) {
-			browser.get().close();
-			browser.remove();
-		}
+        page.addInitScript(script);
+    }
 
-		if (playwright.get() != null) {
-			playwright.get().close();
-			playwright.remove();
-		}
+    public void maximizeWindow() {
+        Page currentPage = page.get();
+        if (currentPage != null) {
+            log.info("✅ Window maximized using setViewportSize(1920, 1080).");
+        } else {
+            throw new RuntimeException("❌ Page is not initialized. Cannot maximize window.");
+        }
+    }
 
-		if (page.get() != null) {
-			page.remove();
-		}
+    @AfterClass(alwaysRun = true)
+    public void closePlaywright() {
 
-		log.info("✅ Browser and Playwright closed after entire class execution.");
-	}
+        if (context.get() != null) {
+            context.get().close();
+            context.remove();
+        }
 
-	public static Page getPage() {
-		return page.get();
-	}
+        if (browser.get() != null) {
+            browser.get().close();
+            browser.remove();
+        }
 
-	public static BrowserContext getContext() {
-		return context.get();
-	}
+        if (playwright.get() != null) {
+            playwright.get().close();
+            playwright.remove();
+        }
 
-	public static Browser getBrowser() {
-		return browser.get();
-	}
+        if (page.get() != null) {
+            page.remove();
+        }
 
-	public static Playwright getPlaywright() {
-		return playwright.get();
-	}
+        log.info("✅ Browser and Playwright closed after entire class execution.");
+    }
+
+    public static Page getPage() {
+        return page.get();
+    }
+
+    public static BrowserContext getContext() {
+        return context.get();
+    }
+
+    public static Browser getBrowser() {
+        return browser.get();
+    }
+
+    public static Playwright getPlaywright() {
+        return playwright.get();
+    }
 }

@@ -1,214 +1,155 @@
 package com.promilo.automation.mentorship.mentor.campaign;
 
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
-<<<<<<< HEAD
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.promilo.automation.mentorship.mentor.BecomeMentor;
 import com.promilo.automation.mentorship.mentor.CampaignlistPage;
 import com.promilo.automation.pageobjects.myresume.Hamburger;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
-import com.promilo.automation.resources.ExcelUtil;
-import com.promilo.automation.resources.ExtentManager;
-
-public class MentorshipCampaignDuplication extends Baseclass{
-
-	
-	  @Test
-	    public void duplication() throws Exception {
-
-	        ExtentReports extent = ExtentManager.getInstance();
-	        ExtentTest test = extent.createTest("✅ Add Employment - Positive Test");
-
-	        Page page = initializePlaywright();
-	        page.navigate(prop.getProperty("url"));
-	        page.setViewportSize(1080, 720);
-
-	        test.info("🌐 Navigated to application URL.");
-
-	        String excelPath = Paths.get(System.getProperty("user.dir"),
-	                "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
-	        ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
-
-	        int rowCount = 0;
-	        for (int i = 1; i <= 1000; i++) {
-	            String testCaseId = excel.getCellData(i, 0);
-	            if (testCaseId == null || testCaseId.trim().isEmpty()) break;
-	            rowCount++;
-	        }
-	        test.info("📘 Loaded " + rowCount + " rows from Excel.");
-
-	        for (int i = 1; i < rowCount; i++) {
-	            String keyword = excel.getCellData(i, 1);
-	            if (!"AddEmployment".equalsIgnoreCase(keyword)) continue;
-
-	            String inputValue = excel.getCellData(i, 3);
-	            String description = excel.getCellData(i, 10);
-
-	            try {
-	                test.info("➡️ Starting execution for row " + i + " with input: " + inputValue);
-
-	                MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
-	                try {
-	                    mayBeLaterPopUp.getPopup().click();
-	                    test.info("✅ Popup closed.");
-	                } catch (Exception ignored) {
-	                    test.info("ℹ️ No popup found.");
-	                }
-
-	                mayBeLaterPopUp.clickLoginButton();
-	                test.info("🔑 Navigating to Login Page.");
-
-	                LoginPage loginPage = new LoginPage(page);
-	                loginPage.loginMailPhone().fill("testradha68@yopmail.com");
-	                loginPage.passwordField().fill("Karthik@88");
-	                loginPage.loginButton().click();
-	                test.info("✅ Logged in with registered credentials.");
-
-	                // Navigate to My Resume
-	                Hamburger resumePage = new Hamburger(page);
-	                resumePage.Mystuff().click();
-
-	                // Become a Mentor actions
-	                BecomeMentor becomeMentor = new BecomeMentor(page);
-	                becomeMentor.becomeMentorButton().click();
-	                becomeMentor.campaignList().click();
-	                
-	                
-	                //duplicating or copy the campaign
-	                CampaignlistPage duplication= new CampaignlistPage(page);
-	                duplication.checkBox().click();
-	                duplication.copyButton().click();
-	                duplication.yesButton().click();
-	                duplication.draftIcon().first().isVisible();
-	                
-	                
-	              //assert draft text visible
-	                Assert.assertTrue(duplication.draftText().first().isVisible(), "❌ Draft text not visible!");
-	                System.out.println(duplication.draftText().first().textContent());
-
-	                //assert created date visible
-	                Assert.assertTrue(duplication.createdDate().first().isVisible(), "❌ Created date not visible!");
-	                System.out.println(duplication.createdDate().first().textContent());
-
-	                //assert service link visible before clicking
-	                Assert.assertTrue(duplication.servicesLink().first().isVisible(), "❌ Services link not visible!");
-=======
-import org.testng.annotations.Test;
-
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Page;
-import com.promilo.automation.mentorship.mentor.BecomeMentor;
-import com.promilo.automation.mentorship.mentor.CampaignlistPage;
-import com.promilo.automation.pageobjects.myresume.MyResumePage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
-import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class MentorshipCampaignDuplication extends BaseClass{
+public class MentorshipCampaignDuplication extends BaseClass {
 
-	
-	  @Test
-	    public void duplication() throws Exception {
+    @Test
+    public void duplication() throws Exception {
 
-	        ExtentReports extent = ExtentManager.getInstance();
-	        ExtentTest test = extent.createTest("✅ Add Employment - Positive Test");
+        ExtentReports extent = ExtentManager.getInstance();
+        ExtentTest test = extent.createTest("MentorshipCampaignDuplication");
 
-	        Page page = initializePlaywright();
-	        page.navigate(prop.getProperty("url"));
-	        page.setViewportSize(1080, 720);
+        Page page = initializePlaywright();
+        page.navigate(prop.getProperty("url"));
+        page.setViewportSize(1080, 720);
+        test.info("🌐 Navigated to application URL.");
 
-	        test.info("🌐 Navigated to application URL.");
+        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "Mentorship Test Data.xlsx").toString();
+        ExcelUtil excel = new ExcelUtil(excelPath, "CampaignCreation");
 
-	        String excelPath = Paths.get(System.getProperty("user.dir"),
-	                "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
-	        ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
+        int totalRows = excel.getRowCount();
+        int totalCols = excel.getColumnCount();
 
-	        int rowCount = 0;
-	        for (int i = 1; i <= 1000; i++) {
-	            String testCaseId = excel.getCellData(i, 0);
-	            if (testCaseId == null || testCaseId.trim().isEmpty()) break;
-	            rowCount++;
-	        }
-	        test.info("📘 Loaded " + rowCount + " rows from Excel.");
+        // 1️⃣ Create normalized header map
+        Map<String, Integer> headerMap = new HashMap<>();
+        for (int c = 0; c < totalCols; c++) {
+            String header = excel.getCellData(0, c);
+            if (header != null && !header.trim().isEmpty()) {
+                header = header.trim().toLowerCase().replaceAll("[^a-z]", ""); // remove spaces/symbols
+                headerMap.put(header, c);
+            }
+        }
 
-	        for (int i = 1; i < rowCount; i++) {
-	            String keyword = excel.getCellData(i, 1);
-	            if (!"AddEmployment".equalsIgnoreCase(keyword)) continue;
+        // 2️⃣ Map required columns dynamically
+        Map<String, String[]> columnVariants = new HashMap<>();
+        columnVariants.put("keyword", new String[]{"keyword"});
+        columnVariants.put("inputvalue", new String[]{"inputvalue"});
+        columnVariants.put("password", new String[]{"password"});
 
-	            String inputValue = excel.getCellData(i, 3);
-	            String description = excel.getCellData(i, 10);
+        Map<String, Integer> finalHeaderMap = new HashMap<>();
+        for (String col : columnVariants.keySet()) {
+            Integer colIndex = null;
+            for (String variant : columnVariants.get(col)) {
+                if (headerMap.containsKey(variant)) {
+                    colIndex = headerMap.get(variant);
+                    break;
+                }
+            }
+            if (colIndex == null) {
+                throw new RuntimeException("Required column missing in Excel: " + col);
+            }
+            finalHeaderMap.put(col, colIndex);
+        }
 
-	            try {
-	                test.info("➡️ Starting execution for row " + i + " with input: " + inputValue);
+        // 3️⃣ Loop through rows and execute only target keyword
+        for (int i = 1; i < totalRows; i++) {
+            String keyword = excel.getCellData(i, finalHeaderMap.get("keyword"));
+            if (!"MentorshipCampaignDuplication".equalsIgnoreCase(keyword)) continue;
 
-	                LandingPage landingPage = new LandingPage(page);
-	                try {
-	                    landingPage.getPopup().click();
-	                    test.info("✅ Popup closed.");
-	                } catch (Exception ignored) {
-	                    test.info("ℹ️ No popup found.");
-	                }
+            String inputValue = excel.getCellData(i, finalHeaderMap.get("inputvalue"));
+            String password   = excel.getCellData(i, finalHeaderMap.get("password"));
 
-	                landingPage.clickLoginButton();
-	                test.info("🔑 Navigating to Login Page.");
+            try {
+                test.info("➡️ Executing Excel row " + i + " with input: " + inputValue);
 
-	                LoginPage loginPage = new LoginPage(page);
-	                loginPage.loginMailPhone().fill("testradha68@yopmail.com");
-	                loginPage.passwordField().fill("Karthik@88");
-	                loginPage.loginButton().click();
-	                test.info("✅ Logged in with registered credentials.");
+                // Close popup if present
+                MayBeLaterPopUp popup = new MayBeLaterPopUp(page);
+                try { 
+                    PlaywrightAssertions.assertThat(popup.getPopup()).isVisible();
+                    popup.getPopup().click(); 
+                    test.info("✅ Popup closed.");
+                } catch (Exception ignored) {
+                    test.info("ℹ️ No popup found.");
+                }
 
-	                // Navigate to My Resume
-	                MyResumePage resumePage = new MyResumePage(page);
-	                resumePage.Mystuff().click();
+                // Click login button
+                popup.clickLoginButton();
+                test.info("🔑 Clicked login button.");
 
-	                // Become a Mentor actions
-	                BecomeMentor becomeMentor = new BecomeMentor(page);
-	                becomeMentor.becomeMentorButton().click();
-	                becomeMentor.campaignList().click();
-	                
-	                
-	                //duplicating or copy the campaign
-	                CampaignlistPage duplication= new CampaignlistPage(page);
-	                duplication.checkBox().click();
-	                duplication.copyButton().click();
-	                duplication.yesButton().click();
-	                duplication.draftIcon().first().isVisible();
-	                System.out.println(duplication.draftText().first().textContent()); 
-	                System.out.println(duplication.createdDate().first().textContent()); 
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
-	                duplication.servicesLink().first().click();
+                // LOGIN
+                LoginPage loginPage = new LoginPage(page);
+                PlaywrightAssertions.assertThat(loginPage.loginMailPhone()).isVisible();
+                loginPage.loginMailPhone().fill(inputValue);
 
-	                
-	                
-	                
-	                
-	                
-	            }
-	                
-	                
-	                catch (Exception e) {
-	                    test.fail("❌ Error in row " + i + ": " + e.getMessage());
-	                    throw e;	                
-	                }
-	                
-	            
-	            
-	            
-	        }}}
-	            
-	            
-	            
-	            
-	     
+                PlaywrightAssertions.assertThat(loginPage.passwordField()).isVisible();
+                loginPage.passwordField().fill(password);
+
+                PlaywrightAssertions.assertThat(loginPage.loginButton()).isEnabled();
+                loginPage.loginButton().click();
+                test.info("✅ Logged in with Excel credentials.");
+
+                // Navigate to campaign list
+                Hamburger hamburger = new Hamburger(page);
+                PlaywrightAssertions.assertThat(hamburger.Mystuff()).isVisible();
+                hamburger.Mystuff().click();
+
+                BecomeMentor mentor = new BecomeMentor(page);
+                PlaywrightAssertions.assertThat(mentor.becomeMentorButton()).isVisible();
+                mentor.becomeMentorButton().click();
+
+                PlaywrightAssertions.assertThat(mentor.campaignList()).isVisible();
+                mentor.campaignList().click();
+
+                CampaignlistPage duplicationPage = new CampaignlistPage(page);
+
+                // Duplicate campaign
+                PlaywrightAssertions.assertThat(duplicationPage.checkBox()).isVisible();
+                duplicationPage.checkBox().click();
+
+                PlaywrightAssertions.assertThat(duplicationPage.copyButton()).isVisible();
+                duplicationPage.copyButton().click();
+
+                PlaywrightAssertions.assertThat(duplicationPage.yesButton()).isVisible();
+                duplicationPage.yesButton().click();
+
+                // Validations
+                PlaywrightAssertions.assertThat(duplicationPage.draftText().first()).isVisible();
+                Assert.assertEquals(duplicationPage.draftText().first().textContent(), "Draft", "Draft text mismatch!");
+                System.out.println("Draft Text: " + duplicationPage.draftText().first().textContent());
+
+                PlaywrightAssertions.assertThat(duplicationPage.createdDate().first()).isVisible();
+                System.out.println("Created Date: " + duplicationPage.createdDate().first().textContent());
+
+                PlaywrightAssertions.assertThat(duplicationPage.servicesLink().first()).isVisible();
+                duplicationPage.servicesLink().first().click();
+                test.info("✅ Clicked Services link.");
+
+            } catch (Exception e) {
+                test.fail("❌ Error in Excel row " + i + ": " + e.getMessage());
+                throw e;
+            }
+        }
+
+        extent.flush();
+        closePlaywright();
+    }
+}

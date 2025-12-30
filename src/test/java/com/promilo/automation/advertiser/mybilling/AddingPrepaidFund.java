@@ -1,13 +1,12 @@
 package com.promilo.automation.advertiser.mybilling;
 
 import java.nio.file.Paths;
-
 import org.testng.annotations.Test;
-
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.resources.BaseClass;
@@ -17,10 +16,10 @@ import com.promilo.automation.resources.ExtentManager;
 public class AddingPrepaidFund extends BaseClass {
 
     ExtentReports extent = ExtentManager.getInstance();
-    ExtentTest test = extent.createTest("🚀 Advertiser Add Funds Test | Data-Driven");
+    ExtentTest test = extent.createTest("🚀 Advertiser AddingPrepaidFund Test | Data-Driven");
 
     @Test
-    public void runAddFundsTest() {
+    public void AddingPrepaidFundTest() {
         try {
             // Step 1: Load Excel Data
             String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
@@ -45,12 +44,17 @@ public class AddingPrepaidFund extends BaseClass {
             // Step 3: Select company & Add funds
             page.locator("//div[text()='Manage Company']").click();
             test.info("📂 Navigated to Manage Company");
+            
+            page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Search by keywords")).fill("indiapromilo");
+            Thread.sleep(2000);
+            page.keyboard().press("Enter");
 
             page.waitForSelector("//td[normalize-space(text())='indiapromilo']");
             page.locator("//td[normalize-space(text())='indiapromilo']/preceding-sibling::td//input[@type='checkbox']").click();
             test.info("✅ Selected company: indiapromilo");
 
-            page.locator("//span[text()='Add fund']").click();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add Fund Add Fund")).click();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add Fund").setExact(true)).click();          
             page.waitForSelector("//label[text()='Prepaid']");
             page.locator("//label[text()='Postpaid']").click();
             page.locator("//input[@placeholder='Enter amount']").fill("35000");

@@ -15,11 +15,11 @@ import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class CourseCommentFunctionality extends Baseclass {
+public class CourseCommentFunctionality extends BaseClass {
 
     @Test
     public void CommentFunctionalityTest() throws InterruptedException, IOException {
@@ -69,7 +69,7 @@ public class CourseCommentFunctionality extends Baseclass {
             test.info("🔑 Performing login with email");
 
             login.loginMailField().fill("adv@yopmail.com");
-            login.loginPasswordField().fill("devuttan2023");
+            login.loginPasswordField().fill("adv@1234");
             login.signInButton().click();
             System.out.println("✅ Login submitted");
             test.info("✅ Login submitted");
@@ -91,6 +91,9 @@ public class CourseCommentFunctionality extends Baseclass {
             AdvertiserProspects approveFunctionality = new AdvertiserProspects(page);
             Thread.sleep(3000);
             test.info("💼 Opened Course section");
+            
+            page.mouse().wheel(0, 1000);
+
 
             approveFunctionality.commentButton().first().click();
             System.out.println("✏️ Clicked comment button");

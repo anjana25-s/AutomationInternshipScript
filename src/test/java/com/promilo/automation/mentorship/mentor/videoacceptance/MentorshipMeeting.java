@@ -1,6 +1,5 @@
 package com.promilo.automation.mentorship.mentor.videoacceptance;
 
-<<<<<<< HEAD
 import java.nio.file.Paths;
 
 import org.testng.annotations.Test;
@@ -9,53 +8,7 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Dialog;
 import com.microsoft.playwright.Page;
-import com.promilo.automation.pageobjects.Mymeetings.MymeetingPage;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
-import com.promilo.automation.resources.ExtentManager;
-
-public class MentorshipMeeting extends Baseclass{
-	
-	
-	@Test
-    public void JoinmeetingFunctionalityTest() throws Exception {
-        ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("📅 Join Meeting Functionality | Hardcoded Data Test");
-
-        Page page = initializePlaywright();
-        page.navigate(prop.getProperty("url"));
-        page.setViewportSize(1366,1000 );
-        test.info("🌐 Navigated to URL: " + prop.getProperty("url"));
-        System.out.println("🌐 Navigated to URL: " + prop.getProperty("url"));
-
-        String[][] credentials = {
-                {"testuser08622@gmail.com", "9999"},
-        };
-
-        for (String[] creds : credentials) {
-            String email = creds[0];
-            String password = creds[1];
-
-            try {
-                MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
-
-                // Popup
-                mayBeLaterPopUp.getPopup().click();
-                test.info("✅ Popup closed.");
-                System.out.println("✅ Popup closed.");
-
-                // Login
-                mayBeLaterPopUp.clickLoginButton();
-=======
-import org.testng.annotations.Test;
-
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.microsoft.playwright.Dialog;
-import com.microsoft.playwright.Page;
-import com.promilo.automation.pageobjects.mymeetings.MymeetingPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExtentManager;
@@ -75,24 +28,22 @@ public class MentorshipMeeting extends BaseClass{
         System.out.println("🌐 Navigated to URL: " + prop.getProperty("url"));
 
         String[][] credentials = {
-                {"testuser08622@gmail.com", "9999"},
-        };
+                {"812de0aa@qtvjnqv9.mailosaur.net", "Karthik@88"},};
 
         for (String[] creds : credentials) {
             String email = creds[0];
             String password = creds[1];
 
             try {
-                LandingPage landingPage = new LandingPage(page);
+                MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
 
                 // Popup
-                landingPage.getPopup().click();
+                mayBeLaterPopUp.getPopup().click();
                 test.info("✅ Popup closed.");
                 System.out.println("✅ Popup closed.");
 
                 // Login
-                landingPage.clickLoginButton();
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
+                mayBeLaterPopUp.clickLoginButton();
                 test.info("➡️ Clicked Login button.");
                 System.out.println("➡️ Clicked Login button.");
 
@@ -101,11 +52,9 @@ public class MentorshipMeeting extends BaseClass{
                 test.info("✍️ Entered Email: " + email);
                 System.out.println("✍️ Entered Email: " + email);
 
-                loginPage.loginWithOtp().click();
-                test.info("📩 Clicked on Login with OTP.");
-                System.out.println("📩 Clicked on Login with OTP.");
+               
 
-                loginPage.otpField().fill(password);
+                loginPage.passwordField().fill(password);
                 test.info("🔑 Entered OTP: " + password);
                 System.out.println("🔑 Entered OTP: " + password);
 
@@ -142,7 +91,7 @@ public class MentorshipMeeting extends BaseClass{
                 
                 
                 // Meeting page actions
-                MymeetingPage mymeeting = new MymeetingPage(page);
+                com.promilo.automation.pageobjects.mymeetings.MymeetingPage mymeeting = new com.promilo.automation.pageobjects.mymeetings.MymeetingPage(page);
 
                // mymeeting.audioMuteButton().click();
                 page.locator(".flex.items-center.justify-center.rounded-lg.bg-white > .cursor-pointer").first().click();
@@ -155,7 +104,7 @@ public class MentorshipMeeting extends BaseClass{
                 System.out.println("📷 Toggled Video.");
 
                
-Thread.sleep(3000);
+                Thread.sleep(3000);
                 mymeeting.RisehandButton().first().click();
                 test.info("✋ Clicked Raise Hand button.");
                 System.out.println("✋ Clicked Raise Hand button.");
@@ -163,7 +112,7 @@ Thread.sleep(3000);
                 
                 
                 
-               // mymeeting.chatButton().click();
+               mymeeting.chatButton().click();
                 
                 page.locator("//div[@style='opacity: 1; transform: scale(1); transition: 200ms linear;']").nth(5).click();
 
@@ -208,7 +157,7 @@ Thread.sleep(3000);
                 
                 
              // Meeting page actions
-                MymeetingPage mymeeting2 = new MymeetingPage(page);
+                com.promilo.automation.pageobjects.mymeetings.MymeetingPage mymeeting2 = new com.promilo.automation.pageobjects.mymeetings.MymeetingPage(page);
 
                // mymeeting.audioMuteButton().click();
                 page.locator(".flex.items-center.justify-center.rounded-lg.bg-white > .cursor-pointer").first().click();
@@ -224,6 +173,10 @@ Thread.sleep(3000);
                 mymeeting2.chatExitbutton().click();
                 test.info("🚪 Exited Chat window.");
                 System.out.println("🚪 Exited Chat window.");
+                
+                
+                
+                
                 
                 
 

@@ -8,13 +8,9 @@ import org.testng.annotations.Test;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Page;
-<<<<<<< HEAD
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.pageobjects.emailnotifications.CancelMeeting;
-=======
-import com.promilo.automation.pageobjects.signuplogin.JobListingPage;
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -39,11 +35,11 @@ ExtentReports extent = ExtentManager.getInstance();
 	            page.setViewportSize(1000, 768);
 	            test.info("✅ Navigated to: " + prop.getProperty("url"));
 	            
-	            LandingPage landingPage= new LandingPage(page);
+	            MayBeLaterPopUp mayBeLaterPopUp= new MayBeLaterPopUp(page);
 	           
-	                landingPage.getPopup().click();
+	                mayBeLaterPopUp.getPopup().click();
 
-	            landingPage.clickLoginButton();
+	            mayBeLaterPopUp.clickLoginButton();
 
 	            LoginPage loginPage = new LoginPage(page);
 	            loginPage.loginMailPhone().fill("warm-apart@ofuk8kzb.mailosaur.net");

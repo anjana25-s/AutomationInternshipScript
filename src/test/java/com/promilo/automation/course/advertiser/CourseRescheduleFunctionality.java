@@ -1,5 +1,7 @@
 package com.promilo.automation.course.advertiser;
 
+import static org.testng.Assert.assertEquals;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 
@@ -14,12 +16,12 @@ import com.promilo.automation.advertiser.AdverstiserMyaccount;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
 import com.promilo.automation.advertiser.AdvertiserProspects;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.MailsaurCredentials;
 
-public class CourseRescheduleFunctionality extends Baseclass {
+public class CourseRescheduleFunctionality extends BaseClass {
     
     @Test(
 		      dependsOnMethods = {
@@ -88,28 +90,30 @@ public class CourseRescheduleFunctionality extends Baseclass {
                 page.locator("[class='approve-btn content-nowrap maxbtnwidth mb-50 btn btn-']").first()
                         .click(new Locator.ClickOptions().setForce(true));
                 test.info("⏳ Clicked on Reschedule accept button");
+                
+                
+                String rescheduleMeeting= page.locator("[class='heading text-primary text-center mb-1']").textContent().trim();
+                assertEquals(rescheduleMeeting, "Reschedule the Meeting");
+                
+                String subHeading= page.locator("[class='sub-heading']").textContent().trim();
+                assertEquals(subHeading, "User has requested reschedule . Please accept the request for this slot.");
+                
+                String noteText= page.locator("[class='note text-center']").textContent().trim();
+                assertEquals(noteText, "Accepting or cancelling the reschedule request will also result in the acceptance or cancellation of the original meeting.");
 
+               System.out.println(page.locator("[class='rescheduledSlots-time w-100 font-12 text-center mb-50 active']").textContent().trim());                 
+                
 
+                page.locator("//button[text()='Accept Request']").click();
                 page.waitForTimeout(3000);
-                page.locator("//span[@class='flatpickr-day']").first().click();
-                test.info("📅 Selected date for reschedule");
-                
-               
+                               
 
-                // Select two slots for reschedule
-                page.locator("li.time-slot-box.list-group-item").first().click();
-                test.info("⏰ Selected two time slots");
 
-                Locator submitButton =page.locator("//button[text()='Submit']");
+
                 
-                submitButton.scrollIntoViewIfNeeded();
-                submitButton.click();
-                
-                
-                
-                page.getByText("Your rescheduled request has been sent to the user.Once the user confirms the")
-                        .click();
-                page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Done")).click();
+                                
+                String succespopUp=page.locator("[class='font-14 text-center']").textContent().trim();
+                assertEquals(succespopUp, "Thanks for Accepting this reschedule request. Your meeting is confirmed.");
 
                 
          
@@ -128,35 +132,27 @@ public class CourseRescheduleFunctionality extends Baseclass {
                 test.info("🔑 Logged into Mailosaur successfully.");
 
                 // Step 3: Click the latest "Reschedule Request Sent" mail
-                mailPage.locator("//p[contains(text(),'Reschedule Request Sent: Awaiting ')]")
+                mailPage.locator("//p[contains(text(),'Thank you for accepting the meeting request from ')]")
                        .first()
                        .click();
                 test.info("✉ Opened the latest 'Reschedule Request Sent' email.");
 
                 // Step 4: Validate mail contents
-                String hiText = mailPage.locator("//span[contains(text(),'Hi')]").textContent();
-                String campaignText = mailPage.locator("//p[contains(text(),'This is regarding campaign')]").textContent();
-                String requestText = mailPage.locator("//p[contains(text(),'Your request to reschedule the')]").textContent();
-                String meetingText = mailPage.locator("//p[contains(text(),'The meeting was originally')]").textContent();
-                String notifyText = mailPage.locator("//p[contains(text(),'We will notify you as soon as')]").textContent();
-                String thanksText = mailPage.locator("//p[contains(text(),'Thank you for your patience')]").textContent();
-
+                String hiText = mailPage.locator("//span[contains(text(),'Dear ')]").textContent();
+                String campaignText = mailPage.locator("//p[contains(text(),'Thank you for accepting the')]").textContent();
+                String requestText = mailPage.locator("//p[contains(text(),'The meeting is now')]").textContent();
+                   
                 test.info("📄 Email Content Validation Results:");
                 test.info("Hi Text: " + hiText);
                 test.info("Campaign Text: " + campaignText);
                 test.info("Request Text: " + requestText);
-                test.info("Meeting Text: " + meetingText);
-                test.info("Notify Text: " + notifyText);
-                test.info("Thanks Text: " + thanksText);
+                
 
                 System.out.println("Validation Results:");
                 System.out.println(hiText);
                 System.out.println(campaignText);
                 System.out.println(requestText);
-                System.out.println(meetingText);
-                System.out.println(notifyText);
-                System.out.println(thanksText);
-
+                
                 
                 test.pass("✅ Reschedule request submitted successfully");
 

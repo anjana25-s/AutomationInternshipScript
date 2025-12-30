@@ -14,12 +14,20 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.promilo.automation.advertiser.*;
-import com.promilo.automation.advertiser.jobcampaign.*;
+import com.promilo.automation.advertiser.AdvertiserHomepage;
+import com.promilo.automation.advertiser.AdvertiserLoginPage;
+import com.promilo.automation.advertiser.jobcampaign.BudgetAndCost;
+import com.promilo.automation.advertiser.jobcampaign.Feedback;
+import com.promilo.automation.advertiser.jobcampaign.Myaudience;
+import com.promilo.automation.advertiser.jobcampaign.ScreeningQuestions;
+import com.promilo.automation.courses.pageobjects.AddApplicationPage;
+import com.promilo.automation.courses.pageobjects.CampusVisitCampaignCreattion;
 import com.promilo.automation.courses.pageobjects.CreateCampaignPage;
-import com.promilo.automation.resources.*;
+import com.promilo.automation.resources.BaseClass;
+import com.promilo.automation.resources.ExcelUtil;
+import com.promilo.automation.resources.ExtentManager;
 
-public class CreateCampaign extends Baseclass {
+public class CreateCampaign extends BaseClass {
 
     private ExtentReports extent;
     private ExtentTest test;
@@ -31,30 +39,27 @@ public class CreateCampaign extends Baseclass {
         extent = ExtentManager.getInstance();
         test = extent.createTest("🚀 Campaign Creation - Data Driven");
 
-        // ======== Load Excel ========
-        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
-                "Mentorship Test Data.xlsx").toString();
+        // ================= LOAD EXCEL =================
+        String excelPath = Paths.get(System.getProperty("user.dir"),
+                "Testdata", "Mentorship Test Data.xlsx").toString();
 
-        ExcelUtil excel;
-        try {
-            excel = new ExcelUtil(excelPath, "Courses");
-        } catch (Exception e) {
-            test.fail("Excel load failed: " + e.getMessage());
-            Assert.fail();
-            return;
-        }
+        ExcelUtil excel = new ExcelUtil(excelPath, "Courses");
 
-        // ======== Header Mapping ========
+        // ================= HEADER MAP (SAFE) =================
         Map<String, Integer> colMap = new HashMap<>();
-        int totalCols = excel.getColumnCount();
-        for (int c = 0; c < totalCols; c++) {
-            colMap.put(excel.getCellData(0, c).trim(), c);
+        for (int c = 0; c < excel.getColumnCount(); c++) {
+            String header = excel.getCellData(0, c);
+            if (header != null && !header.trim().isEmpty()) {
+                colMap.put(header.trim(), c);
+            }
         }
 
-        // ======== Row Count ========
+        System.out.println("📌 Excel Headers: " + colMap.keySet());
+
+        // ================= ROW COUNT =================
         int rowCount = 0;
         for (int i = 1; i <= 1000; i++) {
-            String tcId = excel.getCellData(i, colMap.get("Tc_Id"));
+            String tcId = excel.getCellData(i, getCol(colMap, "Tc_Id"));
             if (tcId == null || tcId.trim().isEmpty()) break;
             rowCount++;
         }
@@ -62,51 +67,45 @@ public class CreateCampaign extends Baseclass {
         Set<String> targetKeywords = Collections.singleton("Course Campaign Creation");
 
         for (int i = 1; i <= rowCount; i++) {
-        	
-        	
-        	String keyword = excel.getCellData(i, colMap.get("Keyword"));
-        	String UrlTitle = excel.getCellData(i, colMap.get("UrlTitle"));
-        	String CampaignUrl = excel.getCellData(i, colMap.get("CampaignUrl"));
+
+            String keyword = excel.getCellData(i, getCol(colMap, "Keyword"));
+            if (!targetKeywords.contains(keyword)) continue;
+
+            // ================= READ EXCEL DATA =================
+            String email = excel.getCellData(i, getCol(colMap, "Email"));
+            String password = excel.getCellData(i, getCol(colMap, "Password"));
+            String campaignName = excel.getCellData(i, getCol(colMap, "CampaignName"));
+            String productTitle = excel.getCellData(i, getCol(colMap, "ProductTitle"));
+            String brandName = excel.getCellData(i, getCol(colMap, "BrandName"));
+            String description = excel.getCellData(i, getCol(colMap, "Description"));
+
+            String startDate = excel.getCellData(i, getCol(colMap, "StartDate"));
+            String endDate = excel.getCellData(i, getCol(colMap, "EndDate"));
+            String years = excel.getCellData(i, getCol(colMap, "DurationYears"));
+
+            String imagePath = excel.getCellData(i, getCol(colMap, "UploadImagePath"));
+            String documentPath = excel.getCellData(i, getCol(colMap, "UploadDocumentPath"));
+
+            String driveLink = excel.getCellData(i, getCol(colMap, "DriveLink"));
+            String UrlTitle = excel.getCellData(i, getCol(colMap, "UrlTitle"));
+            String CampaignUrl = excel.getCellData(i, getCol(colMap, "CampaignUrl"));
+
+            String applicationName = excel.getCellData(i, getCol(colMap, "ApplicationName"));
+            String openDate = excel.getCellData(i, getCol(colMap, "OpeningDate"));
+            String closeDate = excel.getCellData(i, getCol(colMap, "ClosingDate"));
+            String street = excel.getCellData(i, getCol(colMap, "StreetAddress"));
+            String pincode = excel.getCellData(i, getCol(colMap, "PinCode"));
+            String city = excel.getCellData(i, getCol(colMap, "City"));
+            String state = excel.getCellData(i, getCol(colMap, "State"));
+            String applicationCost = excel.getCellData(i, getCol(colMap, "ApplicationCost"));
+
+            String totalCost = excel.getCellData(i, getCol(colMap, "TotalCost"));
+            String prospectCount = excel.getCellData(i, getCol(colMap, "ProspectCount"));
+            String location = excel.getCellData(i, getCol(colMap, "Location"));
+            String selectedCourse= excel.getCellData(i, getCol(colMap, "Course"));
 
 
-        	String years = excel.getCellData(i, colMap.get("DurationYears"));
-        	String imagePath = excel.getCellData(i, colMap.get("UploadImagePath"));
-        	String documentPath = excel.getCellData(i, colMap.get("UploadDocumentPath"));
-
-        	String street = excel.getCellData(i, colMap.get("StreetAddress"));
-        	String openDate = excel.getCellData(i, colMap.get("OpeningDate"));
-        	String closeDate = excel.getCellData(i, colMap.get("ClosingDate"));
-
-        	if (!targetKeywords.contains(keyword)) continue;
-
-        	// ======== Read Excel Columns ========
-        	String email = excel.getCellData(i, colMap.get("Email"));
-        	String password = excel.getCellData(i, colMap.get("Password"));
-        	String campaignName = excel.getCellData(i, colMap.get("CampaignName"));
-        	String productTitle = excel.getCellData(i, colMap.get("ProductTitle"));
-        	String brandName = excel.getCellData(i, colMap.get("BrandName"));
-        	String description = excel.getCellData(i, colMap.get("Description"));
-        	String startDate = excel.getCellData(i, colMap.get("StartDate"));
-        	String endDate = excel.getCellData(i, colMap.get("EndDate"));
-
-        	String tabContent = productTitle; // FIXED
-
-        	String driveLink = excel.getCellData(i, colMap.get("DriveLink"));
-        	String urlTitle = excel.getCellData(i, colMap.get("UrlTitle"));
-        	String campaignUrl = excel.getCellData(i, colMap.get("CampaignUrl"));
-
-        	String applicationName = excel.getCellData(i, colMap.get("ApplicationName"));
-        	String pincode = excel.getCellData(i, colMap.get("PinCode")); // FIXED
-        	String city = excel.getCellData(i, colMap.get("City"));
-        	String state = excel.getCellData(i, colMap.get("State"));
-        	String applicationCost = excel.getCellData(i, colMap.get("ApplicationCost"));
-
-        	String totalCost = excel.getCellData(i, colMap.get("TotalCost"));
-        	String prospectCount = excel.getCellData(i, colMap.get("ProspectCount"));
-        	
-        	
-        	
-
+            String tabContent = productTitle;
 
             // ================= LAUNCH =================
             page = initializePlaywright();
@@ -148,6 +147,7 @@ public class CreateCampaign extends Baseclass {
             campaignPage.endDateField().fill(endDate);
             campaignPage.deliveryModeDropdown().click();
             campaignPage.regularOfflineOption().click();
+            
 
             // ================= IMAGE =================
             campaignPage.uploadImageButton().setInputFiles(Paths.get(imagePath));
@@ -156,8 +156,19 @@ public class CreateCampaign extends Baseclass {
 
             // ================= TABS =================
             campaignPage.addTitleButton().click();
-            Thread.sleep(3000);
+            Locator checkboxes = campaignPage.checkboxes();
 
+            int count = checkboxes.count();
+            int limit = Math.min(3, count);
+
+            for (int i1 = 0; i1 < limit; i1++) {
+                checkboxes.nth(i1).click();
+            }
+            
+            campaignPage.addButton().click();
+            
+            
+            Thread.sleep(3000);
             campaignPage.tabTextbox().first().fill(tabContent);
             campaignPage.coursesAndFeesTab().click();
             campaignPage.tabTextbox().nth(1).fill(tabContent);
@@ -165,123 +176,327 @@ public class CreateCampaign extends Baseclass {
             campaignPage.tabTextbox().nth(2).fill(tabContent);
             campaignPage.saveNextSpan().click();
 
-            // ================= LINK =================
+            
+            
+            // ================= LINKS & DOCUMENT =================
             campaignPage.uploadLinkDiv().click();
             campaignPage.driveLinkInput().fill(driveLink);
             campaignPage.submitInput().click();
+            
+            
+            
+            campaignPage.addPhotosOrVideosDiv().click();
 
-            // ================= DOCUMENT =================
+            page.setInputFiles(
+                    "input[type='file']",
+                    Paths.get("C:/Users/Admin/Downloads/preview_fullpage.png")
+            );
+            campaignPage.cropButton().click();
+            
+            campaignPage.saveNextP().click();
+            
+            
+            
+
+            
+            
+            
+            CampusVisitCampaignCreattion campusVisit= new CampusVisitCampaignCreattion(page);
+            
+            
+
+            page.waitForTimeout(1000);
+            campusVisit.ChoseTimeSlot().click();
+            page.keyboard().type("30");
+            page.keyboard().press("Enter");
+
+          
+            campaignPage.monday().click();
+                // Create 10 slots for the day
+                for (int i1 = 0; i1 < 10; i1++) {
+                	campusVisit.addSlotButton().click();
+                	Thread.sleep(500);
+
+                    // Select nth slot
+                	campaignPage.timeSlotContainer()
+                        .nth(i1 + 1).click();
+                    Thread.sleep(500);
+
+                    page.keyboard().type(String.format("%02d", (i1 % 24)));
+                    Thread.sleep(500);
+
+                    page.keyboard().press("Enter");
+                    Thread.sleep(500);
+                }
+
+                campaignPage.English().click();
+                campaignPage.Hindi().click();
+                campaignPage.Kannada().click();
+                
+                
+                
+                
+                page.waitForTimeout(500);
+                campusVisit.visitCheckBox().click();
+                
+                page.waitForTimeout(500);
+                campusVisit.ChoseTimeSlot().nth(1).click();
+                page.keyboard().type("30");
+                page.keyboard().press("Enter");
+
+              
+                campusVisit.Monday().click();
+                    // Create 10 slots for the day
+                    for (int i1 = 0; i1 < 10; i1++) {
+                    	campusVisit.addSlotButton().nth(1).click();
+                    	Thread.sleep(500);
+
+                        // Select nth slot
+                    	campusVisit.timeSlotContainer()
+                            .nth(i1 ).click();
+                        Thread.sleep(500);
+
+                        page.keyboard().type(String.format("%02d", (i1 % 24)));
+                        Thread.sleep(500);
+
+                        page.keyboard().press("Enter");
+                        Thread.sleep(500);
+                    }
+
+                    campusVisit.English().click();
+                    campusVisit.Hindi().click();
+                    campusVisit.Kannada().click();
+                    campusVisit.mapLinkField().fill("https://maps.app.goo.gl/mwbHXKqbHAha6sFQ8");   
+                    campusVisit.selectCounselors().click();
+                    page.waitForTimeout(2000);
+                    campusVisit.selectCounselorsOption().click();
+                    campusVisit.SaveButton().click();
+                    
+
+
+                
+                   
+            ScreeningQuestions screening = new ScreeningQuestions(page);
+            Feedback feedback = new Feedback(page);
+            screening.AddButton().click();
+            campusVisit.questionInput().fill("are you an immediate joiner");
+            feedback.EnteroptionField().fill("yes");
+            
+            campusVisit.addOptionButton().click();
+            
+            campusVisit.optionInput().nth(1).fill("no0");
+            screening.SaveButton().click();
+
+            // Feedback again
+            feedback.AddButton().click();
+            campusVisit.questionInput().fill("are you an immediate joiner");
+            feedback.EnteroptionField().fill("yes");
+            campusVisit.addOptionButton().click();
+            
+            
+            campusVisit.optionInput().nth(1).fill("no0");
+            feedback.FeedbackSavebutton().click();   
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             campaignPage.urlTitleInput().fill(UrlTitle);
             campaignPage.campaignUrlInput().fill(CampaignUrl);
             campaignPage.documentTitleInput().fill("College PDF");
             campaignPage.uploadDocumentButton().setInputFiles(Paths.get(documentPath));
+            
+            
+            
+            
+            // ================= ADD APPLICATION (FULL) =================
 
-            // ================= ADD APPLICATION =================
-            page.locator("//button[text()='Add Application ']").click();
-            page.locator("//button[text()='Create Application']").click();
-            page.locator("//button[text()='Create Manually']").click();
+            
+         
+         
+         
 
-            page.locator("#application_form_name").fill(applicationName);
-            page.locator("#opening_date").fill(openDate);
-            page.locator("#closing_date").fill(closeDate);
-            page.locator("#street_address").fill(street);
-            page.locator("#pin_code").fill(pincode);
-            page.locator("#city").fill(city);
-            page.locator("#state").fill(state);
-            page.locator("#application_cost").fill(applicationCost);
+            AddApplicationPage addApp = new AddApplicationPage(page);
 
-            page.locator("//div[@class='accreditation-select__input-container css-19bb58m']").click();
-            page.keyboard().type("NAAC");
-            page.keyboard().press("Enter");
+         // ================= ADD APPLICATION =================
+         addApp.clickAddApplication().click();
+         addApp.clickCreateApplication().click();
+         addApp.createManually().click();
 
-            // ================= PERSONAL INFO =================
-            page.locator("//div[@id='PERSONAL_INFO']").click();
-            page.locator("//div[text()='Legal Name']").click();
-            clickAllSubOptions(page);
+         // ================= CLEAR PRE-SELECTED OPTIONS =================
+         long endTime = System.currentTimeMillis() + 20000;
 
-            // ================= ACADEMIC HISTORY =================
-            page.locator("//div[contains(text(),'Select Academic History')]").click();
+         while (System.currentTimeMillis() < endTime) {
+             int count1 = addApp.selectedOptionCross().count();
+             if (count1 == 0) {
+                 break;
+             }
 
-            page.locator("//div[text()='Class 10th Details']").click();
-            clickAllSubOptions(page);
+             for (int i1 = 0; i1 < count1; i1++) {
+                 Locator cross = addApp.selectedOptionCross().nth(i1);
+                 if (cross.isVisible()) {
+                     cross.click();
+                     break;
+                 }
+             }
+         }
 
-            page.locator("//div[contains(text(),'Class 12th Details')]").click();
-            clickAllSubOptions(page);
+         // Assertion
+         Assert.assertEquals(
+                 addApp.selectedOptionCross().count(),
+                 0,
+                 "❌ Exit icons still present"
+         );
 
-            page.locator("//div[contains(text(),'University Last Attended')]").click();
-            clickAllSubOptions(page);
+         // ================= APPLICATION DETAILS =================
+         addApp.enterApplicationFormName().fill(applicationName);
+         addApp.openingDate().fill(openDate);
+         addApp.closingDate().fill(closeDate);
+         addApp.streetAdress().fill(street);
+         addApp.pinCode().fill(pincode);
+         addApp.city().fill(city);
+         addApp.state().fill(state);
+         addApp.applicationCost().fill(applicationCost);
 
-            page.locator("//div[contains(text(),'Provisional/Final Degree Certificate')]").click();
-            clickAllSubOptions(page);
+         // ================= ACCREDITATION =================
+         addApp.selectAccreditation().click();
+         page.keyboard().type("NAAC");
+         page.keyboard().press("Enter");
 
-            page.locator("//div[contains(text(),'Work Experience Certificates')]").click();
-            clickAllSubOptions(page);
+         // ================= PERSONAL INFO =================
+         addApp.selectPersonalIdentificationAndDemographics().click();
+         addApp.selectLegalName().click();
+         clickAllSubOptions(page);
 
-            // ================= ENTRANCE EXAMS =================
-            page.locator("//div[@id='ENTRANCE_EXAMS_AND_TESTS']").click();
+         // ================= ACADEMIC HISTORY =================
+         addApp.selectAcademicHistory().click();
 
-            page.locator("//div[contains(text(),'National Level Exams')]").click();
-            clickAllSubOptions(page);
+         addApp.class10Details().click();
+         clickAllSubOptions(page);
 
-            page.locator("//div[contains(text(),'State Level Exams')]").click();
-            clickAllSubOptions(page);
+         addApp.class12Details().click();
+         clickAllSubOptions(page);
 
-            page.locator("//div[contains(text(),'University Specific Exams')]").click();
-            clickAllSubOptions(page);
+         addApp.universityLastAttended().click();
+         clickAllSubOptions(page);
 
-            // ================= CATEGORY & ELIGIBILITY =================
-            page.locator("//div[@id='CATEGORY_AND_ELIGIBILITY']").click();
+         addApp.degreeCertificate().click();
+         clickAllSubOptions(page);
 
-            page.locator("//div[contains(text(),'Category of Admission')]").click();
-            clickAllSubOptions(page);
+         addApp.workExperienceCertificate().click();
+         clickAllSubOptions(page);
 
-            page.locator("//div[contains(text(),'Documentary Evidence')]").click();
-            clickAllSubOptions(page);
+         addApp.fieldSelectionAndPreview().click();
 
-            page.locator("//div[contains(text(),'Person with Disability (PWD) Status')]").click();
-            clickAllSubOptions(page);
+         // ================= ENTRANCE EXAMS =================
+         addApp.entranceExamsSection().click();
 
-            page.locator("//div[contains(text(),'Sports Quota')]").click();
-            clickAllSubOptions(page);
+         addApp.nationalLevelExams().click();
+         clickAllSubOptions(page);
 
-            page.locator("//div[contains(text(),'Extra-Curricular Activities (ECA) Quota')]").click();
-            clickAllSubOptions(page);
+         addApp.stateLevelExams().click();
+         clickAllSubOptions(page);
 
-            page.locator("//div[contains(text(),'Domicile/Residence Status')]").click();
-            clickAllSubOptions(page);
+         addApp.universitySpecificExams().click();
+         clickAllSubOptions(page);
 
-            // ================= DOCUMENTATION =================
-            page.locator("//div[contains(text(),'Select Documentation')]").click();
+         addApp.fieldSelectionAndPreview().click();
 
-            page.locator("//div[text()='Personal & Identity Documents']").click();
-            clickAllSubOptions(page);
+         // ================= CATEGORY & ELIGIBILITY =================
+         addApp.categoryEligibilitySection().click();
 
-            page.locator("//div[text()='Academic Documents']").click();
-            clickAllSubOptions(page);
+         addApp.categoryOfAdmission().click();
+         clickAllSubOptions(page);
 
-            page.locator("//div[text()='Conditional & Statutory Documents']").click();
-            page.locator("//div[text()='Special Affidavits & Undertakings']").click();
-            clickAllSubOptions(page);
+         addApp.documentaryEvidence().click();
+         clickAllSubOptions(page);
 
-            // ================= CUSTOM FIELD =================
-            page.locator("#customFieldMulti > .css-13cymwt-control > .css-hlgwow > .css-19bb58m").click();
-            page.getByText("Personal Identification & DemographicsAcademic HistoryEntrance Exam & Test").click();
-            page.locator("//input[@placeholder='Enter Field Name']").fill("Something");
-            page.waitForTimeout(3000);
+         addApp.pwdStatus().click();
+         clickAllSubOptions(page);
 
-            // ================= NATIONAL LEVEL EXAMS =================
-            page.locator("//div[text()='Select National Level Exam']").click();
-            page.keyboard().type("JEE");
-            page.keyboard().press("Enter");
+         addApp.sportsQuota().click();
+         clickAllSubOptions(page);
 
-            Locator addMoreLink = page.locator("[class='text-primary pointer']");
-            addMoreLink.first().click();
+         addApp.ecaQuota().click();
+         clickAllSubOptions(page);
 
-            page.locator("//div[text()='Select National Level Exam']").nth(1).click();
-            page.keyboard().type("JEE");
-            page.keyboard().press("Enter");
+         addApp.domicileStatus().click();
+         clickAllSubOptions(page);
 
-            page.locator("//button[text()='Create']").click();
+         addApp.fieldSelectionAndPreview().click();
+
+         // ================= DOCUMENTATION =================
+         page.waitForTimeout(3000);
+
+         addApp.selectDocumentation().click();
+
+         addApp.personalIdentityDocuments().click();
+         clickAllSubOptions(page);
+
+         addApp.academicDocuments().click();
+         clickAllSubOptions(page);
+
+         addApp.conditionalStatutoryDocuments().click();
+         addApp.affidavitsUndertakings().click();
+         clickAllSubOptions(page);
+
+         addApp.fieldSelectionAndPreview().click();
+
+         // ================= CUSTOM FIELD =================
+         addApp.customFieldDropdown().click();
+         addApp.customFieldCategoryText().click();
+         addApp.customFieldNameInput().fill("Something");
+         addApp.addButton().click();
+
+         page.waitForTimeout(3000);
+
+         // Required checkboxes
+         for (int checkbox1 = 0; checkbox1 < addApp.requiredCheckboxes().count(); checkbox1++) {
+             Locator checkbox = addApp.requiredCheckboxes().nth(checkbox1);
+             if (checkbox.isVisible()) {
+                 checkbox.click();
+             }
+         }
+
+         // ================= NEXT FLOW =================
+         addApp.nextButton().click();
+         System.out.println("1st button clicked");
+
+         addApp.nextButton().click();
+         System.out.println("2nd button clicked");
+
+         addApp.nextButton().click();
+         System.out.println("3rd button clicked");
+
+         page.waitForTimeout(3000);
+         addApp.nextButton().click();
+         System.out.println("4th button clicked");
+
+         // ================= NATIONAL LEVEL EXAMS =================
+         page.waitForTimeout(500);
+         addApp.selectNationalLevelExam().click();
+         page.keyboard().type("JEE");
+         page.keyboard().press("Enter");
+
+         page.waitForTimeout(500);
+         addApp.addMoreLink().first().click();
+
+         page.waitForTimeout(500);
+         addApp.selectNationalLevelExam().nth(1).click();
+         page.keyboard().type("JEE");
+         page.keyboard().press("Enter");
+
+         // ================= CREATE APPLICATION =================
+         addApp.createButton().click();
+         addApp.closePopupIcon().click();
+
             campaignPage.saveAndNextButton().click();
 
             // ================= AUDIENCE =================
@@ -293,12 +508,14 @@ public class CreateCampaign extends Baseclass {
             campaignPage.electricalEngineerOption().click();
             page.keyboard().type("accounts");
             page.keyboard().press("Enter");
+
             campaignPage.keywordButton().click();
 
             Myaudience audience = new Myaudience(page);
             audience.MinAge().first().click();
             page.keyboard().type("20");
             page.keyboard().press("Enter");
+
             audience.Maxage().nth(1).click();
             page.keyboard().type("29");
             page.keyboard().press("Enter");
@@ -319,23 +536,69 @@ public class CreateCampaign extends Baseclass {
             BudgetAndCost budget = new BudgetAndCost(page);
             budget.evaluate().click();
             campaignPage.savePreviewButton().first().click();
+            
+            
 
+            page.waitForTimeout(2000);
             // ================= ASSERTIONS =================
             Assert.assertEquals(
                     campaignPage.brandName().textContent().trim(), brandName);
             Assert.assertEquals(
                     campaignPage.productTitle().textContent().trim(), productTitle);
+            
+            Assert.assertEquals(
+                    campaignPage.location().textContent().trim(), location);
+            
+            Assert.assertEquals(       
+            		campaignPage.duration().textContent().trim(), years);
+            
+            Assert.assertEquals(  
+            		campaignPage.averageFees().textContent().trim(), totalCost);
+            
+            
+            
+            
+            
+            
+            
+            campaignPage.collegeInfoTab().click();
+            Assert.assertEquals(       
+            		campaignPage.tabsContent().textContent().trim(), productTitle);
+            
+            
+            campaignPage.coursesAndFeesTab().click();
+            Assert.assertEquals(       
+            		campaignPage.tabsContent().textContent().trim(), productTitle);
+
+            
+            campaignPage.syllubus().click();
+            Assert.assertEquals(       
+            		campaignPage.tabsContent().textContent().trim(), productTitle);
+            
+
+            
+            campaignPage.closePreview().click();
+            
+            
+            
 
             campaignPage.publishButton().click();
             test.pass("✅ Campaign created successfully");
         }
     }
 
+    // ================= SAFE COLUMN ACCESS =================
+    private int getCol(Map<String, Integer> colMap, String header) {
+        if (!colMap.containsKey(header)) {
+            throw new RuntimeException("❌ Missing Excel column: " + header);
+        }
+        return colMap.get(header);
+    }
+
     // ================= UTILITY =================
     private void clickAllSubOptions(Page page) {
         Locator options = page.locator(".sub-option");
-        int count = options.count();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < options.count(); i++) {
             options.nth(i).click();
         }
     }

@@ -1,10 +1,8 @@
 package com.promilo.automation.guestuser.jobs;
 
-
 import java.nio.file.Paths;
 
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -14,130 +12,140 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.job.pageobjects.JobListingPage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
 public class GuestUserNotifySimilarJobs extends BaseClass {
-	
-	@DataProvider(name = "jobApplicationData")
-    public Object[][] jobApplicationData() throws Exception {
-        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
+
+    // Excel reference (not used for execution)
+    private void readExcelForReference() throws Exception {
+        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
+                "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
         ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
-        int rowCount = 0;
-        for (int i = 1; i <= 1000; i++) {
-            String testCaseId = excel.getCellData(i, 0);
-            if (testCaseId == null || testCaseId.trim().isEmpty()) break;
-            rowCount++;
-        }
-        Object[][] data = new Object[rowCount - 1][8];
+        String testCaseId = excel.getCellData(1, 0);
+        String keyword = excel.getCellData(1, 1);
+        String email = excel.getCellData(1, 3);
+        String password = excel.getCellData(1, 6);
+        String name = excel.getCellData(1, 7);
+        String otp = excel.getCellData(1, 5);
+        String mailphone = excel.getCellData(1, 8);
+        String expectedResult = excel.getCellData(1, 4);
 
-        for (int i = 1; i < rowCount; i++) {
-            data[i - 1][0] = excel.getCellData(i, 0); // TestCaseID
-            data[i - 1][1] = excel.getCellData(i, 1); // Keyword
-            data[i - 1][2] = excel.getCellData(i, 3); // InputValue (Email)
-            data[i - 1][3] = excel.getCellData(i, 6); // Password
-            data[i - 1][4] = excel.getCellData(i, 7); // Name
-            data[i - 1][5] = excel.getCellData(i, 5); // OTP
-            data[i - 1][6] = excel.getCellData(i, 8); // MailPhone
-            data[i - 1][7] = excel.getCellData(i, 4); // ExpectedResult
-        }
-
-        return data;
+        System.out.println("Excel reference -> " + testCaseId + ", " + keyword + ", " + email);
     }
 
-    @Test(dataProvider = "jobApplicationData")
-    public void applyForJobAsRegisteredUser(String testCaseId, String keyword, String email, String password, String name, String otp, String mailphone, String expectedResult) throws Exception {
+    @Test
+    public void notifySimilarJobsAsGuestUser() throws Exception {
 
         ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("🚀 Apply for Job as Registered User | " + testCaseId);
+        ExtentTest test = extent.createTest("🚀 Guest User | Notify Similar Jobs | Single Run");
 
-        if (!keyword.equalsIgnoreCase("SimilarJobsTest")) {
-            test.info("⏭️ Skipping TestCaseID: " + testCaseId + " due to keyword: " + keyword);
-            return;
-        }
+        // Hardcoded test data for single execution
+        String name = "Guest User";
+        String mailphone = "9000019014";
+        String otp = "9999";
 
+        // Launch Playwright
         Page page = initializePlaywright();
         page.navigate(prop.getProperty("url"));
         page.setViewportSize(1280, 800);
 
-        LandingPage landingPage = new LandingPage(page);
-        landingPage.getPopup().click();
-        landingPage.clickLoginButton();
-        
+        // Close landing popup
+        MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
+        mayBeLaterPopUp.getPopup().click();
+
+        // Go to jobs and pick fintech
         JobListingPage homePage = new JobListingPage(page);
         homePage.homepageJobs().click();
         homePage.fintech();
 
-        Locator fintechJobCard = page.locator("//span[@class='font-12 additional-tags-text additional-cards-text-truncate jobs-brand-additional-title']");
+        Locator fintechJobCard = page.locator(
+                "//span[@class='font-12 additional-tags-text additional-cards-text-truncate jobs-brand-additional-title']");
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         fintechJobCard.scrollIntoViewIfNeeded();
-        fintechJobCard.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(5000));
+        fintechJobCard.waitFor(
+                new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(5000));
         fintechJobCard.click();
+        
+        page.waitForTimeout(15000);
 
+
+        // Notify similar jobs form
         homePage.notifySimilarJobs().click();
-        homePage.applyNameField().fill(name);
-        homePage.applyNowMobileTextField().fill(mailphone);
+        homePage.applyNameField().nth(1).fill(name);
+     // Generate random phone (90000 + 5 random digits)
+        String randomPhone = "90000" + (10000 + new java.util.Random().nextInt(90000));
+
+        // Generate random email (testuser + random 6 digits)
+        String randomEmail = "testuser" + System.currentTimeMillis() % 1000000 + "@gmail.com";
+
+        // Fill into fields
+        page.locator("//input[@placeholder='Mobile*']").nth(1).fill(randomPhone);
+        page.locator("input[placeholder='Email*']").nth(1).fill(randomEmail);
+
+        // For debugging/logging
+        System.out.println("Generated Phone: " + randomPhone);
+        System.out.println("Generated Email: " + randomEmail);
+
         homePage.sendSimilarJobs().click();
 
+        // OTP validation
         if (otp == null || otp.length() < 4) {
-            throw new IllegalArgumentException("OTP provided is less than 4 characters: " + otp);
+            throw new IllegalArgumentException("OTP must be at least 4 characters: " + otp);
         }
 
         for (int i = 0; i < 4; i++) {
-            String otpChar = Character.toString(otp.charAt(i));
-            Locator otpField = page.locator("//input[@aria-label='Please enter OTP character " + (i + 1) + "']");
-
-            otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
+            String otpChar = String.valueOf(otp.charAt(i));
+            Locator otpField = page
+                    .locator("//input[@aria-label='Please enter OTP character " + (i + 1) + "']");
+            otpField.waitFor(
+                    new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
 
             boolean filled = false;
             int attempts = 0;
-
             while (!filled && attempts < 3) {
                 attempts++;
-                otpField.click(); // force focus
-                otpField.fill(""); // clear previous
+                otpField.click();
+                otpField.fill("");
                 otpField.fill(otpChar);
 
-                // Validate the field actually has the entered digit
                 String currentValue = otpField.evaluate("el => el.value").toString().trim();
                 if (currentValue.equals(otpChar)) {
                     filled = true;
                 } else {
-                    page.waitForTimeout(500); // wait before retry
+                    page.waitForTimeout(500);
                 }
             }
 
             if (!filled) {
-                throw new RuntimeException("Failed to enter OTP digit " + (i + 1) + " correctly after retries.");
+                throw new RuntimeException("Failed to enter OTP digit " + (i + 1));
             }
+            test.info("Entered OTP digit: " + otpChar);
         }
 
-
-
+        // Verify & proceed
         Locator verifyButton = page.locator("//button[text()='Verify & Proceed']");
         verifyButton.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
         verifyButton.click();
 
-        Locator thankYouPopup = page.locator("//div[translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = 'thank you!']");
+        // Validate Thank You popup
+        Locator thankYouPopup = page.locator(
+                "//div[translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = 'thank you!']");
         thankYouPopup.waitFor(new Locator.WaitForOptions().setTimeout(5000));
-
         String popupText = thankYouPopup.innerText().trim();
-        Assert.assertTrue(popupText.equalsIgnoreCase("Thank You!"), "Expected 'Thank You!' popup, but found: " + popupText);
-        test.info("✅ 'Thank You!' popup appeared successfully with text: " + popupText);
 
-        Thread.sleep(3000);
-        test.pass("✅ Flow completed successfully for TestCaseID: " + testCaseId);
-        page.context().close();
+        Assert.assertTrue(popupText.equalsIgnoreCase("Thank You!"),
+                "Expected 'Thank You!' popup, but found: " + popupText);
+        test.pass("✅ 'Thank You!' popup validated successfully");
 
-        String screenshotPath = System.getProperty("user.dir") + "/screenshots/" + testCaseId + "_signup_pass.png";
+        // Screenshot
+        String screenshotPath = System.getProperty("user.dir") + "/screenshots/notifySimilarJobs_pass.png";
         page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get(screenshotPath)).setFullPage(true));
-        test.addScreenCaptureFromPath(screenshotPath, "🖼️ Screenshot after signup");
+        test.addScreenCaptureFromPath(screenshotPath, "🖼️ Screenshot after Notify Similar Jobs");
 
         page.close();
-        test.info("Browser closed for TestCaseID: " + testCaseId);
+        extent.flush();
     }
-
 }
-

@@ -17,11 +17,11 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.advertiser.AdvertiserHomepage;
 import com.promilo.automation.advertiser.AdvertiserLoginPage;
-import com.promilo.automation.resources.Baseclass;
+import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 
-public class AdvertiserRejectsCampusVisitRequest extends Baseclass {
+public class AdvertiserRejectsCampusVisitRequest extends BaseClass {
 
     ExtentReports extent;
     ExtentTest test;

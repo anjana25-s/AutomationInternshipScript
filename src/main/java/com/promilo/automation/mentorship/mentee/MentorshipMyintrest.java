@@ -25,6 +25,10 @@ public class MentorshipMyintrest {
 	private final Locator walletButton;
 	private final Locator phonePe;
 	
+	private final Locator deliverTime;
+	private final Locator languageChosen;
+	private final Locator totalAmount;
+	
 	
 	//Book a Meeting
 	private final Locator mentorDataMeeting;
@@ -33,9 +37,21 @@ public class MentorshipMyintrest {
 	private final Locator statusTag;
 	private final Locator sendReminder;
 	private final Locator cancelButton;
+	private final Locator bookMeetingMentorName;
+	private final Locator bookMeetingMentorData;
+	private final Locator bookMeetingServiceName;
 	
 	// ask a query 
 	private final Locator chatButton;
+	private final Locator rescheduleIcon;
+	private final Locator rescheduleSlots;
+	private final Locator rescheduleSuccesPopup;
+	private final Locator rescheduleAcceptBuuton;
+	private final Locator myInterestTab;
+	private final Locator askQueryMentorName;
+	private final Locator askQueryMentorData;
+	private final Locator askQueryDuration;
+	private final Locator askQueryServiceName;
 	public MentorshipMyintrest(Page page) {
 		
 		this.page= page;
@@ -54,20 +70,35 @@ public class MentorshipMyintrest {
 		this.mobileNumber= page.locator("//input[@placeholder='Mobile number']");
 		this.walletButton= page.locator("//span[text()='Wallet']");
 		this.phonePe= page.locator("//span[text()='PhonePe']");
+		this.deliverTime=page.locator("[class='card_detail-value']");
+		this.languageChosen=page.locator("[class='card_detail-value language-field language-tooltip']").first();
+		this.totalAmount=page.locator("[class='card_detail-value']").first();
+		
+		
 		
 		
 		//Book a Meeting
 		this.mentorDataMeeting= page.locator("//div[@class='font-medium category-text-interest-card text-truncate text-wrap']");
 		this.meetingDate= page.locator("//div[@class='card_detail-wrapper-normal card-separator']");
-		this.meetingTime= page.locator("//div[@class='card_detail-wrapper-normal']");
+		this.meetingTime= page.locator("[class='card_detail-wrapper-normal']");
 		this.statusTag= page.locator("//div[@class='interest_status-tag']");
 		this.sendReminder= page.locator("//button[text()='Send Reminder']");
 		this.cancelButton= page.locator("//span[text()='Cancel']");
-		
-		
+		this.bookMeetingMentorName=page.locator("[class='card-content-header-text fw-bolder mb-0 text-wrap pointer text-truncate']");
+		this.bookMeetingServiceName=page.locator("[class='d-flex justify-content-center align-items-center']");
+		this.bookMeetingMentorData=page.locator("[class='font-medium category-text-interest-card text-truncate text-wrap']");
 		//ask a query
 		this.chatButton= page.locator("//img[@alt='chat-message']");
-		
+		this.rescheduleSuccesPopup= page.locator("//div[@class='modal-content']");
+		this.myInterestTab= page.locator("//span[text()='My Interest']");
+		this.rescheduleIcon= page.locator("img.rescheduled-notification-icon");
+		this.rescheduleSlots= page.locator("//div[@class='rescheduledSlots-time w-100 font-12 text-center mb-50 ']");
+		this.rescheduleAcceptBuuton= page.locator("//button[text()='Accept Request']");
+		this.askQueryMentorName= page.locator("//a[@class='card-content-header-text fw-bolder mb-0 text-wrap pointer text-truncate']");
+		this.askQueryMentorData= page.locator("//div[@class='font-medium category-text-interest-card text-truncate text-wrap']");
+		this.askQueryDuration= page.locator("//div[@class='card_detail-value']");
+		this.askQueryServiceName= page.locator("//span[text()='Ask Query']");
+				
 		 
 		
 		
@@ -90,6 +121,11 @@ public class MentorshipMyintrest {
 	public Locator mobileNumber() {return mobileNumber;}
 	public Locator walletButton() {return walletButton;}
 	public Locator phonePe() {return phonePe;}
+	public Locator deliverTime() {return deliverTime;}
+	public Locator languageChosen() {return languageChosen;}
+	public Locator totalAmount() {return totalAmount;}
+	
+	
 	
 	
 	//
@@ -100,6 +136,17 @@ public class MentorshipMyintrest {
 	public Locator sendReminder() {return sendReminder;}
 	public Locator cancelButton() {return cancelButton;}
 	public Locator chatButton() {return chatButton;}
-	
+	public Locator myInterestTab() {return myInterestTab;}
+	public Locator rescheduleIcon() {return rescheduleIcon;}
+	public Locator rescheduleSlots() {return rescheduleSlots;}
+	public Locator rescheduleAcceptBuuton() {return rescheduleAcceptBuuton;}
+	public Locator rescheduleSuccesPopup() {return rescheduleSuccesPopup;}
+	public Locator askQueryMentorName() {return askQueryMentorName;}
+	public Locator askQueryMentorData() {return askQueryMentorData;}
+	public Locator askQueryDuration() {return askQueryDuration;}
+	public Locator askQueryServiceName() {return askQueryServiceName;}
+	public Locator bookMeetingMentorName() {return bookMeetingMentorName;}
+	public Locator bookMeetingMentorData() {return bookMeetingMentorData;}
+	public Locator bookMeetingServiceName() {return bookMeetingServiceName;}
 
 }

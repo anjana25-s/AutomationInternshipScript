@@ -18,10 +18,10 @@ import com.promilo.automation.resources.ExtentManager;
 public class InvoiceFilterbaseOndays extends BaseClass{
 	
 	ExtentReports extent = ExtentManager.getInstance();
-    ExtentTest test = extent.createTest("🚀 Advertiser Add Funds Test | Data-Driven");
+    ExtentTest test = extent.createTest("🚀 Advertiser InvoiceFilterbaseOndays Test | Data-Driven");
 
     @Test
-    public void runAddFundsTest() {
+    public void InvoiceFilterbaseOndaysTest() {
         try {
             String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata",
                     "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
@@ -34,8 +34,8 @@ public class InvoiceFilterbaseOndays extends BaseClass{
 
             // Login
             AdvertiserLoginPage login = new AdvertiserLoginPage(page);
-            login.loginMailField().fill("vikas78@yopmail.com");
-            login.loginPasswordField().fill("Abcd12345");
+            login.loginMailField().fill("fewer-produce@qtvjnqv9.mailosaur.net");
+            login.loginPasswordField().fill("Karthik@88");
             login.signInButton().click();
             test.info("✅ Logged in successfully as vikas78@yopmail.com");
 

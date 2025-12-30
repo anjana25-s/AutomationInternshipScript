@@ -1,110 +1,18 @@
 package com.promilo.automation.mentorship.mentor.campaign;
 
 import java.nio.file.Paths;
-
+import java.util.*;
 import org.testng.annotations.Test;
+import org.testng.Assert;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-<<<<<<< HEAD
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.mentorship.mentor.BecomeMentor;
 import com.promilo.automation.mentorship.mentor.CampaignlistPage;
 import com.promilo.automation.pageobjects.myresume.Hamburger;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
-import com.promilo.automation.pageobjects.signuplogin.LoginPage;
-import com.promilo.automation.resources.Baseclass;
-import com.promilo.automation.resources.ExcelUtil;
-import com.promilo.automation.resources.ExtentManager;
-
-public class MentorshipFilterFunctionality extends Baseclass {
-
-    @Test
-    public void addEmploymentPositiveTest() throws Exception {
-
-        ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("✅ Add Employment - Positive Test");
-
-        Page page = initializePlaywright();
-        page.navigate(prop.getProperty("url"));
-        page.setViewportSize(1080, 720);
-
-        test.info("🌐 Navigated to application URL.");
-
-        String excelPath = Paths.get(System.getProperty("user.dir"),
-                "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
-        ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
-
-        int rowCount = 0;
-        for (int i = 1; i <= 1000; i++) {
-            String testCaseId = excel.getCellData(i, 0);
-            if (testCaseId == null || testCaseId.trim().isEmpty()) break;
-            rowCount++;
-        }
-        test.info("📘 Loaded " + rowCount + " rows from Excel.");
-
-        for (int i = 1; i < rowCount; i++) {
-            String keyword = excel.getCellData(i, 1);
-            if (!"AddEmployment".equalsIgnoreCase(keyword)) continue;
-
-            String inputValue = excel.getCellData(i, 3);
-            String description = excel.getCellData(i, 10);
-
-            try {
-                test.info("➡️ Starting execution for row " + i + " with input: " + inputValue);
-
-                MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
-                try {
-                    mayBeLaterPopUp.getPopup().click();
-                    test.info("✅ Popup closed.");
-                } catch (Exception ignored) {
-                    test.info("ℹ️ No popup found.");
-                }
-
-                mayBeLaterPopUp.clickLoginButton();
-                test.info("🔑 Navigating to Login Page.");
-
-                LoginPage loginPage = new LoginPage(page);
-                loginPage.loginMailPhone().fill("testradha68@yopmail.com");
-                loginPage.passwordField().fill("Karthik@88");
-                loginPage.loginButton().click();
-                test.info("✅ Logged in with registered credentials.");
-
-                // Navigate to My Resume
-                Hamburger resumePage = new Hamburger(page);
-                resumePage.Mystuff().click();
-
-                // Become a Mentor actions
-                BecomeMentor becomeMentor = new BecomeMentor(page);
-                becomeMentor.becomeMentorButton().click();
-                becomeMentor.campaignList().click();
-                
-                
-                CampaignlistPage Filter= new CampaignlistPage(page);
-
-                Locator statusButton = page.locator("//div[contains(@class,'campaign-list-select__value-container')]");
-
-                String[] statusFilters = {"Draft","In review","Active","Stopped","Rejected","All"};
-
-                for(String status : statusFilters){
-                    statusButton.click(); // always open dropdown
-                    page.locator("//div[text()='"+status+"']").scrollIntoViewIfNeeded();
-                    page.locator("//div[text()='"+status+"']").click();
-                    page.waitForTimeout(500);
-                }
-                
-                
-                
-                
-                
-
-=======
-import com.microsoft.playwright.Page;
-import com.promilo.automation.mentorship.mentor.BecomeMentor;
-import com.promilo.automation.mentorship.mentor.CampaignlistPage;
-import com.promilo.automation.pageobjects.myresume.MyResumePage;
-import com.promilo.automation.pageobjects.signuplogin.LandingPage;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.resources.BaseClass;
 import com.promilo.automation.resources.ExcelUtil;
@@ -113,87 +21,110 @@ import com.promilo.automation.resources.ExtentManager;
 public class MentorshipFilterFunctionality extends BaseClass {
 
     @Test
-    public void addEmploymentPositiveTest() throws Exception {
+    public void mentorshipFilterTest() throws Exception {
 
         ExtentReports extent = ExtentManager.getInstance();
-        ExtentTest test = extent.createTest("✅ Add Employment - Positive Test");
+        ExtentTest test = extent.createTest("MentorshipFilterFunctionalityTest");
 
+        // 1️⃣ Load Excel
+        String excelPath = Paths.get(System.getProperty("user.dir"), "Testdata", "Mentorship Test Data.xlsx").toString();
+        ExcelUtil excel = new ExcelUtil(excelPath, "CampaignCreation");
+
+        int totalRows = excel.getRowCount();
+        if (totalRows < 2) {
+            test.fail("❌ No data found in Excel.");
+            Assert.fail("No data in Excel");
+        }
+
+        int totalCols = excel.getColumnCount();
+
+        // 2️⃣ Build normalized header map
+        Map<String, Integer> headerMap = new HashMap<>();
+        for (int c = 0; c < totalCols; c++) {
+            String header = excel.getCellData(0, c);
+            if (header != null && !header.trim().isEmpty()) {
+                String key = header.replace("\u00A0","").trim().toLowerCase(); // remove non-breaking space
+                headerMap.put(key, c);
+            }
+        }
+
+        // 🔹 Debug: print headers
+        System.out.println("Excel headers:");
+        for (String key : headerMap.keySet()) {
+            System.out.println("Header: '" + key + "' -> Column: " + headerMap.get(key));
+        }
+
+        // 3️⃣ Find row with keyword = MentorshipFilterFunctionality
+        int matchRow = -1;
+        int keywordCol = headerMap.get("keyword"); // ALWAYS lowercase key from header map
+
+        for (int i = 1; i < totalRows; i++) {
+            String keyword = excel.getCellData(i, keywordCol);
+            if (keyword != null && keyword.trim().equalsIgnoreCase("MentorshipFilterFunctionality")) {
+                matchRow = i;
+                break;
+            }
+        }
+
+        if (matchRow == -1) {
+            test.fail("❌ No row found with keyword MentorshipFilterFunctionality");
+            Assert.fail("No keyword match in Excel");
+        }
+
+        test.info("📘 Executing Excel row: " + matchRow);
+
+        // 4️⃣ Fetch credentials from Excel
+        String inputValue = excel.getCellData(matchRow, headerMap.get("inputvalue"));
+        String password   = excel.getCellData(matchRow, headerMap.get("password"));
+
+        // 5️⃣ Initialize Playwright
         Page page = initializePlaywright();
         page.navigate(prop.getProperty("url"));
         page.setViewportSize(1080, 720);
 
-        test.info("🌐 Navigated to application URL.");
+        try {
+            // 6️⃣ Close popup if present
+            MayBeLaterPopUp popup = new MayBeLaterPopUp(page);
+            try { popup.getPopup().click(); test.info("✅ Popup closed."); } catch (Exception ignored) {}
+            popup.clickLoginButton();
 
-        String excelPath = Paths.get(System.getProperty("user.dir"),
-                "Testdata", "PromiloAutomationTestData_Updated_With_OTP (2).xlsx").toString();
-        ExcelUtil excel = new ExcelUtil(excelPath, "PromiloTestData");
+            // 7️⃣ Login
+            LoginPage loginPage = new LoginPage(page);
+            loginPage.loginMailPhone().fill(inputValue);
+            loginPage.passwordField().fill(password);
+            loginPage.loginButton().click();
+            test.info("✅ Logged in successfully with Excel credentials.");
 
-        int rowCount = 0;
-        for (int i = 1; i <= 1000; i++) {
-            String testCaseId = excel.getCellData(i, 0);
-            if (testCaseId == null || testCaseId.trim().isEmpty()) break;
-            rowCount++;
-        }
-        test.info("📘 Loaded " + rowCount + " rows from Excel.");
+            // 8️⃣ Navigate to Campaign List
+            Hamburger hb = new Hamburger(page);
+            hb.Mystuff().click();
 
-        for (int i = 1; i < rowCount; i++) {
-            String keyword = excel.getCellData(i, 1);
-            if (!"AddEmployment".equalsIgnoreCase(keyword)) continue;
+            BecomeMentor mentor = new BecomeMentor(page);
+            mentor.becomeMentorButton().click();
+            mentor.campaignList().click();
 
-            String inputValue = excel.getCellData(i, 3);
-            String description = excel.getCellData(i, 10);
+            CampaignlistPage listPage = new CampaignlistPage(page);
 
-            try {
-                test.info("➡️ Starting execution for row " + i + " with input: " + inputValue);
+            // 9️⃣ Apply filters (hardcoded, not from Excel)
+            Locator statusButton = page.locator("//div[contains(@class,'campaign-list-select__value-container')]");
+            String[] statusFilters = {"Draft","In review","Active","Stopped","Rejected","All"};
 
-                LandingPage landingPage = new LandingPage(page);
-                try {
-                    landingPage.getPopup().click();
-                    test.info("✅ Popup closed.");
-                } catch (Exception ignored) {
-                    test.info("ℹ️ No popup found.");
-                }
-
-                landingPage.clickLoginButton();
-                test.info("🔑 Navigating to Login Page.");
-
-                LoginPage loginPage = new LoginPage(page);
-                loginPage.loginMailPhone().fill("testradha68@yopmail.com");
-                loginPage.passwordField().fill("Karthik@88");
-                loginPage.loginButton().click();
-                test.info("✅ Logged in with registered credentials.");
-
-                // Navigate to My Resume
-                MyResumePage resumePage = new MyResumePage(page);
-                resumePage.Mystuff().click();
-
-                // Become a Mentor actions
-                BecomeMentor becomeMentor = new BecomeMentor(page);
-                becomeMentor.becomeMentorButton().click();
-                becomeMentor.campaignList().click();
-                
-                
-                CampaignlistPage Filter= new CampaignlistPage(page);
-                Filter.statusButton().click();
-                Filter.draft();
-                Filter.inReview();
-                Filter.active();
-                
-                
-                
->>>>>>> refs/remotes/origin/mentorship-Automation-on-Mentorship-Automation
-                
-                
-                
-
-
-            } catch (Exception e) {
-                test.fail("❌ Error in row " + i + ": " + e.getMessage());
-                throw e;
+            for (String status : statusFilters) {
+                statusButton.click();
+                Locator option = page.locator("//div[text()='" + status + "']");
+                option.scrollIntoViewIfNeeded();
+                option.click();
+                page.waitForTimeout(500);
+                test.info("✅ Status filter applied: " + status);
             }
+
+        } catch (Exception e) {
+            test.fail("❌ Error: " + e.getMessage());
+            throw e;
+        } finally {
+            closePlaywright();
         }
 
         extent.flush();
-        page.close();
     }
 }

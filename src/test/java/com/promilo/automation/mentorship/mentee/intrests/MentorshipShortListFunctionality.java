@@ -111,6 +111,7 @@ public class MentorshipShortListFunctionality extends BaseClass {
         log.info("Navigated to URL: " + prop.getProperty("url"));
         page.waitForTimeout(2000);
         log.info("===== Starting Mentorship ShortList Functionality Test =====");
+        page.waitForTimeout(10000);
 
 
         // -------------------- Landing Page --------------------
@@ -129,7 +130,8 @@ public class MentorshipShortListFunctionality extends BaseClass {
         searchPage.SearchTextField().click();
         searchPage.SearchTextField().fill(mentorName);
         page.keyboard().press("Enter");
-        page.waitForTimeout(2000);
+        page.waitForTimeout(15000);
+        
 
         // Shortlist mentor
         DescriptionPage description = new DescriptionPage(page);
@@ -220,7 +222,7 @@ public class MentorshipShortListFunctionality extends BaseClass {
         String expectedMentorName = "December Automation";
         String expectedMentorData = "dxgfchvjbng vbnm";
         String expectedExperience = "2 Years";
-        String expectedLocation = "Anantapur";
+        String expectedLocation = "HYDERABAD";
         
         String expectedServiceName = "Shortlisted";
 

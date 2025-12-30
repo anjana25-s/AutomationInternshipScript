@@ -85,6 +85,7 @@ public class RegisteredUserFeedBack extends BaseClass {
 
         homePage.searchJob().fill("December");
         page.keyboard().press("Enter");
+        page.waitForTimeout(15000);
 
 
         page.locator("//button[@class='feedback-save-btn']").click();

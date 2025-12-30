@@ -39,7 +39,7 @@ public class ViewedIntrestPage {
         this.seeMoreBtn = page.locator("//a[text()='See More']").nth(1);
         this.lpuCard = page.locator("//div[text()='LPU']").first();
         this.myInterestTab = page.locator("//span[normalize-space()='My Interest']");
-        this.myPreferenceTab = page.locator("[class='tab text-center w-50 ms-1 pointer active']");
+        this.myPreferenceTab = page.locator("[class='tab text-center w-50 ms-1 pointer ']");
         this.mentorshipCard = page.locator("//div[@class='my-preferance-card-body card-body']");
         this.campaignName= page.locator("[class='preferance-header-text']");
 		this.meetingDate= page.locator("[class='card_detail-value']").first();

@@ -126,7 +126,6 @@ public class RegisteredUserBrandEndorsement extends BaseClass{
             String gst            = excel.getCellData(i, colMap.get("gst"));
             String pan            = excel.getCellData(i, colMap.get("pan"));
             String contactNumber  = excel.getCellData(i, colMap.get("contactNumber"));
-            String Description       = excel.getCellData(i, colMap.get("feedbackText"));
 
 
         // INITIALIZE PLAYWRIGHT
@@ -153,12 +152,10 @@ public class RegisteredUserBrandEndorsement extends BaseClass{
         dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
 
         // Search for mentor
-        MeetupsListingPage searchPage = new MeetupsListingPage(page);
-        searchPage.SearchTextField().click();
-        searchPage.SearchTextField().fill(mentorName);
-        page.keyboard().press("Enter");
+        page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
         page.waitForTimeout(2000);
-        
+        page.waitForTimeout(14000);
+
 
         // Navigate to mentor details
         DescriptionPage GetMentorCall = new DescriptionPage(page);
@@ -243,7 +240,7 @@ public class RegisteredUserBrandEndorsement extends BaseClass{
         MentorshipMyintrest myintrest = new MentorshipMyintrest(page);
 
         // Expected Values – Temporary hardcoded
-        String expectedMentorName = "December Automation";
+        String expectedMentorName = "karthik U";
         String expectedMentorData = "dxgfchvjbng vbnm";
         String expectedExperience = "2 Years";
         String expectedLocation = "Anantapur";
@@ -287,7 +284,7 @@ public class RegisteredUserBrandEndorsement extends BaseClass{
         MentorBrandEndorsementsNotifications  mentorNotification= new MentorBrandEndorsementsNotifications(page);
         mentorNotification.intrestShownMailNotification().first().click();
         mentorNotification.dearText().isVisible();
-        mentorNotification.goodnewsText().isVisible();
+        mentorNotification.goodnewsText().first().isVisible();
         mentorNotification.pendingCard().isVisible();
         mentorNotification.acceptButton().click();
         

@@ -146,7 +146,7 @@ public class WhenUsersRescheduleRequestIsDeclined extends BaseClass {
 
         page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
         page.keyboard().press("Enter");
-        Thread.sleep(4000);
+        page.waitForTimeout(15000);
 
         page.locator("//button[text()='Apply Now']").first().click();
         jobPage.applyNameField().fill("karthik");

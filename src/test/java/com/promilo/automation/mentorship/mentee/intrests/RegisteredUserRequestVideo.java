@@ -126,8 +126,6 @@ public class RegisteredUserRequestVideo extends BaseClass{
             String gst            = excel.getCellData(i, colMap.get("gst"));
             String pan            = excel.getCellData(i, colMap.get("pan"));
             String contactNumber  = excel.getCellData(i, colMap.get("contactNumber"));
-            String password       = excel.getCellData(i, colMap.get("password"));
-            String Description	  = excel.getCellData(i, colMap.get("feedbackText"));	
         // INITIALIZE PLAYWRIGHT
         Page page = initializePlaywright();
         page.navigate(prop.getProperty("url"));
@@ -162,11 +160,10 @@ public class RegisteredUserRequestVideo extends BaseClass{
 	        dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
 
 	        // Search for mentor
-	        MeetupsListingPage searchPage = new MeetupsListingPage(page);
-	        searchPage.SearchTextField().click();
-	        searchPage.SearchTextField().fill(mentorName);
-	        page.keyboard().press("Enter");
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
 	        page.waitForTimeout(2000);
+            page.waitForTimeout(14000);
+
 	        
 	        
 	        
@@ -256,7 +253,7 @@ public class RegisteredUserRequestVideo extends BaseClass{
 	        }
 
 	        form.occationOptions().first().click();
-	        form.contentDescriptionBox().fill(Description);
+	        form.contentDescriptionBox().fill("Something");
 	        form.toggleButton().click();
 	        form.nextButton().click();
 	        
@@ -282,8 +279,6 @@ public class RegisteredUserRequestVideo extends BaseClass{
 		        
 		        
 		        
-		        page.getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName("By checking this box, I")).check();
-		        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save")).click();
 		        
 		        MentorshipMyintrest paymentFunctionality = new MentorshipMyintrest(page);
 		        paymentFunctionality.payOnline().click();
@@ -340,7 +335,7 @@ public class RegisteredUserRequestVideo extends BaseClass{
 		        
 
 		        // ------------------ Expected Values (You can load from Excel later) ------------------
-		        String expectedMentorName = "December Automation";
+		        String expectedMentorName = "karthik U";
 		        String expectedMentorData = "dxgfchvjbng vbnm";
 		        String expectedServiceName = "Personalized Video";
 

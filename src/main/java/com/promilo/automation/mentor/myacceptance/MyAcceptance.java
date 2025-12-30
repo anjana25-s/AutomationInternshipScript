@@ -74,6 +74,9 @@ public class MyAcceptance extends BaseClass {
     private final Locator askQueryHighlightText;
     private final Locator askQueryMoney;
     private final Locator askQueryTime;
+    private final Locator personalizedVideoAcceptanceStatus;
+    private final Locator personalizedHighLightText;
+    private final Locator personalizedMenteeName;
 
     public MyAcceptance(Page page) {
         this.page = page;
@@ -139,6 +142,9 @@ public class MyAcceptance extends BaseClass {
         this.askQueryHighlightText=page.locator("(//p[text()='Ask Query']//following::div[@class='category-text-interest-card text-truncate text-wrap'])[1]");
         this.askQueryMoney=page.locator("(//p[text()='Ask Query']//following::span[@class='card_detail-value'])[1]");
         this.askQueryTime=page.locator("(//p[text()='Ask Query']//following::div[@class='my_acceptance_card-keyword-normal'])[1]");
+        this.personalizedVideoAcceptanceStatus= page.locator("//p[text()='Personalized Video Message']//following::div[@class='my-acceptance-status-tag'][1]");
+        this.personalizedHighLightText= page.locator("(//p[text()='Personalized Video Message']//following::div[@class='font-10 category-text-interest-card text-truncate  text-wrap'])[1]");
+        this.personalizedMenteeName= page.locator("(//p[text()='Personalized Video Message']//following::div[@class='preferance-header-text'])[1]");
     }
 
     // Getter method for locator
@@ -205,4 +211,7 @@ public class MyAcceptance extends BaseClass {
     public Locator askQueryCampaignName() {return askQueryCampaignName;}
     public Locator askQueryMoney() {return askQueryMoney;}
     public Locator askQueryTime() {return askQueryTime;}
+    public Locator personalizedVideoAcceptanceStatus() {return personalizedVideoAcceptanceStatus;}
+    public Locator personalizedHighLightText() {return personalizedHighLightText;}
+    public Locator personalizedMenteeName() {return personalizedMenteeName;}
 }

@@ -153,19 +153,21 @@ public class CourseFreeVideoCounsellingAccept extends BaseClass {
                
                
                
-               FreeVideoCounsellingPage freeVideoCounselling= new FreeVideoCounsellingPage(page);
-               freeVideoCounselling.myInterestTab().click();
+               FreeVideoCounsellingPage freeVideoCounselling= new FreeVideoCounsellingPage(userPage);
+               Locator interestButton=freeVideoCounselling.myInterestTab();
+               interestButton.scrollIntoViewIfNeeded();
+               interestButton.click();
                
                
                String campaignName=freeVideoCounselling.campaignName().textContent().trim();
-               assertEquals(campaignName, "Application form fill mobile brand name");
+               assertEquals(campaignName, "BTWIN");
                
                
                String location= freeVideoCounselling.location().textContent().trim();
-               assertEquals(location, "Kerala - Other");
+               assertEquals(location, "Ahmedabad");
                
                String productTitle= freeVideoCounselling.productTitle().textContent().trim();
-               assertEquals(productTitle, "Application form fill mobile title");
+               assertEquals(productTitle, "Course promilo automation");
                
                
                

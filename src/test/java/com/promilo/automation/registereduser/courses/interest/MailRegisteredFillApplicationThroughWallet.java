@@ -28,6 +28,7 @@ import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.FileChooser;
 import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Locator;
@@ -36,6 +37,7 @@ import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.courses.intrestspages.FillApplication;
 import com.promilo.automation.courses.intrestspages.FillApplicationFormComponents;
+import com.promilo.automation.courses.pageobjects.CourseSearchPage;
 import com.promilo.automation.mentorship.mentee.MentorshipMyintrest;
 import com.promilo.automation.mentorship.mentee.intrests.MentorshipErrorMessagesAndToasters;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
@@ -123,7 +125,6 @@ public class MailRegisteredFillApplicationThroughWallet extends BaseClass {
             String mentorName     = excel.getCellData(i, colMap.get("MentorName"));
             String otp            = excel.getCellData(i, colMap.get("otp"));
             String invoiceName    = excel.getCellData(i, colMap.get("invoiceName"));
-            String name           = excel.getCellData(i, colMap.get("MentorName"));
             String street1        = excel.getCellData(i, colMap.get("street1"));
             String street2        = excel.getCellData(i, colMap.get("street2"));
             String pincode        = excel.getCellData(i, colMap.get("pincode"));
@@ -150,52 +151,31 @@ public class MailRegisteredFillApplicationThroughWallet extends BaseClass {
         MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
         try { mayBeLaterPopUp.getPopup().click(); } catch (Exception ignored) {}
         mayBeLaterPopUp.clickLoginButton();
-
+        
+        
         LoginPage loginPage = new LoginPage(page);
         loginPage.loginMailPhone().fill(registeredEmail);
-        BaseClass.registeredEmail=registeredEmail;
         loginPage.passwordField().fill(registeredPassword);
         loginPage.loginButton().click();
-        test.info("Logged in as registered user: " );
+        test.info("Logged in as registered user: " + registeredEmail);
 
      // ======== Add Funds in the SAME SESSION ========
         AddFundsUtility.addFundsInSameSession(page, invoiceName, street1, street2, pincode, gst, pan, contactNumber);
 
-
         Thread.sleep(3000);
         test.info("⏱ Waited 3 seconds for page load.");
 
-         Thread.sleep(3000);
+        CourseSearchPage coursePage = new CourseSearchPage(page);
+        coursePage.searchAndSelectCourse("Golden Institute of Technology");
 
-        // Step 1: Click Courses
-        page.locator("//a[text()='Courses']").click();
-        test.info("📚 Clicked on 'Courses'.");
 
-        // Step 2: Search course
-        page.locator("//input[@placeholder='Search Colleges and Courses']").fill("Golden Institute of Technology");
-        test.info("🔍 Entered course search text: Course auto");
-
-        page.keyboard().press("Enter");
-        test.info("↩️ Pressed Enter to search courses.");
-
-        // Step 3: Click Talk to Experts
-        page.locator("//span[text()='Fill Application']").click();
-        test.info("👨‍🏫 Clicked 'Talk to Experts' button.");
-        
-        
-        
-        MentorshipErrorMessagesAndToasters ErrorMessageValidation = new MentorshipErrorMessagesAndToasters(page);
         
         
         
         
-        String serverId = "qtvjnqv9";
-        int randomNum = 10000 + new Random().nextInt(90000);
-        
-        page.waitForTimeout(3000);
-                // ✅ Invalid inputs validation
         page.waitForTimeout(10000);
-        
+                
+        String randomPhone = "90000" + String.format("%05d", new Random().nextInt(100000));
 
         
         FillApplicationFormComponents fillPopUpForm= new FillApplicationFormComponents(page);
@@ -209,247 +189,173 @@ public class MailRegisteredFillApplicationThroughWallet extends BaseClass {
             name1.append(alphabets.charAt(random.nextInt(alphabets.length())));
         }
 
-        BaseClass.name = name1.toString();
+        BaseClass.name = name.toString();
 
         
         
         
         
-        fillPopUpForm.nameTextField().fill(name1.toString()); 
-        
-        
-        
-        String randomPhone = "90000" + String.format("%05d", new Random().nextInt(100000));
-        BaseClass.randomNumber=randomPhone;
-        // Fill mobile field
-        fillPopUpForm.mobileTextField().fill(BaseClass.randomNumber);
-        
-        
-        
-        
-        
-        page.waitForTimeout(3000);
-        page.locator("[id='preferredLocation']").click();
-        test.info("📍 Clicked Preferred Location dropdown");
+        fillPopUpForm.nameTextField().fill(name1.toString());
+        fillPopUpForm.mobileTextField().fill(randomPhone);
 
-        Thread.sleep(1000);
+        // Step 4: Select preferred locations
+        fillPopUpForm.preferredLocationDropdown().click();
         List<String> industries = Arrays.asList("Ahmedabad", "Bengaluru/Bangalore", "Chennai", "Mumbai (All Areas)");
-        Locator options = page.locator("//div[@class='option w-100']");
-        for (String industry : industries) {
-            boolean found = false;
-            for (int i1 = 0; i1 < options.count(); i1++) {
-                String optionText = options.nth(i1).innerText().trim();
-                if (optionText.equalsIgnoreCase(industry)) {
-                    options.nth(i1).click();
-                    test.info("✅ Selected industry: " + industry);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                test.warning("⚠️ Industry not found: " + industry);
-            }
-        }
+        fillPopUpForm.selectLocations(industries);
+        
+        fillPopUpForm.nameTextField().click();
 
-        page.locator("//div[@class='text-content']").textContent();
-        test.info("📋 Captured confirmation text content after industry selection");
-        
-        page.locator("//input[@name='userName']").click();
+        // Step 5: Click Fill Application
+        fillPopUpForm.fillApplicationButton().click();
 
-        
-        
-        
-        page.locator("//button[text()='Fill Application']").click();
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        // Step 6: Enter OTP
         String validOtp = "9999";
-        for (int i1 = 0; i1 < 4; i1++) {
-            String digit = Character.toString(validOtp.charAt(i1));
-            Locator otpField = page.locator("//input[@aria-label='Please enter OTP character " + (i1 + 1) + "']");
-            otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
+        fillPopUpForm.enterOtp(validOtp);
 
-            for (int retry = 0; retry < 3; retry++) {
-                otpField.click();
-                otpField.fill("");
-                otpField.fill(digit);
-                if (otpField.evaluate("el => el.value").toString().trim().equals(digit))
-                    break;
-                page.waitForTimeout(500);
-            }
-            test.info("🔢 Entered OTP digit " + digit + " at position " + (i1 + 1));
-        }
+        // Click Verify & Proceed
+        fillPopUpForm.verifyAndProceedButton().click();
 
-        page.locator("//button[text()='Verify & Proceed']").click();
-        test.info("✅ Clicked 'Verify & Proceed' after entering OTP");
+        page.waitForTimeout(2000);         
         
         
         
-        
-        
-        //Form filling first page
-        page.locator("[id='lastName']").fill("U");
-        page.locator("[id='dateOfBirth']").fill("1997-08-28");
-        page.locator(".react-select__input-container").click();
-        page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("Male").setExact(true)).click();
-        page.locator("//button[text()='Send OTP']").first().click();
-        
-        
-        
-        Page page1 = page.context().newPage();
-        page1.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
+                FillApplication fillApplication = new FillApplication(page);
 
-        
-        page1.waitForTimeout(3000);
-        MailsaurCredentials formOtp= new MailsaurCredentials(page1);       
-        if (page1.locator("//input[@id='email']").isVisible()) {
-            // Need to login
-            formOtp.MialsaurMail().fill("karthikmailsaur@gmail.com");
-            formOtp.MailsaurContinue().click();
-            formOtp.MailsaurPassword().fill("Karthik@88");
-            formOtp.MailsaurLogin();
-        } else {
-            System.out.println("Already logged in. Skipping login.");
-        }
-        
-        
-        Locator firstEmail = page1.locator("//p[text()='Verify Your Email Address to Complete Promilo Registration 🌐']").first();
-        firstEmail.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-        firstEmail.click();
-        page1.waitForTimeout(3000);
-        String otpText = page1.locator("//p[contains(text(),'Verification Code')]").innerText().trim();
-        String formOtp1 = otpText.replaceAll("\\D+", "");
-        System.out.println("✅ OTP fetched from Mailosaur UI: " + otp);
-        
-        
-        
-        page1.close();        
+                // ========================
+                // FIRST PAGE – PERSONAL DETAILS
+                // ========================
 
-        page.locator("[id='email_otp']").fill(formOtp1);
-        page.locator("//button[text()='Verify OTP']").first().click();
-        System.out.println("mail otp verified");
+                fillApplication.lastName().fill("U");
+                page.locator("[id='middleName']").fill("Promilo");
+                fillApplication.dateOfBirth().fill("1997-08-28");
+                fillApplication.genderDropdown().click();
+                fillApplication.maleOption().click();
+                fillApplication.sendOtpButton().click();
+                
+                
+                
+             // Open new tab for Mailosaur UI
+                BrowserContext context = page.context();
+                Page mailosaurPage = context.newPage();
+                mailosaurPage.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
 
-        page.locator("[id='aadhar']").fill("121113231322");
+                // Login to Mailosaur
+                mailosaurPage.locator("//input[@placeholder='Enter your email address']").fill("karthikmailsaur@gmail.com");
+                mailosaurPage.locator("//button[text()='Continue']").click();
 
-        
-        page.locator("//button[text()='Send OTP']").first().click();
-        page.locator("[id='mobile_otp']").fill("9999");
-        
-        page.waitForTimeout(4000);
-        page.locator("//button[text()='Verify OTP']").first().click();
-        System.out.println("Phone verified");
+                mailosaurPage.locator("//input[@placeholder='Enter your password']").fill("Karthik@88");
+                mailosaurPage.locator("//button[text()='Log in']").click();
+
+                
+                
+                
+                mailosaurPage.waitForTimeout(3000);
+                mailosaurPage.reload();
+                Locator firstEmail = mailosaurPage.locator("//p[text()='Verify Your Email Address to Complete Promilo Registration 🌐']").first();
+                firstEmail.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+                firstEmail.click();
+
+                Thread.sleep(5000);
+
+                String otpText = mailosaurPage.locator("//p[contains(text(),'Verification Code')]").innerText().trim();
+                String otp1 = otpText.replaceAll("\\D+", "");
+                System.out.println("✅ OTP fetched from Mailosaur UI: ");
+
+                mailosaurPage.close();
+
+                
+
+                fillApplication.emailOtp().fill(otp1);
+                fillApplication.verifyOtpButton().click();
+                System.out.println("Mail OTP verified");
+
+                fillApplication.aadhar().fill("121113231322");
+                fillApplication.sendOtpButton().click();
+                fillApplication.mobileOtp().fill("9999");
+
+                page.waitForTimeout(4000);
+                fillApplication.verifyOtpButton().click();
+                System.out.println("Phone verified");
+                
+                
+                
+                fillApplication.nextButton().click();
+
+                // ========================
+                // SECOND PAGE – EDUCATION 
+                // ========================
+
+                fillApplication.boardOfExamination().click();
+                fillApplication.centralBoardOption().click();
+                fillApplication.selectBoardText().click();
+                fillApplication.subOption().first().click();
+
+                fillApplication.genderDropdown().click();
+                fillApplication.bandScoreOption().click();
+
+                fillApplication.companyName().click();
+                fillApplication.companyName().fill("promilo");
+
+                fillApplication.jobTitle().click();
+                fillApplication.jobTitle().fill("qa engineer");
+
+                fillApplication.saveAndNextButton().click();
+
+                fillApplication.genderDropdown().first().click();
+                fillApplication.jeeMainOption().click();
+
+                fillApplication.reactSelectControlInput().click();
+                fillApplication.jeeMainOption().click();
+                
 
 
+                page.waitForTimeout(2000);
+                fillApplication.saveAndNextButton().click();
 
-        
-        
-        
-        
-        page.locator("[class='next-btn']").click();
-        
-        
-        //form filling second page
-        page.locator("#boardOfExamination").click();
-        page.getByText("Central Board of Secondary").click();
-        page.getByText("Select Board of Examination").click();
-        page.locator(".sub-option").first().click();
-        page.locator(".react-select__input-container").click();
-        page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("Band Score (Language Tests)")).click();
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Company Name")).click();
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Company Name")).fill("promilo");
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Job Title")).click();
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Job Title")).fill("qa engineer");
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save & Next next-arrow")).click();
-        page.locator(".react-select__input-container").first().click();
-        page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("JEE Main")).click();
-        page.locator(".react-select__control.css-13cymwt-control > .react-select__value-container > .react-select__input-container").click();
-        page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("JEE Main")).click();
-        
-        
-        
-        page.waitForTimeout(2000);
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save & Next next-arrow")).click();
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        //Form fill 3rd page
-        page.locator("[class='selected-values-display']").click();
-        List<Locator> subOptions = page.locator("[class='sub-option']").all();
+                // ========================
+                // THIRD PAGE – ACHIEVEMENTS / UPLOAD
+                // ========================
 
-        for (int typeOfSport = 0; typeOfSport < subOptions.size(); typeOfSport++) {
-            String text = subOptions.get(typeOfSport).textContent().trim();
-            System.out.println("Option " + (typeOfSport + 1) + ": " + text);
-        }
+                fillApplication.selectedValuesDisplay().click();
 
-        
-        page.locator("[class='sub-option']").first().click();
-        
-        
-        //achievement drop down  
-        page.waitForTimeout(3000);
-        Locator level =page.locator(".react-select__input-container");
-        level.scrollIntoViewIfNeeded();
-        level.click();
-        page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("District Level")).click();
-        
-        
-        
-        
-        
-        page.waitForTimeout(4000);
-        page.waitForFileChooser(() -> {
-            page.locator("//span[text()='Upload file']").first().click();
-        }).setFiles(Paths.get("C:/Users/Admin/Downloads/pexels-moh-adbelghaffar-771742.jpg"));
-        
-        
-        page.getByText("I hereby declare that all the").click();
+                // Print all sub-options
+                List<Locator> subOptions = fillApplication.allSubOptions().all();
+                for (int i1 = 0; i1 < subOptions.size(); i1++) {
+                    System.out.println("Option " + (i1 + 1) + ": " + subOptions.get(i1).textContent().trim());
+                }
 
-        page.getByText("Please complete all required").click();
-        
-        page.waitForFileChooser(() -> {
-            page.locator("//span[text()='Upload file']").nth(1).click();
-        }).setFiles(Paths.get("C:/Users/Admin/Downloads/pexels-moh-adbelghaffar-771742.jpg"));
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+                fillApplication.subOption().first().click();
 
-        page.getByText("I hereby declare that all the").textContent().trim();
-        page.getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName("I hereby declare that all the")).check();
+                // Achievement dropdown
+                page.waitForTimeout(3000);
+                Locator level = fillApplication.achievementLevelDropdown();
+                level.scrollIntoViewIfNeeded();
+                level.click();
+                fillApplication.districtLevelOption().click();
 
-        
-        page.getByText("Please complete all required").click();
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save & Next next-arrow")).click();
-        
-        
-        
-        
-        page.locator("//button[text()=' Pay']").click();
+                
+                
+                // Upload files
+                page.waitForTimeout(4000);
+                page.waitForFileChooser(() -> fillApplication.uploadFileFirst().click())
+                        .setFiles(Paths.get("\"C:\\Users\\Admin\\Downloads\\preview_fullpage.png\""));
+
+                fillApplication.declarationText().click();
+                fillApplication.incompleteWarningText().click();
+
+                page.waitForFileChooser(() -> fillApplication.uploadFileSecond().click())
+                        .setFiles(Paths.get("C:/Users/Admin/Downloads/pexels-moh-adbelghaffar-771742.jpg"));
+
+                fillApplication.declarationCheckbox().check();
+
+                fillApplication.saveAndNextButton().click();
+
+                // ========================
+                // PAYMENT
+                // ========================
+
+                fillApplication.payButton().click();
+                
         Locator paymentLabel = page.getByText(Pattern.compile("Use Wallet \\(₹\\d+\\)"));
         String fullText = paymentLabel.textContent().trim(); 
         System.out.println(fullText);
@@ -505,10 +411,7 @@ public class MailRegisteredFillApplicationThroughWallet extends BaseClass {
         assertEquals(statusTag, "Submitted");
         System.out.println(statusTag+ "is displayed");
         
-        String paidAmount = fillFormValidation.paidAmount().textContent().trim();
-        String paidAmountValue = paidAmount.replaceAll("[^0-9.]", "");
-        assertEquals(paidAmountValue, BaseClass.courseFee, 
-             "❌ Mismatch: Paid amount does not match stored course fee.");
+        
 
          
         

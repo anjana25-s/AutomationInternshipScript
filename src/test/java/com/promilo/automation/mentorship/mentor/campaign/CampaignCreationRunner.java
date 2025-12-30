@@ -106,6 +106,7 @@ public class CampaignCreationRunner extends BaseClass {
                 becomeMentor.createMentorshipSession().click();
 
                 // ---------------- Fill Sections ----------------
+                page.waitForTimeout(16000);
                 new CreateProfileSection(page).fillProfile(firstName, lastName, phone, otp,
                         location, gender, experience, mentorType, domain, category,
                         course, dob, specialization, imagePath, socialLink, highlight);
@@ -127,7 +128,7 @@ public class CampaignCreationRunner extends BaseClass {
                         "500001", "22AAAAA0000A1Z5", "AMKPU8302M", "Account Holder", "1234567890",
                         "Branch Name", "KKBK0008066", "AMKPU8032P", "India");
 
-                
+               
 
             } catch (Exception e) {
                 log.error("❌ Error in row " + i + ": " + e.getMessage());

@@ -86,7 +86,7 @@ public class MentorshipAskQueryPaid extends BaseClass {
         }
 
         // ======== Process rows ========
-        Set<String> targetKeywords = Collections.singleton("MentorshipAskQueryPaid");
+        Set<String> targetKeywords = Collections.singleton("GetMentorCall");
 
         for (int i = 1; i <= rowCount; i++) {
             String keyword = excel.getCellData(i, colMap.get("keyword")).trim();
@@ -106,7 +106,6 @@ public class MentorshipAskQueryPaid extends BaseClass {
             String gst            = excel.getCellData(i, colMap.get("gst"));
             String pan            = excel.getCellData(i, colMap.get("pan"));
             String contactNumber  = excel.getCellData(i, colMap.get("contactNumber"));
-            String Description    = excel.getCellData(i, colMap.get("feedbackText"));
 
             // -------------------- Initialize Playwright --------------------
             Page page = initializePlaywright();
@@ -129,11 +128,9 @@ public class MentorshipAskQueryPaid extends BaseClass {
             page.waitForTimeout(2000);
 
             // Search for mentor
-            MeetupsListingPage searchPage = new MeetupsListingPage(page);
-            searchPage.SearchTextField().click();
-            searchPage.SearchTextField().fill("decem");
-            page.keyboard().press("Enter");
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
             page.waitForTimeout(2000);
+            page.waitForTimeout(14000);
 
             // -------------------- Mentor Description --------------------
             DescriptionPage descriptionValidation = new DescriptionPage(page);
@@ -144,7 +141,7 @@ public class MentorshipAskQueryPaid extends BaseClass {
 
             // -------------------- Assertions --------------------
             assertEquals(obj.registerWithUsText().textContent().trim(), "Why register with us?Transform your journey with guidance from industry-leading mentors and experts.Access real-time updates from our elite Academic, Career, and Skill mentors network.Receive instant alerts when mentors matching your specific criteria join our platform.Access authentic reviews and testimonials from peers about potential mentors.Benefit from tailored consulting that aligns with your unique career aspirations.Unlock premium content and tools designed to enhance your professional journey.Your data security is our priority - guaranteed protection from unauthorized communications.Transform your journey with guidance from industry-leading mentors and experts.Access real-time updates from our elite Academic, Career, and Skill mentors network.Receive instant alerts when mentors matching your specific criteria join our platform.Access authentic reviews and testimonials from peers about potential mentors.Benefit from tailored consulting that aligns with your unique career aspirations.Unlock premium content and tools designed to enhance your professional journey.Your data security is our priority - guaranteed protection from unauthorized communications.PreviousNext");
-            assertEquals(obj.headerText().textContent().trim(), "Ask your query from December Automation directly!");
+            assertEquals(obj.headerText().textContent().trim(), "Ask your query from karthik U directly!");
             assertEquals(obj.text2().textContent().trim(), "Transform your journey with guidance from industry-leading mentors and experts.Access real-time updates from our elite Academic, Career, and Skill mentors network.Receive instant alerts when mentors matching your specific criteria join our platform.Access authentic reviews and testimonials from peers about potential mentors.Benefit from tailored consulting that aligns with your unique career aspirations.Unlock premium content and tools designed to enhance your professional journey.Your data security is our priority - guaranteed protection from unauthorized communications.");
             assertEquals(obj.text3().textContent().trim(), "By proceeding ahead you expressly agree to the PromiloTerms & Conditions");
             assertEquals(obj.text4().textContent().trim(), "Already have an account?Login");
@@ -221,7 +218,7 @@ public class MentorshipAskQueryPaid extends BaseClass {
             // -------------------- Validation --------------------
             obj.thankYouPopup().waitFor();
             Assert.assertTrue(obj.thankYouPopup().isVisible());
-            assertEquals(obj.thankYouMessage().textContent().trim(), "Thank you for registering and asking the query from December Automation. Check your email, notifications, and WhatsApp for details on exclusive access.");
+            assertEquals(obj.thankYouMessage().textContent().trim(), "Thank you for registering and asking the query from karthik U. Check your email, notifications, and WhatsApp for details on exclusive access.");
 
             page.getByRole(AriaRole.DIALOG)
                 .getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("My Interest"))
@@ -230,7 +227,7 @@ public class MentorshipAskQueryPaid extends BaseClass {
             // -------------------- Mentor Card Validation --------------------
             MentorshipMyintrest myintrest = new MentorshipMyintrest(page);
             page.waitForTimeout(5000);
-            assertEquals(myintrest.askQueryMentorName().innerText().trim(), "December Automation");
+            assertEquals(myintrest.askQueryMentorName().innerText().trim(), "Karthik U");
             assertEquals(myintrest.askQueryMentorData().innerText().trim(), "dxgfchvjbng vbnm");
             assertEquals(myintrest.askQueryDuration().innerText().trim(), "22 Days");
             assertEquals(myintrest.askQueryServiceName().innerText().trim(), "Ask Query");

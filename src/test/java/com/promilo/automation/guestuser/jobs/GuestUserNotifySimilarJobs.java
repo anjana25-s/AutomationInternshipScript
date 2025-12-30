@@ -68,6 +68,9 @@ public class GuestUserNotifySimilarJobs extends BaseClass {
         fintechJobCard.waitFor(
                 new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(5000));
         fintechJobCard.click();
+        
+        page.waitForTimeout(15000);
+
 
         // Notify similar jobs form
         homePage.notifySimilarJobs().click();

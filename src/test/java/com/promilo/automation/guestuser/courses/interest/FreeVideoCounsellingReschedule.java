@@ -101,6 +101,7 @@ public class FreeVideoCounsellingReschedule extends BaseClass {
             
             
             // Search Course
+            page.waitForTimeout(14000);
             fvcPage.freeVideoCounsellingBtn().click();
             test.info("🎥 Clicked on 'Free Video Counselling' option");
 

@@ -66,7 +66,7 @@ public class GuestUserJobApply extends BaseClass {
         
         Thread.sleep(4000);
         
-        
+        page.waitForTimeout(15000);
 
         page.locator("//button[text()='Apply Now']").first().click();
 

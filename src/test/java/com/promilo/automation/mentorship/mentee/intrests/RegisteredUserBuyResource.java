@@ -162,12 +162,10 @@ public class RegisteredUserBuyResource extends BaseClass {
 	        dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
 
 	        // Search for mentor
-	        MeetupsListingPage searchPage = new MeetupsListingPage(page);
-	        searchPage.SearchTextField().click();
-	        searchPage.SearchTextField().fill(mentorName);
-	        page.keyboard().press("Enter");
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
 	        page.waitForTimeout(2000);
-	        
+            page.waitForTimeout(14000);
+
 	        
 	        
 	        
@@ -294,7 +292,7 @@ public class RegisteredUserBuyResource extends BaseClass {
             MentorshipMyintrest myintrest = new MentorshipMyintrest(page);
 
          
-            assertEquals(myintrest.mentorName().innerText().trim(), "December Automation");
+            assertEquals(myintrest.mentorName().innerText().trim(), "karthik U");
             assertEquals(myintrest.mentorData().innerText().trim(), "dxgfchvjbng vbnm");
             assertTrue(myintrest.experianceString().isVisible());
             assertEquals(myintrest.experianceValue().innerText().trim(), "2 Years");

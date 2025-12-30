@@ -112,10 +112,8 @@ public class MentorAskUsFunctionality extends BaseClass {
             dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
 
             // -------------------- Search Mentor --------------------
-            MeetupsListingPage searchPage = new MeetupsListingPage(page);
-            searchPage.SearchTextField().click();
-            searchPage.SearchTextField().fill(mentorName);
-            page.keyboard().press("Enter");
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
+            page.waitForTimeout(17000);
 
 
             // Open Ask Us
@@ -161,6 +159,10 @@ public class MentorAskUsFunctionality extends BaseClass {
             }
 
             page.locator("//button[text()='Verify & Proceed']").click();
+            
+            
+            
+            
 
             // -------------------- Validation --------------------
             Locator thankYouPopup = page.locator(

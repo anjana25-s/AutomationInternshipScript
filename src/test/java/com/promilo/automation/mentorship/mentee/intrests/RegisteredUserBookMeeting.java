@@ -156,12 +156,10 @@ public class RegisteredUserBookMeeting extends BaseClass{
 	        dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
 
 	        // Search for mentor
-	        MeetupsListingPage searchPage = new MeetupsListingPage(page);
-	        searchPage.SearchTextField().click();
-	        searchPage.SearchTextField().fill(mentorName);
-	        page.keyboard().press("Enter");
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
 	        page.waitForTimeout(2000);
-	        
+            page.waitForTimeout(14000);
+
 	        
 	        
 	        
@@ -317,7 +315,7 @@ public class RegisteredUserBookMeeting extends BaseClass{
 	              displayedTime = displayedTime.replaceFirst("^0", "");
 	              Assert.assertEquals(displayedTime, storedTime);
 
-	              Assert.assertEquals(myintrest.bookMeetingMentorName().innerText().trim(), "December Automation");
+	              Assert.assertEquals(myintrest.bookMeetingMentorName().innerText().trim(), "karthik U");
 	              Assert.assertEquals(myintrest.bookMeetingMentorData().innerText().trim(), "dxgfchvjbng vbnm");
 	              Assert.assertEquals(myintrest.bookMeetingServiceName().innerText().trim(), "Video Call");
 	         

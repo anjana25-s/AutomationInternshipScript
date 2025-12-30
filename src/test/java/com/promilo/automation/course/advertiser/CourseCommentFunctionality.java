@@ -69,7 +69,7 @@ public class CourseCommentFunctionality extends BaseClass {
             test.info("🔑 Performing login with email");
 
             login.loginMailField().fill("adv@yopmail.com");
-            login.loginPasswordField().fill("devuttan2023");
+            login.loginPasswordField().fill("adv@1234");
             login.signInButton().click();
             System.out.println("✅ Login submitted");
             test.info("✅ Login submitted");
@@ -91,6 +91,9 @@ public class CourseCommentFunctionality extends BaseClass {
             AdvertiserProspects approveFunctionality = new AdvertiserProspects(page);
             Thread.sleep(3000);
             test.info("💼 Opened Course section");
+            
+            page.mouse().wheel(0, 1000);
+
 
             approveFunctionality.commentButton().first().click();
             System.out.println("✏️ Clicked comment button");

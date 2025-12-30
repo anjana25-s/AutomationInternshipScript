@@ -63,7 +63,7 @@ public class CourseShortListFunctionality extends BaseClass {
                 Assert.assertTrue(login.talkToAnExpert().isVisible(), "Talk To Expert should be visible");
 
                 login.loginMailField().fill("adv@yopmail.com");
-                login.loginPasswordField().fill("devuttan2023");
+                login.loginPasswordField().fill("adv@1234");
                 login.signInButton().click();
                 test.pass("✅ Advertiser logged in successfully");
 

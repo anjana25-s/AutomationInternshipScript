@@ -169,7 +169,8 @@ public class FillApplicationDraftFunctionality extends BaseClass {
         
         //Fill pop-up form
         FillApplicationFormComponents fillPopUpForm= new FillApplicationFormComponents(page);
-        fillPopUpForm.nameTextField().fill("karthik");
+        BaseClass.name = "karthik";
+        fillPopUpForm.nameTextField().fill(BaseClass.name);
         fillPopUpForm.mobileTextField().fill(randomPhone);
 
         // Step 4: Select preferred locations

@@ -131,8 +131,8 @@ public class UserSendsReminderForAppliedJob extends BaseClass{
         page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
         page.keyboard().press("Enter");
         test.info("Clicked on Developer job listing");
-        
-        Thread.sleep(4000);
+        page.waitForTimeout(15000);
+
         
         
 

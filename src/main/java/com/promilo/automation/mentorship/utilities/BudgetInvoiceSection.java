@@ -257,6 +257,7 @@ public class BudgetInvoiceSection {
         // ========================== PUBLISH PROFILE SECTION ==========================
         budget.previewClose().nth(13).click();
         budget.publishButton().click();
+        page.pause();
         budget.publishConfirmation().nth(1).click();
 
         String actualText = page.getByRole(

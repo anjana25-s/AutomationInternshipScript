@@ -78,7 +78,7 @@ public class FeedbackAutomation extends BaseClass {
         }
 
         // ======== Process rows ========
-        Set<String> targetKeywords = Collections.singleton("FeedbackAutomation");
+        Set<String> targetKeywords = Collections.singleton("GetMentorCall");
 
         for (int i = 1; i <= rowCount; i++) {
             String keyword = excel.getCellData(i, colMap.get("keyword")).trim();
@@ -89,7 +89,6 @@ public class FeedbackAutomation extends BaseClass {
             // Fetch data using header mapping
             String mentorName     = excel.getCellData(i, colMap.get("MentorName"));
             String otp            = excel.getCellData(i, colMap.get("otp"));
-            String feedbackText   = excel.getCellData(i, colMap.get("feedbackText"));
 
             log.info("===== Starting Data-Driven Mentorship Feedback Test =====");
 
@@ -109,15 +108,14 @@ public class FeedbackAutomation extends BaseClass {
             home.mentorships().click(new Locator.ClickOptions().setForce(true));
 
             // -------------------- Search Mentor --------------------
-            MeetupsListingPage listing = new MeetupsListingPage(page);
-            listing.SearchTextField().click();
-            listing.SearchTextField().fill("Karthik");
-            page.keyboard().press("Enter");
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
+
             page.waitForTimeout(2000);
+            page.waitForTimeout(15000);
 
             // -------------------- Feedback Form --------------------
             DescriptionPage descPage = new DescriptionPage(page);
-            descPage.feedbackTextfield().fill(feedbackText);
+            descPage.feedbackTextfield().fill("something");
             descPage.submitButton().click();
 
             // Fill User Details

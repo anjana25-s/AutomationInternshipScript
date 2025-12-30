@@ -107,8 +107,6 @@ public class RequestVideoTest extends BaseClass {
             String gst = excel.getCellData(i, colMap.get("gst"));
             String pan = excel.getCellData(i, colMap.get("pan"));
             String contactNumber = excel.getCellData(i, colMap.get("contactNumber"));
-            String password = excel.getCellData(i, colMap.get("password"));
-            String Description=excel.getCellData(i, colMap.get("feedbackText"));
 
             
             // ========================= SECTION: Playwright Initialization =========================
@@ -131,10 +129,10 @@ public class RequestVideoTest extends BaseClass {
             // ========================= SECTION: Search Mentor =========================
             MeetupsListingPage searchPage = new MeetupsListingPage(page);
 
-            searchPage.SearchTextField().click();
-            searchPage.SearchTextField().fill(name);
-            page.keyboard().press("Enter");
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
             page.waitForTimeout(2000);
+            page.waitForTimeout(14000);
+
 
             // ========================= SECTION: Request Video =========================
             DescriptionPage descriptionValidation = new DescriptionPage(page);
@@ -216,7 +214,7 @@ public class RequestVideoTest extends BaseClass {
             }
 
             form.occationOptions().first().click();
-            form.contentDescriptionBox().fill(Description);
+            form.contentDescriptionBox().fill("Something");
             form.toggleButton().click();
             form.nextButton().click();
 
@@ -273,12 +271,14 @@ public class RequestVideoTest extends BaseClass {
             // ========================= SECTION: Validate Mentor Interest Card =========================
             MentorshipMyintrest myintrest = new MentorshipMyintrest(page);
             page.waitForTimeout(3000);
-            myintrest.myInterestTab().click();
+            page.getByRole(AriaRole.DIALOG)
+            .getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("My Interest"))
+            .click();
             
             
 
          // ------------------ Expected Values (You can load from Excel later) ------------------
-	        String expectedMentorName = "December Automation";
+	        String expectedMentorName = "karthik U";
 	        String expectedMentorData = "dxgfchvjbng vbnm";
 	        String expectedServiceName = "Personalized Video";
 

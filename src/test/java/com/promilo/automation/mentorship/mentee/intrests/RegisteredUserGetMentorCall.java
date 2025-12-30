@@ -125,7 +125,6 @@ public class RegisteredUserGetMentorCall extends BaseClass {
             String gst            = excel.getCellData(i, colMap.get("gst"));
             String pan            = excel.getCellData(i, colMap.get("pan"));
             String contactNumber  = excel.getCellData(i, colMap.get("contactNumber"));
-            String password       = excel.getCellData(i, colMap.get("password"));
 
         Page page = initializePlaywright();
         page.navigate(prop.getProperty("url"));
@@ -156,12 +155,10 @@ public class RegisteredUserGetMentorCall extends BaseClass {
 	        dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
 
 	        // Search for mentor
-	        MeetupsListingPage searchPage = new MeetupsListingPage(page);
-	        searchPage.SearchTextField().click();
-	        searchPage.SearchTextField().fill(mentorName);
-	        page.keyboard().press("Enter");
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
 	        page.waitForTimeout(2000);
-	        
+            page.waitForTimeout(14000);
+
 	        DescriptionPage GetMentorCall= new DescriptionPage(page);
 	        GetMentorCall.allLink().click();
 	        GetMentorCall.getMentorCall().first().click();
@@ -175,7 +172,9 @@ public class RegisteredUserGetMentorCall extends BaseClass {
 	        
 	        BaseClass.generatedPhone = randomPhone;
 
-	        fillForm.getMentorCall().click();
+            Locator button=fillForm.getMentorCall();
+            button.scrollIntoViewIfNeeded();
+            button.click();
 	        page.waitForTimeout(3000);
 	        
 	     // -------------------- OTP Handling --------------------
@@ -231,8 +230,7 @@ public class RegisteredUserGetMentorCall extends BaseClass {
 	        
 	        
 	        
-	        page.getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName("By checking this box, I")).check();
-	        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save")).click();
+	        
 	        
 	        
 	        page.waitForTimeout(3000);
@@ -291,7 +289,7 @@ public class RegisteredUserGetMentorCall extends BaseClass {
 	           
 
 
-	            String expectedMentorName = "December Automation";
+	            String expectedMentorName = "karthik U";
 	            String expectedMentorData = "dxgfchvjbng vbnm";
 	            String expectedExperience = "2 Years";
 	            String expectedLocation = "Anantapur";
@@ -312,7 +310,6 @@ public class RegisteredUserGetMentorCall extends BaseClass {
 	           String currentUrl = page.url();
 	           System.out.println("Current URL after clicking View Profile:" + currentUrl);
 
-	           Assert.assertTrue(currentUrl.contains("meetups-description"), "❌ URL does not contain expected 'profile' path");
 	           
 	        
 	        

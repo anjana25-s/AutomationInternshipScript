@@ -121,6 +121,7 @@ public class MailRegisteredUserJobApplicationTest extends BaseClass {
         objects.searchJobsInput().fill("software");
         objects.searchJobsInput().click();
         page.keyboard().press("Enter");
+        page.waitForTimeout(15000);
 
         jobPage.applyNow().first().click();
         Thread.sleep(2000);

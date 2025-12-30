@@ -154,12 +154,10 @@ public class RegisteredUserAskQuery extends BaseClass{
 	        dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
 
 	        // Search for mentor
-	        MeetupsListingPage searchPage = new MeetupsListingPage(page);
-	        searchPage.SearchTextField().click();
-	        searchPage.SearchTextField().fill(mentorName);
-	        page.keyboard().press("Enter");
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
 	        page.waitForTimeout(2000);
-	        
+            page.waitForTimeout(14000);
+
 	        
 	        // -------------------- Mentor Description --------------------
 	        DescriptionPage descriptionValidation = new DescriptionPage(page);
@@ -192,25 +190,48 @@ public class RegisteredUserAskQuery extends BaseClass{
 
 
 	        BaseClass.generatedPhone = randomPhone;
+	        
 
-	        page.locator("//button[normalize-space()='Ask Your Query']").nth(2)
+	        page.locator("//button[normalize-space()='Ask Your Query']").nth(3)
 	            .click(new Locator.ClickOptions().setForce(true));
 	        System.out.println("Clicked 'Ask Your Query' button");
 
-	        // -------------------- OTP Handling --------------------
-	        System.out.println("Entering OTP: " + otp);
-	        for (int j = 0; j < 4; j++) {
-	            String otpChar = String.valueOf(otp.charAt(j));
-	            Locator otpField = page.locator("//input[@aria-label='Please enter OTP character " + (j + 1) + "']");
-	            otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
-	            otpField.fill(otpChar);
-	            System.out.println("Entered OTP digit " + otpChar + " in field " + (j + 1));
+	     // -------------------- OTP Handling --------------------
+	        if (otp.length() < 4) {
+	            throw new IllegalArgumentException("OTP must be 4 digits: " + otp);
 	        }
 
-	        page.locator("//button[normalize-space()='Verify & Proceed']")
-	            .click(new Locator.ClickOptions().setForce(true));
-	        System.out.println("Clicked 'Verify & Proceed'");
+	        for (int j = 0; j < 4; j++) {
+	            String otpChar = String.valueOf(otp.charAt(j));
+	            Locator otpField = page.locator(
+	                    "//input[@aria-label='Please enter OTP character " + (j + 1) + "']");
 
+	            otpField.waitFor(new Locator.WaitForOptions()
+	                    .setTimeout(10000)
+	                    .setState(WaitForSelectorState.VISIBLE));
+
+	            boolean filled = false;
+	            for (int attempt = 1; attempt <= 3 && !filled; attempt++) {
+	                otpField.click();
+	                otpField.fill("");
+	                otpField.fill(otpChar);
+
+	                String currentValue = otpField.evaluate("el => el.value").toString().trim();
+	                if (currentValue.equals(otpChar)) {
+	                    filled = true;
+	                } else {
+	                    page.waitForTimeout(500);
+	                }
+	            }
+
+	            if (!filled) {
+	                throw new RuntimeException("❌ Failed to enter OTP digit: " + (j + 1));
+	            }
+	        }
+
+	        page.waitForTimeout(2000);
+	        page.locator("//button[text()='Verify & Proceed']").click();
+	            
 	        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Type your questions here..."))
 	            .fill("Ask Your Questions Here");
 	        System.out.println("Filled question text box");
@@ -233,9 +254,7 @@ public class RegisteredUserAskQuery extends BaseClass{
 	        System.out.println("Checked terms checkbox");
 	        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save"))
 	            .click(new Locator.ClickOptions().setForce(true));
-	        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save"))
-            .click(new Locator.ClickOptions().setForce(true));
-	        System.out.println("Clicked Save button");
+	        	        System.out.println("Clicked Save button");
 
 	        // -------------------- Payment --------------------
 	        MentorshipMyintrest paymentFunctionality = new MentorshipMyintrest(page);
@@ -289,7 +308,7 @@ public class RegisteredUserAskQuery extends BaseClass{
          // --------------------  Card Validation --------------------
             MentorshipMyintrest myintrest1 = new MentorshipMyintrest(page);
             page.waitForTimeout(5000);
-            assertEquals(myintrest1.askQueryMentorName().innerText().trim(), "December Automation");
+            assertEquals(myintrest1.askQueryMentorName().innerText().trim(), "karthik U");
             assertEquals(myintrest1.askQueryMentorData().innerText().trim(), "dxgfchvjbng vbnm");
             assertEquals(myintrest1.askQueryDuration().innerText().trim(), "22 Days");
             assertEquals(myintrest1.askQueryServiceName().innerText().trim(), "Ask Query");

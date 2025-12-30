@@ -134,8 +134,8 @@ public class RegisteredUserShortList extends BaseClass {
         homePage.searchJob().fill("December");
         page.keyboard().press("Enter");
 
+        page.waitForTimeout(15000);
         homePage.shortlist().first().click();
-        page.waitForTimeout(5000);
 
         // ======================================================
         // POPUP TEXT VALIDATION

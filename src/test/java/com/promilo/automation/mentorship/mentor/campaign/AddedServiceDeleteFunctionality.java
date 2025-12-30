@@ -32,7 +32,7 @@ import com.promilo.automation.resources.SignupWithMailosaurUI;
 
 public class AddedServiceDeleteFunctionality extends BaseClass {
 
-    private static final Logger log = LogManager.getLogger(CampaignCreation.class);
+    private static final Logger log = LogManager.getLogger(AddedServiceDeleteFunctionality.class);
     private static String registeredEmail = null;
     private static String registeredPassword = null;
 

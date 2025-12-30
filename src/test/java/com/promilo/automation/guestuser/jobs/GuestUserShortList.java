@@ -51,12 +51,13 @@ public class GuestUserShortList extends BaseClass {
 
         JobListingPage homePage = new JobListingPage(page);
         homePage.homepageJobs().click();
-        page.waitForTimeout(5000);
+        page.waitForTimeout(15000);
 
         // Click shortlist
         homePage.jobShortlist1().click();
         page.waitForTimeout(4000);
 
+        
         // Fill user data
         page.locator("//input[@name='userName']").nth(1).fill(name);
 

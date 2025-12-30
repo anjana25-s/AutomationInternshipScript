@@ -123,18 +123,13 @@ public class GuestUserCampusVisit   extends BaseClass{
         
         
         // Step 1: Click Courses
-        page.locator("//a[text()='Courses']").click();
-        test.info("📚 Clicked on 'Courses'.");
-
-        // Step 2: Search course
-        page.locator("//input[@placeholder='Search Colleges and Courses']").fill("BTWIN");
-        test.info("🔍 Entered course search text: Course auto");
-
-        page.keyboard().press("Enter");
-        test.info("↩️ Pressed Enter to search courses.");
+        page.navigate("https://stage.promilo.com/courses-description/engineering/b-e-b-tech/course-promilo-automation/btwin-10");
         
         
-           page.locator("//span[text()='Campus Visit']").click();
+        	page.waitForTimeout(10000);
+          Locator campusVisit=page.locator("//span[text()='Campus Visit']");
+          campusVisit.scrollIntoViewIfNeeded();
+          campusVisit.click(new Locator.ClickOptions().setForce(true));
            
 
         

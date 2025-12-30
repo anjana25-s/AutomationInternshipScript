@@ -16,6 +16,7 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
 import com.promilo.automation.job.pageobjects.FormComponents;
+import com.promilo.automation.job.pageobjects.GetHrCallPageObjects;
 import com.promilo.automation.job.pageobjects.JobListingPage;
 import com.promilo.automation.job.pageobjects.AskUsJobPageObjects;
 import com.promilo.automation.resources.BaseClass;
@@ -136,10 +137,11 @@ public class AskUsJobTest extends BaseClass {
         AskUsJobPageObjects askUsObj = new AskUsJobPageObjects(page);
 
         listingPage.homepageJobs().click();
-        Thread.sleep(5000);
 
         listingPage.searchJob().fill("December Campaign Automation");
         page.keyboard().press("Enter");
+        
+        page.waitForTimeout(15000);
         askUs.askUsButton().first().click();
 
         // -------------------------
@@ -176,18 +178,38 @@ public class AskUsJobTest extends BaseClass {
                 askUsObj.otpPageDescription().textContent().trim(),
                 "Accelerate Your Career JourneyTake your career to the next level with access to exclusive job opportunities and personalized support.Tailored Job MatchesReceive customized job recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams.PreviousNextAccelerate Your Career JourneyTake your career to the next level with access to exclusive job opportunities and personalized support.Tailored Job MatchesReceive customized job recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams."
         );
+        
+        GetHrCallPageObjects obj = new GetHrCallPageObjects(page);
 
-        // ------------------------------
-        // OTP ENTRY (unchanged logic)
-        // ------------------------------
-        if (otp == null || otp.length() < 4) otp = "9999";
+
+        if (otp == null || otp.length() < 4) {
+            throw new IllegalArgumentException("OTP must be 4 characters: " + otp);
+        }
 
         for (int i = 0; i < 4; i++) {
-            String otpChar = "" + otp.charAt(i);
-            Locator otpField = askUsObj.otpInputField(i + 1);
-            otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000)
-                    .setState(WaitForSelectorState.VISIBLE));
-            otpField.fill(otpChar);
+            String otpChar = String.valueOf(otp.charAt(i));
+            Locator otpField = obj.otpDigitField(i + 1);
+            otpField.waitFor(new Locator.WaitForOptions().setTimeout(10000).setState(WaitForSelectorState.VISIBLE));
+
+            int attempts = 0;
+            boolean filled = false;
+            while (!filled && attempts < 3) {
+                attempts++;
+                otpField.click();
+                otpField.fill("");
+                otpField.fill(otpChar);
+
+                String currentValue = otpField.evaluate("el => el.value").toString().trim();
+                if (currentValue.equals(otpChar)) {
+                    filled = true;
+                } else {
+                    page.waitForTimeout(500);
+                }
+            }
+
+            if (!filled) {
+                throw new RuntimeException("Failed to enter OTP digit " + (i + 1));
+            }
         }
 
         assertEquals(

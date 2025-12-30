@@ -96,7 +96,7 @@ public class FreeVideoCounsellingTest extends BaseClass {
             shortList.searchCourseInput().fill("BTWIN");
             page.keyboard().press("Enter");
             
-            page.waitForTimeout(5000);
+            page.waitForTimeout(14000);
             
             
             

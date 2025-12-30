@@ -70,7 +70,7 @@ public class CourseFilterFunctionality extends BaseClass {
             login.loginMailField().fill("adv@yopmail.com");
             test.info("✉ Entered email for login.");
 
-            login.loginPasswordField().fill("devuttan2023");
+            login.loginPasswordField().fill("adv@1234");
             test.info("🔑 Entered password for login.");
 
             login.signInButton().click();

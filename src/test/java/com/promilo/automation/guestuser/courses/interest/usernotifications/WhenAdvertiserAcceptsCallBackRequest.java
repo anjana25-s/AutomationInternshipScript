@@ -23,7 +23,7 @@ public class WhenAdvertiserAcceptsCallBackRequest extends BaseClass {
 
     @Test(
         dependsOnMethods = {
-            "com.promilo.automation.guestuser.courses.interest.myintrests.TalkExpertsMyintrests.TaltoExpertIntrest"
+            "com.promilo.automation.guestuser.courses.interest.TalkExpertsMyintrests.TaltoExpertIntrest"
         }
     )
     public void CallbackOrTalktoExpertApprovefunctionalityTest() throws InterruptedException, IOException {

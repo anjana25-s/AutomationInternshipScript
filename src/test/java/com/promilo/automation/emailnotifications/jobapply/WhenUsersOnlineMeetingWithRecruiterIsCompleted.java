@@ -193,7 +193,7 @@ public class WhenUsersOnlineMeetingWithRecruiterIsCompleted extends BaseClass {
 
         AdvertiserLoginPage advLogin = new AdvertiserLoginPage(recruiterPage);
         advLogin.loginMailField().fill("adv@yopmail.com");
-        advLogin.loginPasswordField().fill("devuttan2023");
+        advLogin.loginPasswordField().fill("adv@1234");
         advLogin.signInButton().click();
 
         AdvertiserHomepage home = new AdvertiserHomepage(recruiterPage);

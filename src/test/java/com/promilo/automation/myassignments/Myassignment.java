@@ -112,7 +112,7 @@ public class Myassignment extends BaseClass {
         popup.clickLoginButton();
 
         LoginPage loginPage = new LoginPage(page);
-        loginPage.loginMailPhone().fill("rest-missing@8mgfvj1x.mailosaur.net");
+        loginPage.loginMailPhone().fill("rest-missing@qtvjnqv9.mailosaur.net");
         loginPage.passwordField().fill("Karthik@88");
         loginPage.loginButton().click();
 

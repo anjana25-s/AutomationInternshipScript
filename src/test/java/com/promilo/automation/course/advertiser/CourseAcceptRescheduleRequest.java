@@ -130,7 +130,7 @@ public class CourseAcceptRescheduleRequest extends BaseClass {
                 System.out.println("Success Message: " + successMsg);
                 test.info("Success Toaster: " + successMsg);
 
-                Assert.assertTrue(successMsg.contains("Success"), "❌ Accept success message not found");
+                Assert.assertTrue(successMsg.contains("Thanks for Accepting this reschedule request. Your meeting is confirmed."), "❌ Accept success message not found");
                 
                 
                 
@@ -172,7 +172,7 @@ public class CourseAcceptRescheduleRequest extends BaseClass {
                    freeVideoCounselling.myInterestTab().click();
                    
                    userPage.waitForTimeout(2000);
-                   userPage.locator("//div[text()='Accepted']").click();
+                   userPage.locator("//div[text()='Accepted']").first().click();
                    
                    
                    userPage.waitForTimeout(2000);

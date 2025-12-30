@@ -73,7 +73,7 @@ public class CourseFolderCreation extends BaseClass {
             test.info("✉ Entered email for login");
             System.out.println("Filled email field");
 
-            login.loginPasswordField().fill("devuttan2023");
+            login.loginPasswordField().fill("adv@1234");
             test.info("🔑 Entered password for login");
             System.out.println("Filled password field");
 

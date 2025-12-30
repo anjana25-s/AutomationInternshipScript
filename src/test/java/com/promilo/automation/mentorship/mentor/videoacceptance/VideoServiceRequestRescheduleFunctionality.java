@@ -13,6 +13,7 @@ import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.promilo.automation.mentor.myacceptance.MyAcceptance;
+import com.promilo.automation.mentorship.datavalidation.objects.MentorshipBookMeetingPageObjects;
 import com.promilo.automation.mentorship.mentee.MentorshipMyintrest;
 import com.promilo.automation.pageobjects.myresume.Hamburger;
 import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
@@ -95,10 +96,11 @@ public class VideoServiceRequestRescheduleFunctionality extends BaseClass{
                 test.info("🔑 Navigating to Login Page.");
 
                 LoginPage loginPage = new LoginPage(page);
-                loginPage.loginMailPhone().fill("812de0aa@qtvjnqv9.mailosaur.net");
+                loginPage.loginMailPhone().fill("92466825@qtvjnqv9.mailosaur.net");
                 loginPage.passwordField().fill("Karthik@88");
                 loginPage.loginButton().click();
                 test.info("✅ Logged in with registered credentials: " );
+                MentorshipBookMeetingPageObjects po = new MentorshipBookMeetingPageObjects(page);
 
                 Hamburger hamburger = new Hamburger(page);
                 hamburger.Mystuff().click();
@@ -107,7 +109,9 @@ public class VideoServiceRequestRescheduleFunctionality extends BaseClass{
                 MyAcceptance acceptVideoRequest= new MyAcceptance(page);
                 acceptVideoRequest.myAcceptance().click();
                 acceptVideoRequest.videorescheduleButton().click();
-                acceptVideoRequest.enableDate().first().click();
+                page.locator("[class='custom-next-month']").nth(1).click();
+                Locator dateElement = po.availableDate();
+                dateElement.click();
                 acceptVideoRequest.availablesSlots().first().click();
                 acceptVideoRequest.availablesSlots().nth(1).click();
                 acceptVideoRequest.continueButton().click();
@@ -152,6 +156,8 @@ public class VideoServiceRequestRescheduleFunctionality extends BaseClass{
                  acceptRequest.myInterestTab().click();
                  Thread.sleep(2000);
                  acceptRequest.rescheduleIcon().click();
+                 
+                 page.waitForTimeout(1000);
                  acceptRequest.rescheduleSlots().first().click();
                  acceptRequest.rescheduleAcceptBuuton().click();
                  acceptRequest.rescheduleSuccesPopup().isVisible();

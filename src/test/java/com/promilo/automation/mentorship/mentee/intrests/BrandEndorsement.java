@@ -114,13 +114,8 @@ public class BrandEndorsement extends BaseClass {
             HomePage dashboard = new HomePage(page);
             dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
 
-            // -------------------- SEARCH USING EXCEL NAME --------------------
-            MeetupsListingPage searchPage = new MeetupsListingPage(page);
-            searchPage.SearchTextField().click();
-            searchPage.SearchTextField().fill(name);
-            page.keyboard().press("Enter");
-            page.waitForTimeout(2000);
-
+            
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
             // -------------------- MENTOR PROFILE --------------------
             DescriptionPage GetMentorCall = new DescriptionPage(page);
             GetMentorCall.allLink().click();
@@ -135,7 +130,7 @@ public class BrandEndorsement extends BaseClass {
                     "Grow Your Brand with Popular PersonalitiesPartner with influencers who truly match your brand's valuesBoost your brand's reach through trusted personality partnershipsBuild customer trust through authentic product promotionPreviousNext");
 
             assertEquals(dataValidation.secureABrandEndorsement().textContent().trim(),
-                    "Secure a brand endorsement from December Automation and elevate your brand's visibility!");
+                    "Secure a brand endorsement from karthik U and elevate your brand's visibility!");
 
             assertEquals(dataValidation.enableUpdatesImportantInformationWhatsapp().textContent().trim(),
                     "Enable updates & important information on Whatsapp");
@@ -210,7 +205,8 @@ public class BrandEndorsement extends BaseClass {
 
             // -------------------- BRAND DETAILS --------------------
             fillForm.typeofBrand().click();
-            fillForm.brandOptions().first().click();
+            page.waitForTimeout(2000);
+            fillForm.brandOptions().click();
             fillForm.typeYourMessage().fill("Hello");
             fillForm.brandEndorsementSubmit().click();
             page.waitForTimeout(4000);
@@ -223,7 +219,7 @@ public class BrandEndorsement extends BaseClass {
                     .trim();
 
             Assert.assertTrue(
-            		actualMsg.contains("December Automation"),
+            		actualMsg.contains("karthik U."),
             		"❌ Expected text to contain 'December Automation' but got: " + actualMsg
             		);
 
@@ -234,7 +230,7 @@ public class BrandEndorsement extends BaseClass {
 
             // -------------------- MENTOR INTEREST CARD --------------------
             MentorshipMyintrest myintrest = new MentorshipMyintrest(page);
-            assertEquals(myintrest.mentorName().innerText().trim(), "December Automation");
+            assertEquals(myintrest.mentorName().innerText().trim(), "karthik U");
             assertEquals(myintrest.mentorData().innerText().trim(), "dxgfchvjbng vbnm");
             assertTrue(myintrest.experianceString().isVisible());
             assertEquals(myintrest.experianceValue().innerText().trim(), "2 Years");

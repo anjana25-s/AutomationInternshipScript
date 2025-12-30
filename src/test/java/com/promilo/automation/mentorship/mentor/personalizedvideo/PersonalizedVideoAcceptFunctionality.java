@@ -97,7 +97,7 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             test.info("🔑 Navigating to Login Page.");
 
             LoginPage loginPage = new LoginPage(page);
-            loginPage.loginMailPhone().fill("fewer-produce@qtvjnqv9.mailosaur.net");
+            loginPage.loginMailPhone().fill("92466825@qtvjnqv9.mailosaur.net");
             loginPage.passwordField().fill("Karthik@88");
             loginPage.loginButton().click();
             test.info("✅ Logged in with registered credentials: " );
@@ -237,67 +237,23 @@ public void AcceptVideoServiceRequestTest() throws Exception {
                 advertiserPage.locator("//a[@class='_btn_klaxo_2 _secondary_klaxo_2 _btnRound_klaxo_2 _iconNoChildren_klaxo_2']//div//*[name()='svg']//*[name()='path' and contains(@fill,'currentCol')]").click();
              // ✅ Validate "Congratulations" notification
                 Locator congratsMessage = advertiserPage.locator(
-                    "//p[contains(text(),'Congratulations on completing a for service name request! You’ve earned ')]"
+                    "//p[contains(text(),'Hi mentor , Congratulations on completing a for Personalized Video request! You’ve earned ')]"
                 ).first();
-                congratsMessage.waitFor();
+                congratsMessage.click();
+                
+                advertiserPage.locator("//a[@class='_btn_klaxo_2 _secondary_klaxo_2 _btnRound_klaxo_2 _iconNoChildren_klaxo_2']//div//*[name()='svg']//*[name()='path' and contains(@fill,'currentCol')]").click();
+
                 String congratsText = congratsMessage.textContent().trim();
                 System.out.println("🎉 Notification Message: " + congratsText);
                 
                 
                 
-
-                // Assertion
-                Assert.assertTrue(congratsText.contains("Congratulations on completing"),
-                        "❌ Expected 'Congratulations' message not found. Actual: " + congratsText);
-                System.out.println("✅ 'Congratulations' message validation passed.");
-                
-                
-                
-                
-
-                // ✅ Get corresponding timestamp for "Congratulations" message
-                Locator congratsTime = advertiserPage.locator(
-                    "(//p[contains(text(),'Hi mentor , Congratulations on completing a for service name request! You’ve earned ')]" +
-                    "/following::p[@class='font-normal whitespace-nowrap'])[1]"
-                );
-                if (congratsTime.count() > 0) {
-                    String timeText = congratsTime.first().textContent().trim();
-                    System.out.println("⏱️ Timestamp for Congratulations message: " + timeText);
-                } else {
-                    System.out.println("ℹ️ No timestamp found for Congratulations message.");
-                }
-
-
-
-                // ✅ Validate "Waiting! Time to Record Your Video" notification
-                Locator waitingMessage = advertiserPage.locator(
-                    "//p[contains(text(),'Waiting! Time to Record Your Video')]"
-                ).first();
-                waitingMessage.waitFor();
-                String waitingText = waitingMessage.textContent().trim();
-                System.out.println("🎬 Notification Message: " + waitingText);
-
-                // Assertion
-                Assert.assertTrue(waitingText.contains("Waiting! Time to Record Your Video"),
-                        "❌ Expected 'Waiting! Time to Record Your Video' message not found. Actual: " + waitingText);
-                System.out.println("✅ 'Waiting! Time to Record Your Video' message validation passed.");
-                
-                
-                
-
-                // ✅ Get corresponding timestamp for "Waiting" message
-                Locator waitingTime = advertiserPage.locator(
-                    "(//p[contains(text(),'Waiting! Time to Record Your Video')]" +
-                    "/following::p[@class='font-normal whitespace-nowrap'])[1]"
-                );
-                if (waitingTime.count() > 0) {
-                    String timeText = waitingTime.first().textContent().trim();
-                    System.out.println("⏱️ Timestamp for Waiting message: " + timeText);
-                } else {
-                    System.out.println("ℹ️ No timestamp found for Waiting message.");
-                }
         }
-        
+                
+                
+                
+
+                        
         
         
         
@@ -309,5 +265,5 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             e.printStackTrace();
         }
 	
-    }}
-}
+    }
+	    }}

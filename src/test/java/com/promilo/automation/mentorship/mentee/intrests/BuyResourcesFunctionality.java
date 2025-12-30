@@ -44,7 +44,7 @@ public class BuyResourcesFunctionality extends BaseClass {
     private static final Logger log = LogManager.getLogger(BuyResourcesFunctionality.class);
 
     @Test()
-    public void mentorshipBrandEndorsement() throws IOException, InterruptedException {
+    public void BuyResourcesFunctionalityTest() throws IOException, InterruptedException {
 
         ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("MentorCampaignDownload");
@@ -116,10 +116,7 @@ public class BuyResourcesFunctionality extends BaseClass {
             HomePage dashboard = new HomePage(page);
             dashboard.mentorships().click();
 
-            MeetupsListingPage searchPage = new MeetupsListingPage(page);
-            searchPage.SearchTextField().fill(mentorName);
-            page.keyboard().press("Enter");
-            page.waitForTimeout(2000);
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
 
             DescriptionPage descriptionValidation = new DescriptionPage(page);
             Locator buyResources = descriptionValidation.buyResources().first();
@@ -131,8 +128,15 @@ public class BuyResourcesFunctionality extends BaseClass {
             assertEquals(obj.descriptionBannerText.textContent().trim(),
                     "Transform your journey with guidance from industry-leading mentors and experts.Access real-time updates from our elite Academic, Career, and Skill mentors network.Receive instant alerts when mentors matching your specific criteria join our platform.Access authentic reviews and testimonials from peers about potential mentors.Benefit from tailored consulting that aligns with your unique career aspirations.Unlock premium content and tools designed to enhance your professional journey.Your data security is our priority - guaranteed protection from unauthorized communications.");
 
-            assertTrue(obj.featureHeader.textContent().trim().contains("December Automation "));
+            String actualHeaderText = obj.featureHeader.textContent().trim();
+            System.out.println(actualHeaderText);
+            String expectedText = "Download the Resource from karthik U directly!";
 
+            assertEquals(
+                    actualHeaderText,
+                    expectedText,
+                    "Feature header text mismatch"
+            );
             assertEquals(obj.whatsappToggleText.textContent().trim(),
                     "Enable updates & important information on Whatsapp");
 
@@ -213,6 +217,16 @@ public class BuyResourcesFunctionality extends BaseClass {
 
             FrameLocator frame = page.frameLocator("iframe");
             frame.getByTestId("contactNumber").fill(contactNumber);
+            
+            
+            
+
+            frame.getByTestId("nav-sidebar")
+                    .locator("div")
+                    .filter(new Locator.FilterOptions().setHasText("Wallet"))
+                    .nth(2)
+                    .click();
+
 
             Page popup2 = page.waitForPopup(() -> {
                 frame.getByTestId("screen-container")
@@ -241,7 +255,7 @@ public class BuyResourcesFunctionality extends BaseClass {
             // FINAL VALIDATION
             MentorshipMyintrest myintrest = new MentorshipMyintrest(page);
 
-            assertEquals(myintrest.mentorName().innerText().trim(), "December Automation");
+            assertEquals(myintrest.mentorName().innerText().trim(), "karthik U");
             assertEquals(myintrest.mentorData().innerText().trim(), "dxgfchvjbng vbnm");
             assertTrue(myintrest.experianceString().isVisible());
             assertEquals(myintrest.experianceValue().innerText().trim(), "2 Years");

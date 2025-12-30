@@ -134,6 +134,7 @@ public class UserOptsToCancelTheAppliedJob extends BaseClass {
 
         page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
         page.keyboard().press("Enter");
+        page.waitForTimeout(15000);
 
         Thread.sleep(2000);
 

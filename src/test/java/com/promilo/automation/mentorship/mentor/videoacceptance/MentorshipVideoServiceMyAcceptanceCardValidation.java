@@ -83,7 +83,7 @@ public class MentorshipVideoServiceMyAcceptanceCardValidation extends BaseClass{
                 test.info("🔑 Navigating to Login Page.");
 
                 LoginPage loginPage = new LoginPage(page);
-                loginPage.loginMailPhone().fill("812de0aa@qtvjnqv9.mailosaur.net");
+                loginPage.loginMailPhone().fill("92466825@qtvjnqv9.mailosaur.net");
                 loginPage.passwordField().fill("Karthik@88");
                 loginPage.loginButton().click();
                 test.info("✅ Logged in with registered credentials: " );
@@ -105,7 +105,7 @@ public class MentorshipVideoServiceMyAcceptanceCardValidation extends BaseClass{
                 
                 String campaignName=acceptVideoRequest.videoServiceCampaignName().first().textContent().trim();
                 
-                assertTrue(campaignName.contains("December Automation"));                
+                assertTrue(campaignName.contains("January Automation"));                
                 String highlightText=acceptVideoRequest.videoServiceHighlight().first().textContent().trim();
                 assertEquals(highlightText, "dxgfchvjbng vbnm");
                 

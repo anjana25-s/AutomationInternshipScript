@@ -169,10 +169,8 @@ public class AdvertiserAcceptsUsersRescheduleRequest extends BaseClass {
                    
                    userPage.waitForTimeout(2000);
                    String statusTagValidation=freeVideoCounselling.statusTag().textContent().trim();
-                   System.out.println(statusTagValidation);
+                   assertEquals(statusTagValidation, "Accepted");
                    
-                   
-                   String rescheduleDate=freeVideoCounselling.availableDate().textContent().trim();
                    
                 
                 

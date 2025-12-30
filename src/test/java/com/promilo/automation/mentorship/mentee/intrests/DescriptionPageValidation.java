@@ -110,6 +110,8 @@ public class DescriptionPageValidation extends BaseClass {
             searchPage.SearchTextField().fill("Karthik");
             page.keyboard().press("Enter");
             page.waitForTimeout(2000);
+            page.waitForTimeout(14000);
+
 
             // Description Page
             DescriptionPage dp = new DescriptionPage(page);

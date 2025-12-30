@@ -81,7 +81,8 @@ public class TalkToExperts extends BaseClass {
             Talktopage.keyboard().press("Enter");
             test.info("↩️ Pressed Enter to search courses.");
             
-;            Talktopage.locator("//span[normalize-space()='Talk to Experts']").first().click();
+            Talktopage.waitForTimeout(12000);
+            Talktopage.locator("//span[normalize-space()='Talk to Experts']").first().click();
             test.info("👨‍🏫 Clicked 'Talk to Experts' button.");
 
             Talktopage.locator("//input[@name='userName']").nth(1).fill("karthik");

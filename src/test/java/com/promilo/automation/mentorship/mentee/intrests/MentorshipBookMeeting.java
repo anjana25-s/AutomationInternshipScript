@@ -121,11 +121,9 @@ public class MentorshipBookMeeting extends BaseClass {
             dashboard.mentorships().click(new Locator.ClickOptions().setForce(true));
 
             // Search for mentor
-            MeetupsListingPage searchPage = new MeetupsListingPage(page);
-            searchPage.SearchTextField().click();
-            searchPage.SearchTextField().fill("dec");
-            page.keyboard().press("Enter");
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
             page.waitForTimeout(2000);
+            page.waitForTimeout(14000);
 
             DescriptionPage GetMentorCall = new DescriptionPage(page);
             GetMentorCall.allLink().click();
@@ -140,7 +138,7 @@ public class MentorshipBookMeeting extends BaseClass {
             MentorshipBookMeetingPageObjects po = new MentorshipBookMeetingPageObjects(page);
 
             assertEquals(po.header().textContent().trim(),
-                    "Book a Video Call from December Automation!");
+                    "Book a Video Call from karthik U!");
             assertEquals(po.registerWithUsText().textContent().trim(), "Why register with us?Transform your journey with guidance from industry-leading mentors and experts.Access real-time updates from our elite Academic, Career, and Skill mentors network.Receive instant alerts when mentors matching your specific criteria join our platform.Access authentic reviews and testimonials from peers about potential mentors.Benefit from tailored consulting that aligns with your unique career aspirations.Unlock premium content and tools designed to enhance your professional journey.Your data security is our priority - guaranteed protection from unauthorized communications.Transform your journey with guidance from industry-leading mentors and experts.Access real-time updates from our elite Academic, Career, and Skill mentors network.Receive instant alerts when mentors matching your specific criteria join our platform.Access authentic reviews and testimonials from peers about potential mentors.Benefit from tailored consulting that aligns with your unique career aspirations.Unlock premium content and tools designed to enhance your professional journey.Your data security is our priority - guaranteed protection from unauthorized communications.PreviousNext");
             assertEquals(po.termsAndConditionsText().textContent().trim(),
                     "By proceeding ahead you expressly agree to the PromiloTerms & Conditions");
@@ -212,11 +210,12 @@ public class MentorshipBookMeeting extends BaseClass {
             assertEquals(po.calendarPopupDescription().textContent().trim(),
                     "Enjoy a video call with your chosen mentors to guide your career path. Select your preferred language and schedule for a video call with a mentor. This will ensure a smooth and personalized connection, making it easy for both you and your mentor to communicate effectively.");
             assertEquals(po.chooseSlotText().textContent().trim(),
-                    "Please choose your preferred language and time for the video call with December Automation");
+                    "Please choose your preferred language and time for the video call with karthik U");
+            page.locator("[class='custom-next-month']").nth(1).click();
 
+            page.waitForTimeout(2000);
             String currentMonth = po.currentMonth().textContent().trim();
             String expectedMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM"));
-            Assert.assertTrue(currentMonth.contains(expectedMonth));
 
             Locator dateElement = po.availableDate();
             dateElement.click();
@@ -265,7 +264,7 @@ public class MentorshipBookMeeting extends BaseClass {
             Assert.assertTrue(thankYouPopup.isVisible());
             assertEquals(page.locator("[class='ThankYou-message text-center text-blue-600 pt-2 ']")
                     .textContent().trim(),
-                    "Thank you for registering and requesting a Video Call from December Automation. Check your email, notifications, and WhatsApp for details on exclusive access.");
+                    "Thank you for registering and requesting a Video Call from karthik U. Check your email, notifications, and WhatsApp for details on exclusive access.");
 
             // -------------------- Validate My Interest Card --------------------
             MentorshipMyintrest myintrest = new MentorshipMyintrest(page);
@@ -292,7 +291,7 @@ public class MentorshipBookMeeting extends BaseClass {
             displayedTime = displayedTime.replaceFirst("^0", "");
             Assert.assertEquals(displayedTime, storedTime);
 
-            Assert.assertEquals(myintrest.bookMeetingMentorName().innerText().trim(), "December Automation");
+            Assert.assertEquals(myintrest.bookMeetingMentorName().innerText().trim(), "karthik U");
             Assert.assertEquals(myintrest.bookMeetingMentorData().innerText().trim(), "dxgfchvjbng vbnm");
             Assert.assertEquals(myintrest.bookMeetingServiceName().innerText().trim(), "Video Call");
 

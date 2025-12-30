@@ -68,7 +68,7 @@ public class GuestUserHrCall extends BaseClass {
         page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
         page.keyboard().press("Enter");
 
-       
+       page.waitForTimeout(15000);
         // Fill Get HR Call form
 page.locator("//button[@class='functional_btn-Get-call']").click();
 homePage.applyNameField().nth(1).fill("karthik");

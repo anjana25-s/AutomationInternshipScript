@@ -139,25 +139,23 @@ public class CourseFreeVideoCounsellingReject extends BaseClass {
                loginPage1.otpField().fill("9999");
                loginPage1.loginButton().click();
                
-               page.pause();
                
                
                
-               FreeVideoCounsellingPage freeVideoCounselling= new FreeVideoCounsellingPage(page);
+               FreeVideoCounsellingPage freeVideoCounselling= new FreeVideoCounsellingPage(userPage);
                freeVideoCounselling.myInterestTab().click();
                
                
                String campaignName=freeVideoCounselling.campaignName().textContent().trim();
-               assertEquals(campaignName, "Application form fill mobile brand name");
+               assertEquals(campaignName, "BTWIN");
                
                
                String location= freeVideoCounselling.location().textContent().trim();
-               assertEquals(location, "Kerala - Other");
+               assertEquals(location, "Ahmedabad");
                
                String productTitle= freeVideoCounselling.productTitle().textContent().trim();
-               assertEquals(productTitle, "Application form fill mobile title");
-               
-               
+               assertEquals(productTitle, "Course promilo automation");
+                              
                
                
                

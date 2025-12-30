@@ -55,6 +55,7 @@ public class GuestUserRegisterWithUS extends BaseClass {
         // Landing page
         MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);
         mayBeLaterPopUp.getPopup().click();
+        page.waitForTimeout(15000);
 
         // Register With Us flow
         JobListingPage registerWithUs = new JobListingPage(page);

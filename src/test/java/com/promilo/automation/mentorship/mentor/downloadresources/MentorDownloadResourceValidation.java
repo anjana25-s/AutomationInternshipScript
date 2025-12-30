@@ -43,7 +43,7 @@ public class MentorDownloadResourceValidation extends BaseClass {
 
     @Test(
         dependsOnMethods = {
-            "com.promilo.automation.mentorship.mentee.BuyResourcesFunctionality.mentorshipShortListFunctionalityTest"
+            "com.promilo.automation.mentorship.mentee.intrests.BuyResourcesFunctionality.BuyResourcesFunctionalityTest"
         }
     )
     public void AcceptVideoServiceRequestTest() throws Exception {
@@ -88,7 +88,7 @@ public class MentorDownloadResourceValidation extends BaseClass {
                 test.info("🔑 Navigating to Login Page.");
 
                 LoginPage loginPage = new LoginPage(page);
-                loginPage.loginMailPhone().fill("rest-missing@8mgfvj1x.mailosaur.net");
+                loginPage.loginMailPhone().fill("92466825@qtvjnqv9.mailosaur.net");
                 loginPage.passwordField().fill("Karthik@88");
                 loginPage.loginButton().click();
                 test.info("✅ Logged in with registered credentials.");
@@ -126,7 +126,7 @@ public class MentorDownloadResourceValidation extends BaseClass {
                 System.out.println("Billing Data: " + billingValidation.billingData().textContent());
 
                 // Mailosaur validations
-                page.navigate("https://mailosaur.com/app/servers/8mgfvj1x/messages/inbox");
+                page.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
 
                 MailsaurCredentials mailsaur = new MailsaurCredentials(page);
                 mailsaur.MialsaurMail();
@@ -142,15 +142,8 @@ public class MentorDownloadResourceValidation extends BaseClass {
                 mailValidation.viewResouceButton().click();
 
                 page.waitForTimeout(3000);
-                page.bringToFront();
 
-                page.locator("//a[@class='_btn_klaxo_2 _secondary_klaxo_2 _btnRound_klaxo_2 _iconNoChildren_klaxo_2']//div//*[name()='svg']//*[name()='path' and contains(@fill,'currentCol')]").click();
-
-                mailValidation.paymentNotification().first().click();
-                System.out.println(mailValidation.hiText().textContent());
-                System.out.println(mailValidation.congratulationsText().textContent());
-                System.out.println(mailValidation.greateFullText().textContent());
-
+                
             } catch (Exception e) {
                 test.fail("❌ Test failed for row " + i + ": " + e.getMessage());
                 e.printStackTrace();

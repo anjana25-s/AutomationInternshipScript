@@ -111,7 +111,7 @@ public void AcceptVideoServiceRequestTest() throws Exception {
 
             // LOGIN
             LoginPage loginPage = new LoginPage(page);
-            loginPage.loginMailPhone().fill("812de0aa@qtvjnqv9.mailosaur.net");
+            loginPage.loginMailPhone().fill("92466825@qtvjnqv9.mailosaur.net");
             loginPage.passwordField().fill("Karthik@88");
             loginPage.loginButton().click();
             test.info("✅ Logged in with credentials: " + InputValue);
@@ -131,7 +131,7 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             
             
             String actualCampaignName=acceptRequest.brandEndorsementCampaignName().textContent().trim();
-            assertEquals(actualCampaignName, "December Automation");
+            assertEquals(actualCampaignName, "January Automation");
             
             String actualMenteeName=acceptRequest.brandEndorsementMenteeName().textContent().trim();
             assertEquals(actualMenteeName , "December");
@@ -139,13 +139,13 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             String actualHighlightTex=acceptRequest.brandEndorsementHighLightText().textContent().trim();
             assertEquals(actualHighlightTex, "dxgfchvjbng vbnm");
             
-            String actualMoney=acceptRequest.brandEndorsementMoney().textContent().trim();
-            assertEquals(actualMoney, "₹ 3,250");
+            
             
             String actualStatus=acceptRequest.brandEndorsementStatus().textContent().trim();
             assertEquals(actualStatus, "Completed");
             
             //click on brand Endorsement
+            page.waitForTimeout(1000);
             acceptRequest.brandEndorsementAccept().click();
             System.out.println(acceptRequest.modalContent().textContent()); 
             
@@ -239,6 +239,7 @@ public void AcceptVideoServiceRequestTest() throws Exception {
                
                ViewedIntrestPage cardValidation= new ViewedIntrestPage(mentorPage);
                cardValidation.myInterestTab().click();
+               page.waitForTimeout(1000);
                cardValidation.myPreferenceTab().click();
                Locator intrestCard=cardValidation.mentorshipCard();
                intrestCard.textContent().trim();

@@ -80,6 +80,7 @@ public class NotifySimilarJobs extends BaseClass {
         home.searchJob().fill("December Campaign Automation");
         page.keyboard().press("Enter");
         home.notifySimilarJobs().click();
+        page.waitForTimeout(15000);
 
         // ======================================================
         // Assertions using object class

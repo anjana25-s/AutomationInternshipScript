@@ -191,6 +191,7 @@ public class UserInitiatesApplyingForJob extends BaseClass {
         jobPage.homepageJobs().click();
         page.locator("//input[@placeholder='Search Jobs']").fill("December");
         page.keyboard().press("Enter");
+        page.waitForTimeout(15000);
 
         // -------- Click Apply Now --------
         page.locator("//button[text()='Apply Now']").first().click();
@@ -268,7 +269,8 @@ public class UserInitiatesApplyingForJob extends BaseClass {
         // -------- Verify OTP --------
         page.locator("//button[text()='Verify & Proceed']").click();
         
-        
+        page.locator("//button[text()='Next']").click();
+
         Locator dateElement = page.locator("span.flatpickr-day:not(.flatpickr-disabled)").first();
         dateElement.click();
         String datePicked = dateElement.innerText();

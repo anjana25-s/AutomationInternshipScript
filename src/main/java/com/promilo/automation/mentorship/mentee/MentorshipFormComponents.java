@@ -83,7 +83,7 @@ public class MentorshipFormComponents {
         this.toggleButton= page.locator("//input[@id='switch-primary pointer']");
         this.verifyAndProceed= page.locator("//button[text()='Verify & Proceed']");
         this.typeofBrand= page.locator("//span[text()='Type of brand endorsement']");
-        this.brandOptions= page.locator("(//label)");
+        this.brandOptions= page.locator("//label[text()='Social Media Promotions']");
         this.typeYourMessage= page.locator("//textarea[@placeholder='Type your message here...']");
         this.brandEndorsementSubmit= page.locator("(//button[text()='Submit'])[2]");
         this.thankYouPopup= page.locator("//div[contains(text(),'Thank You!')]");

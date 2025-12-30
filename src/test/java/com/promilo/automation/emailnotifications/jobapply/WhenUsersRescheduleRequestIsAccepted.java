@@ -145,6 +145,7 @@ public class WhenUsersRescheduleRequestIsAccepted extends BaseClass {
         test.info("✅ Clicked on homepage Jobs");
         page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
         page.keyboard().press("Enter");
+        page.waitForTimeout(15000);
 
         test.info("Clicked on Developer job listing");
         

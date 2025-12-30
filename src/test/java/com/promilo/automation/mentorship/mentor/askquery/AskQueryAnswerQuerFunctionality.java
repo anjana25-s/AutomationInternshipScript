@@ -71,7 +71,7 @@ public class AskQueryAnswerQuerFunctionality extends BaseClass {
 
             // LOGIN
             LoginPage loginPage = new LoginPage(page);
-            loginPage.loginMailPhone().fill("812de0aa@qtvjnqv9.mailosaur.net");
+            loginPage.loginMailPhone().fill("92466825@qtvjnqv9.mailosaur.net");
             loginPage.passwordField().fill("Karthik@88");
             loginPage.loginButton().click();
             test.info("✅ Logged in");
@@ -135,7 +135,6 @@ public class AskQueryAnswerQuerFunctionality extends BaseClass {
             System.out.println("Billing data: " + billingRow);
             
             
-            page.pause();
 
                         // MAILOSAUR
             page.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");

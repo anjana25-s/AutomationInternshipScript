@@ -215,7 +215,7 @@ public class LoggedUserFailPaymentWantedly extends BaseClass {
 
                 fillApplication.lastName().fill("U");
                 fillApplication.dateOfBirth().fill("1997-08-28");
-                fillApplication.reactSelectInput().click();
+                fillApplication.genderDropdown().click();
                 fillApplication.maleOption().click();
                 fillApplication.sendOtpButton().click();
                 
@@ -274,7 +274,7 @@ public class LoggedUserFailPaymentWantedly extends BaseClass {
                 fillApplication.selectBoardText().click();
                 fillApplication.subOption().first().click();
 
-                fillApplication.reactSelectInput().click();
+                fillApplication.genderDropdown().click();
                 fillApplication.bandScoreOption().click();
 
                 fillApplication.companyName().click();
@@ -285,7 +285,7 @@ public class LoggedUserFailPaymentWantedly extends BaseClass {
 
                 fillApplication.saveAndNextButton().click();
 
-                fillApplication.reactSelectInput().first().click();
+                fillApplication.genderDropdown().first().click();
                 fillApplication.jeeMainOption().click();
 
                 fillApplication.reactSelectControlInput().click();
@@ -329,7 +329,7 @@ public class LoggedUserFailPaymentWantedly extends BaseClass {
                 fillApplication.declarationCheckbox().check();
 
                 fillApplication.saveAndNextButton().click();
-                page.pause();
+                page.waitForTimeout(100);
 
                 
 

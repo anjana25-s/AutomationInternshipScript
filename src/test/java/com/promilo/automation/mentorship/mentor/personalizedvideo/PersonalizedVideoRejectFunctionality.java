@@ -98,7 +98,7 @@ public void AcceptVideoServiceRequestTest() throws Exception {
             test.info("🔑 Navigating to Login Page.");
 
             LoginPage loginPage = new LoginPage(page);
-            loginPage.loginMailPhone().fill("fewer-produce@qtvjnqv9.mailosaur.net");
+            loginPage.loginMailPhone().fill("92466825@qtvjnqv9.mailosaur.net");
             loginPage.passwordField().fill("Karthik@88");
             loginPage.loginButton().click();
             test.info("✅ Logged in with registered credentials: " );

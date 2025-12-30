@@ -91,6 +91,8 @@ public class MentorshipRegisterWithUS extends BaseClass{
         page.navigate(prop.getProperty("url"));
         log.info("Navigated to URL: " + prop.getProperty("url"));
         page.waitForTimeout(2000);
+        page.waitForTimeout(10000);
+
 
         // -------------------- Landing Page Popup --------------------
         MayBeLaterPopUp mayBeLaterPopUp = new MayBeLaterPopUp(page);

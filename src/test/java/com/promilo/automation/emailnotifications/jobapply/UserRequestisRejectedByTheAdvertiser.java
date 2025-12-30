@@ -135,6 +135,8 @@ public class UserRequestisRejectedByTheAdvertiser extends BaseClass {
        jobPage.homepageJobs().click();
        page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
        page.keyboard().press("Enter");
+       page.waitForTimeout(15000);
+
 
        
        Thread.sleep(1000);

@@ -1,11 +1,6 @@
 package com.promilo.automation.mentorship.mentor.askquery;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -17,15 +12,12 @@ import com.aventstack.extentreports.ExtentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.MouseButton;
-import com.promilo.automation.courses.intrestspages.ViewedIntrestPage;
 import com.promilo.automation.mentor.myacceptance.MyAcceptance;
 import com.promilo.automation.mentorship.mentor.MentorIntrestPage;
 import com.promilo.automation.pageobjects.myresume.Hamburger;
-import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.pageobjects.signuplogin.LoginPage;
+import com.promilo.automation.pageobjects.signuplogin.MayBeLaterPopUp;
 import com.promilo.automation.resources.BaseClass;
-import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.MailsaurCredentials;
 
@@ -65,7 +57,7 @@ public class AskQueryAlreadyAccepted extends BaseClass {
 
             // LOGIN
             LoginPage loginPage = new LoginPage(page);
-            loginPage.loginMailPhone().fill("812de0aa@qtvjnqv9.mailosaur.net");
+            loginPage.loginMailPhone().fill("92466825@qtvjnqv9.mailosaur.net");
             loginPage.passwordField().fill("Karthik@88");
             loginPage.loginButton().click();
 
@@ -84,7 +76,7 @@ public class AskQueryAlreadyAccepted extends BaseClass {
             assertEquals(actualMenteeName, "December");
 
             String actualCampaignName = acceptRequest.askQueryCampaignName().textContent().trim();
-            assertEquals(actualCampaignName, "December Automation");
+            assertEquals(actualCampaignName, "January Automation");
 
             String actaulHighlightText = acceptRequest.askQueryHighlightText().textContent().trim();
             assertEquals(actaulHighlightText, "dxgfchvjbng vbnm");

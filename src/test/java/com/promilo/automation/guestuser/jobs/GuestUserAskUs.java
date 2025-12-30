@@ -92,7 +92,8 @@ public class GuestUserAskUs extends BaseClass {
         page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
         page.keyboard().press("Enter");
 
-        Thread.sleep(3000);
+        
+        Thread.sleep(15000);
 page.locator("//button[@class='pointer border-1 p-50 border-chip ']").first().click();
 Thread.sleep(4000);
 

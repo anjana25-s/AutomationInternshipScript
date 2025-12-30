@@ -137,7 +137,8 @@ public class UserReceivesRescheduleRequestFromAdvertiser extends BaseClass {
        jobPage.homepageJobs().click();
        page.locator("//input[@placeholder='Search Jobs']").fill("December Campaign Automation");
        page.keyboard().press("Enter");
-       
+       page.waitForTimeout(15000);
+
 
        page.locator("//button[text()='Apply Now']").first().click();
 

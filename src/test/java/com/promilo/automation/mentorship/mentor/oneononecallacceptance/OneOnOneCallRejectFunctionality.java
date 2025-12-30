@@ -44,7 +44,7 @@ public class OneOnOneCallRejectFunctionality extends BaseClass {
 
     @Test(
         dependsOnMethods = {
-            "com.promilo.automation.mentorship.mentee.GetMentorCall.mentorshipShortListFunctionalityTest"
+            "com.promilo.automation.mentorship.mentee.intrests.GetMentorCall.mentorshipShortListFunctionalityTest"
         }
     )
     public void RejectVideoServiceRequestTest() throws Exception {
@@ -88,7 +88,7 @@ public class OneOnOneCallRejectFunctionality extends BaseClass {
                 test.info("🔑 Navigating to Login Page.");
 
                 LoginPage loginPage = new LoginPage(page);
-                loginPage.loginMailPhone().fill("rest-missing@8mgfvj1x.mailosaur.net");
+                loginPage.loginMailPhone().fill("92466825@qtvjnqv9.mailosaur.net");
                 loginPage.passwordField().fill("Karthik@88");
                 loginPage.loginButton().click();
                 test.info("✅ Logged in with registered credentials.");
@@ -136,7 +136,7 @@ public class OneOnOneCallRejectFunctionality extends BaseClass {
                 advertiserPage.locator("//div[text()='My Preference']").click();
 
                 // Mailosaur validation
-                page.navigate("https://mailosaur.com/app/servers/8mgfvj1x/messages/inbox");
+                page.navigate("https://mailosaur.com/app/servers/qtvjnqv9/messages/inbox");
 
                 MailsaurCredentials mailsaur = new MailsaurCredentials(page);
                 mailsaur.MialsaurMail();

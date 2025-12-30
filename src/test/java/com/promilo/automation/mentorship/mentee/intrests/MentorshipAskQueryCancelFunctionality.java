@@ -86,7 +86,7 @@ public class MentorshipAskQueryCancelFunctionality extends BaseClass {
         }
 
         // ======== Process rows ========
-        Set<String> targetKeywords = Collections.singleton("MentorshipAskQueryCancelFunctionality");
+        Set<String> targetKeywords = Collections.singleton("GetMentorCall");
 
         for (int i = 1; i <= rowCount; i++) {
             String keyword = excel.getCellData(i, colMap.get("keyword")).trim();
@@ -106,9 +106,7 @@ public class MentorshipAskQueryCancelFunctionality extends BaseClass {
             String gst            = excel.getCellData(i, colMap.get("gst"));
             String pan            = excel.getCellData(i, colMap.get("pan"));
             String contactNumber  = excel.getCellData(i, colMap.get("contactNumber"));
-            String password       = excel.getCellData(i, colMap.get("password"));
-            String Description	  = excel.getCellData(i, colMap.get("feedbackText"));
-
+           
 
         
 
@@ -137,6 +135,7 @@ public class MentorshipAskQueryCancelFunctionality extends BaseClass {
         searchPage.SearchTextField().fill(mentorName);
         page.keyboard().press("Enter");
         page.waitForTimeout(2000);
+        page.waitForTimeout(12000);
 
         // -------------------- Mentor Description --------------------
         DescriptionPage descriptionValidation = new DescriptionPage(page);

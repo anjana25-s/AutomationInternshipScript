@@ -103,6 +103,7 @@ public class JobDescriptionPageValidation extends BaseClass {
             // Navigate to job listing
             JobListingPage jobListing = new JobListingPage(page);
             jobListing.homepageJobs().click();
+            page.waitForTimeout(15000);
             page.navigate("https://stage.promilo.com/jobs-description/hospitality/december-campaign-automation-10/software-tester");
 
             // Page object

@@ -34,7 +34,7 @@ public class MentorshipAskQueryObjects {
     }
 
     public Locator askYourQueryButton() {
-        return page.locator("//button[normalize-space()='Ask Your Query']").nth(2);
+        return page.locator("//button[normalize-space()='Ask Your Query']").nth(3);
     }
 
     public Locator otpBannerFirst() {

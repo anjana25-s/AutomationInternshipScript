@@ -125,11 +125,9 @@ public class GetMentorCall extends BaseClass {
             page.waitForTimeout(3000);
             new HomePage(page).mentorships().click(new Locator.ClickOptions().setForce(true));
 
-            // Search mentor
-            MeetupsListingPage searchPage = new MeetupsListingPage(page);
-            searchPage.SearchTextField().fill(mentorName);
-            page.keyboard().press("Enter");
+            page.navigate("https://stage.promilo.com/meetups-description/academic-guidance/course-selection/engineering/-dxgfchvjbng-vbnm--127");
             page.waitForTimeout(2000);
+            page.waitForTimeout(17000);
 
             DescriptionPage desc = new DescriptionPage(page);
             desc.allLink().click();
@@ -140,7 +138,7 @@ public class GetMentorCall extends BaseClass {
 
             // Assertions using Page Objects
             assertEquals(obj.featureContentHeader().textContent().trim(),
-                    "Get a 1:1 Call from December Automation!");
+                    "Get a 1:1 Call from karthik U!");
             assertEquals(obj.mentorDescription().textContent().trim(),
                     "Transform your journey with guidance from industry-leading mentors and experts.Access real-time updates from our elite Academic, Career, and Skill mentors network.Receive instant alerts when mentors matching your specific criteria join our platform.Access authentic reviews and testimonials from peers about potential mentors.Benefit from tailored consulting that aligns with your unique career aspirations.Unlock premium content and tools designed to enhance your professional journey.Your data security is our priority - guaranteed protection from unauthorized communications.");
             assertEquals(obj.termsAndConditions().textContent().trim(),
@@ -208,7 +206,7 @@ public class GetMentorCall extends BaseClass {
             
          // Language selection
             assertEquals(obj.languageHeader().textContent().trim(),
-                    "Please choose your preferred language with Campaign VALIDATION undefined. This will make it easier for you and them to connect as you choose.");
+                    "Please choose your preferred language with karthik U. This will make it easier for you and them to connect as you choose.");
             assertEquals(obj.languageDescription().textContent().trim(),
                     "Enjoy a direct 1:1 Call with your chosen mentors to guide your career path in your preferred language.");
             assertEquals(obj.languageNote().textContent().trim(),
@@ -260,14 +258,14 @@ public class GetMentorCall extends BaseClass {
 
             // Thank You validations using Page Objects
             assertEquals(obj.thankYouMessage().textContent().trim(),
-                    "Thank you for registering and requesting a 1:1 Call from December Automation. Check your email, notifications, and WhatsApp for details on exclusive access.");
+                    "Thank you for registering and requesting a 1:1 Call from karthik U. Check your email, notifications, and WhatsApp for details on exclusive access.");
             new ThankYouPopup(page).myPreference().click();
             
             
 
             // Mentor Interest Card validations (unchanged)
             MentorshipMyintrest myintrest = new MentorshipMyintrest(page);
-            String expectedMentorName = "December Automation";
+            String expectedMentorName = "karthik U";
             String expectedMentorData = "dxgfchvjbng vbnm";
             String expectedExperience = "2 Years";
             String expectedLocation = "Anantapur";

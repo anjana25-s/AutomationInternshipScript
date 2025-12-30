@@ -41,7 +41,7 @@ public class AlreadyInterestShwonToasterValidation extends BaseClass {
 		        "com.promilo.automation.guestuser.courses.interest.FreeVideoCounsellingTest.freeVideoCounsellingFlow"
 		      } 
 		    )
-    public void ProspectRejectFunctionalityTest() throws InterruptedException, IOException {
+    public void AlreadyInterestShwonToasterValidationTest() throws InterruptedException, IOException {
         ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("🚀 Prospect Reject Functionality");
 

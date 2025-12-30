@@ -45,7 +45,7 @@ public class FillApplicationCompletedFormSubmissionValidation extends BaseClass 
 
     @Test(
         dependsOnMethods = {
-            "com.promilo.automation.registereduser.courses.interest.MailRegisteredFillApplicationThroughWallet.applyForJobWithInvalidData"
+            "com.promilo.automation.registereduser.courses.interest.MailRegisteredFillApplicationThroughWallet.MailRegisteredFillApplicationThroughWallet"
         }
     )
     public void CallbackOrTalktoExpertApprovefunctionalityTest()

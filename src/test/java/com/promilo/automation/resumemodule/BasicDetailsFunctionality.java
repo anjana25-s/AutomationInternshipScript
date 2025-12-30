@@ -127,8 +127,8 @@ public class BasicDetailsFunctionality extends BaseClass {
         page.locator("//button[text()='Verify']").click();
         test.info("🔑 Entered OTP and clicked Verify.");
 
-        Locator verifiedSpan = page.locator("//span[text()='Verified']");
-        if (verifiedSpan.isVisible()) {
+        Locator verifiedSpan = page.locator("//span[text()='Verified']").nth(1);
+        		if (verifiedSpan.isVisible()) {
             test.pass("✅ OTP verified successfully.");
         } else {
             test.warning("⚠️ OTP verification label not visible.");

@@ -31,7 +31,7 @@ public class CourseDescriptonPageValidation extends BaseClass {
     private static final Logger log = LogManager.getLogger(CourseDescriptonPageValidation.class);
 
     @Test
-    public void mentorshipBrandEndorsement() throws IOException, InterruptedException {
+    public void CourseDescriptonPageValidationTest() throws IOException, InterruptedException {
 
         ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("MentorCampaignDownload");

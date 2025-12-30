@@ -67,7 +67,7 @@ public class MailRegisteredFillApplicationThroughWallet extends BaseClass {
     }
     
     @Test
-    public void applyForJobWithInvalidData() throws Exception {
+    public void MailRegisteredFillApplicationThroughWallet() throws Exception {
 
                 ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("MentorCampaignDownload");

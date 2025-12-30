@@ -23,7 +23,7 @@ import com.promilo.automation.resources.ExtentManager;
 public class ConnectNow extends BaseClass {
 
     @Test
-    public void TaltoExpert() throws InterruptedException, IOException {
+    public void ConnectNowTest() throws InterruptedException, IOException {
 
         ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("🧪 ConnectNow Functionality | Data-Driven");

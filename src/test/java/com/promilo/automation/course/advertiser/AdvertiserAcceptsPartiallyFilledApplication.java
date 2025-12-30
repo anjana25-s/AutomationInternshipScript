@@ -42,7 +42,7 @@ public class AdvertiserAcceptsPartiallyFilledApplication extends BaseClass {
 
     @Test(
         dependsOnMethods = {
-            "com.promilo.automation.registereduser.courses.interest.FillApplicationDraftFunctionality.applyForJobWithInvalidData"
+            "com.promilo.automation.registereduser.courses.interest.FillApplicationDraftFunctionality.FillApplicationDraftFunctionalityTest"
         }
     )
     public void CallbackOrTalktoExpertApprovefunctionalityTest()

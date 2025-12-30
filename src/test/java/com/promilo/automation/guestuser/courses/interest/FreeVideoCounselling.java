@@ -25,10 +25,10 @@ import com.promilo.automation.resources.ExcelUtil;
 import com.promilo.automation.resources.ExtentManager;
 import com.promilo.automation.resources.MailsaurCredentials;
 
-public class FreeVideoCounsellingTest extends BaseClass {
+public class FreeVideoCounselling extends BaseClass {
 
     @Test
-    public void FreeVideoCounsellingFlow() throws InterruptedException, IOException {
+    public void FreeVideoCounsellingTest() throws InterruptedException, IOException {
         ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("🧪 FreeVideoCounselling Functionality | Data-Driven");
 

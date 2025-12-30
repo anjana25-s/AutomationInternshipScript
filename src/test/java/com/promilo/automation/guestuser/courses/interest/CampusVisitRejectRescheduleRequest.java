@@ -49,7 +49,7 @@ public class CampusVisitRejectRescheduleRequest extends BaseClass {
             "com.promilo.automation.guestuser.courses.interest.GuestUserCampusVisit.GuestUserCampusVisitTest"
         }
     )
-    public void CallbackOrTalktoExpertApprovefunctionalityTest()
+    public void CampusVisitRejectRescheduleRequestTest()
             throws InterruptedException, IOException {
 
         test = extent.createTest("📊 Callback / Talk To Expert Approve Functionality");

@@ -20,7 +20,7 @@ import com.promilo.automation.resources.ExtentManager;
 public class RegisterWithUs extends BaseClass {
 
     @Test
-    public void RegisterWithUs() throws IOException, InterruptedException {
+    public void RegisterWithUsTest() throws IOException, InterruptedException {
         ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("🧪 RegisterWithUs Functionality | Simplified");
 

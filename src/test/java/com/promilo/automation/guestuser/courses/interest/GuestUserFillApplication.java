@@ -41,7 +41,7 @@ public class GuestUserFillApplication extends BaseClass {
 
     	
     @Test
-    public void applyForJobWithInvalidData() throws Exception {
+    public void GuestUserFillApplicationTest() throws Exception {
 
         
         ExtentReports extent = ExtentManager.getInstance();

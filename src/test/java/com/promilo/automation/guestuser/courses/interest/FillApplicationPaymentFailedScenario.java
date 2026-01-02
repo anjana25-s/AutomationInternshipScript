@@ -45,7 +45,7 @@ public class FillApplicationPaymentFailedScenario extends BaseClass {
 
     	
     @Test
-    public void applyForJobWithInvalidData() throws Exception {
+    public void FillApplicationPaymentFailedScenarioTest() throws Exception {
 
         
         ExtentReports extent = ExtentManager.getInstance();

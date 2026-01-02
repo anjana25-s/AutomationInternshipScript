@@ -23,7 +23,7 @@ import com.promilo.automation.resources.ExtentManager;
 public class TalkToExperts extends BaseClass {
 
     @Test
-    public void TaltoExpertIntrest() throws InterruptedException, IOException {
+    public void TalkToExpertsTest() throws InterruptedException, IOException {
         ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("🧪 TalkToExperts Functionality | Data-Driven");
 

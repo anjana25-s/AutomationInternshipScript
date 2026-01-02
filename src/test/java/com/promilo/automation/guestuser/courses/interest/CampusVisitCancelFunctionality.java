@@ -44,7 +44,7 @@ public class CampusVisitCancelFunctionality   extends BaseClass{
     
 
     @Test
-    public void GuestUserCampusVisitTest() throws Exception {
+    public void CampusVisitCancelFunctionalityTest() throws Exception {
 
                 ExtentReports extent = ExtentManager.getInstance();
         ExtentTest test = extent.createTest("MentorCampaignDownload");

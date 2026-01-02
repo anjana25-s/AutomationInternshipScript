@@ -34,7 +34,7 @@ public class CourseFreeVideoCounsellingReject extends BaseClass {
     
     @Test(
 		      dependsOnMethods = {
-		        "com.promilo.automation.guestuser.courses.interest.FreeVideoCounsellingTest.freeVideoCounsellingFlow"
+		        "com.promilo.automation.guestuser.courses.interest.FreeVideoCounselling.FreeVideoCounsellingTest"
 		      } 
 		    )
     public void ProspectRejectFunctionalityTest() throws InterruptedException, IOException {

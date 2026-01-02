@@ -49,7 +49,7 @@ public class AdvertiserTalkToExpertRejectFunctionality extends BaseClass {
 
     @Test(
         dependsOnMethods = {
-            "com.promilo.automation.guestuser.courses.interest.TalkToExperts.TaltoExpertIntrest"
+            "com.promilo.automation.guestuser.courses.interest.TalkToExperts.TalkToExpertsTest"
         } 
     )
     public void CallbackOrTalktoExpertApprovefunctionalityTest() throws InterruptedException, IOException {

@@ -55,7 +55,7 @@ public class FillApplicationDraftFunctionality extends BaseClass {
 
     	
     @Test
-    public void applyForJobWithInvalidData() throws Exception {
+    public void FillApplicationDraftFunctionalityTest() throws Exception {
 
         
         ExtentReports extent = ExtentManager.getInstance();

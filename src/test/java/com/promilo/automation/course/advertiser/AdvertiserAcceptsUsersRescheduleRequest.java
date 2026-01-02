@@ -45,7 +45,7 @@ public class AdvertiserAcceptsUsersRescheduleRequest extends BaseClass {
 
     @Test(
         dependsOnMethods = {
-            "com.promilo.automation.guestuser.courses.interest.FreeVideoCounsellingReschedule.freeVideoCounsellingFlow"
+            "com.promilo.automation.guestuser.courses.interest.FreeVideoCounsellingReschedule.FreeVideoCounsellingRescheduleTest"
         }
     )
     public void CallbackOrTalktoExpertApprovefunctionalityTest() throws InterruptedException, IOException {

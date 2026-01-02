@@ -25,7 +25,7 @@ public class CourseRescheduleFunctionality extends BaseClass {
     
     @Test(
 		      dependsOnMethods = {
-				        "com.promilo.automation.guestuser.courses.interest.FreeVideoCounsellingReschedule.freeVideoCounsellingFlow"
+				        "com.promilo.automation.guestuser.courses.interest.FreeVideoCounsellingReschedule.FreeVideoCounsellingRescheduleTest"
 				      } 
 				    )
 			

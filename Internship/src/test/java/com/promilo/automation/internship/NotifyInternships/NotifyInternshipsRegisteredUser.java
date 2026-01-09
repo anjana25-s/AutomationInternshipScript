@@ -13,6 +13,7 @@ import com.promilo.automation.internship.assignment.HomePage;
 import com.promilo.automation.internship.assignment.InternshipPage;
 import com.promilo.automation.internship.assignment.LoginPage;
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
+import com.promilo.automation.internship.utilities.LoginUtility;
 
 import basetest.Baseclass;
 
@@ -21,21 +22,21 @@ public class NotifyInternshipsRegisteredUser extends Baseclass {
     @Test
     public void NotifyInternshipsRU() throws InterruptedException {
        
-        LoginPage loginPage = new LoginPage(page);
-        loginPage.clickMaybeLater();
+       LoginPage loginPage = new LoginPage(page);
+       loginPage.clickMaybeLater();
         loginPage.clickLoginButtonOnHome();
         loginPage.enterEmail("9000029985");
         loginPage.enterPassword("qwertyui");
         loginPage.clickLoginSubmit();
+       
+       
        System.out.println("Login completed");
        
        HomePage homePage = new HomePage(page);
        homePage.clickInternships();
        System.out.println("Clicked Internships tab");
-      /* page.waitForTimeout(5000);
-       page.waitForSelector("//p[text()='Automation Tester']");*/
-
-        NotifyInternshipsPage notify=new NotifyInternshipsPage(page);
+      
+       NotifyInternshipsPage notify=new NotifyInternshipsPage(page);
         notify.clickBankManagerCard();
         notify.clickOnNotify();
        

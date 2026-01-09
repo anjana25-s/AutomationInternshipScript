@@ -12,6 +12,8 @@ import com.promilo.automation.internship.assignment.InternshipPage;
 import com.promilo.automation.internship.assignment.LoginPage;
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
 import com.promilo.automation.internship.pageobjects.AskusDataValidation;
+import com.promilo.automation.internship.utilities.LoginUtility;
+import com.promilo.automation.internship.utilities.SignUpUtility;
 
 import basetest.Baseclass;
 
@@ -23,12 +25,12 @@ public class AskUsRegisteredUser extends Baseclass{
 		
         LoginPage loginPage = new LoginPage(page);
         loginPage.clickMaybeLater();
-        loginPage.clickLoginButtonOnHome();
-        loginPage.enterEmail("mithra12@yopmail.com");
-        loginPage.enterPassword("mithra1234");
+       loginPage.clickLoginButtonOnHome();
+       loginPage.enterEmail("9000029985");
+       loginPage.enterPassword("qwertyui");
         loginPage.clickLoginSubmit();
-        
-        HomePage homePage = new HomePage(page);
+	
+	  HomePage homePage = new HomePage(page);
         homePage.clickInternships();
         System.out.println("Clicked Internships tab");
         
@@ -39,26 +41,24 @@ public class AskUsRegisteredUser extends Baseclass{
         AskUsPage askus=new AskUsPage(page);
         askus.clickAskUs();
         askus.enterQuery("Good evening");
+        
         AskusDataValidation validation = new AskusDataValidation(page);
 
-        // -------------------------
-        // ASK US PAGE VALIDATIONS
-        // -------------------------
-        assertTrue(
-                validation.askUsHeaderText().isVisible(),
-                "❌ Ask Us header text is not visible"
-        );
-
         assertEquals(
-                validation.askUsDescription().textContent().trim(),
-                "Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com.",
-                "❌ Ask Us description text mismatch"
-        );
+        		validation.askUsDescription().textContent().trim(),
+        		"Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com."
+        		);
 
-        assertTrue(
-                validation.askUsFooterText().isVisible(),
-                "❌ Ask Us footer text is not visible"
-        );
+        		assertEquals(
+        				validation.askUsHeaderText().textContent().trim(),
+        		"Share your query to get help!"
+        		);
+
+        		assertEquals(
+        				validation.askUsFooterText().textContent().trim(),
+        		"By proceeding ahead you expressly agree to the PromiloTerms & Conditions"
+        		);
+
         askus.clickOnButton();
        
         NotifyInternshipsPage thankYou = new NotifyInternshipsPage(page);

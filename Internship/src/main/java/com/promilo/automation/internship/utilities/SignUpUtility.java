@@ -1,4 +1,4 @@
-package com.promilo.automation.internship.assignment;
+package com.promilo.automation.internship.utilities;
 
 public class SignUpUtility {
 
@@ -38,6 +38,9 @@ public class SignUpUtility {
             otp = String.valueOf(randomOtp);
         } while (otp.equals(getFixedOtp()));
         return otp;
-    
-}
+    }
+    // Generate Random Password
+    public static String generateRandomPassword() {
+        return "Test@" + System.currentTimeMillis();
+    }
 }

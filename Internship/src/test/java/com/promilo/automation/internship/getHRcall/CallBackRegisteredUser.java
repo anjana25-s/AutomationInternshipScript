@@ -11,6 +11,7 @@ import com.promilo.automation.internship.assignment.LoginPage;
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
 import com.promilo.automation.internship.pageobjects.GetHRcallDataValidation;
 
+
 import basetest.Baseclass;
 
 import org.testng.Assert;
@@ -27,10 +28,10 @@ public class CallBackRegisteredUser extends Baseclass {
     public void HRcallTest() throws InterruptedException {
        
         LoginPage loginPage = new LoginPage(page);
-        loginPage.clickMaybeLater();
-        loginPage.clickLoginButtonOnHome();
-        loginPage.enterEmail("9000029985");
-        loginPage.enterPassword("qwertyui");
+      loginPage.clickMaybeLater();
+       loginPage.clickLoginButtonOnHome();
+       loginPage.enterEmail("9000029985");
+       loginPage.enterPassword("qwertyui");
         loginPage.clickLoginSubmit();
         
         HomePage homePage = new HomePage(page);
@@ -48,21 +49,25 @@ public class CallBackRegisteredUser extends Baseclass {
       // ===================== LANGUAGE SELECTION VALIDATION =====================
          callback.clickLanguage();
          Locator languageText = data.chooseLanguageText();
-         languageText.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(10000));
-
-         Assert.assertTrue(languageText.isVisible(), "❌ Language selection text missing");
-        
-         System.out.println("✅ Language selection texts validated successfully.");
-        callback.clickSubmit();
+         String nextPageText = data.nextPageInfoText().first().textContent().trim();
+         String expectedNextPageText="Get Selected Faster!Your answers will help the Recruiter select you faster to schedule an interview.";
+         assertEquals(nextPageText, expectedNextPageText);
+         page.waitForTimeout(2000);
+         String chooseLangaugeText = data.chooseLanguageText().textContent().trim();
+         String expectedChooseLangaugeText="Please Select your preferred language with UST Global. This will make it easier for you and HR to connect as you choose. ";
+         assertEquals(chooseLangaugeText, expectedChooseLangaugeText);
+          callback.clickSubmit();
         
         
          // ===================== SCREENING PAGE & THANK YOU VALIDATION =====================
          callback.clickOncheckBox();
-         Locator screeningQuestion = data.takeMomentText();
-         screeningQuestion.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(10000));
-
-         Assert.assertTrue(data.takeMomentText().isVisible(), "❌ 'Take a moment' text missing");
-         System.out.println("✅ screening question validated successfully.");
+         Locator screeningQuestion = data.takeMomentSideText();
+         String submitPageText = data.takeMomentSideText().textContent().trim();
+         String expectedSubmitPageText="Get Selected Faster!Your answers will help the Recruiter select you faster to schedule an interview.";
+         assertEquals(submitPageText, expectedSubmitPageText);
+         String takeMomentText = data.takeMomentText().textContent().trim();
+         String expectedTakeMomentText="Please take a moment to answer the below questions.";
+         assertEquals(takeMomentText, expectedTakeMomentText);
          callback.clickOnSubmit();
           
         

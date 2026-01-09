@@ -6,8 +6,9 @@ import com.promilo.automation.internship.assignment.AskUsPage;
 import com.promilo.automation.internship.assignment.HomePage;
 import com.promilo.automation.internship.assignment.InternshipPage;
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
-import com.promilo.automation.internship.assignment.SignUpUtility;
 import com.promilo.automation.internship.negative.AskUsPopUp;
+import com.promilo.automation.internship.utilities.SignUpUtility;
+
 import basetest.Baseclass;
 
 public class AskUsNegativeValidation extends Baseclass {

@@ -67,6 +67,11 @@ public Locator chooseLanguageText() {
 return page.locator("[class='fw-500 font-18 text-primary mb-50 text-default-color-language']");
 }
 
+public Locator takeMomentSideText() {
+return page.locator("[class='col-6 askUs-content-container ']");
+}
+
+
 public Locator takeMomentText() {
 return page.locator("//span[text()='Please take a moment to answer the below questions.']");
 }
@@ -75,5 +80,8 @@ return page.locator("//span[text()='Please take a moment to answer the below que
 public Locator thankYouText() {
 return page.locator("[class='ThankYou-content justify-content-center']");
 }
+
+ 
+
 }
 

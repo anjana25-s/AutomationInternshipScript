@@ -4,6 +4,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import com.promilo.automation.internship.assignment.*;
 import com.promilo.automation.internship.negative.NotifyInternshipPopup;
+import com.promilo.automation.internship.utilities.SignUpUtility;
+
 import basetest.Baseclass;
 
 public class NotifyInternshipsNegativeValidation extends Baseclass {
@@ -22,9 +24,13 @@ public class NotifyInternshipsNegativeValidation extends Baseclass {
         internshipPage.clickAutomationTesterCard();
 
         NotifyInternshipsPage notify = new NotifyInternshipsPage(page);
+     
+        // Close Milli again (it reopens sometimes)
+        closeMilliIfVisible();
         notify.clickOnNotify();
         notify.button();
         
+     
         NotifyInternshipPopup popup = new NotifyInternshipPopup(page);
         popup.verifyEmptyNameField();
         popup.verifyEmptyPhoneField();
@@ -37,7 +43,7 @@ public class NotifyInternshipsNegativeValidation extends Baseclass {
         page.reload();
         homePage.clickInternships();
         internshipPage.clickAutomationTesterCard();
-
+        closeMilliIfVisible();
         notify.clickOnNotify();
         notify.typeUserName("Ka");
         notify.enterPhoneNumber("900002026");
@@ -55,7 +61,7 @@ public class NotifyInternshipsNegativeValidation extends Baseclass {
         page.reload();
         homePage.clickInternships();
         internshipPage.clickAutomationTesterCard();
-
+        closeMilliIfVisible();
         notify.clickOnNotify();
         String email = SignUpUtility.generateRandomEmail();
         String mobile = SignUpUtility.generateRandomMobile();

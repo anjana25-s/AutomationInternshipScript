@@ -20,20 +20,15 @@ public class FeedbackNegativeTest extends BaseClass {
     private static final String OTP = "9999";
 
     @BeforeMethod(alwaysRun = true)
-    public void openBase() {
+    public void setup() {
 
         home   = new HomepagePage(page);
         popup  = new FeedbackPopupPage(page);
         errors = new FeedbackErrorMessagesPage(page);
         helper = new HelperUtility(page);
 
-        helper.log("Navigating to Promilo");
-        page.navigate(BASE_URL);
+        page.navigate("https://stage.promilo.com/");
         page.waitForLoadState();
-
-        if (home.getMaybeLaterBtn().isVisible()) {
-            helper.safeClick(home.getMaybeLaterBtn(), "Close Maybe Later");
-        }
     }
 
     @Test
@@ -41,87 +36,79 @@ public class FeedbackNegativeTest extends BaseClass {
 
         helper.log("==== FEEDBACK FULL NEGATIVE FLOW STARTED ====");
 
-        // ------------------------------------------------------------
+        // =====================================================
         // OPEN INTERNSHIP
-        // ------------------------------------------------------------
+        // =====================================================
         helper.safeClick(home.getInternshipsTab(), "Open Internships");
 
         Locator card = home.getInternshipCard(INTERNSHIP);
         helper.waitForVisible(card, "Internship Card");
         helper.scrollAndClick(card, "Open Internship");
 
-        // ------------------------------------------------------------
-        // FEEDBACK TEXTAREA
-        // ------------------------------------------------------------
-        Locator feedbackBox = popup.getFeedbackTextarea();
-        helper.waitForVisible(feedbackBox, "Feedback Textarea");
+        // =====================================================
+        // INLINE FEEDBACK
+        // =====================================================
+        helper.waitForVisible(
+                popup.getInlineFeedbackContainer(),
+                "Inline Feedback Container"
+        );
 
-        feedbackBox.fill("Automated feedback for validation.");
-        helper.safeClick(popup.getFeedbackSubmitBtn(),
-                "Submit Feedback Text");
+        popup.getFeedbackTextarea()
+                .fill("Automated feedback for validation.");
 
-        // ------------------------------------------------------------
-        // ASK US POPUP
-        // ------------------------------------------------------------
-        Locator askUsModal =
-                page.locator("//div[contains(@class,'AskUs-Modal') and contains(@class,'show')]");
+        helper.safeClick(
+                popup.getFeedbackSubmitBtn(),
+                "Submit Feedback Text"
+        );
 
-        helper.waitForVisible(askUsModal, "Ask Us Popup");
+        // =====================================================
+        // DETAILS FORM — BLANK SUBMIT
+        // =====================================================
+        helper.waitForVisible(
+                popup.getDetailsHeader(),
+                "Details Form"
+        );
 
-        // ------------------------------------------------------------
-        // BLANK SUBMIT
-        // ------------------------------------------------------------
-        helper.safeClick(popup.getPopupSubmitBtn(),
-                "Submit Blank Form");
+        helper.safeClick(
+                popup.getDetailsSubmitBtn(),
+                "Submit Blank Form"
+        );
 
-        helper.assertVisible(errors.nameRequiredError(),
-                "Name required error");
-        helper.assertVisible(errors.mobileRequiredError(),
-                "Mobile required error");
-        helper.assertVisible(errors.emailRequiredError(),
-                "Email required error");
+        helper.assertVisible(errors.nameRequiredError(), "Name required error");
+        helper.assertVisible(errors.mobileRequiredError(), "Mobile required error");
+        helper.assertVisible(errors.emailRequiredError(), "Email required error");
 
-        // ------------------------------------------------------------
-        // NAME VALIDATIONS
-        // ------------------------------------------------------------
+        // =====================================================
+        // NAME NEGATIVE CASES
+        // =====================================================
         popup.getNameField().fill("ab");
-        helper.safeClick(popup.getPopupSubmitBtn(),
-                "Short Name Submit");
-        helper.assertVisible(errors.nameMinError(),
-                "Name min error");
+        helper.safeClick(popup.getDetailsSubmitBtn(), "Short Name Submit");
+        helper.assertVisible(errors.nameMinError(), "Name min error");
 
         popup.getNameField().fill("Megh@");
-        helper.safeClick(popup.getPopupSubmitBtn(),
-                "Invalid Name Submit");
-        helper.assertVisible(errors.nameInvalidError(),
-                "Invalid name error");
+        helper.safeClick(popup.getDetailsSubmitBtn(), "Invalid Name Submit");
+        helper.assertVisible(errors.nameInvalidError(), "Invalid name error");
 
         popup.getNameField().fill("A".repeat(51));
-        helper.safeClick(popup.getPopupSubmitBtn(),
-                "Long Name Submit");
-        helper.assertVisible(errors.nameMaxError(),
-                "Name max error");
+        helper.safeClick(popup.getDetailsSubmitBtn(), "Long Name Submit");
+        helper.assertVisible(errors.nameMaxError(), "Name max error");
 
-        // ------------------------------------------------------------
+        // =====================================================
         // MOBILE + EMAIL NEGATIVE
-        // ------------------------------------------------------------
+        // =====================================================
         popup.getMobileField().fill("12345");
-        helper.safeClick(popup.getPopupSubmitBtn(),
-                "Invalid Mobile Submit");
-        helper.assertVisible(errors.mobileInvalidError(),
-                "Invalid mobile error");
+        helper.safeClick(popup.getDetailsSubmitBtn(), "Invalid Mobile Submit");
+        helper.assertVisible(errors.mobileInvalidError(), "Invalid mobile error");
 
         popup.getEmailField().fill("megh@");
-        helper.safeClick(popup.getPopupSubmitBtn(),
-                "Invalid Email Submit");
-        helper.assertVisible(errors.emailInvalidError(),
-                "Invalid email error");
+        helper.safeClick(popup.getDetailsSubmitBtn(), "Invalid Email Submit");
+        helper.assertVisible(errors.emailInvalidError(), "Invalid email error");
 
         helper.log("==== BASIC NEGATIVE VALIDATIONS COMPLETED ====");
 
-        // ------------------------------------------------------------
-        // VALID FEEDBACK (NEW USER)
-        // ------------------------------------------------------------
+        // =====================================================
+        // VALID DETAILS (NEW USER)
+        // =====================================================
         String name  = helper.generateRandomName();
         String email = helper.generateEmailFromName(name);
         String phone = helper.generateRandomPhone();
@@ -130,32 +117,34 @@ public class FeedbackNegativeTest extends BaseClass {
         popup.getMobileField().fill(phone);
         popup.getEmailField().fill(email);
 
-        helper.safeClick(popup.getPopupSubmitBtn(),
-                "Submit Valid Feedback");
+        helper.safeClick(
+                popup.getDetailsSubmitBtn(),
+                "Submit Valid Feedback"
+        );
 
-        // ------------------------------------------------------------
+        // =====================================================
         // OTP
-        // ------------------------------------------------------------
-        Locator otpModal =
-                page.locator("//h5[text()='OTP Verification']/ancestor::div[@class='modal-content']");
-        helper.waitForVisible(otpModal, "OTP Modal");
+        // =====================================================
+        helper.waitForVisible(
+                popup.getOtpHeader(),
+                "OTP Screen"
+        );
 
         for (int i = 1; i <= 4; i++) {
-            helper.safeFill(
-                    popup.getOtpInput(i),
-                    OTP.substring(i - 1, i),
-                    "OTP Digit " + i
-            );
+            popup.getOtpInput(i)
+                    .fill(OTP.substring(i - 1, i));
         }
 
-        helper.safeClick(popup.getOtpVerifyBtn(),
-                "Verify OTP");
+        helper.safeClick(
+                popup.getOtpVerifyBtn(),
+                "Verify OTP"
+        );
 
         helper.log("---- OTP VERIFIED SUCCESSFULLY ----");
 
-        // ------------------------------------------------------------
+        // =====================================================
         // NEW SESSION — ALREADY REGISTERED EMAIL
-        // ------------------------------------------------------------
+        // =====================================================
         helper.log("---- CHECKING ALREADY REGISTERED EMAIL ----");
 
         BrowserContext oldContext = page.context();
@@ -168,14 +157,13 @@ public class FeedbackNegativeTest extends BaseClass {
         errors = new FeedbackErrorMessagesPage(page);
         helper = new HelperUtility(page);
 
-        page.navigate(BASE_URL);
+        page.navigate("https://stage.promilo.com/");
+        page.waitForLoadState();
+        
+        closeMilliIfPresent();
+        closePreferenceModalIfPresent();
 
-        if (home.getMaybeLaterBtn().isVisible()) {
-            helper.safeClick(home.getMaybeLaterBtn(), "Close Maybe Later");
-        }
-
-        helper.safeClick(home.getInternshipsTab(),
-                "Open Internships Again");
+        helper.safeClick(home.getInternshipsTab(), "Open Internships Again");
 
         Locator cardAgain = home.getInternshipCard(INTERNSHIP);
         helper.waitForVisible(cardAgain, "Internship Card Again");
@@ -184,15 +172,19 @@ public class FeedbackNegativeTest extends BaseClass {
         popup.getFeedbackTextarea()
                 .fill("Checking already registered email flow");
 
-        helper.safeClick(popup.getFeedbackSubmitBtn(),
-                "Submit Feedback Again");
+        helper.safeClick(
+                popup.getFeedbackSubmitBtn(),
+                "Submit Feedback Again"
+        );
 
         popup.getNameField().fill(name);
         popup.getMobileField().fill(helper.generateRandomPhone());
         popup.getEmailField().fill(email);
 
-        helper.safeClick(popup.getPopupSubmitBtn(),
-                "Submit with Existing Email");
+        helper.safeClick(
+                popup.getDetailsSubmitBtn(),
+                "Submit with Existing Email"
+        );
 
         helper.assertToastAppeared(
                 errors.emailAlreadyRegisteredToast(),
@@ -202,5 +194,6 @@ public class FeedbackNegativeTest extends BaseClass {
         helper.log("==== FEEDBACK FULL NEGATIVE FLOW COMPLETED ====");
     }
 }
+
 
 

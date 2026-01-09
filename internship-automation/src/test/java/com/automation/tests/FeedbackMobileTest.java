@@ -1,6 +1,7 @@
 package com.automation.tests;
 
 import com.automation.base.BaseClass;
+import com.automation.constants.FeedbackExpectedTexts;
 import com.automation.pages.*;
 import com.automation.utils.HelperUtility;
 import com.microsoft.playwright.Locator;
@@ -18,114 +19,236 @@ public class FeedbackMobileTest extends BaseClass {
     private static final String BASE_URL = "https://stage.promilo.com/";
     private static final String OTP = "9999";
     private static final String PASSWORD = "Test@123";
-    private static final String INTERNSHIP = "Finance- Job role";
+    private static final String INTERNSHIP_NAME = "Tester 1";
     private static final String FEEDBACK_TEXT =
             "This is feedback after mobile signup.";
 
     @BeforeMethod(alwaysRun = true)
-    public void openBase() {
+    public void setup() {
 
         home     = new HomepagePage(page);
         signup   = new SignUpPage(page);
         feedback = new FeedbackPopupPage(page);
         helper   = new HelperUtility(page);
 
-        helper.log("[Step 1] Navigating to Homepage…");
-        page.navigate(BASE_URL);
+        page.navigate("https://stage.promilo.com/");
         page.waitForLoadState();
-
-        if (home.getMaybeLaterBtn().isVisible()) {
-            helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
-        }
     }
 
     @Test
-    public void verifyFeedbackPopupViaMobileSignup() {
+    public void verifyFeedbackViaMobileSignup_FullFlow_WithValidations() {
 
-        // ---------- TEST DATA ----------
+        helper.step("START – Feedback via Mobile Signup");
+
+        // =====================================================
+        // TEST DATA
+        // =====================================================
         String name   = helper.generateRandomName();
         String mobile = helper.generateRandomPhone();
         String email  = helper.generateEmailFromName(name);
 
-        helper.log("Generated Name = " + name);
-        helper.log("Generated Mobile = " + mobile);
-        helper.log("Generated Email = " + email);
+        // =====================================================
+        // MOBILE SIGNUP
+        // =====================================================
+        helper.step("Mobile Signup");
 
-        // ---------- SIGNUP (MOBILE) ----------
-        helper.safeClick(signup.getInitialSignupButton(), "Click SignUp");
-        helper.safeFill(signup.getEmailOrPhoneInput(), mobile, "Enter Mobile");
-        helper.safeClick(signup.getSendVerificationCodeButton(),
-                "Send Verification Code");
+        helper.safeClick(signup.getInitialSignupButton(), "Sign Up");
+        helper.safeFill(signup.getEmailOrPhoneInput(), mobile, "Mobile");
+        helper.safeClick(signup.getSendVerificationCodeButton(), "Send OTP");
+        helper.safeFill(signup.getOtpInput(), OTP, "OTP");
+        helper.safeFill(signup.getPasswordInput(), PASSWORD, "Password");
+        helper.safeClick(signup.getFinalSignupButton(), "Complete Signup");
 
-        helper.safeFill(signup.getOtpInput(), OTP, "Enter OTP");
-        helper.safeFill(signup.getPasswordInput(),
-                PASSWORD, "Enter Password");
-        helper.safeClick(signup.getFinalSignupButton(),
-                "Complete Signup");
-
-        // ---------- ASSERT LOGIN ----------
         Assert.assertTrue(
                 home.getInternshipsTab().isVisible(),
-                "❌ Signup failed — Internships tab not visible"
+                "Signup failed"
         );
-        helper.log("✔ Signup successful via Mobile");
 
-        // ---------- OPEN INTERNSHIP ----------
-        helper.safeClick(home.getInternshipsTab(),
-                "Open Internships");
+        // =====================================================
+        // OPEN INTERNSHIP
+        // =====================================================
+        helper.step("Open Internship");
 
-        Locator card = home.getInternshipCard(INTERNSHIP);
+        helper.safeClick(home.getInternshipsTab(), "Internships");
+        Locator card = home.getInternshipCard(INTERNSHIP_NAME);
         helper.waitForVisible(card, "Internship Card");
         helper.scrollAndClick(card, "Open Internship");
 
-        // ---------- FEEDBACK MODAL ----------
-        Locator feedbackModal =
-                page.locator("div.Job-Feedback-modal");
+        // =====================================================
+        // CAPTURE COMPANY NAME FROM DESCRIPTION PAGE
+        // =====================================================
+        helper.step("Capture Company Name from Internship Description");
 
-        helper.waitForVisible(feedbackModal, "Feedback Modal");
-        Assert.assertTrue(feedbackModal.isVisible(),
-                "❌ Feedback modal not visible");
+        String companyNameFromDescription =
+                home.getCompanyNameOnDescription()
+                        .innerText()
+                        .trim();
 
-        helper.log("✔ Feedback Modal Visible");
+        helper.log("Captured Company Name = " + companyNameFromDescription);
 
-        // ---------- SUBMIT FEEDBACK ----------
-        helper.safeFill(feedback.getFeedbackTextarea(),
-                FEEDBACK_TEXT, "Enter Feedback");
-        helper.safeClick(feedback.getFeedbackSubmitBtn(),
-                "Submit Feedback");
-
-        // ---------- USER DETAILS ----------
-        helper.safeFill(feedback.getNameField(),
-                name, "Enter Name");
-
-        if (feedback.getMobileField().isEnabled()) {
-            helper.safeFill(feedback.getMobileField(),
-                    mobile, "Enter Mobile");
-        } else {
-            helper.log("✔ Mobile auto-filled");
-        }
-
-        helper.safeFill(feedback.getEmailField(),
-                email, "Enter Email");
-
-        helper.safeClick(feedback.getPopupSubmitBtn(),
-                "Submit User Details");
-
-        // ---------- THANK YOU ----------
-        helper.waitForVisible(feedback.getThankYouPopup(),
-                "Thank You Popup");
-
-        Assert.assertTrue(
-                feedback.getThankYouPopup().isVisible(),
-                "❌ Thank You popup not visible"
+        helper.assertTrue(
+                !companyNameFromDescription.isEmpty(),
+                "Company name captured from description"
         );
 
-        helper.safeClick(feedback.getThankYouCloseBtn(),
-                "Close Thank You Popup");
+        // =====================================================
+        // INLINE FEEDBACK VALIDATION
+        // =====================================================
+        helper.step("Inline Feedback Validation");
 
-        helper.log("🎉 FEEDBACK FLOW VIA MOBILE PASSED!");
+        helper.waitForVisible(
+                feedback.getInlineFeedbackContainer(),
+                "Feedback Container"
+        );
+
+        // =====================================================
+        // FEEDBACK BRAND NAME VALIDATION
+        // =====================================================
+        helper.step("Validate Feedback Brand Name");
+
+        helper.waitForVisible(
+                feedback.getFeedbackBrandName(),
+                "Feedback Brand Name"
+        );
+
+        helper.assertEquals(
+                feedback.getFeedbackBrandName().innerText().trim(),
+                companyNameFromDescription,
+                "Feedback brand name matches internship company"
+        );
+
+        Assert.assertEquals(
+                feedback.getFeedbackTextarea().getAttribute("placeholder"),
+                FeedbackExpectedTexts.FEEDBACK_PLACEHOLDER,
+                "Feedback placeholder"
+        );
+
+        Assert.assertEquals(
+                feedback.getFeedbackSubmitBtn().innerText().trim(),
+                FeedbackExpectedTexts.FEEDBACK_SUBMIT_BUTTON,
+                "Feedback submit button text"
+        );
+
+        helper.safeFill(
+                feedback.getFeedbackTextarea(),
+                FEEDBACK_TEXT,
+                "Enter Feedback"
+        );
+
+        helper.safeClick(
+                feedback.getFeedbackSubmitBtn(),
+                "Submit Feedback"
+        );
+
+        // =====================================================
+        // LEFT PANEL VALIDATION
+        // =====================================================
+        helper.step("Left Panel Validation");
+
+        Locator headers = feedback.getLeftPanelHeaders();
+        Locator descs   = feedback.getLeftPanelDescriptions();
+
+        helper.waitForVisible(headers.first(), "Left Panel Header");
+
+        Assert.assertEquals(
+                headers.nth(0).innerText().trim(),
+                FeedbackExpectedTexts.EMPOWER_HEADER
+        );
+
+        Assert.assertEquals(
+                descs.nth(0).innerText().trim(),
+                FeedbackExpectedTexts.EMPOWER_DESCRIPTION
+        );
+
+        Assert.assertEquals(
+                headers.nth(1).innerText().trim(),
+                FeedbackExpectedTexts.HONEST_HEADER
+        );
+
+        Assert.assertEquals(
+                descs.nth(1).innerText().trim(),
+                FeedbackExpectedTexts.HONEST_DESCRIPTION
+        );
+
+        // =====================================================
+        // DETAILS FORM VALIDATION
+        // =====================================================
+        helper.step("Details Form Validation");
+
+        Assert.assertEquals(
+                feedback.getDetailsHeader().innerText().trim(),
+                FeedbackExpectedTexts.DETAILS_HEADER
+        );
+
+        Assert.assertEquals(
+                feedback.getNameField().getAttribute("placeholder"),
+                FeedbackExpectedTexts.NAME_PLACEHOLDER
+        );
+
+        Assert.assertEquals(
+                feedback.getMobileField().getAttribute("placeholder"),
+                FeedbackExpectedTexts.MOBILE_PLACEHOLDER
+        );
+
+        Assert.assertEquals(
+                feedback.getEmailField().getAttribute("placeholder"),
+                FeedbackExpectedTexts.EMAIL_PLACEHOLDER
+        );
+
+        helper.safeFill(feedback.getNameField(), name, "Name");
+
+        // Mobile auto-filled & disabled
+        Assert.assertFalse(
+                feedback.getMobileField().isEnabled(),
+                "Mobile should be disabled"
+        );
+
+        Assert.assertEquals(
+                feedback.getMobileField().getAttribute("value"),
+                mobile,
+                "Auto-filled mobile"
+        );
+
+        // Email editable for mobile flow
+        helper.safeFill(feedback.getEmailField(), email, "Email");
+
+        helper.safeClick(
+                feedback.getDetailsSubmitBtn(),
+                "Submit Details"
+        );
+
+        // =====================================================
+        // THANK YOU VALIDATION (NO OTP HERE)
+        // =====================================================
+        helper.step("Thank You Validation");
+
+        helper.waitForVisible(
+                feedback.getThankYouPopup(),
+                "Thank You Popup"
+        );
+
+        Assert.assertEquals(
+                feedback.getThankYouHeader().innerText().trim(),
+                FeedbackExpectedTexts.THANK_YOU_HEADER
+        );
+
+        Assert.assertEquals(
+                feedback.getThankYouMessage().innerText().trim(),
+                FeedbackExpectedTexts.THANK_YOU_MESSAGE
+        );
+
+        // Mobile flow → footer MUST be visible
+        Assert.assertEquals(
+                feedback.getThankYouFooter().innerText().trim(),
+                FeedbackExpectedTexts.THANK_YOU_FOOTER_NON_EMAIL,
+                "Footer should be visible for mobile flow"
+        );
+
+        helper.safeClick(
+                feedback.getThankYouCloseBtn(),
+                "Close Thank You"
+        );
+
+        helper.log("🎉 FEEDBACK MOBILE FLOW – ALL DATA VALIDATIONS PASSED");
     }
 }
-
-
-

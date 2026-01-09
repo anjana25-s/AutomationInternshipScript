@@ -33,9 +33,8 @@ public class GetConnectedNegativeTest extends BaseClass {
         page.navigate(BASE_URL);
         page.waitForLoadState();
 
-        if (home.getMaybeLaterBtn().isVisible()) {
-            helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
-        }
+        page.navigate("https://stage.promilo.com/");
+        page.waitForLoadState();
     }
 
     @Test
@@ -137,40 +136,54 @@ public class GetConnectedNegativeTest extends BaseClass {
         helper.safeClick(boxes.nth(1), "Select Industry");
         helper.safeClick(conn.getIndustryDropdown(), "Close Industry");
 
-        // ------------------------------------------------------------
-        // SUBMIT → OTP
-        // ------------------------------------------------------------
-        helper.safeClick(conn.getRegisterBtn(),
-                "Submit Valid Details");
+     // ------------------------------------------------------------
+     // SUBMIT → OTP
+     // ------------------------------------------------------------
+     helper.safeClick(
+             conn.getRegisterBtn(),
+             "Submit Valid Details"
+     );
 
-        helper.log("---- OTP NEGATIVE TEST ----");
+     // ------------------------------------------------------------
+     // OTP NEGATIVE → Enter wrong OTP → Verify → Toast
+     // ------------------------------------------------------------
+     helper.log("---- OTP NEGATIVE TEST ----");
 
-        for (int i = 1; i <= 4; i++) {
-            conn.getOtpInput(i).fill("1");
-        }
+     for (int i = 1; i <= 4; i++) {
+         conn.getOtpInput(i).fill("1");   // wrong OTP
+     }
 
-        helper.safeClick(conn.getVerifyOtpBtn(),
-                "Submit Wrong OTP");
+     helper.safeClick(
+             conn.getVerifyOtpBtn(),
+             "Submit WRONG OTP"
+     );
 
-        helper.assertToastAppeared(
-                errors.invalidOtpToast(),
-                "Invalid OTP toast"
-        );
+     helper.assertToastAppeared(
+             errors.invalidOtpToast(),
+             "Invalid OTP toast appeared"
+     );
 
-        // ------------------------------------------------------------
-        // OTP POSITIVE
-        // ------------------------------------------------------------
-        helper.log("---- OTP POSITIVE TEST ----");
+     // ------------------------------------------------------------
+     // OTP POSITIVE → Enter correct OTP → Verify
+     // ------------------------------------------------------------
+     helper.log("---- OTP POSITIVE TEST ----");
 
-        for (int i = 1; i <= 4; i++) {
-            conn.getOtpInput(i).fill("");
-            conn.getOtpInput(i).fill("9");
-        }
+     // clear previous values
+     for (int i = 1; i <= 4; i++) {
+         conn.getOtpInput(i).fill("");
+     }
 
-        helper.safeClick(conn.getVerifyOtpBtn(),
-                "Submit Correct OTP");
+     // enter correct OTP
+     for (int i = 1; i <= 4; i++) {
+         conn.getOtpInput(i).fill("9");
+     }
 
-        helper.log("OTP Verified Successfully");
+     helper.safeClick(
+             conn.getVerifyOtpBtn(),
+             "Submit CORRECT OTP"
+     );
+
+     helper.log("---- OTP VERIFIED SUCCESSFULLY ----");
 
         // ------------------------------------------------------------
         // ALREADY REGISTERED EMAIL
@@ -187,11 +200,10 @@ public class GetConnectedNegativeTest extends BaseClass {
         errors = new GetConnectedErrorMessagesPage(page);
         helper = new HelperUtility(page);
 
-        page.navigate(BASE_URL);
-
-        if (home.getMaybeLaterBtn().isVisible()) {
-            helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
-        }
+        page.navigate("https://stage.promilo.com/");
+        page.waitForLoadState();
+        closeMilliIfPresent();
+        closePreferenceModalIfPresent();
 
         helper.safeClick(home.getInternshipsTab(),
                 "Open Internships Again");

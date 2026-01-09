@@ -1,110 +1,137 @@
 package com.automation.tests;
 
 import com.automation.base.BaseClass;
-import com.automation.pages.*;
+import com.automation.constants.FeedbackExpectedTexts;
+import com.automation.pages.FeedbackPopupPage;
+import com.automation.pages.HomepagePage;
 import com.automation.utils.HelperUtility;
+import com.automation.utils.LoginUtility;
 import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import org.testng.Assert;
-import org.testng.Reporter;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 public class FeedbackLoginTest extends BaseClass {
 
     private HomepagePage home;
-    private LoginpagePage login;
     private FeedbackPopupPage feedback;
+    private LoginUtility login;
     private HelperUtility helper;
 
-    // ------------------- Test Data -------------------
     private static final String BASE_URL = "https://stage.promilo.com/";
-    private static final String LOGIN_EMAIL = "testwork123@yopmail.com";
-    private static final String LOGIN_PASSWORD = "12345678";
-    private static final String INTERNSHIP = "Designer1";
-    private static final String FEEDBACK_TEXT = "Feedback after login flow.";
+    private static final String INTERNSHIP_NAME = "Tester 1";
+    private static final String FEEDBACK_TEXT =
+            "This is automated feedback after login.";
 
-    // ------------------- Setup -------------------
-    @BeforeClass
-    public void initPages() {
-        home = new HomepagePage(page);
-        login = new LoginpagePage(page);
+    // ================= INIT =================
+    @BeforeMethod(alwaysRun = true)
+    public void init() {
+
+        home     = new HomepagePage(page);
         feedback = new FeedbackPopupPage(page);
-        helper = new HelperUtility(page);
-    }
+        login    = new LoginUtility(page);
+        helper   = new HelperUtility(page);
 
-    @BeforeMethod
-    public void openBaseUrl() {
-        helper.log("[Step 1] Navigating to " + BASE_URL);
-        page.navigate(BASE_URL);
+        page.navigate("https://stage.promilo.com/");
         page.waitForLoadState();
-
-        Assert.assertTrue(page.url().contains("promilo"), 
-                "❌ URL mismatch. Current: " + page.url());
-
-        if (home.getMaybeLaterBtn().isVisible()) {
-            helper.safeClick(home.getMaybeLaterBtn(), "Close 'May be later' popup");
-        }
     }
 
-    // ------------------- Test -------------------
+    // ================= TEST =================
     @Test
-    public void verifyFeedbackPopupAfterLogin() {
+    public void verifyFeedbackViaLogin() {
+
         try {
-            // ⭐ Step 2 — Login
-            helper.log("[Step 2] Starting Login Flow...");
 
-            Locator loginBtn = page.locator("//div[@class='Login-button']");
-            helper.waitForVisible(loginBtn, "Login Button");
-            helper.safeClick(loginBtn, "Open Login Form");
+            helper.step("LOGIN USING SAVED SIGNUP ACCOUNT");
 
-            helper.safeFill(login.getEmailInput(), LOGIN_EMAIL, "Email");
-            helper.safeFill(login.getPasswordInput(), LOGIN_PASSWORD, "Password");
-            helper.safeClick(login.getLoginSubmitBtn(), "Submit Login");
+            // ---------- LOGIN ----------
+            login.loginUsingSignupAccount();
 
-            page.waitForLoadState();
-            helper.log("[Step 2 ✓] Logged in successfully.");
+            Assert.assertTrue(
+                    home.getInternshipsTab().isVisible(),
+                    "❌ Login failed — Internships tab not visible"
+            );
 
-            // ⭐ Step 3 — Open Internships
-            helper.safeClick(home.getInternshipsTab(), "Open Internships Tab");
+            // ---------- OPEN INTERNSHIPS ----------
+            helper.step("OPEN INTERNSHIPS");
+            helper.safeClick(home.getInternshipsTab(), "Internships");
 
-            Locator card = home.getInternshipCard(INTERNSHIP);
+            // ---------- OPEN INTERNSHIP ----------
+            helper.step("OPEN INTERNSHIP CARD");
+            Locator card = home.getInternshipCard(INTERNSHIP_NAME);
             helper.waitForVisible(card, "Internship Card");
-            helper.scrollAndClick(card, "Open Internship = " + INTERNSHIP);
+            helper.scrollAndClick(card, "Open Internship");
 
-            // ⭐ Step 4 — Wait for Feedback Modal
-            Locator feedbackModal = page.locator("div.Job-Feedback-modal");
-            feedbackModal.waitFor(new Locator.WaitForOptions()
-                    .setState(WaitForSelectorState.VISIBLE)
-                    .setTimeout(20000));
+            // ---------- FEEDBACK CONTAINER ----------
+            helper.step("VERIFY FEEDBACK CONTAINER");
+            helper.waitForVisible(
+                    feedback.getInlineFeedbackContainer(),
+                    "Inline Feedback Container"
+            );
 
-            helper.log("[Step 4 ✓] Feedback modal displayed.");
+            // ---------- BRAND NAME VALIDATION ----------
+            helper.step("VALIDATE FEEDBACK BRAND NAME");
 
-            // ⭐ Step 5 — Enter Feedback
-            helper.safeFill(feedback.getFeedbackTextarea(), FEEDBACK_TEXT, "Feedback");
-            helper.safeClick(feedback.getFeedbackSubmitBtn(), "Submit Feedback Text");
+            String companyNameFromDescription =
+                    home.getCompanyNameOnDescription().innerText().trim();
 
-            // ⭐ Step 6 — Validate Thank You Popup
-            Locator thankYou = feedback.getThankYouPopup();
-            thankYou.waitFor(new Locator.WaitForOptions()
-                    .setState(WaitForSelectorState.VISIBLE)
-                    .setTimeout(15000));
+            helper.assertEquals(
+                    feedback.getFeedbackBrandName().innerText().trim(),
+                    companyNameFromDescription,
+                    "Feedback brand name"
+            );
 
-            Assert.assertTrue(thankYou.isVisible(), "❌ Thank You popup NOT visible!");
-            helper.log("[Step 6 ✓] Thank You popup displayed.");
+            // ---------- FEEDBACK TEXTAREA ----------
+            helper.step("SUBMIT FEEDBACK");
 
-            // ⭐ Step 7 — Close Popup
-            helper.safeClick(feedback.getThankYouCloseBtn(), "Close Thank You Popup");
+            helper.assertEquals(
+                    feedback.getFeedbackTextarea()
+                            .getAttribute("placeholder"),
+                    FeedbackExpectedTexts.FEEDBACK_PLACEHOLDER,
+                    "Feedback placeholder"
+            );
 
-            helper.log("🎉 FEEDBACK FLOW AFTER LOGIN — PASSED!");
-            helper.takeScreenshot("Feedback_Login_Success");
+            helper.safeFill(
+                    feedback.getFeedbackTextarea(),
+                    FEEDBACK_TEXT,
+                    "Feedback Text"
+            );
+
+            helper.safeClick(
+                    feedback.getFeedbackSubmitBtn(),
+                    "Submit Feedback"
+            );
+
+         
+            // ---------- THANK YOU ----------
+            helper.step("VALIDATE THANK YOU POPUP");
+
+            helper.waitForVisible(
+                    feedback.getThankYouPopup(),
+                    "Thank You Popup"
+            );
+
+            Assert.assertEquals(
+                    feedback.getThankYouHeader().innerText().trim(),
+                    FeedbackExpectedTexts.THANK_YOU_HEADER
+            );
+
+            Assert.assertEquals(
+                    feedback.getThankYouMessage().innerText().trim(),
+                    FeedbackExpectedTexts.THANK_YOU_MESSAGE
+            );
+
+            helper.safeClick(
+                    feedback.getThankYouCloseBtn(),
+                    "Close Thank You Popup"
+            );
+
+            helper.pass("🎉 FEEDBACK VIA LOGIN FLOW PASSED");
 
         } catch (Exception e) {
-            helper.takeScreenshot("Feedback_Login_Failed");
-            Reporter.log("❌ Test failed: " + e.getMessage(), true);
-            Assert.fail("Test failed due to: " + e.getMessage());
+            helper.fail("❌ FEEDBACK VIA LOGIN FLOW FAILED");
+            throw e;
         }
     }
 }
-
-
 

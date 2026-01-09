@@ -11,40 +11,70 @@ public class ApplyNowPage {
         this.page = page;
     }
 
-    // ===================== APPLY NOW BUTTON =====================
+    // =========================================================
+    // APPLY NOW BUTTON
+    // =========================================================
     public Locator getApplyNowButton() {
         return page.locator("//button[contains(text(),'Apply Now')]").first();
     }
 
-    // ===================== USER DETAILS =====================
+    // =========================================================
+    // USER DETAILS
+    // =========================================================
     public Locator getNameField() {
-        return page.locator("(//div[contains(@class,'modal') and contains(@class,'show')]//input[@id='userName'])[1]");
+        return page.locator(
+                "(//div[contains(@class,'modal') and contains(@class,'show')]//input[@id='userName'])[1]"
+        );
     }
 
     public Locator getPhoneField() {
-        return page.locator("(//div[contains(@class,'modal') and contains(@class,'show')]//input[@id='userMobile'])[1]");
+        return page.locator(
+                "(//div[contains(@class,'modal') and contains(@class,'show')]//input[@id='userMobile'])[1]"
+        );
     }
 
     public Locator getEmailField() {
-        return page.locator("(//div[contains(@class,'modal') and contains(@class,'show')]//input[@id='userEmail'])[1]");
+        return page.locator(
+                "(//div[contains(@class,'modal') and contains(@class,'show')]//input[@id='userEmail'])[1]"
+        );
     }
 
+    // =========================================================
+    // INDUSTRY
+    // =========================================================
     public Locator getIndustryDropdown() {
-        return page.locator("(//div[contains(@class,'modal') and contains(@class,'show')]//div[@id='industry-dropdown'])[1]");
+        return page.locator(
+                "(//div[contains(@class,'modal') and contains(@class,'show')]//div[@id='industry-dropdown'])[1]"
+        );
     }
 
     public Locator getAllIndustryCheckboxes() {
-        return page.locator("//div[contains(@class,'modal') and contains(@class,'show')]//input[@type='checkbox']");
+        return page.locator(
+                "//div[contains(@class,'modal') and contains(@class,'show')]//input[@type='checkbox']"
+        );
     }
 
     public Locator getAskUsApplyNowButton() {
-        return page.locator("//div[contains(@class,'modal show')]//button[normalize-space()='Apply Now']");
+        return page.locator(
+                "//div[contains(@class,'modal show')]//button[normalize-space()='Apply Now']"
+        );
     }
 
-    // ===================== APPLY POPUP TEXT =====================
+    // =========================================================
+    // APPLY POPUP TEXT
+    // =========================================================
+   
     public Locator getApplyHeader() {
-        return page.locator(".modal.show .feature-content-header");
+        return page.locator(
+            "//div[contains(@class,'modal') and contains(@class,'show')]//h3[contains(@class,'feature-content-header')]"
+        );
     }
+
+
+    public Locator getApplyHeaderCompanyName() {
+        return page.locator("h3.feature-content-header span");
+    }
+
 
     public Locator getWhyRegisterHeader() {
         return page.locator(".text-content .header-text");
@@ -58,9 +88,20 @@ public class ApplyNowPage {
         return page.locator("label.form-check-label").first();
     }
 
-    // ===================== OTP =====================
+    // =========================================================
+    // WHATSAPP TOGGLE (FIXED)
+    // =========================================================
+    public Locator getWhatsappToggle() {
+        return page.locator("#enableNotifications");
+    }
+
+    // =========================================================
+    // OTP
+    // =========================================================
     public Locator getOtpInputField(int index) {
-        return page.locator("(//div[contains(@class,'modal-content')]//input[@aria-label])[" + index + "]");
+        return page.locator(
+                "(//div[contains(@class,'modal-content')]//input[@aria-label])[" + index + "]"
+        );
     }
 
     public Locator getVerifyAndProceedButton() {
@@ -83,44 +124,45 @@ public class ApplyNowPage {
         return page.locator("//p[text()='Still can’t find the OTP?']");
     }
 
-   
- // ===================== VIDEO INTERVIEW =====================
+    // =========================================================
+    // VIDEO INTERVIEW
+    // =========================================================
+    public Locator getVideoInterviewTitle() {
+        return page.locator(".otp-banner-info p.font-18.fw-500");
+    }
 
- // TITLE — uniquely identified by fw-500
- public Locator getVideoInterviewTitle() {
-     return page.locator(
-         ".otp-banner-info p.font-18.fw-500"
-     );
- }
+    public Locator getVideoInterviewDesc() {
+        return page.locator(".otp-banner-info p.font-16");
+    }
 
- // DESCRIPTION — specific font-16
- public Locator getVideoInterviewDesc() {
-     return page.locator(
-         ".otp-banner-info p.font-16"
-     );
- }
-
-
-    
-
-    // ===================== LANGUAGE =====================
+    // =========================================================
+    // LANGUAGE
+    // =========================================================
     public Locator getLanguageCard(String language) {
-        return page.locator("//div[contains(@class,'language-card')]//span[normalize-space()='" + language + "']");
+        return page.locator(
+                "//div[contains(@class,'language-card')]//span[normalize-space()='" + language + "']"
+        );
     }
 
     public Locator getSelectedLanguage() {
         return page.locator(".language-card.checked .label-text");
     }
 
-    // ===================== CALENDAR =====================
+    // =========================================================
+    // CALENDAR & TIME
+    // =========================================================
     public Locator getFirstActiveDate() {
-        return page.locator("(//span[contains(@class,'flatpickr-day') and not(contains(@class,'disabled'))])[1]");
+        return page.locator(
+                "(//span[contains(@class,'flatpickr-day') and not(contains(@class,'disabled'))])[1]"
+        );
     }
 
     public Locator getFirstActiveTimeSlot() {
-        return page.locator("(//li[contains(@class,'time-slot-box') and not(contains(@class,'disabled'))])[1]");
+        return page.locator(
+                "(//li[contains(@class,'time-slot-box') and not(contains(@class,'disabled'))])[1]"
+        );
     }
-
+    
     public Locator getSelectedDate() {
         return page.locator(".flatpickr-day.selected, .flatpickr-day.today.selected");
     }
@@ -139,9 +181,13 @@ public class ApplyNowPage {
         );
     }
 
-    // ===================== SCREENING =====================
+    // =========================================================
+    // SCREENING
+    // =========================================================
     public Locator getScreeningQuestions() {
-        return page.locator("//div[contains(@class,'interested-question-wrapper')]//div[contains(@class,'pb-1')]");
+        return page.locator(
+                "//div[contains(@class,'interested-question-wrapper')]//div[contains(@class,'pb-1')]"
+        );
     }
 
     public Locator getObjectiveOptions(Locator question) {
@@ -153,19 +199,29 @@ public class ApplyNowPage {
     }
 
     public Locator getScreeningSubmitButton() {
-        return page.locator("//button[contains(@class,'calendar-modal-custom-btn') and normalize-space()='Submit']");
+        return page.locator(
+                "//button[contains(@class,'calendar-modal-custom-btn') and normalize-space()='Submit']"
+        );
     }
 
-    // ===================== THANK YOU =====================
+    // =========================================================
+    // THANK YOU POPUP
+    // =========================================================
     public Locator getThankYouHeader() {
-        return page.locator("//div[contains(@class,'headerText') and text()='Thank You!']");
+        return page.locator(
+                "//div[contains(@class,'headerText') and text()='Thank You!']"
+        );
     }
 
-    public Locator getThankYouMessage() {
-        return page.locator("//div[contains(@class,'ThankYou-message')]");
+    public Locator getThankYouDescriptionText() {
+        return page.locator(".ThankYou-message p");
     }
 
     public Locator getThankYouMyInterestLink() {
-        return page.locator("//div[contains(@class,'ThankYouPopup-Modal')]//a[contains(@href,'myinterest')]");
+        return page.locator(
+                "//div[contains(@class,'ThankYouPopup-Modal')]//a[contains(@href,'myinterest')]"
+        );
     }
 }
+
+

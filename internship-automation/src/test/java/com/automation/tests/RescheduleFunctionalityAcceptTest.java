@@ -1,115 +1,236 @@
 package com.automation.tests;
+
 import com.automation.base.BaseClass;
+import com.automation.constants.ApplyNowExpectedTexts;
+import com.automation.constants.AdvertiserPageExpectedTexts;
 import com.automation.pages.*;
-import com.automation.utils.LoginUtility;
-import com.automation.utils.TestAccountSave;
+import com.automation.utils.HelperUtility;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import org.testng.Assert;
-import org.testng.Reporter;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class RescheduleFunctionalityAcceptTest extends BaseClass {
 
-    private HomepagePage homePage;
-    private RescheduleFunctionalityPage reschedulePage;
-    private AdvertiserPage advertiserPage;
-    private LoginUtility login;
+    private HomepagePage home;
+    private SignUpPage signup;
+    private ApplyNowPage apply;
+    private MyInterestPage myInterest;
+    private RescheduleFunctionalityPage reschedule;
+    private HelperUtility helper;
 
-    private static final String BASE_URL = "https://stage.promilo.com/";
     private static final String ADVERTISER_URL = "https://stagebusiness.promilo.com/login";
+
+    private static final String OTP = "9999";
+    private static final String PASSWORD = "Test@123";
+    private static final String INTERNSHIP_NAME = "Tester 1";
 
     private static final String ADVERTISER_EMAIL = "nidhiadvemailtesting@yopmail.com";
     private static final String ADVERTISER_PASSWORD = "promilo@123";
 
-    private String internshipName; // Loaded dynamically
+    private static final DateTimeFormatter DATE_FORMAT =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    @BeforeClass
-    public void initPages() {
-        homePage = new HomepagePage(page);
-        reschedulePage = new RescheduleFunctionalityPage(page);
-        advertiserPage = new AdvertiserPage(page);
-        login = new LoginUtility(page);
+    // ================= INIT =================
+    @BeforeMethod(alwaysRun = true)
+    public void init() {
 
-        // Load internship name saved from ApplyNow test
-        internshipName = TestAccountSave.loadAppliedInternship();
-
-        if (internshipName == null) {
-            throw new RuntimeException("❌ NO internship found — run ApplyNowEmailTest first.");
-        }
-    }
-
-    @BeforeMethod
-    public void openCandidatePortal() {
-        page.navigate(BASE_URL);
+        home = new HomepagePage(page);
+        signup = new SignUpPage(page);
+        apply = new ApplyNowPage(page);
+        myInterest = new MyInterestPage(page);
+        reschedule = new RescheduleFunctionalityPage(page);
+        helper = new HelperUtility(page);
+        page.navigate("https://stage.promilo.com/");
         page.waitForLoadState();
-        Assert.assertTrue(page.url().contains("promilo"), "❌ URL validation failed.");
     }
 
+    // ================= TEST =================
     @Test
-    public void verifyCandidateToAdvertiserRescheduleFlow() {
+    public void verifyApplyNow_Reschedule_AdvertiserAccept_FullFlow() {
+
+        Page userPage = page;
 
         try {
-            // Close popup
-            if (homePage.getMaybeLaterBtn().isVisible()) {
-                homePage.getMaybeLaterBtn().click();
+
+            helper.step("START – Apply → Reschedule → Advertiser Accept");
+
+            // ================= SIGN UP =================
+            BaseClass.candidateName = helper.generateRandomName();
+            String email = helper.generateEmailFromName(BaseClass.candidateName);
+            String phone = helper.generateRandomPhone();
+
+            helper.safeClick(signup.getInitialSignupButton(), "Sign Up");
+            helper.safeFill(signup.getEmailOrPhoneInput(), email, "Email");
+            helper.safeClick(signup.getSendVerificationCodeButton(), "Send OTP");
+            helper.safeFill(signup.getOtpInput(), OTP, "OTP");
+            helper.safeFill(signup.getPasswordInput(), PASSWORD, "Password");
+            helper.safeClick(signup.getFinalSignupButton(), "Complete Signup");
+
+            // ================= APPLY =================
+            helper.safeClick(home.getInternshipsTab(), "Internships");
+            helper.safeClick(home.getInternshipCard(INTERNSHIP_NAME), "Internship Card");
+            helper.safeClick(apply.getApplyNowButton(), "Apply Now");
+
+            helper.safeFill(apply.getNameField(), BaseClass.candidateName, "Name");
+            helper.safeFill(apply.getPhoneField(), phone, "Phone");
+
+            helper.safeClick(apply.getIndustryDropdown(), "Industry");
+            helper.safeClick(apply.getAllIndustryCheckboxes().nth(1), "Industry Option");
+            helper.safeClick(apply.getIndustryDropdown(), "Close Industry");
+            helper.safeClick(apply.getAskUsApplyNowButton(), "Submit Apply");
+
+            // ================= OTP =================
+            for (int i = 1; i <= 4; i++) {
+                apply.getOtpInputField(i)
+                        .fill(String.valueOf(OTP.charAt(i - 1)));
+            }
+            helper.safeClick(apply.getVerifyAndProceedButton(), "Verify OTP");
+
+            // ================= DATE & TIME =================
+            Locator date = apply.getFirstActiveDate();
+            helper.safeClick(date, "Select Date");
+
+            int day = Integer.parseInt(date.innerText().trim().split("\\s+")[0]);
+            LocalDate selectedDate = LocalDate.now().withDayOfMonth(day);
+            if (selectedDate.isBefore(LocalDate.now())) {
+                selectedDate = selectedDate.plusMonths(1);
             }
 
-            // ⭐ LOGIN USING SAVED ACCOUNT
-            Reporter.log("Logging in using saved ApplyNow account...", true);
-            login.loginWithSavedAccount();
+            BaseClass.selectedDate = selectedDate.format(DATE_FORMAT);
 
-            // My Interest
-            Locator myInterestTab = reschedulePage.getMyInterestTab();
-            myInterestTab.waitFor();
-            myInterestTab.click();
+            Locator time = apply.getFirstActiveTimeSlot();
+            helper.safeClick(time, "Select Time");
+            BaseClass.selectedTime = helper.normalizeTime(time.innerText());
 
-            // Internship card
-            Locator internshipCard = reschedulePage.getInternshipCard(internshipName);
-            internshipCard.waitFor();
-            internshipCard.click();
+            // ================= SCREENING =================
+            if (apply.getScreeningQuestions().count() > 0) {
+                helper.safeClick(apply.getNextButton(), "Next");
 
-            // Reschedule
-            Locator rescheduleIcon = reschedulePage.getCalendarIcon(internshipName);
-            rescheduleIcon.click();
+                for (Locator q : apply.getScreeningQuestions().all()) {
+                    if (q.locator("input").count() > 0) {
+                        helper.safeClick(q.locator("input").first(), "Option");
+                    }
+                    if (q.locator("textarea").count() > 0) {
+                        helper.safeFill(
+                                q.locator("textarea").first(),
+                                "Automated Answer",
+                                "Screening"
+                        );
+                    }
+                }
+                helper.safeClick(apply.getScreeningSubmitButton(), "Submit Screening");
+            }
 
-            Locator activeDate = reschedulePage.getFirstActiveDate();
-            activeDate.click();
+            // ================= THANK YOU =================
+            helper.assertEquals(
+                    apply.getThankYouHeader().innerText().trim(),
+                    ApplyNowExpectedTexts.THANK_YOU_HEADER,
+                    "Thank You header"
+            );
 
-            Locator timeSlot = reschedulePage.getFirstAvailableTimeSlot();
-            timeSlot.click();
+            helper.safeClick(apply.getThankYouMyInterestLink(), "My Interest");
 
-            reschedulePage.getContinueButton().click();
+            // ================= MY INTEREST – INITIAL =================
+            myInterest.open();
 
-            // Success popup
-            Locator successPopup = page.locator("//div[contains(@class,'modal-body')]");
-            successPopup.waitFor();
+            helper.assertEquals(
+                    myInterest.getMeetingDate(INTERNSHIP_NAME).innerText().trim(),
+                    BaseClass.selectedDate,
+                    "Initial meeting date"
+            );
 
-            // Close popup
-            successPopup.locator("//img[contains(@alt,'CloseIcon')]").click();
+            // ================= RESCHEDULE =================
+            helper.step("Candidate Reschedules Meeting");
 
-            // Advertiser Login
-            page.navigate(ADVERTISER_URL);
-            advertiserPage.getEmailInput().fill(ADVERTISER_EMAIL);
-            advertiserPage.getPasswordInput().fill(ADVERTISER_PASSWORD);
-            advertiserPage.getSignInButton().click();
+            helper.safeClick(
+                    myInterest.getCalendarIcon(INTERNSHIP_NAME),
+                    "Reschedule Icon"
+            );
 
-            advertiserPage.getMyAccountTab().click();
-            advertiserPage.getMyProspectTab().click();
-            advertiserPage.getInternshipsLink().click();
+            Locator rescheduleDate = reschedule.getFirstActiveDate();
+            rescheduleDate.waitFor(new Locator.WaitForOptions().setTimeout(10000));
 
-            Locator req = advertiserPage.getRescheduleRequest();
-            req.waitFor();
-            req.click();
+            String rawDateLabel = rescheduleDate.getAttribute("aria-label");
+            LocalDate parsedDate =
+                    LocalDate.parse(rawDateLabel, DateTimeFormatter.ofPattern("MMMM d, yyyy"));
 
-            advertiserPage.getAcceptRequestButton().click();
-            advertiserPage.getDoneButton().click();
+            BaseClass.rescheduledDate = parsedDate.format(DATE_FORMAT);
 
-            Reporter.log("✔ Reschedule + Accept Flow Completed!", true);
+            page.evaluate("el => el.click()", rescheduleDate.elementHandle());
 
+            Locator rescheduleTime = reschedule.getFirstAvailableTimeSlot();
+            rescheduleTime.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+
+            BaseClass.rescheduledTime =
+                    helper.normalizeTime(rescheduleTime.innerText());
+
+            helper.safeClick(rescheduleTime, "Reschedule Time");
+            helper.safeClick(reschedule.getContinueButton(), "Confirm Reschedule");
+
+            // ================= ADVERTISER =================
+            helper.step("Advertiser Accepts Reschedule");
+
+            Page advertiserPage = context.newPage();
+            advertiserPage.navigate(ADVERTISER_URL);
+            advertiserPage.waitForLoadState();
+
+            AdvertiserPage advertiser = new AdvertiserPage(advertiserPage);
+
+            helper.safeFill(advertiser.getEmailInput(), ADVERTISER_EMAIL, "Email");
+            helper.safeFill(advertiser.getPasswordInput(), ADVERTISER_PASSWORD, "Password");
+            helper.safeClick(advertiser.getSignInButton(), "Sign In");
+
+            advertiserPage.waitForLoadState();
+
+            helper.safeClick(advertiser.getMyAccountTab(), "My Account");
+            helper.safeClick(advertiser.getMyProspectTab(), "My Prospect");
+            helper.safeClick(advertiser.getInternshipsLink(), "Internships");
+
+             helper.safeClick(advertiser.getRescheduleRequest(), "Open Reschedule");
+
+            advertiser.waitForReschedulePopup();
+
+            String slotText = advertiser.getRescheduledSlotText().innerText().trim();
+
+            helper.assertEquals(
+                    slotText.split(" ")[0],
+                    BaseClass.rescheduledDate,
+                    "Advertiser reschedule date"
+            );
+
+            helper.safeClick(advertiser.getAcceptRequestButton(), "Accept");
+
+            helper.assertEquals(
+                    advertiser.getPopupMessage().innerText().trim(),
+                    AdvertiserPageExpectedTexts.RESCHEDULE_ACCEPT_SUCCESS_MESSAGE,
+                    "Accept success popup"
+            );
+
+            helper.safeClick(advertiser.getDoneButton(), "Done");
+
+            // ================= BACK TO USER =================
+            userPage.bringToFront();
+            userPage.reload();
+            myInterest.open();
+
+            helper.assertEquals(
+                    myInterest.getMeetingDate(INTERNSHIP_NAME).innerText().trim(),
+                    BaseClass.rescheduledDate,
+                    "User updated date"
+            );
+
+            helper.pass("🎉 RESCHEDULE → ADVERTISER ACCEPT FLOW PASSED");
+        
         } catch (Exception e) {
-            Assert.fail("❌ Test failed due to: " + e.getMessage());
+            helper.fail("❌ RESCHEDULE ACCEPT FLOW FAILED");
+            throw e;
         }
     }
 }
+
+
 

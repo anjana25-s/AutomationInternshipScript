@@ -1,7 +1,6 @@
 package com.automation.utils;
 
 import com.automation.pages.SignUpPage;
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
 public class SignupUtility {
@@ -14,30 +13,30 @@ public class SignupUtility {
         this.signupPage = new SignUpPage(page);
     }
 
-    // ------------------------------------------------------------
-    // SIGNUP WITH EMAIL → SAVE ACCOUNT
-    // ------------------------------------------------------------
-    public void signupWithEmail(String email, String password, String otp) {
+    // =====================================================
+    // SIGNUP USING MOBILE → SAVE ACCOUNT
+    // =====================================================
+    public void signupWithMobile(String mobile, String password, String otp) {
 
-        System.out.println("🚀 Starting Signup Flow");
+        System.out.println("🚀 Starting mobile signup");
 
         signupPage.getInitialSignupButton().click();
-
-        signupPage.getEmailOrPhoneInput().fill(email);
+        signupPage.getEmailOrPhoneInput().fill(mobile);
         signupPage.getSendVerificationCodeButton().click();
 
         signupPage.getOtpInput().fill(otp);
         signupPage.getPasswordInput().fill(password);
-
         signupPage.getFinalSignupButton().click();
 
-        Locator internshipsTab =
-                page.locator("//a[normalize-space()='Internships']");
-        internshipsTab.waitFor();
+        // wait till user is logged in
+        page.waitForLoadState();
+        page.waitForTimeout(2000);
 
-        // ⭐ Save account for login tests
-        TestAccountSave.saveAccount(email, password);
+        // ✅ Save for login tests
+        TestAccountStore.save(mobile, password);
 
-        System.out.println("✔ Signup successful & account saved");
+        System.out.println("✅ Signup successful & account saved: " + mobile);
     }
 }
+
+

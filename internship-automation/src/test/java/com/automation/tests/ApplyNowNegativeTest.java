@@ -18,7 +18,8 @@ public class ApplyNowNegativeTest extends BaseClass {
         ApplyNowPage apply = new ApplyNowPage(page);
         ApplyNowErrorMessagesPage errors = new ApplyNowErrorMessagesPage(page);
         HelperUtility helper = new HelperUtility(page);
-
+        page.navigate("https://stage.promilo.com/");
+        page.waitForLoadState();
         helper.log("==== APPLY NOW FULL NEGATIVE FLOW STARTED ====");
 
         // ------------------------------------------------------------
@@ -192,8 +193,10 @@ public class ApplyNowNegativeTest extends BaseClass {
         helper = new HelperUtility(page);
 
         page.navigate("https://stage.promilo.com/");
-        if (home.getMaybeLaterBtn().isVisible())
-            helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
+        page.waitForLoadState();
+        
+        closeMilliIfPresent();
+        closePreferenceModalIfPresent();
 
         helper.safeClick(home.getInternshipsTab(), "Open Internships Again");
 

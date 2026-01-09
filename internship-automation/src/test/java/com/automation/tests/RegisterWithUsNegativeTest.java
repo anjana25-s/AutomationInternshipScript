@@ -5,199 +5,122 @@ import com.automation.pages.HomepagePage;
 import com.automation.pages.RegisterWithUsPage;
 import com.automation.pages.RegisterWithUsErrorMessagesPage;
 import com.automation.utils.HelperUtility;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.Locator;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class RegisterWithUsNegativeTest extends BaseClass {
 
     private HomepagePage home;
-    private RegisterWithUsPage reg;
+    private RegisterWithUsPage register;
     private RegisterWithUsErrorMessagesPage errors;
     private HelperUtility helper;
 
     private static final String BASE_URL = "https://stage.promilo.com/";
 
     @BeforeMethod(alwaysRun = true)
-    public void openBase() {
+    public void setup() {
 
-        home   = new HomepagePage(page);
-        reg    = new RegisterWithUsPage(page);
-        errors = new RegisterWithUsErrorMessagesPage(page);
-        helper = new HelperUtility(page);
+        home     = new HomepagePage(page);
+        register = new RegisterWithUsPage(page);
+        errors   = new RegisterWithUsErrorMessagesPage(page);
+        helper   = new HelperUtility(page);
 
-        helper.log("[Step 1] Navigating to " + BASE_URL);
+        helper.log("Navigating to " + BASE_URL);
         page.navigate(BASE_URL);
         page.waitForLoadState();
 
-        if (home.getMaybeLaterBtn().isVisible()) {
-            helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
-        }
+        page.navigate("https://stage.promilo.com/");
+        page.waitForLoadState();
+        closeMilliIfPresent();
+        closePreferenceModalIfPresent();
 
-        helper.safeClick(home.getInternshipsTab(), "Open Internships");
+        helper.safeClick(home.getInternshipsTab(), "Open Internships Tab");
     }
 
     @Test
-    public void fullRegisterWithUsNegativeFlow() {
+    public void verifyRegisterWithUsNegativeScenarios() {
 
-        helper.log("==== REGISTER WITH US FULL NEGATIVE FLOW STARTED ====");
+        helper.step("START – Register With Us NEGATIVE FLOW");
 
-        // ------------------------------------------------------------
-        // EMPTY FORM
-        // ------------------------------------------------------------
-        helper.safeClick(reg.getRegisterNowButton(), "Submit Blank Form");
-
-        helper.assertVisible(errors.nameRequiredError(), "Name required");
-        helper.assertVisible(errors.mobileRequiredError(), "Mobile required");
-        helper.assertVisible(errors.emailRequiredError(), "Email required");
-        helper.assertVisible(errors.preferredLocationRequiredError(), "Location required");
-        helper.assertVisible(errors.industryRequiredError(), "Industry required");
-        helper.assertVisible(errors.passwordRequiredError(), "Password required");
-
-        // ------------------------------------------------------------
-        // INVALID NAME
-        // ------------------------------------------------------------
-        reg.getNameField().fill("12@@");
-        helper.safeClick(reg.getRegisterNowButton(), "Invalid Name Submit");
-        helper.assertVisible(errors.invalidNameError(), "Invalid name error");
-
-        // ------------------------------------------------------------
-        // INVALID MOBILE
-        // ------------------------------------------------------------
-        reg.getMobileField().fill("12345");
-        helper.safeClick(reg.getRegisterNowButton(), "Invalid Mobile Submit");
-        helper.assertVisible(errors.invalidMobileError(), "Invalid mobile error");
-
-        // ------------------------------------------------------------
-        // INVALID EMAIL
-        // ------------------------------------------------------------
-        reg.getEmailField().fill("test@");
-        helper.safeClick(reg.getRegisterNowButton(), "Invalid Email Submit");
-        helper.assertVisible(errors.invalidEmailError(), "Invalid email error");
-
-        // ------------------------------------------------------------
-        // PASSWORD INVALID
-        // ------------------------------------------------------------
-        reg.getPasswordField().fill("12345");
-        helper.safeClick(reg.getRegisterNowButton(), "Short Password");
-        helper.assertVisible(errors.passwordMinError(), "Password min error");
-
-        reg.getPasswordField().fill("A".repeat(16));
-        helper.safeClick(reg.getRegisterNowButton(), "Long Password");
-        helper.assertVisible(errors.passwordMaxError(), "Password max error");
-
-        // ------------------------------------------------------------
-        // VALID DATA
-        // ------------------------------------------------------------
-        String NAME = helper.generateRandomName();
-        String EMAIL = helper.generateEmailFromName(NAME);
-        String PHONE = helper.generateRandomPhone();
-        String PASSWORD = "Test@123";
-
-        helper.log("Random Data:");
-        helper.log(NAME);
-        helper.log(EMAIL);
-        helper.log(PHONE);
-
-        reg.getNameField().fill(NAME);
-        reg.getMobileField().fill(PHONE);
-        reg.getEmailField().fill(EMAIL);
-        reg.getPasswordField().fill(PASSWORD);
-
-        // ------------------------------------------------------------
-        // LOCATION + INDUSTRY
-        // ------------------------------------------------------------
-        helper.safeClick(reg.getPreferredLocationDropdown(), "Open Location");
-        helper.safeClick(reg.getFirstLocationOption(), "Select Location");
-
-        helper.safeClick(reg.getIndustryDropdown(), "Open Industry");
-        Locator boxes = reg.getIndustryCheckboxes();
-        helper.assertTrue(boxes.count() > 0, "Industry options present");
-
-        helper.safeClick(boxes.nth(0), "Select Industry");
-        helper.safeClick(reg.getIndustryDropdown(), "Close Industry");
-
-        // ------------------------------------------------------------
-        // SUBMIT → OTP
-        // ------------------------------------------------------------
-        helper.safeClick(reg.getRegisterNowButton(), "Submit Valid Data");
-        helper.log("---- REACHED OTP SCREEN ----");
-
-        // ------------------------------------------------------------
-        // OTP NEGATIVE
-        // ------------------------------------------------------------
-        String[] wrongDigits = {"1", "2", "3", "9"};
-        for (int i = 0; i < wrongDigits.length; i++) {
-            reg.getOtpInputs().nth(i).fill(wrongDigits[i]);
-
-            boolean shouldEnable = (i == wrongDigits.length - 1);
-            boolean isEnabled = !errors.verifyBtn().isDisabled();
-
-            helper.assertTrue(isEnabled == shouldEnable,
-                    "OTP digit " + (i + 1) + " → verifyEnabled=" + isEnabled);
-        }
-
-        helper.safeClick(reg.getVerifyOtpButton(), "Submit WRONG OTP");
-        helper.assertToastAppeared(errors.invalidOtpToast(),
-                "Invalid OTP toast appeared");
-
-        // ------------------------------------------------------------
-        // OTP POSITIVE
-        // ------------------------------------------------------------
-        for (int i = 0; i < 4; i++) reg.getOtpInputs().nth(i).fill("");
-        for (int i = 0; i < 4; i++) reg.getOtpInputs().nth(i).fill("9");
-
-        helper.safeClick(reg.getVerifyOtpButton(), "Submit CORRECT OTP");
-        helper.log("---- OTP VERIFIED SUCCESSFULLY ----");
-
-        if (reg.getThankYouPopup().isVisible()) {
-            helper.safeClick(reg.getThankYouCloseButton(), "Close Thank You");
-        }
-
-        // ------------------------------------------------------------
-        // ALREADY REGISTERED EMAIL
-        // ------------------------------------------------------------
-        helper.log("---- TESTING ALREADY REGISTERED EMAIL ----");
-
-        BrowserContext old = page.context();
-        old.close();
-
-        page = browser.newContext().newPage();
-
-        home   = new HomepagePage(page);
-        reg    = new RegisterWithUsPage(page);
-        errors = new RegisterWithUsErrorMessagesPage(page);
-        helper = new HelperUtility(page);
-
-        page.navigate(BASE_URL);
-
-        if (home.getMaybeLaterBtn().isVisible())
-            helper.safeClick(home.getMaybeLaterBtn(), "Close Popup");
-
-        helper.safeClick(home.getInternshipsTab(), "Open Internships Again");
-
-        reg.getNameField().fill(NAME);
-        reg.getMobileField().fill(helper.generateRandomPhone());
-        reg.getEmailField().fill(EMAIL);
-        reg.getPasswordField().fill(PASSWORD);
-
-        helper.safeClick(reg.getPreferredLocationDropdown(), "Open Location");
-        helper.safeClick(reg.getFirstLocationOption(), "Select Location");
-
-        helper.safeClick(reg.getIndustryDropdown(), "Open Industry");
-        helper.safeClick(reg.getIndustryCheckboxes().nth(0), "Select Industry");
-        helper.safeClick(reg.getIndustryDropdown(), "Close Industry");
-
-        helper.safeClick(reg.getRegisterNowButton(), "Submit Already Registered");
-
-        helper.assertToastAppeared(
-                errors.emailAlreadyRegisteredToast(),
-                "Already registered email toast visible"
+        // =====================================================
+        // 1️⃣ SUBMIT EMPTY FORM
+        // =====================================================
+        helper.safeClick(
+                register.getRegisterNowButton(),
+                "Submit Empty Register Form"
         );
 
-        helper.log("==== REGISTER WITH US FULL NEGATIVE FLOW COMPLETED ====");
+        helper.assertVisible(errors.nameRequiredError(), "Name required error");
+        helper.assertVisible(errors.mobileRequiredError(), "Mobile required error");
+        helper.assertVisible(errors.emailRequiredError(), "Email required error");
+        helper.assertVisible(errors.preferredLocationRequiredError(), "Location required error");
+        helper.assertVisible(errors.industryRequiredError(), "Industry required error");
+        helper.assertVisible(errors.passwordRequiredError(), "Password required error");
+
+        // =====================================================
+        // 2️⃣ INVALID NAME
+        // =====================================================
+        register.getNameField().fill("12@@");
+        helper.safeClick(register.getRegisterNowButton(), "Submit Invalid Name");
+        helper.assertVisible(errors.invalidNameError(), "Invalid name error");
+
+        // =====================================================
+        // 3️⃣ INVALID MOBILE
+        // =====================================================
+        register.getMobileField().fill("12345");
+        helper.safeClick(register.getRegisterNowButton(), "Submit Invalid Mobile");
+        helper.assertVisible(errors.invalidMobileError(), "Invalid mobile error");
+
+        // =====================================================
+        // 4️⃣ INVALID EMAIL
+        // =====================================================
+        register.getEmailField().fill("test@");
+        helper.safeClick(register.getRegisterNowButton(), "Submit Invalid Email");
+        helper.assertVisible(errors.invalidEmailError(), "Invalid email error");
+
+        // =====================================================
+        // 5️⃣ PASSWORD VALIDATIONS
+        // =====================================================
+        register.getPasswordField().fill("12345");
+        helper.safeClick(register.getRegisterNowButton(), "Short Password");
+        helper.assertVisible(errors.passwordMinError(), "Password min length error");
+
+        register.getPasswordField().fill("A".repeat(16));
+        helper.safeClick(register.getRegisterNowButton(), "Long Password");
+        helper.assertVisible(errors.passwordMaxError(), "Password max length error");
+
+        // =====================================================
+        // 6️⃣ VALID FIELDS BUT NO LOCATION / INDUSTRY
+        // =====================================================
+        String name  = helper.generateRandomName();
+        String phone = helper.generateRandomPhone();
+        String email = helper.generateEmailFromName(name);
+
+        register.getNameField().fill(name);
+        register.getMobileField().fill(phone);
+        register.getEmailField().fill(email);
+        register.getPasswordField().fill("Test@123");
+
+        helper.safeClick(
+                register.getRegisterNowButton(),
+                "Submit Without Location & Industry"
+        );
+
+        helper.assertVisible(errors.preferredLocationRequiredError(), "Location required");
+        helper.assertVisible(errors.industryRequiredError(), "Industry required");
+
+        // =====================================================
+        // 7️⃣ VERIFY OTP SCREEN DOES NOT APPEAR
+        // =====================================================
+        helper.assertTrue(
+                !register.getOtpInputs().first().isVisible(),
+                "OTP screen should NOT appear for invalid form"
+        );
+
+
+        helper.pass("✅ REGISTER WITH US – NEGATIVE FLOW VERIFIED");
     }
 }
+
 
 

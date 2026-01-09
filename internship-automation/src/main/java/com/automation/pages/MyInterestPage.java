@@ -11,34 +11,94 @@ public class MyInterestPage {
         this.page = page;
     }
 
-    public Locator getInterestCard() {
-        return page.locator("//div[contains(@class,'my-interest-card-contianer')]");
-    }
-
-    public Locator getCardTitle() {
-        return page.locator("//div[contains(@class,'my-interest-card-contianer')]//a[contains(@class,'card-content-header-text')]");
-    }
-
-    public Locator getCardCompany() {
-        return page.locator("//div[contains(@class,'my-interest-card-contianer')]//div[contains(@class,'category-text-interest-card')][2]");
-    }
-
-    public Locator getCardStatus() {
-        return page.locator("//div[contains(@class,'my-interest-status-tag')]");
-    }
-
-    public Locator getMeetingDate() {
+    // ================= TOP MENU =================
+    private Locator myInterestMenu() {
         return page.locator(
-            "//div[contains(@class,'card_detail-label') and normalize-space()='Meeting Date']" +
-            "/following-sibling::div[contains(@class,'card_detail-value')]"
+                "//li[contains(@class,'top-menu-bar-items')]//span[normalize-space()='My Interest']"
         );
     }
 
-    public Locator getMeetingTime() {
-        return page.locator(
-            "//div[contains(@class,'card_detail-label') and normalize-space()='Meeting Time']" +
-            "/following-sibling::div[contains(@class,'card_detail-value')]"
-        );
+    // ================= OPEN PAGE =================
+    public void open() {
+        myInterestMenu().click();
+        page.waitForLoadState();
     }
 
+    // ================= BASE CARD =================
+    private Locator interestCard(String internshipName) {
+        return page.locator(".my-preferance-card-body")
+                .filter(new Locator.FilterOptions().setHas(
+                        page.locator(
+                                "a.card-content-header-text",
+                                new Page.LocatorOptions().setHasText(internshipName)
+                        )
+                ))
+                .first();
+    }
+
+    // ================= STATUS =================
+    public Locator getStatusTag(String internshipName) {
+        return interestCard(internshipName)
+                .locator(".my-interest-status-tag");
+    }
+
+    // ================= INTERNSHIP TITLE =================
+    public Locator getInternshipTitle(String internshipName) {
+        return interestCard(internshipName)
+                .locator("a.card-content-header-text");
+    }
+
+    // ================= LOCATION =================
+    public Locator getLocation(String internshipName) {
+        return interestCard(internshipName)
+                .locator(".category-text-interest-card")
+                .first();
+    }
+
+    // ================= COMPANY NAME =================
+    public Locator getCompanyName(String internshipName) {
+        return interestCard(internshipName)
+                .locator(".card-content-sub_header-text")
+                .nth(1);
+    }
+
+    // ================= MEETING DATE =================
+    public Locator getMeetingDate(String internshipName) {
+        return interestCard(internshipName)
+                .locator(".card_detail-label:text-is('Meeting Date')")
+                .locator("xpath=following-sibling::div");
+    }
+
+    // ================= MEETING TIME =================
+    public Locator getMeetingTime(String internshipName) {
+        return interestCard(internshipName)
+                .locator(".card_detail-label:text-is('Meeting Time')")
+                .locator("xpath=following-sibling::div");
+    }
+
+    // ================= INTERVIEW MODE =================
+    public Locator getInterviewMode(String internshipName) {
+        return interestCard(internshipName)
+                .locator(".free-councel span");
+    }
+
+    // ================= RESCHEDULE ICON =================
+    public Locator getCalendarIcon(String internshipName) {
+        return interestCard(internshipName)
+                .locator("img[alt='Reschedule']")
+                .first();
+    }
+
+    // ================= FOOTER BUTTONS =================
+    public Locator getCancelButton(String internshipName) {
+        return interestCard(internshipName)
+                .locator("button:has-text('Cancel')");
+    }
+
+    public Locator getSendReminderButton(String internshipName) {
+        return interestCard(internshipName)
+                .locator("button:has-text('Send Reminder')");
+    }
 }
+
+

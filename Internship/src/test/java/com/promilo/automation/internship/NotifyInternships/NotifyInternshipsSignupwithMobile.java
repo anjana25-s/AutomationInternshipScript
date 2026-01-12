@@ -1,0 +1,113 @@
+package com.promilo.automation.internship.NotifyInternships;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import com.microsoft.playwright.Locator;
+import com.promilo.automation.internship.assignment.HomePage;
+import com.promilo.automation.internship.assignment.InternshipPage;
+import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
+import com.promilo.automation.internship.assignment.SignupPage;
+import com.promilo.automation.internship.pageobjects.NotifyInternshipsDataValidation;
+import com.promilo.automation.internship.utilities.SignUpUtility;
+
+import basetest.Baseclass;
+
+public class NotifyInternshipsSignupwithMobile extends Baseclass {
+
+    @Test
+    public void NotifyInternshipsMobile() throws InterruptedException {
+
+      
+        // 1️⃣ Initialize Signup Page
+        SignupPage signup = new SignupPage(page);
+
+        // Close the "Maybe Later" popup
+        signup.clickMaybeLater();
+
+        // Click the SIGN UP button
+         signup.clickInitialSignupButton();
+
+      // 2️⃣ Generate Random Mobile Number
+        String Mobile = SignUpUtility.generateRandomMobile();
+        System.out.println("Generated Random Mobile → " + Mobile);
+        String email = SignUpUtility.generateRandomEmail();
+        String otp = SignUpUtility.getFixedOtp();  // → always 9999
+
+
+        // Enter random mobile number
+        signup.enterEmailOrPhone(Mobile);
+
+        // Click Send Verification Code
+        signup.clickVerificationCode();
+
+        // Enter OTP (fixed 9999 from utility)
+       signup.enterMobileOtp(otp);
+
+        // Enter password
+        signup.enterPassword("Testanju12");
+
+        // Complete signup
+        signup.clickFinalSignupButton();
+
+        // Validate signup success
+        signup.isSignupSuccess();
+
+
+      
+        // 3️⃣ Navigate to Internships
+        HomePage homePage = new HomePage(page);
+        homePage.clickInternships();
+        System.out.println("Clicked Internships tab");
+
+
+        // -------------------------------
+        // 4️⃣ Select Internship Card
+        // -------------------------------
+        InternshipPage internshipPage = new InternshipPage(page);
+        internshipPage.clickAutomationTesterCard();
+
+
+        // 5️⃣ Notify Internship Flow
+        // -------------------------------
+        NotifyInternshipsPage notify = new NotifyInternshipsPage(page);
+        closeMilliIfVisible();
+        notify.clickOnNotify();
+
+        // ===================== DATA VALIDATION: NOTIFY POPUP =====================
+        NotifyInternshipsDataValidation data = new NotifyInternshipsDataValidation(page);
+
+        // Wait for header to appear
+        Locator header = data.headerText();
+        header.waitFor();
+
+        assertTrue(data.headerText().textContent().trim()
+        		.contains("Get similar internship alerts? Connect with Top companies to crack your dream internships."));
+        
+        		assertEquals(data.registerDescriptionText().textContent().trim(),
+        		"Why Register for Personalized Internship Recommendations?Discover Tailored Opportunities: Get internship recommendations that align with your skills and career goals.Real-Time Internship Alerts: Be notified instantly about internships matching your profile and interests.Direct Connection to Recruiters: Increase your chances of being shortlisted for exciting opportunities.Exclusive Career Insights: Unlock resources to enhance your application, interview skills, and professional growth.Privacy Matters: Enjoy a secure platform with no unsolicited communication or spam.Discover Tailored Opportunities: Get internship recommendations that align with your skills and career goals.Real-Time Internship Alerts: Be notified instantly about internships matching your profile and interests.Direct Connection to Recruiters: Increase your chances of being shortlisted for exciting opportunities.Exclusive Career Insights: Unlock resources to enhance your application, interview skills, and professional growth.Privacy Matters: Enjoy a secure platform with no unsolicited communication or spam.PreviousNext");
+        		assertEquals(data.whatsappNotificationText().textContent().trim(),
+        		"Enable updates & important information on Whatsapp");
+        		
+        		assertEquals(data.agreeText().textContent().trim(),
+        		"By proceeding ahead you expressly agree to the Promilo");
+
+      System.out.println("✅ Notify popup static texts validated successfully.");
+      
+        notify.enterUserName("Kalyan");
+        notify.enterEmail(email); 
+        notify.button();
+
+        // -------------------------------
+        // 6️⃣ Validate Thank You Popup
+        // -------------------------------
+        NotifyInternshipsPage thankYou = new NotifyInternshipsPage(page);
+        String actualMessage = thankYou.successPopup().textContent().trim();
+
+        System.out.println("Success message displayed: " + actualMessage);
+        Assert.assertEquals(actualMessage, "Thank You!", "Success message validation failed!");
+    }
+}

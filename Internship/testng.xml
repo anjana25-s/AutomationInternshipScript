@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<suite name="Promilo Automation Suite">
+
+    <listeners>
+        <listener class-name="listener.ListenerClass"/>
+    </listeners>
+
+   <test name="Get HR Call Tests">
+        <classes>
+           <class name="com.promilo.automation.internship.getHRcall.CallBackGuestUser"/>
+           <class name="com.promilo.automation.internship.getHRcall.CallBackSignupwithEmail"/>
+           <class name="com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile"/>
+            </classes>
+       </test>
+   </suite>

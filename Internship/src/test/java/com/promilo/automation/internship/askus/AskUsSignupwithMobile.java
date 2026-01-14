@@ -11,9 +11,9 @@ import com.promilo.automation.internship.assignment.CallbackPage;
 import com.promilo.automation.internship.assignment.HomePage;
 import com.promilo.automation.internship.assignment.InternshipPage;
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
-import com.promilo.automation.internship.assignment.SignUpUtility;
 import com.promilo.automation.internship.assignment.SignupPage;
 import com.promilo.automation.internship.pageobjects.AskusDataValidation;
+import com.promilo.automation.internship.utilities.SignUpUtility;
 
 import basetest.Baseclass;
 
@@ -67,28 +67,27 @@ public class AskUsSignupwithMobile extends Baseclass {
         askus.enterMail(email);
         askus.enterQuery("Good evening");
         
-        AskusDataValidation validation = new AskusDataValidation(page);
-
         // -------------------------
         // ASK US PAGE VALIDATIONS
         // -------------------------
-        assertTrue(
-                validation.askUsHeaderText().isVisible(),
-                "❌ Ask Us header text is not visible"
-        );
+        AskusDataValidation validation = new AskusDataValidation(page);
 
         assertEquals(
-                validation.askUsDescription().textContent().trim(),
-                "Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com.",
-                "❌ Ask Us description text mismatch"
-        );
+        		validation.askUsDescription().textContent().trim(),
+        		"Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com."
+        		);
 
-        assertTrue(
-                validation.askUsFooterText().isVisible(),
-                "❌ Ask Us footer text is not visible"
-        );
+        		assertEquals(
+        				validation.askUsHeaderText().textContent().trim(),
+        		"Share your query to get help!"
+        		);
 
-        askus.clickOnButton();
+        		assertEquals(
+        				validation.askUsFooterText().textContent().trim(),
+        		"By proceeding ahead you expressly agree to the PromiloTerms & Conditions"
+        		);
+             
+        		askus.clickOnButton();
 
         // Step 9: Success message
         NotifyInternshipsPage thankYou = new NotifyInternshipsPage(page);

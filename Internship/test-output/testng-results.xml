@@ -2,31 +2,31 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-12-27T13:24:50 IST" name="Default suite" finished-at="2025-12-27T13:25:39 IST" duration-ms="49452">
+  <suite started-at="2026-01-08T21:49:27 IST" name="Default suite" finished-at="2026-01-08T21:50:15 IST" duration-ms="47943">
     <groups>
     </groups>
-    <test started-at="2025-12-27T13:24:50 IST" name="Default test" finished-at="2025-12-27T13:25:39 IST" duration-ms="49452">
-      <class name="com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile">
-        <test-method is-config="true" signature="launchBrowser(org.testng.ITestContext)[pri:0, instance:com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile@77847718]" started-at="2025-12-27T13:24:50 IST" name="launchBrowser" finished-at="2025-12-27T13:24:55 IST" duration-ms="5119" status="PASS">
+    <test started-at="2026-01-08T21:49:27 IST" name="Default test" finished-at="2026-01-08T21:50:15 IST" duration-ms="47943">
+      <class name="com.promilo.automation.internship.askus.AskUsSignupwithEmail">
+        <test-method is-config="true" signature="launchBrowser(org.testng.ITestContext)[pri:0, instance:com.promilo.automation.internship.askus.AskUsSignupwithEmail@5c33f1a9]" started-at="2026-01-08T21:49:27 IST" name="launchBrowser" finished-at="2026-01-08T21:49:43 IST" duration-ms="15747" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[org.testng.TestRunner@49ff7d8c]]>
+                <![CDATA[org.testng.TestRunner@3899782c]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- launchBrowser -->
-        <test-method signature="HRcallTest()[pri:0, instance:com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile@77847718]" started-at="2025-12-27T13:24:55 IST" name="HRcallTest" finished-at="2025-12-27T13:25:39 IST" duration-ms="44029" status="PASS">
+        <test-method signature="AskUs1Test()[pri:0, instance:com.promilo.automation.internship.askus.AskUsSignupwithEmail@5c33f1a9]" started-at="2026-01-08T21:49:43 IST" name="AskUs1Test" finished-at="2026-01-08T21:50:14 IST" duration-ms="31665" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- HRcallTest -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile@77847718]" started-at="2025-12-27T13:25:39 IST" name="tearDown" finished-at="2025-12-27T13:25:39 IST" duration-ms="263" status="PASS">
+        </test-method> <!-- AskUs1Test -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.promilo.automation.internship.askus.AskUsSignupwithEmail@5c33f1a9]" started-at="2026-01-08T21:50:14 IST" name="tearDown" finished-at="2026-01-08T21:50:15 IST" duration-ms="438" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-      </class> <!-- com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile -->
+      </class> <!-- com.promilo.automation.internship.askus.AskUsSignupwithEmail -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

@@ -1,5 +1,8 @@
 package com.promilo.automation.internship.NotifyInternships;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -9,7 +12,7 @@ import com.promilo.automation.internship.assignment.InternshipPage;
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
 import com.promilo.automation.internship.assignment.SignupPage;
 import com.promilo.automation.internship.pageobjects.NotifyInternshipsDataValidation;
-import com.promilo.automation.internship.assignment.SignUpUtility;
+import com.promilo.automation.internship.utilities.SignUpUtility;
 
 import basetest.Baseclass;
 
@@ -27,7 +30,7 @@ public class NotifyInternshipsSignupwithEmail extends Baseclass {
         signup.clickMaybeLater();
 
         // Click the SIGN UP button
-        signup.clickInitialSignupButton();
+        signup.clickInitialSignupButton(); 
 
         // -------------------------------
         // 2️⃣ Generate Random Email
@@ -75,10 +78,9 @@ public class NotifyInternshipsSignupwithEmail extends Baseclass {
         // 5️⃣ Notify Internship Flow
         // -------------------------------
         NotifyInternshipsPage notify = new NotifyInternshipsPage(page);
-        notify.closeMilli();
+        closeMilliIfVisible();
         notify.clickOnNotify();
-        notify.enterUserName("Kalyan");
-        notify.enterNumber(mobile); 
+        
         // ===================== DATA VALIDATION: NOTIFY POPUP =====================
         NotifyInternshipsDataValidation data = new NotifyInternshipsDataValidation(page);
 
@@ -86,54 +88,38 @@ public class NotifyInternshipsSignupwithEmail extends Baseclass {
         Locator header = data.headerText();
         header.waitFor();
 
-        Assert.assertTrue(
-                header.isVisible(),
-                "❌ Notify popup header is missing"
-        );
-        System.out.println("✅ Header text visible: " + header.textContent());
+        assertTrue(data.headerText().textContent().trim()
+        		.contains("Get similar internship alerts? Connect with Top companies to crack your dream internships."));
+        
+        		assertEquals(data.registerDescriptionText().textContent().trim(),
+        		"Why Register for Personalized Internship Recommendations?Discover Tailored Opportunities: Get internship recommendations that align with your skills and career goals.Real-Time Internship Alerts: Be notified instantly about internships matching your profile and interests.Direct Connection to Recruiters: Increase your chances of being shortlisted for exciting opportunities.Exclusive Career Insights: Unlock resources to enhance your application, interview skills, and professional growth.Privacy Matters: Enjoy a secure platform with no unsolicited communication or spam.Discover Tailored Opportunities: Get internship recommendations that align with your skills and career goals.Real-Time Internship Alerts: Be notified instantly about internships matching your profile and interests.Direct Connection to Recruiters: Increase your chances of being shortlisted for exciting opportunities.Exclusive Career Insights: Unlock resources to enhance your application, interview skills, and professional growth.Privacy Matters: Enjoy a secure platform with no unsolicited communication or spam.PreviousNext");
+        		assertEquals(data.whatsappNotificationText().textContent().trim(),
+        		"Enable updates & important information on Whatsapp");
+        		
+        		assertEquals(data.agreeText().textContent().trim(),
+        		"By proceeding ahead you expressly agree to the Promilo");
 
-        Assert.assertTrue(
-                data.registerDescriptionText().isVisible(),
-                "❌ Register description text is missing"
-        );
+      System.out.println("✅ Notify popup static texts validated successfully.");
 
-        Assert.assertTrue(
-                data.whatsappNotificationText().isVisible(),
-                "❌ Whatsapp notification label is missing"
-        );
-
-        Assert.assertTrue(
-                data.agreeText().isVisible(),
-                "❌ Agreement text is missing"
-        );
-
-        System.out.println("✅ Notify popup static texts validated successfully.");
-
+        notify.enterUserName("Kalyan");
+        notify.enterNumber(mobile); 
         notify.button();
         notify.enterOtp(otp);
         
-     // ===================== DATA VALIDATION: OTP PAGE =====================
-        Assert.assertTrue(
-                data.otpPageDescription().isVisible(),
-                "❌ OTP page description missing"
-        );
+        // ===================== DATA VALIDATION: OTP PAGE =====================
+        assertEquals(data.otpPageDescription().textContent().trim(),
+        		"Start Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams.PreviousNextStart Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams.");
 
-        Assert.assertTrue(
-                data.otpVerificationHeader().isVisible(),
-                "❌ OTP verification header missing"
-        );
+        assertEquals(data.otpThanksText().textContent().trim(), "Thanks for giving your Information!");
         
-        // Wait for OTP Thanks message
-        Locator thanksText = data.otpThanksText();
-        thanksText.waitFor();
+        assertEquals(data.otpVerificationHeader().textContent().trim(), "OTP Verification");
+        
+        assertTrue(data.otpSentText().textContent().trim()
+        .contains("Enter the 4-digit verification code we just sent you to"));
+        
+        assertTrue(data.otpCantFindText().textContent().trim().contains("Still can’t find the OTP"));
 
-        Assert.assertTrue(
-                thanksText.textContent().contains("Thanks"),
-                "❌ OTP success text mismatch"
-        );
 
-        System.out.println("✅ OTP validation passed successfully.");
-       
         notify.clickSubmitButton();
         
        // -------------------------------

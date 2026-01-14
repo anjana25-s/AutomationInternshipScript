@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.promilo.automation.internship.getHRcall.CallBackRegisteredUser">
+      <class name="com.promilo.automation.internship.askus.AskUsRegisteredUser">
         <methods>
           <include name="launchBrowser"/>
           <include name="tearDown"/>
-          <include name="HRcallTest"/>
+          <include name="AskUs3Test"/>
         </methods>
-      </class> <!-- com.promilo.automation.internship.getHRcall.CallBackRegisteredUser -->
+      </class> <!-- com.promilo.automation.internship.askus.AskUsRegisteredUser -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

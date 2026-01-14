@@ -13,9 +13,10 @@ import com.promilo.automation.internship.assignment.CallbackPage;
 import com.promilo.automation.internship.assignment.HomePage;
 import com.promilo.automation.internship.assignment.InternshipPage;
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
-import com.promilo.automation.internship.assignment.SignUpUtility;
 import com.promilo.automation.internship.assignment.SignupPage;
 import com.promilo.automation.internship.pageobjects.AskusDataValidation;
+import com.promilo.automation.internship.utilities.SignUpUtility;
+import com.promilo.automation.internship.utilities.TestAccountStore;
 
 import basetest.Baseclass;
 
@@ -30,34 +31,23 @@ public class AskUsSignupwithEmail extends Baseclass {
         SignupPage signup = new SignupPage(page);
         signup.clickMaybeLater();
         signup.clickInitialSignupButton();
+        
 
         // Generate a random email & OTP
         String email = SignUpUtility.generateRandomEmail();
+        String otp = SignUpUtility.getFixedOtp();;
+        String password=SignUpUtility.generateRandomPassword();
         String mobile=SignUpUtility.generateRandomMobile();
-        String otp = SignUpUtility.getFixedOtp();  // → always 9999
-        System.out.println("Generated Email: " + email);
-
-        // Enter email
+     
         signup.enterEmailOrPhone(email);
-       
-        // Request OTP
         signup.clickVerificationCode();
-       
-       
-        // Enter fixed OTP 9999
         signup.enterEmailOtp(otp);
-      
-       // Enter Password
-        signup.enterPassword("Testautomation123");
-
-        // Final signup
+        signup.enterPassword(password);
         signup.clickFinalSignupButton();
-
-        // Validate signup success
         signup.isSignupSuccess();
 
-
-        // ------------------------
+       
+         // ------------------------
         // NAVIGATE TO INTERNSHIP
         // ------------------------
         HomePage homePage = new HomePage(page);
@@ -78,25 +68,21 @@ public class AskUsSignupwithEmail extends Baseclass {
         askus.enterQuery("Good evening");
         
         AskusDataValidation validation = new AskusDataValidation(page);
-
-        // -------------------------
-        // ASK US PAGE VALIDATIONS
-        // -------------------------
-        assertTrue(
-                validation.askUsHeaderText().isVisible(),
-                "❌ Ask Us header text is not visible"
-        );
-
         assertEquals(
-                validation.askUsDescription().textContent().trim(),
-                "Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com.",
-                "❌ Ask Us description text mismatch"
-        );
+        		validation.askUsDescription().textContent().trim(),
+        		"Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com."
+        		);
 
-        assertTrue(
-                validation.askUsFooterText().isVisible(),
-                "❌ Ask Us footer text is not visible"
-        );
+        		assertEquals(
+        				validation.askUsHeaderText().textContent().trim(),
+        		"Share your query to get help!"
+        		);
+
+        		assertEquals(
+        				validation.askUsFooterText().textContent().trim(),
+        		"By proceeding ahead you expressly agree to the PromiloTerms & Conditions"
+        		);
+
         askus.clickOnButton();
 
 
@@ -106,23 +92,30 @@ public class AskUsSignupwithEmail extends Baseclass {
         CallbackPage callback = new CallbackPage(page);
         callback.enterNumber(otp);
       
-        page.waitForSelector("//h5[text()='OTP Verification']");
+        assertEquals(
+        		validation.otpPageDescription().textContent().trim(),
+        		"Start Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams.PreviousNextStart Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams."
+        		);
+        assertEquals(
+        		validation.otpSuccessText().textContent().trim(),
+        		"Thanks for giving your Information!"
+        		);
 
-        Assert.assertTrue(
-            validation.otpHeader().isVisible(),
-            "❌ OTP header is not visible"
-        );
+        		assertEquals(
+        				validation.otpHeader().textContent().trim(),
+        		"OTP Verification"
+        		);
 
-        Assert.assertEquals(
-            validation.otpHeader().innerText().trim(),
-            "OTP Verification",
-            "❌ OTP header text mismatch"
-        );
+        		assertTrue(
+        				validation.otpDescription().textContent().trim()
+        		.contains("Enter the 4-digit verification code we just sent you to")
+        		);
 
-        Assert.assertTrue(
-            validation.otpDescription().isVisible(),
-            "❌ OTP description is not visible"
-        );
+        		assertTrue(
+        				validation.otpStillCantFind().textContent().trim()
+        		.contains("Still can’t find the OTP")
+        		);
+        		
         callback.clickSubmitButton();
 
 

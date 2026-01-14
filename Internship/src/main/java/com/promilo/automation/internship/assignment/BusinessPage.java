@@ -20,8 +20,10 @@ public class BusinessPage {
     private final Locator callBackTab;
     private final Locator approveBtn;
     private final Locator proceedBtn;
+    private final Locator doneButton;
     private final Locator rejectBtn;
     private final Locator rejectedConfirmationBtn;
+    private final Locator approvedTextMessage;
     private final Locator rejectTextMessage;
     private final Locator campaignName;
 
@@ -41,8 +43,10 @@ public class BusinessPage {
         this.callBackTab = page.locator("//a[text()='Callback/ Talk to Expert']");
         this.approveBtn = page.locator("(//span[text()='Approve'])[1]");
         this.proceedBtn = page.locator("//button[text()='Proceed']");
+        this.doneButton=page.locator("[class='btn done-btn w-100']");
         this.rejectBtn = page.locator("(//span[text()='Reject'])[1]");
         this.rejectedConfirmationBtn = page.locator("//button[@class='btn done-btn w-100']");
+        this.approvedTextMessage=page.locator("//span[text()='Approved']");
         this.rejectTextMessage=page.locator("//div[text()='Rejected']");
         this.campaignName=page.locator("(//span[text()='B2C'])[1]");
     }
@@ -92,20 +96,27 @@ public class BusinessPage {
         proceedBtn.click();
     }
 
+    public void clickDone() {
+    	doneButton.click();
+    }
     /** Click Reject button for first request */
     public void clickReject() {
         rejectBtn.click();
     }
-
+    
+    
     /** Confirm Reject action */
     public void confirmReject() {
         rejectedConfirmationBtn.click();
     }
     
+    public Locator approvedTextMessage() {
+    	return approvedTextMessage;
+    }
     public Locator rejectTextMessage() {
     	return rejectTextMessage;
     }
-    public Locator campName() {
+    public Locator campaignName() {
     	return campaignName;
     }
 }

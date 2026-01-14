@@ -1,5 +1,8 @@
 package com.promilo.automation.internship.NotifyInternships;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -9,8 +12,7 @@ import com.promilo.automation.internship.assignment.InternshipPage;
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
 import com.promilo.automation.internship.assignment.SignupPage;
 import com.promilo.automation.internship.pageobjects.NotifyInternshipsDataValidation;
-import com.promilo.automation.internship.assignment.SignUpUtility;
-
+import com.promilo.automation.internship.utilities.SignUpUtility;
 
 import basetest.Baseclass;
 
@@ -19,22 +21,17 @@ public class NotifyInternshipsSignupwithMobile extends Baseclass {
     @Test
     public void NotifyInternshipsMobile() throws InterruptedException {
 
-        // -------------------------------
+      
         // 1️⃣ Initialize Signup Page
-        // -------------------------------
         SignupPage signup = new SignupPage(page);
 
         // Close the "Maybe Later" popup
         signup.clickMaybeLater();
 
         // Click the SIGN UP button
-        
-        signup.clickInitialSignupButton();
+         signup.clickInitialSignupButton();
 
-
-        // -------------------------------
-        // 2️⃣ Generate Random Mobile Number
-        // -------------------------------
+      // 2️⃣ Generate Random Mobile Number
         String Mobile = SignUpUtility.generateRandomMobile();
         System.out.println("Generated Random Mobile → " + Mobile);
         String email = SignUpUtility.generateRandomEmail();
@@ -60,12 +57,8 @@ public class NotifyInternshipsSignupwithMobile extends Baseclass {
         signup.isSignupSuccess();
 
 
-        // -------------------------------
+      
         // 3️⃣ Navigate to Internships
-        // -------------------------------
-        
-        
-        
         HomePage homePage = new HomePage(page);
         homePage.clickInternships();
         System.out.println("Clicked Internships tab");
@@ -78,13 +71,12 @@ public class NotifyInternshipsSignupwithMobile extends Baseclass {
         internshipPage.clickAutomationTesterCard();
 
 
-        // -------------------------------
         // 5️⃣ Notify Internship Flow
         // -------------------------------
         NotifyInternshipsPage notify = new NotifyInternshipsPage(page);
-        notify.closeMilli();
+        closeMilliIfVisible();
         notify.clickOnNotify();
-        
+
         // ===================== DATA VALIDATION: NOTIFY POPUP =====================
         NotifyInternshipsDataValidation data = new NotifyInternshipsDataValidation(page);
 
@@ -92,29 +84,19 @@ public class NotifyInternshipsSignupwithMobile extends Baseclass {
         Locator header = data.headerText();
         header.waitFor();
 
-        Assert.assertTrue(
-                header.isVisible(),
-                "❌ Notify popup header is missing"
-        );
-        System.out.println("✅ Header text visible: " + header.textContent());
+        assertTrue(data.headerText().textContent().trim()
+        		.contains("Get similar internship alerts? Connect with Top companies to crack your dream internships."));
+        
+        		assertEquals(data.registerDescriptionText().textContent().trim(),
+        		"Why Register for Personalized Internship Recommendations?Discover Tailored Opportunities: Get internship recommendations that align with your skills and career goals.Real-Time Internship Alerts: Be notified instantly about internships matching your profile and interests.Direct Connection to Recruiters: Increase your chances of being shortlisted for exciting opportunities.Exclusive Career Insights: Unlock resources to enhance your application, interview skills, and professional growth.Privacy Matters: Enjoy a secure platform with no unsolicited communication or spam.Discover Tailored Opportunities: Get internship recommendations that align with your skills and career goals.Real-Time Internship Alerts: Be notified instantly about internships matching your profile and interests.Direct Connection to Recruiters: Increase your chances of being shortlisted for exciting opportunities.Exclusive Career Insights: Unlock resources to enhance your application, interview skills, and professional growth.Privacy Matters: Enjoy a secure platform with no unsolicited communication or spam.PreviousNext");
+        		assertEquals(data.whatsappNotificationText().textContent().trim(),
+        		"Enable updates & important information on Whatsapp");
+        		
+        		assertEquals(data.agreeText().textContent().trim(),
+        		"By proceeding ahead you expressly agree to the Promilo");
 
-        Assert.assertTrue(
-                data.registerDescriptionText().isVisible(),
-                "❌ Register description text is missing"
-        );
-
-        Assert.assertTrue(
-                data.whatsappNotificationText().isVisible(),
-                "❌ Whatsapp notification label is missing"
-        );
-
-        Assert.assertTrue(
-                data.agreeText().isVisible(),
-                "❌ Agreement text is missing"
-        );
-
-        System.out.println("✅ Notify popup static texts validated successfully.");
-
+      System.out.println("✅ Notify popup static texts validated successfully.");
+      
         notify.enterUserName("Kalyan");
         notify.enterEmail(email); 
         notify.button();

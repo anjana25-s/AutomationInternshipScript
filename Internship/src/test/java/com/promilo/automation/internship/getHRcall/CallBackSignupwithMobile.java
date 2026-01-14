@@ -7,12 +7,17 @@ import com.promilo.automation.internship.assignment.BusinessPage;
 import com.promilo.automation.internship.assignment.CallbackPage;
 import com.promilo.automation.internship.assignment.HomePage;
 import com.promilo.automation.internship.assignment.InternshipPage;
+import com.promilo.automation.internship.assignment.MyBillingPage;
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
 import com.promilo.automation.internship.assignment.SignupPage;
 import com.promilo.automation.internship.pageobjects.GetHRcallDataValidation;
-import com.promilo.automation.internship.assignment.SignUpUtility;
+import com.promilo.automation.internship.pageobjects.MyPreferenceCardValidation;
+import com.promilo.automation.internship.pageobjects.MyProspectCardValidation;
+import com.promilo.automation.internship.utilities.SignUpUtility;
 
 import basetest.Baseclass;
+
+import static org.testng.Assert.assertEquals;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -69,17 +74,19 @@ public class CallBackSignupwithMobile extends Baseclass {
         // ===================== HR CALL POPUP VALIDATION =====================
         GetHRcallDataValidation data = new GetHRcallDataValidation(page);
 
-        Locator header = data.getHrCallHeaderText();
-        header.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(10000));
+        String getHrCallPopUpDescription = data.getHrCallPopupDescription().textContent().trim();
+        String expectedGetHrCallPopUpDescription = "Why Register to Get an HR Callback for Your First Internship?Take Charge of Your Career: Connect with recruiters and apply for internships that match your aspirations.Stay Updated: Receive real-time notifications about internship openings tailored to your profile.Direct HR Access: Ensure your application reaches the right recruiter for prompt callback opportunities.Personalized Opportunities: Tailored internship alerts ensure you don't miss the right openings.Exclusive Resources: Unlock premium tools and tips for acing interviews and securing your dream internship.Privacy Guaranteed: Your data is safe—no unauthorized communication or spam.Take Charge of Your Career: Connect with recruiters and apply for internships that match your aspirations.Stay Updated: Receive real-time notifications about internship openings tailored to your profile.Direct HR Access: Ensure your application reaches the right recruiter for prompt callback opportunities.Personalized Opportunities: Tailored internship alerts ensure you don't miss the right openings.Exclusive Resources: Unlock premium tools and tips for acing interviews and securing your dream internship.Privacy Guaranteed: Your data is safe—no unauthorized communication or spam.PreviousNext";
+        assertEquals(getHrCallPopUpDescription, expectedGetHrCallPopUpDescription);
+        String getHrCallHeaderText = data.getHrCallHeaderText().textContent().trim();
+        String expectedGetHrCallHeaderText="Get an HR Call from UST Global!";
+        assertEquals(getHrCallHeaderText, expectedGetHrCallHeaderText);
+        String enableWhatssappNotification = data.enableWhatsappNotification().textContent().trim();
+        String expectedEnableWhatssappNotification="Enable updates & important information on Whatsapp";
+        assertEquals(enableWhatssappNotification, expectedEnableWhatssappNotification);
+        String getHrCallfooterText = data.getHrCallFooterText().textContent().trim();
+        String expectedGetHrCallfooterText="By proceeding ahead you expressly agree to the PromiloTerms & Conditions";
+        assertEquals(getHrCallfooterText, expectedGetHrCallfooterText);;
 
-        Assert.assertTrue(header.isVisible(), "❌ HR Call header text missing");
-        Assert.assertTrue(data.getHrCallPopupDescription().isVisible(), "❌ HR Call description text missing");
-        Assert.assertTrue(data.enableWhatsappNotification().isVisible(), "❌ WhatsApp notification toggle missing");
-        Assert.assertTrue(data.getHrCallFooterText().isVisible(), "❌ HR Call footer text missing");
-
-        System.out.println("✅ HR Call popup static texts validated successfully.");
-
-       
         callback.enterUserName("Anu");
         callback.emailIdField(email);
         callback.clickDropDown();
@@ -90,20 +97,24 @@ public class CallBackSignupwithMobile extends Baseclass {
         // ===================== LANGUAGE SELECTION VALIDATION =====================
         callback.clickLanguage();
         Locator languageText = data.chooseLanguageText();
-        languageText.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(10000));
-
-        Assert.assertTrue(languageText.isVisible(), "❌ Language selection text missing");
-       
-        System.out.println("✅ Language selection texts validated successfully.");
+        String nextPageText = data.nextPageInfoText().first().textContent().trim();
+        String expectedNextPageText="Get Selected Faster!Your answers will help the Recruiter select you faster to schedule an interview.";
+        assertEquals(nextPageText, expectedNextPageText);
+        page.waitForTimeout(2000);
+        String chooseLangaugeText = data.chooseLanguageText().textContent().trim();
+        String expectedChooseLangaugeText="Please Select your preferred language with UST Global. This will make it easier for you and HR to connect as you choose. ";
+        assertEquals(chooseLangaugeText, expectedChooseLangaugeText);
         callback.clickSubmit();
 
         // ===================== SCREENING PAGE & THANK YOU VALIDATION =====================
         callback.clickOncheckBox();
-        Locator screeningQuestion = data.takeMomentText();
-        screeningQuestion.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(10000));
-
-        Assert.assertTrue(data.takeMomentText().isVisible(), "❌ 'Take a moment' text missing");
-        System.out.println("✅ screening question validated successfully.");
+        Locator screeningQuestion = data.takeMomentSideText();
+        String submitPageText = data.takeMomentSideText().textContent().trim();
+        String expectedSubmitPageText="Get Selected Faster!Your answers will help the Recruiter select you faster to schedule an interview.";
+        assertEquals(submitPageText, expectedSubmitPageText);
+        String takeMomentText = data.takeMomentText().textContent().trim();
+        String expectedTakeMomentText="Please take a moment to answer the below questions.";
+        assertEquals(takeMomentText, expectedTakeMomentText);
         callback.clickOnSubmit();
         
         page.waitForLoadState();
@@ -136,11 +147,87 @@ public class CallBackSignupwithMobile extends Baseclass {
         advertiser.clickCallBack();
         advertiser.clickReject();
         advertiser.confirmReject();
+        
+     // Initialize Prospect Card Validation
+        MyProspectCardValidation prospectCard = new MyProspectCardValidation(newPage);
 
-        // Validate rejection label
-        BusinessPage MyProspect = new BusinessPage(newPage);
-        String actualMessage1 = MyProspect.rejectTextMessage().textContent().trim();
-        System.out.println(" :✅  " + actualMessage1);
-        Assert.assertEquals(actualMessage1, "Rejected", "Rejected message validation failed!");
-    }
+        // Wait until prospect card is visible
+        prospectCard.waitForProspectCard();
+
+        /* ---------------- USER NAME ---------------- */
+        String userName = prospectCard.getUserName();
+        Assert.assertFalse(
+                userName.isEmpty(),
+                "❌ User name is empty in prospect card"
+        );
+
+        /* ---------------- CAMPAIGN NAME ---------------- */
+        String campaignName = prospectCard.getCampaignName();
+        Assert.assertTrue(
+                campaignName.toUpperCase().contains("B2C"),
+                "❌ Campaign name does not contain B2C"
+        );
+
+        /* ---------------- INTEREST SHOWN DATE ---------------- */
+        String interestShownDate = prospectCard.getInterestShownDate();
+        Assert.assertFalse(
+                interestShownDate.isEmpty(),
+                "❌ Interest shown date is empty"
+        );
+
+        /* ---------------- MEETING STATUS ---------------- */
+        String meetingStatus = prospectCard.getMeetingStatus();
+        Assert.assertTrue(
+                meetingStatus.equalsIgnoreCase("Pending")
+                || meetingStatus.equalsIgnoreCase("Completed")
+                || meetingStatus.equalsIgnoreCase("Rejected"),
+                "❌ Invalid meeting status: " + meetingStatus
+        );
+
+        /* ---------------- PREFERRED LANGUAGE ---------------- */
+        String preferredLanguage = prospectCard.getPreferredLanguage();
+        Assert.assertFalse(
+                preferredLanguage.isEmpty(),
+                "❌ Preferred language is empty"
+        );
+
+
+        System.out.println("✅ My Prospect card data validated successfully.");
+
+        
+          // ===================== USER SIDE REJECTED STATUS VALIDATION =====================
+
+     // Switch back to user page (original page)
+     page.bringToFront();
+     page.waitForLoadState();
+
+     // Navigate to My Preferences 
+     CallbackPage callback1 = new CallbackPage(page);
+     callback1.myPreference();
+     
+             // Initialize preference card validation
+     MyPreferenceCardValidation preference = new MyPreferenceCardValidation(page);
+
+     // Wait for rejected tag
+     Locator rejectedTag = preference.rejectedStatusTag();
+     rejectedTag.waitFor(new Locator.WaitForOptions()
+             .setState(WaitForSelectorState.VISIBLE)
+             .setTimeout(15000));
+
+     // Assertions
+     Assert.assertTrue(
+             rejectedTag.isVisible(),
+             "❌ Rejected status tag not visible on user side"
+     );
+
+     String rejectedText = rejectedTag.textContent().trim();
+     Assert.assertEquals(
+             rejectedText,
+             "Rejected",
+             "❌ Rejected status text mismatch on user side"
+     );
+
+     System.out.println("✅ User side rejected status validated successfully");
+
+}
 }

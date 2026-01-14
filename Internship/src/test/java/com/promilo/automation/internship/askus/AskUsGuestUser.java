@@ -1,3 +1,4 @@
+
 package com.promilo.automation.internship.askus;
 
 import static org.testng.Assert.assertEquals;
@@ -13,8 +14,8 @@ import com.promilo.automation.internship.assignment.AskUsPage;
 import com.promilo.automation.internship.assignment.HomePage;
 import com.promilo.automation.internship.assignment.InternshipPage;			 	
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
-import com.promilo.automation.internship.assignment.SignUpUtility;
 import com.promilo.automation.internship.pageobjects.AskusDataValidation;
+import com.promilo.automation.internship.utilities.SignUpUtility;
 
 import basetest.Baseclass;
 
@@ -39,29 +40,26 @@ public class AskUsGuestUser extends Baseclass {
 
         AskUsPage askUsPage = new AskUsPage(page);
         askUsPage.clickAskUs();
-
+        
+         // AskUs Data Validation
         AskusDataValidation validation = new AskusDataValidation(page);
-
-        // -------------------------
-        // ASK US PAGE VALIDATIONS
-        // -------------------------
-        assertTrue(
-                validation.askUsHeaderText().isVisible(),
-                "❌ Ask Us header text is not visible"
-        );
-
+     
         assertEquals(
-                validation.askUsDescription().textContent().trim(),
-                "Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com.",
-                "❌ Ask Us description text mismatch"
-        );
+        		validation.askUsDescription().textContent().trim(),
+        		"Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com."
+        		);
 
-        assertTrue(
-                validation.askUsFooterText().isVisible(),
-                "❌ Ask Us footer text is not visible"
-        );
+        		assertEquals(
+        				validation.askUsHeaderText().textContent().trim(),
+        		"Share your query to get help!"
+        		);
 
-        // -------------------------
+        		assertEquals(
+        				validation.askUsFooterText().textContent().trim(),
+        		"By proceeding ahead you expressly agree to the PromiloTerms & Conditions"
+        		);
+
+         // -------------------------
         // FORM SUBMISSION
         // -------------------------
         String email = SignUpUtility.generateRandomEmail();
@@ -74,42 +72,40 @@ public class AskUsGuestUser extends Baseclass {
         askUsPage.enterQuery("Good evening");
         askUsPage.clickOnButton();
 
-     // ===================== OTP PAGE VALIDATION =====================
-        page.waitForSelector("//h5[text()='OTP Verification']");
+        assertEquals(
+        		validation.otpPageDescription().textContent().trim(),
+        		"Start Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams.PreviousNextStart Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams."
+        		);
+        assertEquals(
+        		validation.otpSuccessText().textContent().trim(),
+        		"Thanks for giving your Information!"
+        		);
 
-        Assert.assertTrue(
-            validation.otpHeader().isVisible(),
-            "❌ OTP header is not visible"
-        );
+        		assertEquals(
+        				validation.otpHeader().textContent().trim(),
+        		"OTP Verification"
+        		);
 
-        Assert.assertEquals(
-            validation.otpHeader().innerText().trim(),
-            "OTP Verification",
-            "❌ OTP header text mismatch"
-        );
+        		assertTrue(
+        				validation.otpDescription().textContent().trim()
+        		.contains("Enter the 4-digit verification code we just sent you to")
+        		);
 
-        Assert.assertTrue(
-            validation.otpDescription().isVisible(),
-            "❌ OTP description is not visible"
-        );
+        		assertTrue(
+        				validation.otpStillCantFind().textContent().trim()
+        		.contains("Still can’t find the OTP")
+        		);
 
 
-        // Enter OTP
+       // Enter OTP
         askUsPage.enterOtp(otp);
         askUsPage.clickVerify();
 
-     // ================= THANK YOU POPUP VALIDATION =================
-
-     // Wait for Thank You header
-     page.waitForSelector( ".ThankYouPopup-Modal .headerText",
-         new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE)
-     );
-
-     // Visibility check
-     Assert.assertTrue(
-    		 validation.thankYouHeader().isVisible(),
-         "❌ Thank You popup is not displayed"
-     );
+        Assert.assertEquals(
+                validation.thankYouHeader().textContent().trim(),
+                "Thank You!",
+                "❌ Thank You popup header text mismatch"
+        );
 
      
   // -------------------- FINAL SUCCESS MESSAGE --------------------

@@ -1,11 +1,15 @@
 package com.promilo.automation.internship.NotifyInternships;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import com.microsoft.playwright.Locator;
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
-import com.promilo.automation.internship.assignment.SignUpUtility;
 import com.promilo.automation.internship.pageobjects.NotifyInternshipsDataValidation;
+import com.promilo.automation.internship.utilities.SignUpUtility;
+
 import basetest.Baseclass;
 
 public class NotifyInternshipsGuestUser extends Baseclass {
@@ -29,28 +33,18 @@ public class NotifyInternshipsGuestUser extends Baseclass {
         Locator header = data.headerText();
         header.waitFor();
 
-        Assert.assertTrue(
-                header.isVisible(),
-                "❌ Notify popup header is missing"
-        );
-        System.out.println("✅ Header text visible: " + header.textContent());
+        assertTrue(data.headerText().textContent().trim()
+        		.contains("Get similar internship alerts? Connect with Top companies to crack your dream internships."));
+        
+        		assertEquals(data.registerDescriptionText().textContent().trim(),
+        		"Why Register for Personalized Internship Recommendations?Discover Tailored Opportunities: Get internship recommendations that align with your skills and career goals.Real-Time Internship Alerts: Be notified instantly about internships matching your profile and interests.Direct Connection to Recruiters: Increase your chances of being shortlisted for exciting opportunities.Exclusive Career Insights: Unlock resources to enhance your application, interview skills, and professional growth.Privacy Matters: Enjoy a secure platform with no unsolicited communication or spam.Discover Tailored Opportunities: Get internship recommendations that align with your skills and career goals.Real-Time Internship Alerts: Be notified instantly about internships matching your profile and interests.Direct Connection to Recruiters: Increase your chances of being shortlisted for exciting opportunities.Exclusive Career Insights: Unlock resources to enhance your application, interview skills, and professional growth.Privacy Matters: Enjoy a secure platform with no unsolicited communication or spam.PreviousNext");
+        		assertEquals(data.whatsappNotificationText().textContent().trim(),
+        		"Enable updates & important information on Whatsapp");
+        		
+        		assertEquals(data.agreeText().textContent().trim(),
+        		"By proceeding ahead you expressly agree to the Promilo");
 
-        Assert.assertTrue(
-                data.registerDescriptionText().isVisible(),
-                "❌ Register description text is missing"
-        );
-
-        Assert.assertTrue(
-                data.whatsappNotificationText().isVisible(),
-                "❌ Whatsapp notification label is missing"
-        );
-
-        Assert.assertTrue(
-                data.agreeText().isVisible(),
-                "❌ Agreement text is missing"
-        );
-
-        System.out.println("✅ Notify popup static texts validated successfully.");
+      System.out.println("✅ Notify popup static texts validated successfully.");
 
         // ===================== USER DATA ENTRY =====================
         String email = SignUpUtility.generateRandomEmail();
@@ -66,15 +60,18 @@ public class NotifyInternshipsGuestUser extends Baseclass {
         notify.button();
 
         // ===================== DATA VALIDATION: OTP PAGE =====================
-        Assert.assertTrue(
-                data.otpPageDescription().isVisible(),
-                "❌ OTP page description missing"
-        );
+        assertEquals(data.otpPageDescription().textContent().trim(),
+        		"Start Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams.PreviousNextStart Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams.");
 
-        Assert.assertTrue(
-                data.otpVerificationHeader().isVisible(),
-                "❌ OTP verification header missing"
-        );
+        assertEquals(data.otpThanksText().textContent().trim(), "Thanks for giving your Information!");
+        
+        assertEquals(data.otpVerificationHeader().textContent().trim(), "OTP Verification");
+        
+        assertTrue(data.otpSentText().textContent().trim()
+        .contains("Enter the 4-digit verification code we just sent you to"));
+        
+        assertTrue(data.otpCantFindText().textContent().trim().contains("Still can’t find the OTP"));
+
 
         // Enter OTP
         notify.enterOtp(otp);
@@ -95,24 +92,8 @@ public class NotifyInternshipsGuestUser extends Baseclass {
         Locator thankYouPopup = data.thankYouPopup();
         thankYouPopup.waitFor();
 
-        Assert.assertTrue(
-                thankYouPopup.isVisible(),
-                "❌ Thank You popup not visible"
-        );
-
-        Assert.assertTrue(
-                data.thankYouMessageText().isVisible(),
-                "❌ Thank You message text missing"
-        );
-
-        String actualMessage = data.thankYouMessageText().textContent().trim();
-        System.out.println("✅ Success message displayed: " + actualMessage);
-
-        Assert.assertTrue(
-            actualMessage.toLowerCase().contains("thank you"),
-            "❌ Success message validation failed! Expected text to contain 'Thank you'"
-        );
-
-        System.out.println("Notify Internships data validations passed successfully!");
+        assertEquals(data.thankYouMessageText().textContent().trim(),
+        		"Thank You!Thank you for registering and requesting a similar internships alert. Check your email, notifications, and WhatsApp for the latest recommendations.Build, update, or upload your resume to get an interview approved and help the recruiter get to know you better.Build ResumeUpload Resume");
+          System.out.println("Notify Internships data validations passed successfully!");
     }
 }

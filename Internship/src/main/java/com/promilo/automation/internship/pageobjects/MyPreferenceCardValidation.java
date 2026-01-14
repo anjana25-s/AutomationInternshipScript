@@ -12,6 +12,8 @@ public class MyPreferenceCardValidation {
     private final Locator duration;
     private final Locator stipend;
     private final Locator serviceName;
+    private final Locator completedStatusTag;
+    private final Locator rejectedStatusTag;
   
     
      public MyPreferenceCardValidation(Page page) {
@@ -23,14 +25,17 @@ public class MyPreferenceCardValidation {
             this.duration=page.locator("//div[text()='6 Months']");
             this.stipend=page.locator("//span[text()='25K - 35K']");
             this.serviceName=page.locator("[class='service-name']");
-     }
+            this.completedStatusTag=page.locator("//span[text()='Completed']");
+            this.rejectedStatusTag=page.locator("//span[text()='Rejected']");
+            }
 
-     
      public Locator internshipRole() {return internshipRole;}
      public Locator location() {return location;}
      public Locator brandName() {return brandName;}
      public Locator duration() {return duration;}
      public Locator stipend() {return stipend;}
      public Locator serviceName() {return serviceName;}
+     public Locator completedStatusTag() {return completedStatusTag;}
+     public Locator rejectedStatusTag() { return rejectedStatusTag;}
     
 }

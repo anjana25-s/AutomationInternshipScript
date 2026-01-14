@@ -8,8 +8,7 @@ public class NotifyInternshipsPage {
 	// Locators representing UI elements on the Internship page
 	private final Locator internshipsTab;
     private final Locator bankManagerCard;
-    private final Locator milliClose;
-	private final Locator clickNotifyInternship;
+    private final Locator clickNotifyInternship;
 	private final Locator userName;
 	private final Locator guestUserName;
 	private final Locator mobileNumber;
@@ -33,9 +32,8 @@ public class NotifyInternshipsPage {
 		
 		this.bankManagerCard = page.locator("//h3[text()='Artificial Intelligence']");
 		// Click button for "Notify Similar Internships"
-		 this.milliClose= page.locator("//div[contains(@class,'chatbot-header')]//img[contains(@src,'closeMiliIcon')]");
-
-		this.clickNotifyInternship=page.locator("(//button[text()='Notify Similar Internships'])[1]");
+		 
+		this.clickNotifyInternship=page.locator("//button[text()='Notify Similar Internships']");
 		// Form input fields
 		this.userName=page.locator("[placeholder='Name*']");
 		this.guestUserName=page.locator("(//input[@placeholder='Name*'])[2]");
@@ -73,16 +71,10 @@ public class NotifyInternshipsPage {
 
 	}
 	
-	public void closeMilli() {
-		milliClose.waitFor();
-		milliClose.click();
-	}
-
 	// Click Notify Similar Internships CTA
 	public void clickOnNotify() {
-		//clickNotifyInternship.click();
 		clickNotifyInternship.first().click();
-		page.waitForTimeout(2000);
+		page.waitForTimeout(4000);
 	}
 
 	// Enter Username into input field

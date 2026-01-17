@@ -33,6 +33,7 @@ public class AskUsGuestUser extends Baseclass {
         // Navigation Flow
         // -------------------------
         HomePage homePage = new HomePage(page);
+        
         homePage.clickInternships();
 
         InternshipPage internshipPage = new InternshipPage(page);

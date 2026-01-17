@@ -16,6 +16,7 @@ public class Filters16cardsPages {
  // Popup and Navigation
     private final Locator closePopup;
     private final Locator internshipsTab;
+    private final Locator companyType;
 // Filter Elements
     private final Locator b2cOption;
     private final Locator locationDropdown;
@@ -37,6 +38,7 @@ public class Filters16cardsPages {
 
         this.closePopup = page.locator("//img[@alt='Close']");
         this.internshipsTab = page.locator("//a[text()='Internships']");
+        this.companyType=page.locator("//p[text()='Company Type']");
         this.b2cOption = page.locator("//p[text()='B2C']");
         this.locationDropdown = page.locator("//p[text()='Location']");
         this.searchLocation = page.locator("//input[@placeholder='Search Location']");
@@ -68,11 +70,19 @@ public class Filters16cardsPages {
         internshipsTab.click();
         page.waitForTimeout(2000);
        }
-    /** Select B2C filter category */
-     public void selectB2C() {
-        b2cOption.click();
-        page.waitForTimeout(2000);
+    
+    public void clickCompanyType() {
+    	companyType.click();
+    	page.waitForTimeout(2000);
     }
+    /** Select B2C filter category */
+    public void selectB2C() {
+        b2cOption.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE));
+        b2cOption.scrollIntoViewIfNeeded();
+        b2cOption.click();
+    }
+
      /** Click on Location filter dropdown */
     public void clickLocation() {
     	locationDropdown.click();

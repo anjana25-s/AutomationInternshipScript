@@ -46,7 +46,9 @@ public class ListenerClass implements ITestListener {
     //  When Test Suite Starts
     @Override
     public void onStart(ITestContext context) {
-        extent = createInstance();
+        if (extent == null) {
+            extent = createInstance();
+        }
         System.out.println("====== Test Suite Started ======");
     }
 

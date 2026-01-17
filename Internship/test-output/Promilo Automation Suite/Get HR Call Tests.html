@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>Get HR Call Tests</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>3/0/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>3/1/0</td>
 </tr><tr>
-<td>Started on:</td><td>Thu Dec 18 17:37:09 IST 2025</td>
+<td>Started on:</td><td>Sat Jan 17 20:48:37 IST 2026</td>
 </tr>
-<tr><td>Total time:</td><td>164 seconds (164552 ms)</td>
+<tr><td>Total time:</td><td>268 seconds (268978 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -67,6 +67,194 @@ function toggleAllBoxes() {
 </tr>
 </table><p/>
 <small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-failed'>
+<tr><td colspan='4' align='center'><b>FAILED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td><b>Attribute(s)</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile.HRcallTest()'><b>HRcallTest</b><br>Test class: com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile</td>
+<td><div><pre>com.microsoft.playwright.TimeoutError: Error {
+  message=&apos;Timeout 30000ms exceeded.
+  name=&apos;TimeoutError
+  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\progress.js:76:26)
+    at Frame.fill (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\frames.js:1006:23)
+    at FrameDispatcher.fill (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\frameDispatcher.js:129:30)
+    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\dispatcher.js:88:40)
+    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\dispatcher.js:309:39)
+}
+Call log:
+-   - waiting for locator(&quot;//input[@name=&apos;userName&apos;]&quot;).first()
+-     - locator resolved to &lt;input disabled type=&quot;text&quot; id=&quot;userName&quot; name=&quot;userName&quot; value=&quot;Gokul Ram&quot; placeholder=&quot;Name*&quot; class=&quot;form-control&quot;/&gt;
+-     - fill(&quot;Anu&quot;)
+-   - attempting fill action
+-     2 × waiting for element to be visible, enabled and editable
+-       - element is not enabled
+-     - retrying fill action
+-     - waiting 20ms
+-     2 × waiting for element to be visible, enabled and editable
+-       - element is not enabled
+-     - retrying fill action
+-       - waiting 100ms
+-     38 × waiting for element to be visible, enabled and editable
+-        - element is not enabled
+-      - retrying fill action
+-        - waiting 500ms
+-     - waiting for element to be visible, enabled and editable
+-   - element was detached from the DOM, retrying
+
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:138)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:131)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:124)
+	at com.microsoft.playwright.impl.FrameImpl.fill(FrameImpl.java:300)
+	at com.microsoft.playwright.impl.LocatorImpl.fill(LocatorImpl.java:244)
+	at com.microsoft.playwright.Locator.fill(Locator.java:3105)
+	at com.promilo.automation.internship.assignment.CallbackPage.enterUserName(CallbackPage.java:110)
+	at com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile.HRcallTest(CallBackSignupwithMobile.java:81)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message=&apos;Timeout 30000ms exceeded.
+  name=&apos;TimeoutError
+  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\progress.js:76:26)
+    at Frame.fill (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\frames.js:1006:23)
+    at FrameDispatcher.fill (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\frameDispatcher.js:129:30)
+    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\dispatcher.js:88:40)
+    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\dispatcher.js:309:39)
+}
+Call log:
+-   - waiting for locator(&quot;//input[@name=&apos;userName&apos;]&quot;).first()
+-     - locator resolved to &lt;input disabled type=&quot;text&quot; id=&quot;userName&quot; name=&quot;userName&quot; value=&quot;Gokul Ram&quot; placeholder=&quot;Name*&quot; class=&quot;form-control&quot;/&gt;
+-     - fill(&quot;Anu&quot;)
+-   - attempting fill action
+-     2 × waiting for element to be visible, enabled and editable
+-       - element is not enabled
+-     - retrying fill action
+-     - waiting 20ms
+-     2 × waiting for element to be visible, enabled and editable
+-       - element is not enabled
+-     - retrying fill action
+-       - waiting 100ms
+-     38 × waiting for element to be visible, enabled and editable
+-        - element is not enabled
+-      - retrying fill action
+-        - waiting 500ms
+-     - waiting for element to be visible, enabled and editable
+-   - element was detached from the DOM, retrying
+
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:257)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:214)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:136)
+	... 33 more
+... Removed 25 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1075082007", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1075082007'><pre>com.microsoft.playwright.TimeoutError: Error {
+  message=&apos;Timeout 30000ms exceeded.
+  name=&apos;TimeoutError
+  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\progress.js:76:26)
+    at Frame.fill (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\frames.js:1006:23)
+    at FrameDispatcher.fill (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\frameDispatcher.js:129:30)
+    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\dispatcher.js:88:40)
+    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\dispatcher.js:309:39)
+}
+Call log:
+-   - waiting for locator(&quot;//input[@name=&apos;userName&apos;]&quot;).first()
+-     - locator resolved to &lt;input disabled type=&quot;text&quot; id=&quot;userName&quot; name=&quot;userName&quot; value=&quot;Gokul Ram&quot; placeholder=&quot;Name*&quot; class=&quot;form-control&quot;/&gt;
+-     - fill(&quot;Anu&quot;)
+-   - attempting fill action
+-     2 × waiting for element to be visible, enabled and editable
+-       - element is not enabled
+-     - retrying fill action
+-     - waiting 20ms
+-     2 × waiting for element to be visible, enabled and editable
+-       - element is not enabled
+-     - retrying fill action
+-       - waiting 100ms
+-     38 × waiting for element to be visible, enabled and editable
+-        - element is not enabled
+-      - retrying fill action
+-        - waiting 500ms
+-     - waiting for element to be visible, enabled and editable
+-   - element was detached from the DOM, retrying
+
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:138)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:131)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:124)
+	at com.microsoft.playwright.impl.FrameImpl.fill(FrameImpl.java:300)
+	at com.microsoft.playwright.impl.LocatorImpl.fill(LocatorImpl.java:244)
+	at com.microsoft.playwright.Locator.fill(Locator.java:3105)
+	at com.promilo.automation.internship.assignment.CallbackPage.enterUserName(CallbackPage.java:110)
+	at com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile.HRcallTest(CallBackSignupwithMobile.java:81)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.testng.TestRunner.privateRun(TestRunner.java:739)
+	at org.testng.TestRunner.run(TestRunner.java:614)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+	at org.testng.TestNG.runSuites(TestNG.java:1112)
+	at org.testng.TestNG.run(TestNG.java:1079)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message=&apos;Timeout 30000ms exceeded.
+  name=&apos;TimeoutError
+  stack=&apos;TimeoutError: Timeout 30000ms exceeded.
+    at ProgressController.run (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\progress.js:76:26)
+    at Frame.fill (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\frames.js:1006:23)
+    at FrameDispatcher.fill (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\frameDispatcher.js:129:30)
+    at FrameDispatcher._handleCommand (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\dispatcher.js:88:40)
+    at DispatcherConnection.dispatch (C:\Users\Admin\AppData\Local\Temp\playwright-java-9626663354748089108\package\lib\server\dispatchers\dispatcher.js:309:39)
+}
+Call log:
+-   - waiting for locator(&quot;//input[@name=&apos;userName&apos;]&quot;).first()
+-     - locator resolved to &lt;input disabled type=&quot;text&quot; id=&quot;userName&quot; name=&quot;userName&quot; value=&quot;Gokul Ram&quot; placeholder=&quot;Name*&quot; class=&quot;form-control&quot;/&gt;
+-     - fill(&quot;Anu&quot;)
+-   - attempting fill action
+-     2 × waiting for element to be visible, enabled and editable
+-       - element is not enabled
+-     - retrying fill action
+-     - waiting 20ms
+-     2 × waiting for element to be visible, enabled and editable
+-       - element is not enabled
+-     - retrying fill action
+-       - waiting 100ms
+-     38 × waiting for element to be visible, enabled and editable
+-        - element is not enabled
+-      - retrying fill action
+-        - waiting 500ms
+-     - waiting for element to be visible, enabled and editable
+-   - element was detached from the DOM, retrying
+
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:257)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:214)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:136)
+	... 33 more
+</pre></div></td>
+<td>53</td>
+<td>com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile@6150c3ec</td></tr>
+</table><p>
 <table width='100%' border='1' class='invocation-passed'>
 <tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
 <tr><td><b>Test method</b></td>
@@ -76,20 +264,20 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='com.promilo.automation.internship.getHRcall.CallBackGuestUser.HRcallTest()'><b>HRcallTest</b><br>Test class: com.promilo.automation.internship.getHRcall.CallBackGuestUser</td>
+<td title='com.promilo.automation.internship.getHRcall.CallBackRegisteredUser.HRcallTest()'><b>HRcallTest</b><br>Test class: com.promilo.automation.internship.getHRcall.CallBackRegisteredUser</td>
 <td></td>
-<td>37</td>
-<td>com.promilo.automation.internship.getHRcall.CallBackGuestUser@35cabb2a</td></tr>
+<td>50</td>
+<td>com.promilo.automation.internship.getHRcall.CallBackRegisteredUser@1573f9fc</td></tr>
 <tr>
 <td title='com.promilo.automation.internship.getHRcall.CallBackSignupwithEmail.HRcallTest()'><b>HRcallTest</b><br>Test class: com.promilo.automation.internship.getHRcall.CallBackSignupwithEmail</td>
 <td></td>
-<td>67</td>
-<td>com.promilo.automation.internship.getHRcall.CallBackSignupwithEmail@31304f14</td></tr>
+<td>87</td>
+<td>com.promilo.automation.internship.getHRcall.CallBackSignupwithEmail@5542c4ed</td></tr>
 <tr>
-<td title='com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile.HRcallTest()'><b>HRcallTest</b><br>Test class: com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile</td>
+<td title='com.promilo.automation.internship.getHRcall.CallBackGuestUser.CallBackGuestUser()'><b>CallBackGuestUser</b><br>Test class: com.promilo.automation.internship.getHRcall.CallBackGuestUser</td>
 <td></td>
-<td>50</td>
-<td>com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile@34a3d150</td></tr>
+<td>39</td>
+<td>com.promilo.automation.internship.getHRcall.CallBackGuestUser@815b41f</td></tr>
 </table><p>
 </body>
 </html>

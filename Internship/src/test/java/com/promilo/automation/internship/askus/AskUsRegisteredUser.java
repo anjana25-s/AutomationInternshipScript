@@ -23,12 +23,11 @@ public class AskUsRegisteredUser extends Baseclass{
 @Test
 	public void AskUs3Test() throws InterruptedException{
 		
-        LoginPage loginPage = new LoginPage(page);
-        loginPage.clickMaybeLater();
-       loginPage.clickLoginButtonOnHome();
-       loginPage.enterEmail("9000029985");
-       loginPage.enterPassword("qwertyui");
-        loginPage.clickLoginSubmit();
+     
+ // ---------- LOGIN USING UTILITY ----------
+    LoginUtility loginUtil = new LoginUtility(page);
+    loginUtil.loginWithSavedUser();  
+
 	
 	  HomePage homePage = new HomePage(page);
         homePage.clickInternships();

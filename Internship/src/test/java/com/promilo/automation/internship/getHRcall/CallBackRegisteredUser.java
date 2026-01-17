@@ -10,7 +10,7 @@ import com.promilo.automation.internship.assignment.InternshipPage;
 import com.promilo.automation.internship.assignment.LoginPage;
 import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
 import com.promilo.automation.internship.pageobjects.GetHRcallDataValidation;
-
+import com.promilo.automation.internship.utilities.LoginUtility;
 
 import basetest.Baseclass;
 
@@ -27,13 +27,10 @@ public class CallBackRegisteredUser extends Baseclass {
     @Test
     public void HRcallTest() throws InterruptedException {
        
-        LoginPage loginPage = new LoginPage(page);
-      loginPage.clickMaybeLater();
-       loginPage.clickLoginButtonOnHome();
-       loginPage.enterEmail("9000029985");
-       loginPage.enterPassword("qwertyui");
-        loginPage.clickLoginSubmit();
-        
+      // ---------- LOGIN USING UTILITY ----------
+        LoginUtility loginUtil = new LoginUtility(page);
+        loginUtil.loginWithSavedUser();  
+
         HomePage homePage = new HomePage(page);
         homePage.clickInternships();
         System.out.println("Clicked Internships tab");

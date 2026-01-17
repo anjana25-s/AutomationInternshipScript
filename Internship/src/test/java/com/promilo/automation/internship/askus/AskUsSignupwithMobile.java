@@ -24,31 +24,20 @@ public class AskUsSignupwithMobile extends Baseclass {
 
         SignupPage signup = new SignupPage(page);
 
-        // Step 1: Popup
         signup.clickMaybeLater();
-
-        // Step 2: Sign Up
         signup.clickInitialSignupButton();
 
         // Step 3: Generate random mobile
         String mobileNumber = SignUpUtility.generateRandomMobile();
         System.out.println("Generated Mobile: " + mobileNumber);
+        String password=SignUpUtility.generateRandomPassword();
         String otp = SignUpUtility.getFixedOtp();  // → always 9999
         String email = SignUpUtility.generateRandomEmail();
 
         signup.enterEmailOrPhone(mobileNumber);
-
-        // Step 4: OTP flow
         signup.clickVerificationCode();
-        
-     // Enter fixed OTP 9999
-      signup.enterMobileOtp(otp);
-        
-        // Step 5: Password
-        signup.enterPassword("Testautomation123");
-
-        // Step 6: Final Sign Up
-        
+        signup.enterMobileOtp(otp);
+        signup.enterPassword(password);
         signup.clickFinalSignupButton();
         signup.isSignupSuccess();
 

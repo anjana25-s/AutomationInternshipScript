@@ -16,17 +16,18 @@ public class FiltersSearchPage {
 	     * Navigate to the Internships section through the menu
 	     */
 	    public void goToInternshipsSection() {
-	        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Internships").setExact(true)).click();
-	        page.waitForTimeout(2000);
+	    	  page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Search Colleges, Courses,")).click();
+	         page.waitForTimeout(2000);
+	         page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Search Internships")).click();
+		        page.waitForTimeout(2000);
 	    }
 	    /**
 	     * Search internships using the search bar and filter list suggestion
 	     */
 	    public void searchInternships() {
-	        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Search Internships")).click();
-	        page.waitForTimeout(2000);
+	       
 	        // Click on the first suggestion from dropdown list
-	        page.getByRole(AriaRole.LISTITEM).filter(new Locator.FilterOptions().setHasText("Internships")).locator("span").click();
+	       page.getByRole(AriaRole.LISTITEM).filter(new Locator.FilterOptions().setHasText("Internships")).locator("span").click();
 	        page.waitForTimeout(1000);
 	    }
 

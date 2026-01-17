@@ -20,7 +20,7 @@ public class SearchPageFilters extends Baseclass {
          internship.filterByWorkMode();
          internship.filterByStipend();
          internship.filterByIndustryAndJobRole();
-         internship.clearAllFilters();   
+         internship.clearAllFilters();
 
     }
     	}	

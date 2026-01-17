@@ -19,10 +19,11 @@ public class ListingPageFilters extends Baseclass {
         Filters16cardsPages internship = new Filters16cardsPages(page);
 
        internship.openWebsite("https://stage.promilo.com/");
-        //internship.closePopup();
+      
         internship.clickInternshipsTab();
-       // internship.selectB2C();
-       
+        page.waitForTimeout(2000);
+        internship.clickCompanyType();
+        internship.selectB2C();
         internship.clickLocation();
         internship.searchAndSelectLocation("Bihar");
         internship.clickDuration();

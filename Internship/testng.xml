@@ -3,14 +3,34 @@
 <suite name="Promilo Automation Suite">
 
     <listeners>
-        <listener class-name="listener.ListenerClass"/>
+        <listener class-name="com.promilo.automation.internship.listener.ListenerClass"/>
     </listeners>
 
-   <test name="Get HR Call Tests">
+   <test name="Ask Us Tests">
+        <classes>
+           <class name="com.promilo.automation.internship.askus.AskUsGuestUser"/>
+           <class name="com.promilo.automation.internship.askus.AskUsSignupwithEmail"/>
+           <class name="com.promilo.automation.internship.askus.AskUsRegisteredUser"/>
+           <class name="com.promilo.automation.internship.askus.AskUsSignupwithMobile"/>
+           </classes>
+       </test>
+       
+       <test name="Get HR Call Tests">
         <classes>
            <class name="com.promilo.automation.internship.getHRcall.CallBackGuestUser"/>
            <class name="com.promilo.automation.internship.getHRcall.CallBackSignupwithEmail"/>
+            <class name="com.promilo.automation.internship.getHRcall.CallBackRegisteredUser"/>
            <class name="com.promilo.automation.internship.getHRcall.CallBackSignupwithMobile"/>
-            </classes>
+           </classes>
        </test>
-   </suite>
+       
+       
+        <test name="Notify Internships Tests">
+        <classes>
+           <class name="com.promilo.automation.internship.NotifyInternships.NotifyInternshipsGuestUser"/>
+           <class name="com.promilo.automation.internship.NotifyInternships.NotifyInternshipsSignupwithEmail"/>
+            <class name="com.promilo.automation.internship.NotifyInternships.NotifyInternshipsRegisteredUser"/>
+           <class name="com.promilo.automation.internship.NotifyInternships.NotifyInternshipsSignupwithMobile"/>
+           </classes>
+       </test>
+       </suite>

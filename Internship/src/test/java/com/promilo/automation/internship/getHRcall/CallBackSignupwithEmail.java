@@ -15,6 +15,7 @@ import com.promilo.automation.internship.pageobjects.GetHRcallDataValidation;
 import com.promilo.automation.internship.pageobjects.MyPreferenceCardValidation;
 import com.promilo.automation.internship.pageobjects.MyProspectCardValidation;
 import com.promilo.automation.internship.utilities.SignUpUtility;
+import com.promilo.automation.internship.utilities.TestAccountStore;
 
 import basetest.Baseclass;
 
@@ -40,25 +41,15 @@ public class CallBackSignupwithEmail extends Baseclass {
       // Generate a random email & OTP
          String email = SignUpUtility.generateRandomEmail();
          String mobile=SignUpUtility.generateRandomMobile();
+         String password=SignUpUtility.generateRandomPassword();
          String otp = SignUpUtility.getFixedOtp();  // → always 9999
          System.out.println("Generated Email: " + email);
          
-         // Enter email
          signup.enterEmailOrPhone(email);
-         
-         // Request OTP
          signup.clickVerificationCode();
-         
-         // Enter fixed OTP 9999ext
          signup.enterEmailOtp(otp);
-         
-          // Enter Password
-         signup.enterPassword("Testautomation123");
-         
-         // Final signup
+         signup.enterPassword(password);
          signup.clickFinalSignupButton();
-         
-         // Validate signup success
          signup.isSignupSuccess();
          
          // ------------------------

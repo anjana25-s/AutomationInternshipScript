@@ -38,27 +38,18 @@ public class CallBackSignupwithMobile extends Baseclass {
         //  Generate random mobile number
         String mobileNumber = SignUpUtility.generateRandomMobile();
         System.out.println("Generated Mobile Number: " + mobileNumber);
+        String password=SignUpUtility.generateRandomPassword();
         String otp = SignUpUtility.getFixedOtp(); 
         String email = SignUpUtility.generateRandomEmail();
 
-
-        // Enter mobile number
-        signup.enterEmailOrPhone(mobileNumber);
-
-        // Click "Send Verification Code"
-        signup.clickVerificationCode();
-
-        // Enter fixed OTP
-        signup.enterMobileOtp(otp);
-
-        // Enter password
-        signup.enterPassword("Testanju12");
-
-        // Complete signup
-        signup.clickFinalSignupButton();
-        signup.isSignupSuccess();
-
-        // Navigate to internships tab
+       signup.enterEmailOrPhone(mobileNumber);
+       signup.clickVerificationCode();
+       signup.enterMobileOtp(otp);
+       signup.enterPassword(password);
+       signup.clickFinalSignupButton();
+       signup.isSignupSuccess();
+       
+     // Navigate to internships tab
         HomePage homePage = new HomePage(page);
         homePage.clickInternships();
         System.out.println("Clicked Internships tab");

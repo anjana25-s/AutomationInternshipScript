@@ -38,15 +38,15 @@ public class AskUsSignupwithEmail extends Baseclass {
         String otp = SignUpUtility.getFixedOtp();;
         String password=SignUpUtility.generateRandomPassword();
         String mobile=SignUpUtility.generateRandomMobile();
-     
-        signup.enterEmailOrPhone(email);
+       
+         signup.enterEmailOrPhone(email);
         signup.clickVerificationCode();
         signup.enterEmailOtp(otp);
         signup.enterPassword(password);
         signup.clickFinalSignupButton();
         signup.isSignupSuccess();
 
-       
+        TestAccountStore.save(email, password);
          // ------------------------
         // NAVIGATE TO INTERNSHIP
         // ------------------------

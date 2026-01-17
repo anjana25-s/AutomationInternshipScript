@@ -25,40 +25,26 @@ public class NotifyInternshipsSignupwithMobile extends Baseclass {
         // 1️⃣ Initialize Signup Page
         SignupPage signup = new SignupPage(page);
 
-        // Close the "Maybe Later" popup
+        
         signup.clickMaybeLater();
+        signup.clickInitialSignupButton();
 
-        // Click the SIGN UP button
-         signup.clickInitialSignupButton();
-
-      // 2️⃣ Generate Random Mobile Number
+      
         String Mobile = SignUpUtility.generateRandomMobile();
         System.out.println("Generated Random Mobile → " + Mobile);
+        String password=SignUpUtility.generateRandomPassword();
         String email = SignUpUtility.generateRandomEmail();
         String otp = SignUpUtility.getFixedOtp();  // → always 9999
 
-
-        // Enter random mobile number
-        signup.enterEmailOrPhone(Mobile);
-
-        // Click Send Verification Code
-        signup.clickVerificationCode();
-
-        // Enter OTP (fixed 9999 from utility)
+       signup.enterEmailOrPhone(Mobile);
+       signup.clickVerificationCode();
        signup.enterMobileOtp(otp);
-
-        // Enter password
-        signup.enterPassword("Testanju12");
-
-        // Complete signup
-        signup.clickFinalSignupButton();
-
-        // Validate signup success
-        signup.isSignupSuccess();
+       signup.enterPassword(password);
+       signup.clickFinalSignupButton();
+       signup.isSignupSuccess();
 
 
-      
-        // 3️⃣ Navigate to Internships
+       // 3️⃣ Navigate to Internships
         HomePage homePage = new HomePage(page);
         homePage.clickInternships();
         System.out.println("Clicked Internships tab");

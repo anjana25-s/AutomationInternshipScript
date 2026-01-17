@@ -13,6 +13,7 @@ import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
 import com.promilo.automation.internship.assignment.SignupPage;
 import com.promilo.automation.internship.pageobjects.NotifyInternshipsDataValidation;
 import com.promilo.automation.internship.utilities.SignUpUtility;
+import com.promilo.automation.internship.utilities.TestAccountStore;
 
 import basetest.Baseclass;
 
@@ -26,38 +27,23 @@ public class NotifyInternshipsSignupwithEmail extends Baseclass {
         // -------------------------------
         SignupPage signup = new SignupPage(page);
 
-        // Close the "Maybe Later" popup
+       
         signup.clickMaybeLater();
-
-        // Click the SIGN UP button
         signup.clickInitialSignupButton(); 
 
-        // -------------------------------
-        // 2️⃣ Generate Random Email
-        // -------------------------------
         String email = SignUpUtility.generateRandomEmail();
         System.out.println("Generated Random Email → " + email);
         String mobile=SignUpUtility.generateRandomMobile();
+        String password=SignUpUtility.generateRandomPassword();
         String otp = SignUpUtility.getFixedOtp();  // → always 9999
-
-        // Enter random email into signup field
+        
+        
         signup.enterEmailOrPhone(email);
-
-        // Click on Send Verification Code
         signup.clickVerificationCode();
-
-        // Enter OTP (fixed 9999)
         signup.enterEmailOtp(otp);
-
-        // Enter password
-        signup.enterPassword("Testautomation123");
-
-        // Click the final Signup button
+        signup.enterPassword(password);
         signup.clickFinalSignupButton();
-
-        // Validate signup success
         signup.isSignupSuccess();
-
 
         // -------------------------------
         // 3️⃣ Navigate to Internships

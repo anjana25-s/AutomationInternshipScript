@@ -9,10 +9,12 @@ public class TestAccountStore {
 
     private static final String FILE_PATH = "target/test-account.properties";
 
-    // Save credentials to file
+    // ❌ Method name unchanged
     public static void save(String username, String password) {
         try {
             Properties props = new Properties();
+
+            // ✅ KEEP key name "username"
             props.setProperty("username", username);
             props.setProperty("password", password);
 
@@ -29,7 +31,6 @@ public class TestAccountStore {
         }
     }
 
-    // Load credentials from file
     public static Map<String, String> get() {
         File file = new File(FILE_PATH);
         if (!file.exists()) return null;
@@ -37,6 +38,7 @@ public class TestAccountStore {
         try (FileInputStream fis = new FileInputStream(file)) {
             Properties props = new Properties();
             props.load(fis);
+
             Map<String, String> acc = new HashMap<>();
             acc.put("username", props.getProperty("username"));
             acc.put("password", props.getProperty("password"));

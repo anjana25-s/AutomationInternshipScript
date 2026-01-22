@@ -1,16 +1,11 @@
 package com.promilo.automation.internship.askus;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import com.promilo.automation.internship.assignment.AskUsPage;
-import com.promilo.automation.internship.assignment.CallbackPage;
 import com.promilo.automation.internship.assignment.HomePage;
-import com.promilo.automation.internship.assignment.InternshipPage;
-import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
 import com.promilo.automation.internship.assignment.SignupPage;
 import com.promilo.automation.internship.pageobjects.AskusDataValidation;
 import com.promilo.automation.internship.utilities.SignUpUtility;
@@ -18,7 +13,7 @@ import com.promilo.automation.internship.utilities.TestAccountStore;
 
 import basetest.Baseclass;
 
-public class AskUsSignupwithMobile extends Baseclass {
+public class AskUsSearchPageSignupwithMobile extends Baseclass {
 
     @Test
     public void AskUs2Test() throws InterruptedException {
@@ -42,27 +37,19 @@ public class AskUsSignupwithMobile extends Baseclass {
         signup.clickFinalSignupButton();
         signup.isSignupSuccess();
         
-      
-        // Step 7: Internship navigation
+        TestAccountStore.save(mobileNumber,password);
+
+        
         HomePage homePage = new HomePage(page);
-        homePage.clickInternships();
-        System.out.println("Clicked Internships tab");
-
-        InternshipPage internshipPage = new InternshipPage(page);
-        internshipPage.clickAutomationTesterCard();
-
-        // Step 8: AskUs form
+        homePage.clickSearchBar();
+        homePage.clickInternshipsTab();
+      
         AskUsPage askUsPage = new AskUsPage(page);
         askUsPage.clickAskUs();
-        askUsPage.enterName("Sree");
+        askUsPage.enterName("Ammu");
         askUsPage.enterMail(email);
         askUsPage.enterQuery("Good evening");
-        
-        // -------------------------
-        // ASK US PAGE VALIDATIONS
-        // -------------------------
         AskusDataValidation validation = new AskusDataValidation(page);
-
         assertEquals(
         		validation.askUsDescription().textContent().trim(),
         		"Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com."
@@ -77,33 +64,33 @@ public class AskUsSignupwithMobile extends Baseclass {
         				validation.askUsFooterText().textContent().trim(),
         		"By proceeding ahead you expressly agree to the PromiloTerms & Conditions"
         		);
-             
-        		askUsPage.clickOnButton();
+        askUsPage.clickOnButton();
+        
+        Assert.assertEquals(
+                validation.thankYouHeader().textContent().trim(),
+                "Thank You!",
+                "❌ Thank You popup header text mismatch"
+        );
+        askUsPage.closeThankyouPopup();
+        askUsPage.notificationIcon();
+        
+        String notificationText =
+                validation.inAppNotification().textContent().trim();
 
-        		  
-                Assert.assertEquals(
-                        validation.thankYouHeader().textContent().trim(),
-                        "Thank You!",
-                        "❌ Thank You popup header text mismatch"
-                );
-                askUsPage.closeThankyouPopup();
-                askUsPage.notificationIcon();
-                   
-                String notificationText =
-                        validation.inAppNotification().textContent().trim();
+        Assert.assertTrue(
+                notificationText.contains("We’ve got your question about"),
+                "Notification prefix text is missing"
+        );
 
-                Assert.assertTrue(
-                        notificationText.contains("We’ve got your question about"),
-                        "Notification prefix text is missing"
-                );
+        Assert.assertTrue(
+                notificationText.contains("Sit tight—our team is preparing a detailed response"),
+                "Notification response message is missing"
+        );
 
-                Assert.assertTrue(
-                        notificationText.contains("Sit tight—our team is preparing a detailed response"),
-                        "Notification response message is missing"
-                );
+        // -------------------- FINAL SUCCESS MESSAGE --------------------
+        System.out.println("✅ Test data validation passed successfully");
 
-                // -------------------- FINAL SUCCESS MESSAGE --------------------
-                System.out.println("✅ Test data validation passed successfully");
+        }
 
-    }
+
 }

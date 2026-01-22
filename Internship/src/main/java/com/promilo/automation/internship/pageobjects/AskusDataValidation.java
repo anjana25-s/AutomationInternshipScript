@@ -59,5 +59,45 @@ public Locator thankYouHeader() {
 }
 
 
+
+public Locator signUpSideContentHeader() {
+	return page.locator("//p[@class='header-text header-text-margin']");
+	
 }
+
+public Locator SignUpSideContentFirstDescription() {
+	return page.locator("(//li[@class='pb-1'])[1]");
+	
+}
+public Locator SignUpSideContentSecondDescription() {
+	return page.locator("(//li[@class='pb-1'])[2]");
+	}
+
+public Locator SignUpSideContentThirdDescription() {
+	return page.locator("(//li[@class='pb-1'])[3]");
+
+}
+
+public Locator SignUpSideContentFourthDescription() {
+	return page.locator("(//li[@class='pb-1'])[4]");
+
+}
+public Locator inAppNotification() {
+    return page.locator("(//div[@class='notification-item notification-item-unread'])[1]");
+  
+    
+}}
+
+
+
+
+
+
+
+
+
+
+
+
+
 

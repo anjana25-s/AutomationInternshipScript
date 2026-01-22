@@ -68,4 +68,3 @@ public class Baseclass {
         if (playwright != null) playwright.close();
     }
 }
-

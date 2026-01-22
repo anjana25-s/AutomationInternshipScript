@@ -1,28 +1,21 @@
-
 package com.promilo.automation.internship.askus;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.internship.assignment.AskUsPage;
 import com.promilo.automation.internship.assignment.HomePage;
-import com.promilo.automation.internship.assignment.InternshipPage;			 	
-import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
+import com.promilo.automation.internship.assignment.InternshipPage;
 import com.promilo.automation.internship.pageobjects.AskusDataValidation;
 import com.promilo.automation.internship.utilities.SignUpUtility;
 
 import basetest.Baseclass;
 
-public class AskUsGuestUser extends Baseclass {
+public class AskusSignupFromDescPage extends Baseclass {
 
     @Test
-    public void AskUsGuestUser() throws InterruptedException {
+    public void  SignupAskusFromDesc() throws InterruptedException {
 
         // -------------------------
         // Close Initial Popup
@@ -41,38 +34,52 @@ public class AskUsGuestUser extends Baseclass {
 
         AskUsPage askUsPage = new AskUsPage(page);
         askUsPage.clickAskUs();
+        askUsPage.clickLogin();
+        askUsPage.clickSignup();
         
-         // AskUs Data Validation
-        AskusDataValidation validation = new AskusDataValidation(page);
-     
-        assertEquals(
-        		validation.askUsDescription().textContent().trim(),
-        		"Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com."
-        		);
-
-        		assertEquals(
-        				validation.askUsHeaderText().textContent().trim(),
-        		"Share your query to get help!"
-        		);
-
-        		assertEquals(
-        				validation.askUsFooterText().textContent().trim(),
-        		"By proceeding ahead you expressly agree to the PromiloTerms & Conditions"
-        		);
-
-         // -------------------------
-        // FORM SUBMISSION
-        // -------------------------
+        // Generate a random email & OTP
         String email = SignUpUtility.generateRandomEmail();
-        String mobile = SignUpUtility.generateRandomMobile();
+        String mobileNumber = SignUpUtility.generateRandomMobile();
         String otp = SignUpUtility.getFixedOtp();
-
-        askUsPage.typeUserName("Ammu");
-        askUsPage.typenumber(mobile);
-        askUsPage.typeEmail(email);
-        askUsPage.enterQuery("Good evening");
-        askUsPage.clickOnButton();
-
+        
+        // AskUs Data Validation
+        AskusDataValidation validation = new AskusDataValidation(page);
+        
+        askUsPage.enterNameInTextfield("Anjana");
+        
+        Assert.assertEquals(
+                validation.signUpSideContentHeader().textContent().trim(),
+                "Why Should You Sign In?");
+        
+        Assert.assertEquals(
+                validation.SignUpSideContentFirstDescription().textContent().trim(),
+                "Stay Ahead in Your Career: Access the latest internship opportunities tailored to your skills, industry trends, and career aspirations.");
+        
+        Assert.assertEquals(
+                validation.SignUpSideContentSecondDescription().textContent().trim(),
+                "Instant Notifications: Be the first to know when new internships matching your profile are posted on Promilo.");
+        
+        Assert.assertEquals(
+                validation.SignUpSideContentThirdDescription().textContent().trim(),
+                "Get Trusted Insights: Discover authentic reviews about potential companies and insights shared by peers and professionals.");
+        
+        Assert.assertEquals(
+                validation.SignUpSideContentFourthDescription().textContent().trim(),
+                "Guaranteed Privacy: Your information is safe with us. We ensure no unsolicited third-party communications.");
+                
+        askUsPage.enterMobileNumber(mobileNumber);
+        askUsPage.enterEmail(email);
+        askUsPage.industryDropdown();
+        askUsPage.clickOnValue();
+        askUsPage.selectValue();
+        askUsPage.closeDropdown();
+        page.keyboard().press("Enter");
+        askUsPage.enterPassword("abc@12345");
+        askUsPage.clickOnIcon();
+        askUsPage.clickCloseIcon();
+        askUsPage.toggleClick();
+        askUsPage.clickOnRegButton();
+        
         assertEquals(
         		validation.otpPageDescription().textContent().trim(),
         		"Start Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams.PreviousNextStart Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams."
@@ -98,15 +105,31 @@ public class AskUsGuestUser extends Baseclass {
         		);
 
 
-       // Enter OTP
-        askUsPage.enterOtp(otp);
+        askUsPage.enterOtp(otp); 
         askUsPage.clickVerify();
+        askUsPage.enterQuery("Helloo");
+        assertEquals(
+          		validation.askUsDescription().textContent().trim(),
+          		"Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com."
+          		);
 
+          		assertEquals(
+          				validation.askUsHeaderText().textContent().trim(),
+          		"Share your query to get help!"
+          		);
+
+          		assertEquals(
+          				validation.askUsFooterText().textContent().trim(),
+          		"By proceeding ahead you expressly agree to the PromiloTerms & Conditions"
+          		);
+        askUsPage.clickOnButton();
+        
         Assert.assertEquals(
                 validation.thankYouHeader().textContent().trim(),
                 "Thank You!",
                 "❌ Thank You popup header text mismatch"
         );
+
         askUsPage.closeThankyouPopup();
         askUsPage.notificationIcon();
         
@@ -126,5 +149,6 @@ public class AskUsGuestUser extends Baseclass {
         // -------------------- FINAL SUCCESS MESSAGE --------------------
         System.out.println("✅ Test data validation passed successfully");
 
+         }
 
-}}
+}

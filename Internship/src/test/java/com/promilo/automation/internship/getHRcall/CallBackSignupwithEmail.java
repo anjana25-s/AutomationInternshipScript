@@ -52,6 +52,7 @@ public class CallBackSignupwithEmail extends Baseclass {
          signup.clickFinalSignupButton();
          signup.isSignupSuccess();
          
+         TestAccountStore.save(email,password);
          // ------------------------
          // NAVIGATE TO INTERNSHIP
          // ------------------------

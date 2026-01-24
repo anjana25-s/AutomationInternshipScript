@@ -14,6 +14,7 @@ import com.promilo.automation.internship.pageobjects.GetHRcallDataValidation;
 import com.promilo.automation.internship.pageobjects.MyPreferenceCardValidation;
 import com.promilo.automation.internship.pageobjects.MyProspectCardValidation;
 import com.promilo.automation.internship.utilities.SignUpUtility;
+import com.promilo.automation.internship.utilities.TestAccountStore;
 
 import basetest.Baseclass;
 
@@ -48,6 +49,8 @@ public class CallBackSignupwithMobile extends Baseclass {
        signup.enterPassword(password);
        signup.clickFinalSignupButton();
        signup.isSignupSuccess();
+       
+       TestAccountStore.save(mobileNumber,password);
        
      // Navigate to internships tab
         HomePage homePage = new HomePage(page);

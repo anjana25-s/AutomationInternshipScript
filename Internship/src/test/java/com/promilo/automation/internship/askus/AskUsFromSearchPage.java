@@ -1,12 +1,8 @@
-
 package com.promilo.automation.internship.askus;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
@@ -19,10 +15,11 @@ import com.promilo.automation.internship.utilities.SignUpUtility;
 
 import basetest.Baseclass;
 
-public class AskUsGuestUser extends Baseclass {
+public class AskUsFromSearchPage extends Baseclass {
+	
 
     @Test
-    public void AskUsGuestUser() throws InterruptedException {
+    public void AskUsTest() throws InterruptedException {
 
         // -------------------------
         // Close Initial Popup
@@ -34,11 +31,9 @@ public class AskUsGuestUser extends Baseclass {
         // -------------------------
         HomePage homePage = new HomePage(page);
         
-        homePage.clickInternships();
-
-        InternshipPage internshipPage = new InternshipPage(page);
-        internshipPage.clickAutomationTesterCard();
-
+        homePage.clickSearchBar();
+        homePage.clickInternshipsTab();
+      
         AskUsPage askUsPage = new AskUsPage(page);
         askUsPage.clickAskUs();
         
@@ -47,7 +42,8 @@ public class AskUsGuestUser extends Baseclass {
      
         assertEquals(
         		validation.askUsDescription().textContent().trim(),
-        		"Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com."
+        		"Ask Us Anything for FreeGet "
+        		+ "personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com."
         		);
 
         		assertEquals(
@@ -101,14 +97,16 @@ public class AskUsGuestUser extends Baseclass {
        // Enter OTP
         askUsPage.enterOtp(otp);
         askUsPage.clickVerify();
-
+       
         Assert.assertEquals(
                 validation.thankYouHeader().textContent().trim(),
                 "Thank You!",
                 "❌ Thank You popup header text mismatch"
         );
+
         askUsPage.closeThankyouPopup();
         askUsPage.notificationIcon();
+        
         
         String notificationText =
                 validation.inAppNotification().textContent().trim();
@@ -126,5 +124,4 @@ public class AskUsGuestUser extends Baseclass {
         // -------------------- FINAL SUCCESS MESSAGE --------------------
         System.out.println("✅ Test data validation passed successfully");
 
-
-}}
+        }}

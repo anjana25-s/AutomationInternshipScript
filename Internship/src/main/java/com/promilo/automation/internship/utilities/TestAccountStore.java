@@ -45,6 +45,24 @@ public class TestAccountStore {
             return acc;
         } catch (Exception e) {
             throw new RuntimeException("❌ Failed to load saved account", e);
+        }}
+        
+        public static String getUsername() {
+            File file = new File(FILE_PATH);
+            if (!file.exists()) {
+                throw new RuntimeException("❌ No saved test account found. Run signup test first.");
+            }
+
+            try (FileInputStream fis = new FileInputStream(file)) {
+                Properties props = new Properties();
+                props.load(fis);
+                return props.getProperty("username");
+            } catch (Exception e) {
+                throw new RuntimeException("❌ Failed to load username", e);
+            }
         }
+
+        
+
     }
-}
+    

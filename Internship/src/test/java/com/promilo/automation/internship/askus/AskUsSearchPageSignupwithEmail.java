@@ -1,50 +1,58 @@
-
 package com.promilo.automation.internship.askus;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.internship.assignment.AskUsPage;
 import com.promilo.automation.internship.assignment.HomePage;
-import com.promilo.automation.internship.assignment.InternshipPage;			 	
-import com.promilo.automation.internship.assignment.NotifyInternshipsPage;
+import com.promilo.automation.internship.assignment.SignupPage;
 import com.promilo.automation.internship.pageobjects.AskusDataValidation;
 import com.promilo.automation.internship.utilities.SignUpUtility;
-
+import com.promilo.automation.internship.utilities.TestAccountStore;
 import basetest.Baseclass;
 
-public class AskUsGuestUser extends Baseclass {
+public class AskUsSearchPageSignupwithEmail extends Baseclass {
 
     @Test
-    public void AskUsGuestUser() throws InterruptedException {
+    public void AskUs1Test() throws InterruptedException {
 
-        // -------------------------
-        // Close Initial Popup
-        // -------------------------
-        page.locator("//button[text()='May be later!']").click();
+        // ------------------------
+        // SIGNUP
+        // ------------------------
+        SignupPage signup = new SignupPage(page);
+        signup.clickMaybeLater();
+        signup.clickInitialSignupButton();
+        
 
-        // -------------------------
-        // Navigation Flow
-        // -------------------------
+        // Generate a random email & OTP
+        String email = SignUpUtility.generateRandomEmail();
+        String otp = SignUpUtility.getFixedOtp();
+        String password=SignUpUtility.generateRandomPassword();
+        String mobile=SignUpUtility.generateRandomMobile();
+       
+         signup.enterEmailOrPhone(email);
+        signup.clickVerificationCode();
+        signup.enterEmailOtp(otp);
+        signup.enterPassword(password);
+        signup.clickFinalSignupButton();
+        signup.isSignupSuccess();
+
+        TestAccountStore.save(email, password);
+         // ------------------------
+        // NAVIGATE TO INTERNSHIP
+        // ------------------------
         HomePage homePage = new HomePage(page);
         
-        homePage.clickInternships();
-
-        InternshipPage internshipPage = new InternshipPage(page);
-        internshipPage.clickAutomationTesterCard();
-
+        homePage.clickSearchBar();
+        homePage.clickInternshipsTab();
+      
         AskUsPage askUsPage = new AskUsPage(page);
         askUsPage.clickAskUs();
-        
-         // AskUs Data Validation
+        askUsPage.enterName("Ammu");
+        askUsPage.enterNumber(mobile);
+        askUsPage.enterQuery("Good evening");
         AskusDataValidation validation = new AskusDataValidation(page);
-     
         assertEquals(
         		validation.askUsDescription().textContent().trim(),
         		"Ask Us Anything for FreeGet personalized responses tailored to your career needs.Learn & ConnectGain insights from industry experts and engage with a dynamic community of professionals and peers at Promilo.com."
@@ -59,20 +67,10 @@ public class AskUsGuestUser extends Baseclass {
         				validation.askUsFooterText().textContent().trim(),
         		"By proceeding ahead you expressly agree to the PromiloTerms & Conditions"
         		);
-
-         // -------------------------
-        // FORM SUBMISSION
-        // -------------------------
-        String email = SignUpUtility.generateRandomEmail();
-        String mobile = SignUpUtility.generateRandomMobile();
-        String otp = SignUpUtility.getFixedOtp();
-
-        askUsPage.typeUserName("Ammu");
-        askUsPage.typenumber(mobile);
-        askUsPage.typeEmail(email);
-        askUsPage.enterQuery("Good evening");
         askUsPage.clickOnButton();
-
+        // Enter OTP
+        askUsPage.enterOtp(otp);
+        
         assertEquals(
         		validation.otpPageDescription().textContent().trim(),
         		"Start Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams.PreviousNextStart Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams."
@@ -96,12 +94,9 @@ public class AskUsGuestUser extends Baseclass {
         				validation.otpStillCantFind().textContent().trim()
         		.contains("Still can’t find the OTP")
         		);
-
-
-       // Enter OTP
-        askUsPage.enterOtp(otp);
+        		
         askUsPage.clickVerify();
-
+        
         Assert.assertEquals(
                 validation.thankYouHeader().textContent().trim(),
                 "Thank You!",
@@ -109,7 +104,7 @@ public class AskUsGuestUser extends Baseclass {
         );
         askUsPage.closeThankyouPopup();
         askUsPage.notificationIcon();
-        
+           
         String notificationText =
                 validation.inAppNotification().textContent().trim();
 
@@ -126,5 +121,10 @@ public class AskUsGuestUser extends Baseclass {
         // -------------------- FINAL SUCCESS MESSAGE --------------------
         System.out.println("✅ Test data validation passed successfully");
 
+        
 
-}}
+
+       
+}
+
+}

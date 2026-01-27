@@ -20,6 +20,16 @@ public Locator getHrCallHeaderText() {
 return page.locator("[class='feature-content-header']");
 }
 
+public String getCampaignName() {
+    String header =
+            getHrCallHeaderText().textContent().trim();
+
+    return header
+            .replace("Get an HR Call from", "")
+            .replace("!", "")
+            .trim();
+}
+
 public Locator enableWhatsappNotification() {
 return page.locator("[class='form-check-label']");
 }
@@ -67,6 +77,16 @@ public Locator chooseLanguageText() {
 return page.locator("[class='fw-500 font-18 text-primary mb-50 text-default-color-language']");
 }
 
+public String getCampaignNameFromChooseLanguage() {
+    String text = chooseLanguageText().textContent().trim();
+
+    return text
+            .replace("Please Select your preferred language with", "")
+            .replace("This will make it easier for you and HR", "")
+            .replace(".", "")
+            .trim();
+}
+
 public Locator takeMomentSideText() {
 return page.locator("[class='col-6 askUs-content-container ']");
 }
@@ -76,12 +96,45 @@ public Locator takeMomentText() {
 return page.locator("//span[text()='Please take a moment to answer the below questions.']");
 }
 
-// ============================ Thank You Popup ===============================
 public Locator thankYouText() {
 return page.locator("[class='ThankYou-content justify-content-center']");
 }
 
- 
+
+public Locator signUpSideContentHeader() {
+	return page.locator("//p[@class='header-text header-text-margin']");
+	
+}
+
+public Locator SignUpSideContentFirstDescription() {
+	return page.locator("(//li[@class='pb-1'])[1]");
+	
+}
+public Locator SignUpSideContentSecondDescription() {
+	return page.locator("(//li[@class='pb-1'])[2]");
+	}
+
+public Locator SignUpSideContentThirdDescription() {
+	return page.locator("(//li[@class='pb-1'])[3]");
 
 }
+
+public Locator SignUpSideContentFourthDescription() {
+	return page.locator("(//li[@class='pb-1'])[4]");
+
+}
+public Locator inAppNotification() {
+    return page.locator("(//div[@class='notification-item notification-item-unread'])[1]");
+}
+    
+    public Locator latestInAppNotification() {
+        return page.locator(
+            "(//div[contains(@class,'notification-item')]//h6)[1]"
+        );
+    }
+
+}
+ 
+
+
 

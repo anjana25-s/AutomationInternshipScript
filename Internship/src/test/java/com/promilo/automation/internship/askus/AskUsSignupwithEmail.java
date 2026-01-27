@@ -35,7 +35,7 @@ public class AskUsSignupwithEmail extends Baseclass {
 
         // Generate a random email & OTP
         String email = SignUpUtility.generateRandomEmail();
-        String otp = SignUpUtility.getFixedOtp();;
+        String otp = SignUpUtility.getFixedOtp();
         String password=SignUpUtility.generateRandomPassword();
         String mobile=SignUpUtility.generateRandomMobile();
        
@@ -61,11 +61,11 @@ public class AskUsSignupwithEmail extends Baseclass {
         // ------------------------
         // ASK US FORM
         // ------------------------
-        AskUsPage askus = new AskUsPage(page);
-        askus.clickAskUs();
-        askus.enterName("Arya");
-        askus.enterNumber(mobile);
-        askus.enterQuery("Good evening");
+        AskUsPage askUsPage = new AskUsPage(page);
+        askUsPage.clickAskUs();
+        askUsPage.enterName("Arya");
+        askUsPage.enterNumber(mobile);
+        askUsPage.enterQuery("Good evening");
         
         AskusDataValidation validation = new AskusDataValidation(page);
         assertEquals(
@@ -83,7 +83,7 @@ public class AskUsSignupwithEmail extends Baseclass {
         		"By proceeding ahead you expressly agree to the PromiloTerms & Conditions"
         		);
 
-        askus.clickOnButton();
+        		askUsPage.clickOnButton();
 
 
         // ------------------------
@@ -119,14 +119,32 @@ public class AskUsSignupwithEmail extends Baseclass {
         callback.clickSubmitButton();
 
 
-        // ------------------------
-        // SUCCESS MESSAGE VALIDATION
-        // ------------------------
-        NotifyInternshipsPage thankYou = new NotifyInternshipsPage(page);
-        String actualMessage = thankYou.successPopup().textContent().trim();
-        System.out.println("Success message displayed: " + actualMessage);
+        Assert.assertEquals(
+                validation.thankYouHeader().textContent().trim(),
+                "Thank You!",
+                "❌ Thank You popup header text mismatch"
+        );
+        askUsPage.closeThankyouPopup();
+        askUsPage.notificationIcon();
+           
+        String notificationText =
+                validation.inAppNotification().textContent().trim();
 
-        Assert.assertEquals(actualMessage, "Thank You!", "Success message validation failed!");
+        Assert.assertTrue(
+                notificationText.contains("We’ve got your question about"),
+                "Notification prefix text is missing"
+        );
+
+        Assert.assertTrue(
+                notificationText.contains("Sit tight—our team is preparing a detailed response"),
+                "Notification response message is missing"
+        );
+
+        // -------------------- FINAL SUCCESS MESSAGE --------------------
+        System.out.println("✅ Test data validation passed successfully");
+
+        
+
 
     }
 }

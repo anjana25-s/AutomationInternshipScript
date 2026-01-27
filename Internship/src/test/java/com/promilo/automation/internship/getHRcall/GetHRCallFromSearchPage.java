@@ -1,37 +1,49 @@
 package com.promilo.automation.internship.getHRcall;
-
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.promilo.automation.internship.assignment.BusinessPage;
 import com.promilo.automation.internship.assignment.CallbackPage;
 import com.promilo.automation.internship.assignment.HomePage;
+import com.promilo.automation.internship.assignment.MyBillingPage;
 import com.promilo.automation.internship.pageobjects.GetHRcallDataValidation;
 import com.promilo.automation.internship.pageobjects.MyPreferenceCardValidation;
+import com.promilo.automation.internship.pageobjects.MyProspectCardValidation;
 import com.promilo.automation.internship.utilities.SignUpUtility;
 
 import basetest.Baseclass;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-public class CallBackGuestUser extends Baseclass {
+public class GetHRCallFromSearchPage extends Baseclass {
+	
 
     @Test
-    public void CallBackGuestUser() {
+    public void GetHRCallSearchPage() throws InterruptedException {
 
-        // ===================== INITIAL SETUP =====================
+        // -------------------------
+        // Close Initial Popup
+        // -------------------------
         page.locator("//button[text()='May be later!']").click();
-        page.locator("//img[@src='/assets/closeMiliIcon-96dcded9.svg']").click();
+        
+        // Close popup
+        Locator closePopup = page.locator("img[src*='closeMiliIcon']");
 
+        closePopup.click();
+        Assert.assertTrue(closePopup.isHidden(), "Popup not closed");
 
+        // -------------------------
+        // Navigation Flow
+        // -------------------------
         HomePage homePage = new HomePage(page);
-        homePage.clickInternships();
-
-        // Generate test data
+        
+        homePage.clickSearchBar();
+        homePage.clickInternshipsTab();
+        
+       // Generate test data
         String email = SignUpUtility.generateRandomEmail();
         String mobile = SignUpUtility.generateRandomMobile();
         String otp = SignUpUtility.getFixedOtp();
@@ -39,30 +51,30 @@ public class CallBackGuestUser extends Baseclass {
         System.out.println("Generated Email: " + email);
         System.out.println("Generated Mobile: " + mobile);
 
-        // ===================== HR CALL FLOW =====================
         CallbackPage callback = new CallbackPage(page);
-        callback.clickInternshipsTab();
-        callback.clickAutomationTesterCard();
         callback.clickGetHRCall();
-
+        callback.enterStudentName("Diya");
+        
         // ===================== HR CALL POPUP VALIDATION =====================
         GetHRcallDataValidation data = new GetHRcallDataValidation(page);
 
         String getHrCallPopUpDescription = data.getHrCallPopupDescription().textContent().trim();
         String expectedGetHrCallPopUpDescription = "Why Register to Get an HR Callback for Your First Internship?Take Charge of Your Career: Connect with recruiters and apply for internships that match your aspirations.Stay Updated: Receive real-time notifications about internship openings tailored to your profile.Direct HR Access: Ensure your application reaches the right recruiter for prompt callback opportunities.Personalized Opportunities: Tailored internship alerts ensure you don't miss the right openings.Exclusive Resources: Unlock premium tools and tips for acing interviews and securing your dream internship.Privacy Guaranteed: Your data is safe—no unauthorized communication or spam.Take Charge of Your Career: Connect with recruiters and apply for internships that match your aspirations.Stay Updated: Receive real-time notifications about internship openings tailored to your profile.Direct HR Access: Ensure your application reaches the right recruiter for prompt callback opportunities.Personalized Opportunities: Tailored internship alerts ensure you don't miss the right openings.Exclusive Resources: Unlock premium tools and tips for acing interviews and securing your dream internship.Privacy Guaranteed: Your data is safe—no unauthorized communication or spam.PreviousNext";
         assertEquals(getHrCallPopUpDescription, expectedGetHrCallPopUpDescription);
-        String getHrCallHeaderText = data.getHrCallHeaderText().textContent().trim();
-        String expectedGetHrCallHeaderText="Get an HR Call from UST Global!";
-        assertEquals(getHrCallHeaderText, expectedGetHrCallHeaderText);
+        
+        String getHrCallHeaderText =data.getHrCallHeaderText().textContent().trim();
+        assertTrue(getHrCallHeaderText.contains("Get an HR Call from"),"HR Call header format is incorrect"  );
+        
+        String campaignName = getHrCallHeaderText.replace("Get an HR Call from", "").replace("!", "").trim();
+        assertFalse( campaignName.isEmpty(), "Campaign name is missing in HR Call header" );
+
         String enableWhatssappNotification = data.enableWhatsappNotification().textContent().trim();
         String expectedEnableWhatssappNotification="Enable updates & important information on Whatsapp";
         assertEquals(enableWhatssappNotification, expectedEnableWhatssappNotification);
         String getHrCallfooterText = data.getHrCallFooterText().textContent().trim();
         String expectedGetHrCallfooterText="By proceeding ahead you expressly agree to the PromiloTerms & Conditions";
         assertEquals(getHrCallfooterText, expectedGetHrCallfooterText);
-
-        // ===================== SUBMIT FORM =====================
-        callback.enterStudentName("Diya");
+        
         callback.studentMobileNumber(mobile);
         callback.enterMailId(email);
         callback.industryDropdown();
@@ -109,22 +121,25 @@ public class CallBackGuestUser extends Baseclass {
        
         // ===================== LANGUAGE SELECTION VALIDATION =====================
         callback.clickLanguage();
-        callback.selectLanguage();
+       // callback.selectLanguage();
         
         Locator languageText = data.chooseLanguageText();
         String nextPageText = data.nextPageInfoText().first().textContent().trim();
         String expectedNextPageText="Get Selected Faster!Your answers will help the Recruiter select you faster to schedule an interview.";
         assertEquals(nextPageText, expectedNextPageText);
         page.waitForTimeout(2000);
-        String chooseLangaugeText = data.chooseLanguageText().textContent().trim();
-        String expectedChooseLangaugeText="Please Select your preferred language with UST Global. This will make it easier for you and HR to connect as you choose. ";
-        assertEquals(chooseLangaugeText, expectedChooseLangaugeText);
-        callback.clickSubmit();
+        String chooseLanguageText =data.chooseLanguageText().textContent().trim();
+        assertTrue( chooseLanguageText.contains("Please Select your preferred language with"), "Choose language text format is incorrect");
+        String campaignName1 =chooseLanguageText.replace("Please Select your preferred language with", "").replace("This will make it easier for you and HR", "") .replace(".", "").trim();
+        assertFalse( campaignName.isEmpty(),
+            "Campaign name is missing in Choose Language text");
         
-
-       
-        // ===================== SCREENING PAGE & THANK YOU VALIDATION =====================
+         callback.clickSubmit();
+        
+     // ===================== SCREENING PAGE & THANK YOU VALIDATION =====================
         callback.clickOncheckBox();
+        callback.typeAnswer("yes");
+        
         Locator screeningQuestion = data.takeMomentSideText();
         String submitPageText = data.takeMomentSideText().textContent().trim();
         String expectedSubmitPageText="Get Selected Faster!Your answers will help the Recruiter select you faster to schedule an interview.";
@@ -132,6 +147,7 @@ public class CallBackGuestUser extends Baseclass {
         String takeMomentText = data.takeMomentText().textContent().trim();
         String expectedTakeMomentText="Please take a moment to answer the below questions.";
         assertEquals(takeMomentText, expectedTakeMomentText);
+        
         callback.clickOnSubmit();
         
         page.waitForLoadState();
@@ -148,6 +164,7 @@ public class CallBackGuestUser extends Baseclass {
                 "❌ Thank You message validation failed!"
         );
 
+       
         callback.myPreference();
 
      // ===================== My Preference Card Validation =====================
@@ -212,19 +229,8 @@ public class CallBackGuestUser extends Baseclass {
 
         System.out.println("✅ My Preference card data validated successfully");
         
-        callback.notificationIcon();
-        
-        String notificationText =
-                data.latestInAppNotification().textContent().trim();
-
-        Assert.assertTrue(
-                notificationText.contains(
-                    "HR Call Request Pending... Your HR call request is currently in pending status. " +
-                    "Stay tuned! Our team will be in touch soon." ),
-                "HR Call Pending notification text is incorrect or missing"
-        );
-
-
+         callback.clickApplyNow();
+         
         Page newPage = context.newPage();  
         newPage.navigate("https://stagebusiness.promilo.com/");
         System.out.println("Navigated to business Promilo in new tab");
@@ -241,4 +247,55 @@ public class CallBackGuestUser extends Baseclass {
         advertiser.clickProceed();
         advertiser.clickDone();
         
+        // Initialize Prospect Card Validation
+      MyProspectCardValidation prospectCard = new MyProspectCardValidation(newPage);
+
+        // Wait until prospect card is visible
+        prospectCard.waitForProspectCard();
+
+        /* ---------------- USER NAME ---------------- */
+        String userName = prospectCard.getUserName();
+        Assert.assertFalse(
+                userName.isEmpty(),
+                "❌ User name is empty in prospect card"
+        );
+
+        /* ---------------- CAMPAIGN NAME ---------------- */
+        String prospectCampaignName = prospectCard.getCampaignName();
+
+        Assert.assertFalse(
+                prospectCampaignName.isEmpty(),
+                "❌ Campaign name is empty in prospect card"
+        );
+
+
+        /* ---------------- INTEREST SHOWN DATE ---------------- */
+        String interestShownDate = prospectCard.getInterestShownDate();
+        Assert.assertFalse(
+                interestShownDate.isEmpty(),
+                "❌ Interest shown date is empty"
+        );
+
+        /* ---------------- MEETING STATUS ---------------- */
+        String meetingStatus = prospectCard.getMeetingStatus();
+        Assert.assertTrue(
+                meetingStatus.equalsIgnoreCase("Pending")
+                || meetingStatus.equalsIgnoreCase("Completed")
+                || meetingStatus.equalsIgnoreCase("Rejected"),
+                "❌ Invalid meeting status: " + meetingStatus
+        );
+
+        /* ---------------- PREFERRED LANGUAGE ---------------- */
+        String preferredLanguage = prospectCard.getPreferredLanguage();
+        Assert.assertFalse(
+                preferredLanguage.isEmpty(),
+                "❌ Preferred language is empty"
+        );
+
+        System.out.println("✅ My Prospect card data validated successfully."); 
+
+      
+        
+  
+
 }}

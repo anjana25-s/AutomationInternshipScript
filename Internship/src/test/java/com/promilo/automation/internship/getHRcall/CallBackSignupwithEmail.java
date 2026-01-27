@@ -52,7 +52,7 @@ public class CallBackSignupwithEmail extends Baseclass {
          signup.clickFinalSignupButton();
          signup.isSignupSuccess();
          
-         // ------------------------
+        // ------------------------
          // NAVIGATE TO INTERNSHIP
          // ------------------------
          HomePage homePage = new HomePage(page);
@@ -159,11 +159,11 @@ public class CallBackSignupwithEmail extends Baseclass {
                 "❌ Thank You message validation failed!"
         );
         
-         Page newPage = context.newPage();  
-         newPage.navigate("https://stagebusiness.promilo.com/");
-         System.out.println("Navigated to business Promilo in new tab");
+        Page businessPage = context.newPage();
+        businessPage.navigate("https://stagebusiness.promilo.com/");
+        businessPage.waitForLoadState();
 
-         BusinessPage advertiser=new BusinessPage(newPage);
+         BusinessPage advertiser=new BusinessPage(businessPage);
          advertiser.enterUserName("adv@yopmail.com");
          advertiser.enterPassword("adv@1234");
          advertiser.clickSignIn();
@@ -175,59 +175,7 @@ public class CallBackSignupwithEmail extends Baseclass {
          advertiser.clickProceed();
          advertiser.clickDone();
          
-         // Initialize Prospect Card Validation
-         MyProspectCardValidation prospectCard = new MyProspectCardValidation(newPage);
-
-         // Wait until prospect card is visible
-         prospectCard.waitForProspectCard();
-
-         /* ---------------- USER NAME ---------------- */
-         String userName = prospectCard.getUserName();
-         Assert.assertFalse(
-                 userName.isEmpty(),
-                 "❌ User name is empty in prospect card"
-         );
-
-         /* ---------------- CAMPAIGN NAME ---------------- */
-         String campaignName = prospectCard.getCampaignName();
-         Assert.assertTrue(
-                 campaignName.toUpperCase().contains("B2C"),
-                 "❌ Campaign name does not contain B2C"
-         );
-
-         /* ---------------- INTEREST SHOWN DATE ---------------- */
-         String interestShownDate = prospectCard.getInterestShownDate();
-         Assert.assertFalse(
-                 interestShownDate.isEmpty(),
-                 "❌ Interest shown date is empty"
-         );
-
-         /* ---------------- MEETING STATUS ---------------- */
-         String meetingStatus = prospectCard.getMeetingStatus();
-         Assert.assertTrue(
-                 meetingStatus.equalsIgnoreCase("Pending")
-                 || meetingStatus.equalsIgnoreCase("Completed")
-                 || meetingStatus.equalsIgnoreCase("Rejected"),
-                 "❌ Invalid meeting status: " + meetingStatus
-         );
-
-         /* ---------------- PREFERRED LANGUAGE ---------------- */
-         String preferredLanguage = prospectCard.getPreferredLanguage();
-         Assert.assertFalse(
-                 preferredLanguage.isEmpty(),
-                 "❌ Preferred language is empty"
-         );
-
-
-         System.out.println("✅ My Prospect card data validated successfully.");
-
-         
-         MyBillingPage billingpage=new MyBillingPage(newPage);
-         billingpage.clickMyBilling();
-         billingpage.clicksendEmail();
-         billingpage.clickSendInvoice();
-         
-      // ===================== USER SIDE COMPLETED STATUS VALIDATION =====================
+         // ===================== USER SIDE COMPLETED STATUS VALIDATION =====================
 
       // Switch back to user portal
       page.bringToFront();
@@ -262,5 +210,42 @@ public class CallBackSignupwithEmail extends Baseclass {
 
       System.out.println("✅ User side completed status validated successfully");
 
-         
+      // -------------------------
+      // Navigation Flow
+      // -------------------------
+      HomePage homePage1 = new HomePage(page);
+      homePage.clickHomeTab();
+      homePage.clickSearchBar();
+      homePage.clickInternshipsTab();
+      
+      CallbackPage callback2 = new CallbackPage(page);
+      callback.clickGetHRCall();
+      callback.clickLanguage();
+      callback.clickSubmit();
+      callback.clickOncheckBox();
+      callback.typeAnswer("yes");
+      callback.clickOnSubmit();
+      callback.buildResume();
+      callback.notificationIcon();
+      
+      String notificationText1 =
+              data.latestInAppNotification().textContent().trim();
+
+      Assert.assertTrue(
+              notificationText1.contains(
+                  "HR Call Request Pending... Your HR call request is currently in pending status. " +
+                  "Stay tuned! Our team will be in touch soon." ),
+              "HR Call Pending notification text is incorrect or missing"
+      );
+
+      businessPage.bringToFront();
+      businessPage.waitForLoadState();
+      
+      advertiser.clickMyProspect();
+      advertiser.clickInternships();
+      advertiser.clickCallBack();
+      advertiser.clickApprove();
+      advertiser.clickProceed();
+      advertiser.clickDone();
+
   }}

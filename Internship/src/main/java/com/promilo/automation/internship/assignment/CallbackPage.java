@@ -40,6 +40,8 @@ private final Locator selectLanguage;
 private final Locator clickNext;
 private final Locator clickLanguage;
 private final Locator selectLanguageone;
+private final Locator selectLanguageTwo;
+private final Locator selectLanguageThree;
 private final Locator clickCheckBox;
 private final Locator enterAnswer;
 private final Locator clickSubmit;
@@ -67,6 +69,11 @@ private final Locator clickToCloseIcon;
 private final Locator clickRegister;
 private final Locator toggleButtonClick;
 private final Locator backButton;
+private final Locator bellIcon;
+private final Locator clickOnClose;
+private final Locator cardClick;
+private final Locator resendOtp;
+
 
 
 
@@ -100,6 +107,8 @@ public CallbackPage(Page page) {
 	this.clickButton=page.locator("//button[text()='Verify & Proceed']");
 	this.selectLanguage=page.locator("(//span[@class='font-14 text-dark-grey label-text'])[1]");
 	this.selectLanguageone=page.locator("(//span[@class='font-14 text-dark-grey label-text'])[2]");
+	this.selectLanguageTwo=page.locator("(//span[@class='font-14 text-dark-grey label-text'])[3]");
+	this.selectLanguageThree=page.locator("(//span[@class='font-14 text-dark-grey label-text'])[4]");
     this.clickNext=page.locator("//button[@class='fw-bold w-100 font-16 fw-bold calendar-modal-custom-btn mt-2 btn btn-primary']");
 	this.clickLanguage=page.locator("(//span[@class='font-14 text-dark-grey label-text'])[1]");
 	this.clickCheckBox=page.locator("(//input[@class='form-check-input'])[1]");
@@ -125,8 +134,12 @@ public CallbackPage(Page page) {
 	this.clickEyeIcon=page.locator("(//img[@class='password-eye'])[2]");
 	this.clickToCloseIcon=page.locator("(//img[@class='password-eye'])[2]");
 	this.clickRegister=page.locator("//button[text()='Register']");
-	this.toggleButtonClick=page.locator("//input[@id='custom-switch']");
+	this.toggleButtonClick=page.locator("[id='enableNotifications']");
 	this.backButton=page.locator("//span[text()='Back']");
+	this.bellIcon=page.locator("(//img[@class='InAppNotification-icon'])[2]");
+	this.clickOnClose=page.locator("[alt='close-showInAppNotificationModal']");
+	this.cardClick=page.locator("(//a[@class='preferance-header-text'])[1]");
+	this.resendOtp=page.locator("//p[text()='Resend OTP']");
 	
 	
 }
@@ -277,6 +290,18 @@ public void clickSubmitButton() {
  
  public void selectLanguage() {
 	 selectLanguageone.click();
+	 page.waitForTimeout(2000);
+ }
+ 
+ public void clickOnLangTwo() {
+	 selectLanguageTwo.click();
+	 page.waitForTimeout(2000);
+	 
+ }
+ 
+ public void clickOnLangThree() {
+	 selectLanguageThree.click();
+	 page.waitForTimeout(2000);
  }
  /** Click Next button */
 public void clickSubmit() {
@@ -405,7 +430,19 @@ public void backButtonClick() {
 	   page.waitForTimeout(1000);
 }
 
-
-
-
+public void notificationIcon() {
+	   bellIcon.click();
+	   page.waitForTimeout(1000);
+	   }
+public void closeNotification() {
+	clickOnClose.click();
+}
+public void clickOnCard() {
+	cardClick.click();
+	page.waitForTimeout(1000);
+}
+public void resendClick() {
+	 resendOtp.click();
+	 page.waitForTimeout(2000);
+}
 }

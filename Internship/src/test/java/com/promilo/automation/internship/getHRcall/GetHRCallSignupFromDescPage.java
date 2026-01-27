@@ -15,8 +15,10 @@ import com.promilo.automation.internship.assignment.HomePage;
 import com.promilo.automation.internship.assignment.InternshipPage;
 import com.promilo.automation.internship.pageobjects.GetHRcallDataValidation;
 import com.promilo.automation.internship.utilities.SignUpUtility;
-
+import com.promilo.automation.internship.utilities.TestAccountStore;
 import basetest.Baseclass;
+
+
 
 public class GetHRCallSignupFromDescPage extends Baseclass {
 	
@@ -94,7 +96,7 @@ public class GetHRCallSignupFromDescPage extends Baseclass {
         callback.toggleClick();
         callback.clickOnRegButton();
         
-        // ===================== OTP PAGE VALIDATION =====================
+         // ===================== OTP PAGE VALIDATION =====================
         Locator otpHeader = data.otpVerificationHeader();
         String otpPageDescription = data.otpPageDescription().textContent().trim();
         String expectedOtpPageDescription = "Start Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams.PreviousNextStart Your Career JourneyStart your career with access to exclusive internships opportunities and personalized support.Tailored Internship MatchesReceive customized internship recommendations that align with your skills, goals, and aspirations.Unlock Your PotentialStep into a world of opportunities designed to help you achieve your professional dreams.";
@@ -181,13 +183,8 @@ public class GetHRCallSignupFromDescPage extends Baseclass {
        advertiser.clickProceed();
        advertiser.clickDone();
        
- 
-
-    }
-    
-
-
-    }
+  }
+      }
 
 
 

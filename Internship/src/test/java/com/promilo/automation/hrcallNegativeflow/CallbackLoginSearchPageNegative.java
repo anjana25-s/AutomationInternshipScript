@@ -1,27 +1,25 @@
+package com.promilo.automation.hrcallNegativeflow;
 
-package com.promilo.automation.internship.getHRcall;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
 import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.WaitForSelectorState;
-import com.promilo.automation.internship.assignment.BusinessPage;
 import com.promilo.automation.internship.assignment.CallbackPage;
 import com.promilo.automation.internship.assignment.HomePage;
 import com.promilo.automation.internship.pageobjects.GetHRcallDataValidation;
 import com.promilo.automation.internship.utilities.SignUpUtility;
-import com.promilo.automation.internship.utilities.TestAccountStore;
 
 import basetest.Baseclass;
 
-public class GetHRCallLoginFromSearchPage extends Baseclass {
+public class CallbackLoginSearchPageNegative extends Baseclass {
 	
 
     @Test
-    public void GetHRCallLoginSearchPage() throws InterruptedException {
+    public void CallbackLoginSearchPage() throws InterruptedException {
 
         // -------------------------
         // Close Initial Popup
@@ -42,15 +40,14 @@ public class GetHRCallLoginFromSearchPage extends Baseclass {
         homePage.clickSearchBar();
         homePage.clickInternshipsTab();
         
-        String savedEmail = TestAccountStore.getUsername();
+        String mobile=SignUpUtility.generateRandomMobile();
         String otp = SignUpUtility.getFixedOtp(); 
-
-        CallbackPage callback=new CallbackPage(page);
+        String invalidOtp = SignUpUtility.generateInvalidOtp();
+        
+        CallbackPage callback = new CallbackPage(page);
         callback.clickGetHRCall();
         callback.clickLogin();
-        callback.backButtonClick();
-        callback.clickLogin();
-        callback.enterEmailId(savedEmail);
+        callback.enterEmailId(mobile);
         
         GetHRcallDataValidation data = new GetHRcallDataValidation(page);
         
@@ -75,7 +72,9 @@ public class GetHRCallLoginFromSearchPage extends Baseclass {
                 "Guaranteed Privacy: Your information is safe with us. We ensure no unsolicited third-party communications.");
                 
         callback.clickOnSendVerificationButton();
-        callback.enterNumber(otp);
+        callback.enterEmailId("9000025134");
+        callback.clickOnSendVerificationButton();
+        callback.enterNumber(invalidOtp);
         
         // ===================== OTP PAGE VALIDATION =====================
         Locator otpHeader = data.otpVerificationHeader();
@@ -103,12 +102,13 @@ public class GetHRCallLoginFromSearchPage extends Baseclass {
         assertTrue(text6.contains(expectedResult6));
 
         callback.clickSubmitButton();
-
+        callback.resendClick();
+        callback.enterNumber(otp);
+        callback.clickSubmitButton();
        
         // ===================== LANGUAGE SELECTION VALIDATION =====================
         callback.clickLanguage();
-       //callback.selectLanguage();
-        
+     
         Locator languageText = data.chooseLanguageText();
         String chooseLanguageText =data.chooseLanguageText().textContent().trim();
         assertTrue( chooseLanguageText.contains("Please Select your preferred language with"), "Choose language text format is incorrect");
@@ -116,12 +116,11 @@ public class GetHRCallLoginFromSearchPage extends Baseclass {
         assertFalse( chooseLanguageText.isEmpty(),
             "Campaign name is missing in Choose Language text");
         
-         callback.clickSubmit();
+      
+        callback.clickSubmit();
+        callback.clickOnSubmit();
         
-     // ===================== SCREENING PAGE & THANK YOU VALIDATION =====================
-        callback.clickOncheckBox();
-        callback.typeAnswer("yes");
-        
+        // ===================== SCREENING PAGE & THANK YOU VALIDATION =====================
         Locator screeningQuestion = data.takeMomentSideText();
         String submitPageText = data.takeMomentSideText().textContent().trim();
         String expectedSubmitPageText="Get Selected Faster!Your answers will help the Recruiter select you faster to schedule an interview.";
@@ -129,44 +128,12 @@ public class GetHRCallLoginFromSearchPage extends Baseclass {
         String takeMomentText = data.takeMomentText().textContent().trim();
         String expectedTakeMomentText="Please take a moment to answer the below questions.";
         assertEquals(takeMomentText, expectedTakeMomentText);
-        
+   
+        callback.clickOncheckBox();
         callback.clickOnSubmit();
-        
-        page.waitForLoadState();
-        Locator thankYou = data.thankYouText();
-        thankYou.waitFor(new Locator.WaitForOptions()
-                .setState(WaitForSelectorState.VISIBLE)
-                .setTimeout(20000));
-       
-        String actualThankYouMessage = thankYou.textContent().trim();
-        System.out.println("✅ Thank You message displayed: " + actualThankYouMessage);
-
-        Assert.assertTrue(
-                actualThankYouMessage.toLowerCase().contains("thank you"),
-                "❌ Thank You message validation failed!"
-        );
-
-       callback.buildResume();
-
-       Page newPage = context.newPage();  
-       newPage.navigate("https://stagebusiness.promilo.com/");
-       System.out.println("Navigated to business Promilo in new tab");
-
-       BusinessPage advertiser=new BusinessPage(newPage);
-       advertiser.enterUserName("adv@yopmail.com");
-       advertiser.enterPassword("adv@1234");
-       advertiser.clickSignIn();
-       advertiser.clickMyAccount();
-       advertiser.clickMyProspect();
-       advertiser.clickInternships();
-       advertiser.clickCallBack();
-       advertiser.clickApprove();
-       advertiser.clickProceed();
-       advertiser.clickDone();
-       
- 
-
     }
-    
 
 }
+
+    
+

@@ -125,9 +125,15 @@ public Locator SignUpSideContentFourthDescription() {
 }
 public Locator inAppNotification() {
     return page.locator("(//div[@class='notification-item notification-item-unread'])[1]");
-  
+}
     
-}}
+    public Locator latestInAppNotification() {
+        return page.locator(
+            "(//div[contains(@class,'notification-item')]//h6)[1]"
+        );
+    }
+
+}
  
 
 

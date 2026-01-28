@@ -1,0 +1,64 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Promilo Automation Suite" verbose="1">
+
+	<test name="Package Execution">
+		<packages>
+
+
+			<package name="com.promilo.automation.signupandlogin"></package>
+
+			<package name="com.promilo.automation.resumemodule"></package>
+			<package name="com.promilo.automation.registereduser.jobs"></package>
+			<package
+				name="com.promilo.automation.registereduser.courses.interest"></package>
+			<package name="com.promilo.automation.myassignments"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentor.videoacceptance"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentor.personalizedvideo"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentor.oneononecallacceptance"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentor.downloadresources"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentor.campaign.negativevalidation"></package>
+			<package name="com.promilo.automation.mentorship.mentor.campaign"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentor.brandendorsement"></package>
+			<package name="com.promilo.automation.mentorship.mentor.askquery"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentee.personalizedvideo.negativevalidations"></package>
+			<package name="com.promilo.automation.mentorship.mentee.intrests"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentee.getmentorcall.negativevalidation"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentee.downloadresource.negativevalidation"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentee.bookmeeting.negativevalidation"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentee.askquery.negativevalidations"></package>
+			<package
+				name="com.promilo.automation.mentorship.mentee.askquery.negativevalidation"></package>
+			<package
+				name="com.promilo.automation.mentee.brandendorsement.negativevalidations"></package>
+			<package
+				name="com.promilo.automation.mentee.brandendorsement.negativevalidation"></package>
+			<package
+				name="com.promilo.automation.guestuser.courses.interest.usernotifications"></package>
+			<package
+				name="com.promilo.automation.emailnotifications.user.gethrcall"></package>
+			<package name="com.promilo.automation.emailnotifications.jobapply"></package>
+			<package name="com.promilo.automation.emailnotifcations.advertiser"></package>
+			<package name="com.promilo.automation.courses.negativevalidations"></package>
+			<package name="com.promilo.automation.course.advertiser"></package>
+			<package name="com.promilo.automation.advertiser.mybilling"></package>
+			<package name="com.promilo.automation.advertiser.loginandregister"></package>
+			<package name="com.promilo.automation.advertiser.campaign"></package>
+
+		</packages>
+	</test>
+	<listeners>
+		<listener class-name="com.promilo.automation.resources.Listeners" />
+	</listeners>
+
+</suite>
